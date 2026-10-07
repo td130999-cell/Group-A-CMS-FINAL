@@ -1,0 +1,103 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/theme.json",
+  "version": 2,
+  "title": "Red",
+  "settings": {
+    "color": {
+      "palette": [
+        {
+          "name": "Primary",
+          "color": "#ffadad",
+          "slug": "primary"
+        },
+        {
+          "name": "Secondary",
+          "color": "#0693e3",
+          "slug": "secondary"
+        },
+        {
+          "name": "Slidebg",
+          "color": "#B91C1C",
+          "slug": "slidebg"
+        },
+        {
+          "name": "Tertiary",
+          "color": "#ffe8e8",
+          "slug": "tertiary"
+        },
+        {
+          "name": "Background",
+          "color": "#fffbfb",
+          "slug": "background"
+        },
+        {
+          "name": "Fourth",
+          "color": "#ffffff",
+          "slug": "fourth"
+        },
+        {
+          "name": "Accent",
+          "color": "#EF4444",
+          "slug": "accent"
+        },
+        {
+          "name": "Heading",
+          "color": "#1E293B",
+          "slug": "heading"
+        },
+        {
+          "name": "Body",
+          "color": "#475569",
+          "slug": "body"
+        },
+        {
+          "name": "Surface",
+          "color": "#FEF2F2",
+          "slug": "surface"
+        },
+        {
+          "name": "Light Gray",
+          "color": "#F8FAFC",
+          "slug": "light-gray"
+        },
+        {
+          "name": "Border",
+          "color": "#e5e7eb",
+          "slug": "border"
+        },
+        {
+          "name": "Muted",
+          "color": "#991B1B",
+          "slug": "muted"
+        },
+        {
+          "name": "Success",
+          "color": "#059669",
+          "slug": "success"
+        },
+        {
+          "name": "Warning",
+          "color": "#D97706",
+          "slug": "warning"
+        },
+        {
+          "name": "Error",
+          "color": "#DC2626",
+          "slug": "error"
+        },
+        {
+          "name": "Transparent",
+          "color": "transparent",
+          "slug": "transparent"
+        }
+      ],
+      "gradients": [
+        {
+          "slug": "secondary-gradient",
+          "gradient": "linear-gradient(to right, #dcf2ff , #eec2c2)",
+          "name": "Secondary Gradient"
+        }
+      ]
+    }
+  }
+}
