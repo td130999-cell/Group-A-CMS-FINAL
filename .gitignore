@@ -12,4 +12,6 @@ Thumbs.db
 # Logs
 *.log
 docker-compose.override.yml
+__pycache__/
+wp-content/uploads/wc-logs/
 

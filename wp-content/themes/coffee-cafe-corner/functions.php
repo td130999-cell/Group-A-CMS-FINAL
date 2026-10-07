@@ -100,3 +100,11 @@ if ( ! function_exists( 'coffee_cafe_corner_admin_scripts' ) ) :
     }
 endif;
 add_action( 'admin_enqueue_scripts', 'coffee_cafe_corner_admin_scripts' );
+
+/**
+ * Quills Coffee Experience Engine
+ */
+$quills_exp = get_template_directory() . '/inc/class-quills-experience.php';
+if ( file_exists( $quills_exp ) ) {
+    require_once $quills_exp;
+}
