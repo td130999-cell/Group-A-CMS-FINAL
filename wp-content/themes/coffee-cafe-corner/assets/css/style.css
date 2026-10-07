@@ -2093,3 +2093,305 @@ ul.wp-block-social-links {
     font-size: 32px;
     font-weight: 800;
 }
+
+/* ========================================================
+   QUILLS COFFEE HEADER STYLES (Matching Target Design)
+   ======================================================== */
+
+.quills-header-wrapper {
+    background-color: #FFFDEB !important;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    color: #151515;
+}
+
+header.wp-block-template-part,
+.wp-block-template-part header,
+.wp-block-template-part {
+    background-color: #FFFDEB !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+.quills-header-top {
+    background-color: #FFFDEB;
+    padding: 12px 35px;
+    box-sizing: border-box;
+    width: 100%;
+}
+
+.quills-header-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    gap: 15px;
+}
+
+/* Left: Search Box */
+.quills-header-left {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.quills-search-form {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0;
+    padding: 0;
+    background: transparent;
+    border: none;
+}
+
+.quills-search-btn {
+    background: transparent !important;
+    border: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #151515 !important;
+    line-height: 1;
+}
+
+.quills-search-input {
+    background: transparent !important;
+    border: none !important;
+    outline: none !important;
+    box-shadow: none !important;
+    font-size: 13.5px !important;
+    color: #151515 !important;
+    width: 130px !important;
+    padding: 2px 0 !important;
+    margin: 0 !important;
+    font-family: inherit !important;
+    letter-spacing: 0.1px;
+}
+
+.quills-search-input::placeholder {
+    color: #8c8c8c !important;
+    opacity: 1 !important;
+    font-size: 13.5px !important;
+}
+
+/* Center: Logo */
+.quills-header-center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.quills-logo-link {
+    display: inline-block;
+    text-decoration: none !important;
+    line-height: 1;
+}
+
+.quills-logo-img {
+    height: 38px !important;
+    width: auto !important;
+    max-width: 100% !important;
+    display: block !important;
+    object-fit: contain;
+}
+
+/* Right: Action Items */
+.quills-header-right {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 22px;
+}
+
+.quills-currency-wrap {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+    user-select: none;
+    line-height: 1;
+}
+
+.quills-flag-img {
+    width: 20px !important;
+    height: 14px !important;
+    border-radius: 1px !important;
+    object-fit: cover !important;
+    box-shadow: 0 0 1px rgba(0, 0, 0, 0.25) !important;
+    display: inline-block !important;
+    vertical-align: middle;
+}
+
+.quills-currency-code {
+    font-size: 12.5px;
+    font-weight: 700;
+    color: #151515;
+    letter-spacing: 0.5px;
+    font-family: inherit;
+    line-height: 1;
+}
+
+.quills-icon--chevron {
+    display: inline-block;
+    vertical-align: middle;
+    transition: transform 0.2s ease;
+}
+
+.quills-icon-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: #151515 !important;
+    text-decoration: none !important;
+    line-height: 1;
+    transition: opacity 0.2s ease;
+}
+
+.quills-icon-link:hover {
+    opacity: 0.7;
+}
+
+.quills-cart-icon-wrapper {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.quills-cart-badge {
+    position: absolute;
+    top: -6px;
+    right: -8px;
+    background-color: #151515;
+    color: #ffffff;
+    font-size: 9.5px;
+    font-weight: 700;
+    min-width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+    padding: 0 1px;
+    box-sizing: border-box;
+}
+
+.quills-mobile-toggle {
+    display: none;
+    background: transparent;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    line-height: 1;
+    color: #151515;
+}
+
+/* Horizontal Divider */
+.quills-divider-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 35px;
+    box-sizing: border-box;
+    width: 100%;
+}
+
+.quills-header-divider {
+    height: 1px;
+    width: 100%;
+    background-color: #EDECE8;
+    margin: 0;
+    padding: 0;
+    border: none;
+}
+
+/* Bottom Navigation */
+.quills-header-bottom {
+    background-color: #FFFDEB;
+    padding: 9px 20px 11px 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.quills-nav-list {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 30px;
+    list-style: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    flex-wrap: wrap;
+}
+
+.quills-nav-item {
+    list-style: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+.quills-nav-link {
+    font-size: 12.5px !important;
+    font-weight: 700 !important;
+    color: #151515 !important;
+    text-decoration: none !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.7px !important;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif !important;
+    padding: 3px 0 !important;
+    display: inline-block !important;
+    transition: color 0.2s ease !important;
+}
+
+.quills-nav-link:hover {
+    color: #666666 !important;
+    text-decoration: underline !important;
+    text-underline-offset: 3px !important;
+}
+
+/* Mobile & Tablet Styles */
+@media (max-width: 860px) {
+    .quills-header-top {
+        padding: 10px 15px;
+    }
+
+    .quills-header-right {
+        gap: 15px;
+    }
+
+    .quills-mobile-toggle {
+        display: inline-flex;
+        align-items: center;
+    }
+
+    .quills-header-bottom {
+        display: none;
+        padding: 15px 20px;
+    }
+
+    .quills-header-bottom.is-open {
+        display: block;
+    }
+
+    .quills-nav-list {
+        flex-direction: column;
+        align-items: center;
+        gap: 15px;
+    }
+
+    .quills-search-input {
+        width: 85px !important;
+    }
+}

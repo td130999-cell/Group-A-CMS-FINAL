@@ -2,75 +2,106 @@
 /**
  * Title: Header
  * Slug: coffee-cafe-corner/header
+ * Categories: header
+ * Block Types: core/template-part/header
  */
 ?>
 
-<!-- wp:group {"className":"whole-header","style":{"spacing":{"padding":{"right":"0","left":"0","top":"0","bottom":"0"}},"border":{"radius":{"topLeft":"0px","topRight":"0px","bottomLeft":"0px","bottomRight":"0px"}}},"layout":{"type":"default"}} -->
-<div class="wp-block-group whole-header" style="border-top-left-radius:0px;border-top-right-radius:0px;border-bottom-left-radius:0px;border-bottom-right-radius:0px;padding-top:0;padding-right:0;padding-bottom:0;padding-left:0"><!-- wp:group {"className":"topbar","style":{"spacing":{"padding":{"top":"10px","bottom":"10px","left":"0px","right":"0px"},"blockGap":"0","margin":{"top":"0","bottom":"0"}},"border":{"radius":{"topLeft":"0px","topRight":"0px","bottomLeft":"0px","bottomRight":"0px"}}},"backgroundColor":"tertiary","fontSize":"small","layout":{"type":"constrained","contentSize":"80%"}} -->
-<div class="wp-block-group topbar has-tertiary-background-color has-background has-small-font-size" style="border-top-left-radius:0px;border-top-right-radius:0px;border-bottom-left-radius:0px;border-bottom-right-radius:0px;margin-top:0;margin-bottom:0;padding-top:10px;padding-right:0px;padding-bottom:10px;padding-left:0px"><!-- wp:columns {"className":"menu-margin","style":{"spacing":{"padding":{"top":"0","bottom":"0","left":"0","right":"0"},"margin":{"top":"0","bottom":"0"},"blockGap":{"top":"0","left":"0"}},"border":{"radius":{"topLeft":"0px","topRight":"0px","bottomLeft":"0px","bottomRight":"0px"}},"elements":{"link":{"color":{"text":"var:preset|color|black"}}}},"textColor":"black"} -->
-<div class="wp-block-columns menu-margin has-black-color has-text-color has-link-color" style="border-top-left-radius:0px;border-top-right-radius:0px;border-bottom-left-radius:0px;border-bottom-right-radius:0px;margin-top:0;margin-bottom:0;padding-top:0;padding-right:0;padding-bottom:0;padding-left:0"><!-- wp:column {"verticalAlignment":"center","width":"85%","className":"header-text"} -->
-<div class="wp-block-column is-vertically-aligned-center header-text" style="flex-basis:85%"><!-- wp:paragraph {"className":"mail-address","style":{"elements":{"link":{"color":{"text":"var:preset|color|primary"}}},"spacing":{"padding":{"top":"0","bottom":"0","left":"0","right":"0"},"margin":{"top":"0","bottom":"0"}}},"textColor":"slidebg","fontFamily":"lora"} -->
-<p class="mail-address has-slidebg-color has-text-color has-link-color has-lora-font-family" style="margin-top:0;margin-bottom:0;padding-top:0;padding-right:0;padding-bottom:0;padding-left:0"><?php esc_html_e('Freshly Brewed Coffee Served All Day – Visit Brew Haven Today!', 'coffee-cafe-corner'); ?></p>
-<!-- /wp:paragraph --></div>
-<!-- /wp:column -->
-
-<!-- wp:column {"verticalAlignment":"center","width":"15%","className":"header-social"} -->
-<div class="wp-block-column is-vertically-aligned-center header-social" style="flex-basis:15%"><!-- wp:social-links {"iconColor":"slidebg","iconColorValue":"#f0ebe5","openInNewTab":true,"size":"has-normal-icon-size","className":"header-social-icon is-style-logos-only","layout":{"type":"flex","justifyContent":"left","orientation":"horizontal"}} -->
-<ul class="wp-block-social-links has-normal-icon-size has-icon-color header-social-icon is-style-logos-only"><!-- wp:social-link {"url":"https://www.facebook.com/","service":"facebook"} /-->
-
-<!-- wp:social-link {"url":"https://www.instagram.com/","service":"instagram"} /-->
-
-<!-- wp:social-link {"url":"https://www.linkedin.com/","service":"linkedin"} /-->
-
-<!-- wp:social-link {"url":"https://www.twitter.com/","service":"twitter"} /--></ul>
-<!-- /wp:social-links --></div>
-<!-- /wp:column -->
-
-<!-- wp:column {"verticalAlignment":"center","width":"10%","className":"header-detail"} -->
-<div class="wp-block-column is-vertically-aligned-center header-detail" style="flex-basis:10%"><!-- wp:group {"className":"header-carttt","style":{"elements":{"link":{"color":{"text":"var:preset|color|fourth"}}}},"textColor":"fourth","layout":{"type":"flex","flexWrap":"nowrap","justifyContent":"right"}} -->
-<div class="wp-block-group header-carttt has-fourth-color has-text-color has-link-color"><!-- wp:search {"label":"Search","showLabel":false,"placeholder":"Search Here","buttonText":"Search","buttonPosition":"button-only","buttonUseIcon":true,"isSearchFieldHidden":true,"className":"header-search","style":{"elements":{"link":{"color":{"text":"var:preset|color|slidebg"}}},"spacing":{"margin":{"top":"0","bottom":"0","left":"0","right":"0"}}},"backgroundColor":"transparent","textColor":"slidebg"} /-->
-
-<!-- wp:woocommerce/mini-cart {"style":{"typography":{"fontSize":"16px"}}} /-->
-
 <!-- wp:html -->
-<i class="far fa-heart"></i>
-<!-- /wp:html --></div>
-<!-- /wp:group --></div>
-<!-- /wp:column --></div>
-<!-- /wp:columns --></div>
-<!-- /wp:group -->
+<div id="quills-header-wrapper" class="quills-header-wrapper">
+  <div class="quills-header-top">
+    <div class="quills-header-container">
+      
+      <!-- Left: Inline Search Box -->
+      <div class="quills-header-left">
+        <form role="search" method="get" class="quills-search-form" action="<?php echo esc_url( home_url( '/' ) ); ?>">
+          <button type="submit" class="quills-search-btn" aria-label="<?php esc_attr_e( 'Search', 'coffee-cafe-corner' ); ?>">
+            <svg class="quills-icon quills-icon--search" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#151515" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="11" cy="11" r="7.5"></circle>
+              <line x1="21" y1="21" x2="16.5" y2="16.5"></line>
+            </svg>
+          </button>
+          <input type="search" class="quills-search-input" placeholder="Search..." value="<?php echo get_search_query(); ?>" name="s" autocomplete="off" />
+        </form>
+      </div>
 
-<!-- wp:group {"tagName":"header","align":"full","className":"coffee-cafe-corner-header","style":{"spacing":{"padding":{"left":"0px","right":"0px","top":"10px","bottom":"10px"},"margin":{"top":"0","bottom":"0"}},"elements":{"link":{"color":{"text":"var:preset|color|fourth"}}},"border":{"radius":{"topLeft":"0px","topRight":"0px","bottomLeft":"0px","bottomRight":"0px"}}},"backgroundColor":"primary","textColor":"fourth","layout":{"type":"constrained","contentSize":"80%"}} -->
-<header class="wp-block-group alignfull coffee-cafe-corner-header has-fourth-color has-primary-background-color has-text-color has-background has-link-color" style="border-top-left-radius:0px;border-top-right-radius:0px;border-bottom-left-radius:0px;border-bottom-right-radius:0px;margin-top:0;margin-bottom:0;padding-top:10px;padding-right:0px;padding-bottom:10px;padding-left:0px"><!-- wp:columns {"className":"menu-margin","style":{"spacing":{"padding":{"top":"0","bottom":"0","left":"0","right":"0"},"margin":{"top":"0","bottom":"0"},"blockGap":{"top":"0","left":"0"}},"border":{"radius":{"topLeft":"0px","topRight":"0px","bottomLeft":"0px","bottomRight":"0px"}},"elements":{"link":{"color":{"text":"var:preset|color|black"}}}},"textColor":"black"} -->
-<div class="wp-block-columns menu-margin has-black-color has-text-color has-link-color" style="border-top-left-radius:0px;border-top-right-radius:0px;border-bottom-left-radius:0px;border-bottom-right-radius:0px;margin-top:0;margin-bottom:0;padding-top:0;padding-right:0;padding-bottom:0;padding-left:0"><!-- wp:column {"verticalAlignment":"center","width":"20%","className":"header-logo"} -->
-<div class="wp-block-column is-vertically-aligned-center header-logo" style="flex-basis:20%"><!-- wp:site-title {"style":{"typography":{"fontWeight":"700","fontStyle":"normal"},"elements":{"link":{"color":{"text":"var:preset|color|slidebg"}}}},"textColor":"slidebg","fontSize":"xx-large","fontFamily":"cookie"} /--></div>
-<!-- /wp:column -->
+      <!-- Center: Logo -->
+      <div class="quills-header-center">
+        <a href="<?php echo esc_url( home_url( '/' ) ); ?>" class="quills-logo-link" rel="home">
+          <img src="<?php echo esc_url( get_template_directory_uri() . '/assets/images/quills-logo.png' ); ?>" alt="<?php bloginfo( 'name' ); ?>" class="quills-logo-img" />
+        </a>
+      </div>
 
-<!-- wp:column {"verticalAlignment":"center","width":"50%","className":"header-menu"} -->
-<div class="wp-block-column is-vertically-aligned-center header-menu" style="flex-basis:50%"><!-- wp:navigation {"textColor":"slidebg","icon":"menu","metadata":{"ignoredHookedBlocks":["woocommerce/customer-account","woocommerce/mini-cart"]},"className":"coffee-cafe-corner-main-navigation","style":{"typography":{"fontStyle":"normal","fontWeight":"400"}},"fontFamily":"lora","layout":{"type":"flex","justifyContent":"left"}} -->
-<!-- wp:navigation-link {"label":"Home","url":"#","kind":"custom","isTopLevelLink":true} /-->
+      <!-- Right: Currency, Account, Cart -->
+      <div class="quills-header-right">
+        <!-- Currency Selector -->
+        <div class="quills-currency-wrap" tabindex="0" role="button" aria-label="<?php esc_attr_e( 'Currency selector', 'coffee-cafe-corner' ); ?>">
+          <img src="<?php echo esc_url( get_template_directory_uri() . '/assets/images/us-flag.svg' ); ?>" alt="USD" class="quills-flag-img" width="22" height="15" />
+          <span class="quills-currency-code">USD</span>
+          <svg class="quills-icon quills-icon--chevron" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#151515" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="6 9 12 15 18 9"></polyline>
+          </svg>
+        </div>
 
-<!-- wp:navigation-link {"label":"Pages","url":"#","kind":"custom","isTopLevelLink":true} /-->
+        <!-- Account Link -->
+        <a href="<?php echo esc_url( function_exists('wc_get_page_permalink') ? wc_get_page_permalink( 'myaccount' ) : home_url('/my-account/') ); ?>" class="quills-icon-link quills-account-link" aria-label="<?php esc_attr_e( 'Account', 'coffee-cafe-corner' ); ?>">
+          <svg class="quills-icon quills-icon--user" width="22" height="22" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <g id="user">
+              <path fill="#151515" d="m14,2.44897a11.272,11.272 0 1 0 11.272,11.272a11.289,11.289 0 0 0 -11.272,-11.272zm0,1.734a9.545,9.545 0 0 1 7.343,15.634a7.842,7.842 0 0 0 -4.415,-4.653a4.335,4.335 0 1 0 -5.853,0a7.831,7.831 0 0 0 -4.41,4.654a9.539,9.539 0 0 1 7.335,-15.635zm0,5.2a2.6,2.6 0 1 1 -2.6,2.6a2.585,2.585 0 0 1 2.6,-2.597l0,-0.003zm0,6.937a6.047,6.047 0 0 1 5.928,4.873a9.526,9.526 0 0 1 -11.848,0a6.034,6.034 0 0 1 5.92,-4.871l0,-0.002z" />
+            </g>
+          </svg>
+        </a>
 
-<!-- wp:navigation-link {"label":"Services","url":"#","kind":"custom","isTopLevelLink":true} /-->
+        <!-- Cart Link with Badge -->
+        <a href="<?php echo esc_url( function_exists('wc_get_cart_url') ? wc_get_cart_url() : home_url('/cart/') ); ?>" class="quills-icon-link quills-cart-link" aria-label="<?php esc_attr_e( 'Cart', 'coffee-cafe-corner' ); ?>">
+          <div class="quills-cart-icon-wrapper">
+            <svg class="quills-icon quills-icon--cart" width="22" height="22" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <g id="cart">
+                <path fill="#151515" d="m1.87025,4a0.87,0.87 0 1 0 0,1.741l1.6,0a0.863,0.863 0 0 1 0.854,0.707l0.173,0.907l1.871,9.827a3.782,3.782 0 0 0 3.706,3.065l10.864,0a3.781,3.781 0 0 0 3.706,-3.065l1.871,-9.827a0.87,0.87 0 0 0 -0.854,-1.034l-19.59,0l-0.037,-0.2a2.62,2.62 0 0 0 -2.565,-2.121l-1.599,0zm4.53,4.062l18.2,0l-1.675,8.794a2.022,2.022 0 0 1 -2,1.65l-10.851,0a2.023,2.023 0 0 1 -2,-1.65l0,0l-1.674,-8.794zm5.041,13.345a1.741,1.741 0 1 0 1.741,1.741a1.741,1.741 0 0 0 -1.738,-1.741l-0.003,0zm8.123,0a1.741,1.741 0 1 0 1.741,1.741a1.741,1.741 0 0 0 -1.738,-1.741l-0.003,0z" />
+              </g>
+            </svg>
+            <span class="quills-cart-badge"><?php 
+              $cart_count = 1;
+              if ( function_exists('WC') && WC()->cart ) {
+                $wc_count = WC()->cart->get_cart_contents_count();
+                if ( $wc_count > 0 ) {
+                  $cart_count = $wc_count;
+                }
+              }
+              echo esc_html( $cart_count );
+            ?></span>
+          </div>
+        </a>
 
-<!-- wp:navigation-link {"label":"Portfolio","url":"#","kind":"custom","isTopLevelLink":true} /-->
+        <!-- Mobile Menu Toggle Button -->
+        <button class="quills-mobile-toggle" aria-label="<?php esc_attr_e( 'Toggle navigation', 'coffee-cafe-corner' ); ?>" onclick="var menu = document.getElementById('quills-nav-menu'); if(menu) menu.classList.toggle('is-open');">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#151515" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="3" y1="12" x2="21" y2="12"></line>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <line x1="3" y1="18" x2="21" y2="18"></line>
+          </svg>
+        </button>
 
-<!-- wp:navigation-link {"label":"Blogs","url":"#","kind":"custom","isTopLevelLink":true} /-->
+      </div>
+    </div>
+  </div>
 
-<!-- wp:navigation-link {"label":"Contact Us","url":"#","kind":"custom","isTopLevelLink":true} /-->
-<!-- /wp:navigation --></div>
-<!-- /wp:column -->
+  <!-- Divider Line (Contained) -->
+  <div class="quills-divider-container">
+    <div class="quills-header-divider"></div>
+  </div>
 
-<!-- wp:column {"verticalAlignment":"center","width":"30%","className":"header-btns"} -->
-<div class="wp-block-column is-vertically-aligned-center header-btns" style="flex-basis:30%"><!-- wp:group {"className":"cart-detail","layout":{"type":"flex","flexWrap":"nowrap","justifyContent":"right"}} -->
-<div class="wp-block-group cart-detail"><!-- wp:buttons {"className":"coffee-cafe-corner-header-cta","fontFamily":"lora","layout":{"type":"flex","justifyContent":"right","flexWrap":"nowrap"}} -->
-<div class="wp-block-buttons coffee-cafe-corner-header-cta has-lora-font-family"><!-- wp:button {"textColor":"slidebg","className":"header-btn","style":{"typography":{"letterSpacing":"0.5px","fontStyle":"normal","fontWeight":"500","textTransform":"capitalize"},"spacing":{"padding":{"left":"15px","right":"15px","top":"var:preset|spacing|x-small","bottom":"var:preset|spacing|x-small"}},"border":{"width":"1px","radius":{"topLeft":"6px","topRight":"6px","bottomLeft":"6px","bottomRight":"6px"}}},"fontSize":"small","fontFamily":"lora"} -->
-<div class="wp-block-button header-btn"><a class="wp-block-button__link has-slidebg-color has-text-color has-lora-font-family has-small-font-size has-custom-font-size wp-element-button" style="border-width:1px;border-top-left-radius:6px;border-top-right-radius:6px;border-bottom-left-radius:6px;border-bottom-right-radius:6px;padding-top:var(--wp--preset--spacing--x-small);padding-right:15px;padding-bottom:var(--wp--preset--spacing--x-small);padding-left:15px;font-style:normal;font-weight:500;letter-spacing:0.5px;text-transform:capitalize"><?php esc_html_e('Book a Table', 'coffee-cafe-corner'); ?></a></div>
-<!-- /wp:button --></div>
-<!-- /wp:buttons --></div>
-<!-- /wp:group --></div>
-<!-- /wp:column --></div>
-<!-- /wp:columns --></header>
-<!-- /wp:group --></div>
-<!-- /wp:group -->
+  <!-- Bottom Row: Centered Navigation Menu -->
+  <nav class="quills-header-bottom" id="quills-nav-menu" aria-label="<?php esc_attr_e( 'Primary Navigation', 'coffee-cafe-corner' ); ?>">
+    <ul class="quills-nav-list">
+      <li class="quills-nav-item"><a href="<?php echo esc_url( home_url('/shop/') ); ?>" class="quills-nav-link">COFFEE</a></li>
+      <li class="quills-nav-item"><a href="<?php echo esc_url( home_url('/subscriptions/') ); ?>" class="quills-nav-link">SUBSCRIPTIONS</a></li>
+      <li class="quills-nav-item"><a href="<?php echo esc_url( home_url('/brew-gear/') ); ?>" class="quills-nav-link">BREW GEAR</a></li>
+      <li class="quills-nav-item"><a href="<?php echo esc_url( home_url('/merch/') ); ?>" class="quills-nav-link">MERCH</a></li>
+      <li class="quills-nav-item"><a href="<?php echo esc_url( home_url('/gift-cards/') ); ?>" class="quills-nav-link">GIFT CARDS</a></li>
+      <li class="quills-nav-item"><a href="<?php echo esc_url( home_url('/visit/') ); ?>" class="quills-nav-link">VISIT</a></li>
+      <li class="quills-nav-item"><a href="<?php echo esc_url( home_url('/about/') ); ?>" class="quills-nav-link">ABOUT</a></li>
+    </ul>
+  </nav>
+</div>
+<!-- /wp:html -->
