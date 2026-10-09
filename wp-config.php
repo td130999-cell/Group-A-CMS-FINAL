@@ -42,6 +42,11 @@ define( 'WP_DEBUG', filter_var($debug_mode ?: false, FILTER_VALIDATE_BOOLEAN) );
 define( 'FS_METHOD', 'direct' );
 
 /**
+ * Disable WP-Cron loopback requests in Docker container to prevent slow page load timeouts.
+ */
+define( 'DISABLE_WP_CRON', true );
+
+/**
  * Handle reverse proxies and SSL termination.
  */
 if ( isset( $_SERVER['HTTP_X_FORWARDED_PROTO'] ) && $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https' ) {
