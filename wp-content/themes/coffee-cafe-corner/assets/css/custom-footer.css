@@ -1,0 +1,278 @@
+/**
+ * Custom Footer Styles - Matching Quills Coffee Design
+ * Background: Sage/Olive Green (#596e54)
+ * Typography: Warm off-white (#e8ede5)
+ */
+
+.quills-footer-wrapper {
+    background-color: #596e54 !important;
+    color: #e8ede5;
+    padding: 70px 24px 30px 24px;
+    font-family: var(--wp--preset--font-family--lora, 'Lora', Georgia, serif);
+    position: relative;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.quills-footer-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 16px;
+    box-sizing: border-box;
+}
+
+/* 3-Column Top Section */
+.quills-footer-top {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 48px;
+    margin-bottom: 60px;
+}
+
+.quills-footer-col {
+    display: flex;
+    flex-direction: column;
+}
+
+.quills-footer-title {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 2.2px;
+    text-transform: uppercase;
+    color: #ffffff;
+    margin: 0 0 24px 0;
+    padding: 0;
+}
+
+/* Brand & Contact Column */
+.quills-footer-contact {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.quills-footer-contact p,
+.quills-contact-line {
+    margin: 0;
+    padding: 0;
+    font-size: 14.5px;
+    line-height: 1.6;
+    color: #e8ede5;
+}
+
+.quills-footer-contact a {
+    color: #e8ede5;
+    text-decoration: none;
+    transition: color 0.2s ease, opacity 0.2s ease;
+}
+
+.quills-footer-contact a:hover {
+    color: #ffffff;
+    text-decoration: underline;
+}
+
+/* Menu Lists in Quick Links & Company */
+.quills-footer-menu {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.quills-footer-menu li {
+    margin: 0;
+    padding: 0;
+    line-height: 1.6;
+}
+
+.quills-footer-menu li a {
+    color: #e8ede5;
+    text-decoration: none;
+    font-size: 14.5px;
+    transition: color 0.2s ease, opacity 0.2s ease;
+    display: inline-block;
+}
+
+.quills-footer-menu li a:hover {
+    color: #ffffff;
+    opacity: 0.9;
+    text-decoration: underline;
+}
+
+/* Bottom Bar */
+.quills-footer-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 24px;
+    padding-top: 20px;
+    margin-bottom: 30px;
+}
+
+/* Left: Currency, Language & Socials */
+.quills-footer-left {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    flex-wrap: wrap;
+}
+
+.quills-selector {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #e8ede5;
+    cursor: pointer;
+    user-select: none;
+    transition: opacity 0.2s ease;
+}
+
+.quills-selector:hover {
+    color: #ffffff;
+    opacity: 0.9;
+}
+
+.quills-flag-icon {
+    display: inline-block;
+    vertical-align: middle;
+    border-radius: 1px;
+    box-shadow: 0 0 1px rgba(0,0,0,0.4);
+}
+
+.quills-chevron {
+    font-size: 10px;
+    margin-left: 2px;
+    display: inline-block;
+    vertical-align: middle;
+    opacity: 0.85;
+}
+
+/* Social icons */
+.quills-social-links {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-left: 8px;
+}
+
+.quills-social-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: #e8ede5;
+    text-decoration: none;
+    font-size: 16px;
+    transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.quills-social-icon svg {
+    width: 16px;
+    height: 16px;
+    fill: currentColor;
+}
+
+.quills-social-icon:hover {
+    color: #ffffff;
+    transform: translateY(-2px);
+}
+
+/* Right: Payment Method Badges */
+.quills-footer-payment {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.quills-payment-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 24px;
+    opacity: 0.95;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.quills-payment-badge:hover {
+    opacity: 1;
+    transform: scale(1.05);
+}
+
+.quills-payment-badge svg {
+    height: 22px;
+    width: auto;
+    max-width: 44px;
+    fill: #ffffff;
+}
+
+/* Copyright Row */
+.quills-footer-copyright {
+    text-align: center;
+    padding-top: 20px;
+}
+
+.quills-footer-copyright p {
+    margin: 0;
+    font-size: 11.5px;
+    color: #c9d2c6;
+    letter-spacing: 0.3px;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+.quills-footer-copyright a {
+    color: inherit;
+    text-decoration: none;
+}
+
+.quills-footer-copyright a:hover {
+    text-decoration: underline;
+    color: #ffffff;
+}
+
+/* Responsive Breakpoints */
+@media (max-width: 900px) {
+    .quills-footer-top {
+        grid-template-columns: 1fr 1fr;
+        gap: 36px;
+    }
+    .quills-footer-bottom {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        gap: 20px;
+    }
+    .quills-footer-left {
+        justify-content: center;
+    }
+    .quills-footer-payment {
+        justify-content: center;
+    }
+}
+
+@media (max-width: 600px) {
+    .quills-footer-wrapper {
+        padding: 50px 16px 25px 16px;
+    }
+    .quills-footer-top {
+        grid-template-columns: 1fr;
+        gap: 32px;
+    }
+    .quills-footer-title {
+        margin-bottom: 16px;
+    }
+    .quills-footer-bottom {
+        gap: 18px;
+    }
+    .quills-footer-left {
+        gap: 16px;
+    }
+    .quills-footer-payment {
+        gap: 10px;
+    }
+}

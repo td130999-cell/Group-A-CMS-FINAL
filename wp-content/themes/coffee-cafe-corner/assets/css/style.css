@@ -1,0 +1,2397 @@
+/**
+ * Coffee Cafe Corner Theme Styles
+ * Custom styles for the Coffee Cafe Corner WordPress theme
+ */
+
+/* Base Styles */
+* {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: var(--wp--preset--font-family--lora);
+    line-height: 1.6;
+    color: var(--wp--preset--color--body);
+    background-color: var(--wp--preset--color--background);
+}
+
+/* Typography Enhancements */
+h1, h2, h3, h4, h5, h6 {
+    font-family: var(--wp--preset--font-family--cookie);
+    font-weight: 400;
+    line-height: 1.2;
+    letter-spacing: -0.025em;
+}
+
+/* Link Styles */
+a {
+    color: var(--wp--preset--color--primary);
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+a:hover {
+    color: var(--wp--preset--color--heading);
+}
+
+/* ========================================
+   CONTENT LINKS STYLING - WordPress THEME REVIEW REQUIREMENTS
+   ======================================== */
+
+/* Links within ALL content areas - Required by WordPress Theme Review Guidelines */
+/* Covers: the_content(), the_excerpt(), comments, widgets, and custom text blocks */
+.wp-block-post-content a,
+.entry-content a,
+.post-content a,
+.page-content a,
+article a,
+.comment-content a,
+.comment-text a,
+.wp-block-post-excerpt a,
+.post-excerpt a,
+.excerpt a,
+.widget a,
+.widget-content a,
+.wp-block-text a,
+.textwidget a,
+.wp-block-paragraph a,
+.wp-block-list a,
+.wp-block-quote a,
+.wp-block-pullquote a,
+.wp-block-verse a,
+.wp-block-preformatted a,
+.content a,
+main a,
+.site-content a {
+    color: var(--wp--preset--color--primary);
+    text-decoration: underline;
+    text-underline-offset: 0.125em;
+    text-decoration-thickness: 1px;
+    transition: all 0.3s ease;
+}
+
+/* Content link hover state */
+.wp-block-post-content a:hover,
+.entry-content a:hover,
+.post-content a:hover,
+.page-content a:hover,
+article a:hover,
+.comment-content a:hover,
+.comment-text a:hover,
+.wp-block-post-excerpt a:hover,
+.post-excerpt a:hover,
+.excerpt a:hover,
+.widget a:hover,
+.widget-content a:hover,
+.wp-block-text a:hover,
+.textwidget a:hover,
+.wp-block-paragraph a:hover,
+.wp-block-list a:hover,
+.wp-block-quote a:hover,
+.wp-block-pullquote a:hover,
+.wp-block-verse a:hover,
+.wp-block-preformatted a:hover,
+.content a:hover,
+main a:hover,
+.site-content a:hover {
+    color: var(--wp--preset--color--secondary);
+    text-decoration-thickness: 2px;
+}
+
+/* Content link focus state for accessibility */
+.wp-block-post-content a:focus,
+.entry-content a:focus,
+.post-content a:focus,
+.page-content a:focus,
+article a:focus,
+.comment-content a:focus,
+.comment-text a:focus,
+.wp-block-post-excerpt a:focus,
+.post-excerpt a:focus,
+.excerpt a:focus,
+.widget a:focus,
+.widget-content a:focus,
+.wp-block-text a:focus,
+.textwidget a:focus,
+.wp-block-paragraph a:focus,
+.wp-block-list a:focus,
+.wp-block-quote a:focus,
+.wp-block-pullquote a:focus,
+.wp-block-verse a:focus,
+.wp-block-preformatted a:focus,
+.content a:focus,
+main a:focus,
+.site-content a:focus {
+    outline: 2px solid var(--wp--preset--color--primary);
+    outline-offset: 2px;
+    text-decoration-thickness: 2px;
+}
+/* EXCLUDE specific elements from underline styling */
+/* Buttons */
+.wp-block-button a,
+.wp-block-buttons a,
+.button,
+.btn,
+/* Images and Media */
+.wp-block-image a,
+.wp-block-gallery a,
+.wp-block-media-text a,
+.wp-block-cover a,
+/* Navigation and Menus */
+.wp-block-navigation a,
+.navigation a,
+.nav a,
+.menu a,
+.navbar a,
+/* Headers and Logos */
+.site-title a,
+.site-header a,
+.header a,
+.logo a,
+/* Social Links */
+.wp-block-social-links a,
+.social-links a,
+/* Post Meta */
+.wp-block-post-title a,
+.wp-block-post-author a,
+.wp-block-post-date a,
+.wp-block-post-terms a,
+.post-meta a,
+.entry-meta a,
+/* Cards and Special Blocks */
+.wp-block-latest-posts a,
+.wp-block-archives a,
+.wp-block-categories a,
+.wp-block-tag-cloud a,
+.card a,
+/* Pagination */
+.wp-block-query-pagination a,
+.pagination a,
+.page-numbers,
+/* Footer specific */
+.site-footer .wp-block-navigation a,
+.footer-navigation a {
+    text-decoration: none !important;
+}
+
+/* Ensure excluded elements stay without underlines on hover */
+.wp-block-button a:hover,
+.wp-block-buttons a:hover,
+.button:hover,
+.btn:hover,
+.wp-block-image a:hover,
+.wp-block-gallery a:hover,
+.wp-block-media-text a:hover,
+.wp-block-cover a:hover,
+.wp-block-navigation a:hover,
+.navigation a:hover,
+.nav a:hover,
+.menu a:hover,
+.navbar a:hover,
+.site-title a:hover,
+.site-header a:hover,
+.header a:hover,
+.logo a:hover,
+.wp-block-social-links a:hover,
+.social-links a:hover,
+.wp-block-post-title a:hover,
+.wp-block-post-author a:hover,
+.wp-block-post-date a:hover,
+.wp-block-post-terms a:hover,
+.post-meta a:hover,
+.entry-meta a:hover,
+.wp-block-latest-posts a:hover,
+.wp-block-archives a:hover,
+.wp-block-categories a:hover,
+.wp-block-tag-cloud a:hover,
+.card a:hover,
+.wp-block-query-pagination a:hover,
+.pagination a:hover,
+.page-numbers:hover,
+.site-footer .wp-block-navigation a:hover,
+.footer-navigation a:hover {
+    text-decoration: none !important;
+}
+
+/* ========================================
+   BUTTON ENHANCEMENTS
+   ======================================== */
+
+/* Button Enhancements */
+.wp-block-button__link {
+    font-weight: 600;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    text-decoration: none;
+}
+
+/* ========================================
+   HEADER NAVIGATION STYLING
+   ======================================== */
+
+/* HEADER NAVIGATION SPACING - Desktop */
+.coffee-cafe-corner-header .coffee-cafe-corner-main-navigation ul {
+    display: flex !important;
+    align-items: center !important;
+    list-style: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+.coffee-cafe-corner-header .coffee-cafe-corner-main-navigation .wp-block-navigation-item {
+    margin-right: 20px !important;
+    margin-left: 0 !important;
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+}
+
+.coffee-cafe-corner-header .wp-block-navigation__submenu-container.wp-block-navigation-submenu li::before,.coffee-cafe-corner-header .wp-block-navigation__submenu-container.wp-block-navigation-submenu li::after{
+    display: none;
+}
+
+.coffee-cafe-corner-header li.wp-block-navigation-item.wp-block-navigation-link:hover span, .coffee-cafe-corner-header li.wp-block-navigation-item.current-menu-item.wp-block-navigation-link span {
+    color: #1C130C;
+    background: #F0EBE5;
+}
+
+.wp-block-navigation__submenu-container.wp-block-navigation-submenu li.wp-block-navigation-item.wp-block-navigation-link:hover span{
+    color: #000000 !important;
+    background: transparent !important;
+}
+.coffee-cafe-corner-header span.wp-block-navigation-item__label {
+    padding: 20px 10px;
+}
+.wp-block-navigation__submenu-container.wp-block-navigation-submenu span{
+    padding: 0;
+}
+
+.coffee-cafe-corner-header .coffee-cafe-corner-main-navigation .wp-block-navigation__container {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    padding: 5px 0px !important;
+}
+
+.coffee-cafe-corner-header ul.wp-block-navigation__submenu-container.wp-block-navigation-submenu {
+    color: #222 !important;
+}
+
+.coffee-cafe-corner-header .coffee-cafe-corner-main-navigation {
+    display: block !important;
+}
+
+/* Header CTA Button - Awesome styling for all screens */
+.slide-btn{
+    position: relative !important;
+}
+
+.coffee-cafe-corner-header-cta .wp-block-button__link:hover {
+    background: transparent !important;
+    color: white !important;
+}
+
+.coffee-cafe-corner-header-cta .wp-block-button__link:hover::before {
+    left: 100% !important;
+}
+
+/* Header-specific styling */
+.coffee-cafe-corner-header-container {
+    align-items: center;
+}
+
+.coffee-cafe-corner-header-logo {
+    align-items: center;
+}
+
+.coffee-cafe-corner-header-nav {
+    align-items: center;
+}
+
+.coffee-cafe-corner-header-cta {
+    margin-left: var(--wp--preset--spacing--medium);
+}
+
+.header-logo h1 a:hover{
+    color: var(--wp--preset--color--heading) !important;
+}
+
+span.head-tone strong {
+    text-transform: uppercase;
+}
+span.dashicons.dashicons-phone{
+    display: none;
+}
+.blog-default-image{
+  border-radius: 16px 16px 0px 0px;
+  height: 200px;  
+}
+.blog-default-image img {
+    height: 200px;
+    border-radius: 16px 16px 0px 0px;
+    padding: 0;
+}
+.coffee-cafe-corner-portfolio-card h3 a{
+    font-size: 30px !important;
+}
+/* ========================================
+   GENERAL COMPONENT STYLES
+   ======================================== */
+
+/* Navigation Enhancements */
+.wp-block-navigation-item a {
+    transition: all 0.3s ease;
+}
+
+.wp-block-navigation-item a:hover {
+    color: var(--wp--preset--color--primary);
+}
+
+/* Footer Navigation Links - Only links have hover effects */
+footer .wp-block-navigation-item a {
+    color: var(--wp--preset--color--background);
+    transition: all 0.3s ease;
+}
+
+footer .wp-block-navigation-item a:hover {
+    color: var(--wp--preset--color--primary);
+    transform: translateY(-2px);
+}
+
+/* Footer Links Hover Effect */
+footer .wp-block-group .wp-block-paragraph a {
+    transition: all 0.3s ease;
+}
+
+footer .wp-block-group .wp-block-paragraph a:hover {
+    transform: translateY(-2px);
+    text-decoration: underline;
+}
+
+/* Remove hover effects from footer columns themselves */
+footer .wp-block-column {
+    transition: none;
+}
+
+footer .wp-block-column:hover {
+    transform: none;
+}
+
+/* ========================================
+   FOOTER STYLING - SIMPLE FIX
+   ======================================== */
+
+/* SIMPLE: Just remove white backgrounds from footer elements */
+footer,
+footer * {
+    background-color: inherit !important;
+}
+
+/* Footer navigation styling */
+footer .wp-block-navigation {
+    display: block !important;
+}
+
+footer .wp-block-navigation ul {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: var(--wp--preset--spacing--x-small) !important;
+    list-style: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+footer .wp-block-navigation .wp-block-navigation-item {
+    margin: 0 !important;
+}
+
+footer .wp-block-navigation .wp-block-navigation__container {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: var(--wp--preset--spacing--x-small) !important;
+}
+
+/* Footer groups - prevent unwanted effects */
+footer .wp-block-group {
+    transition: none !important;
+    transform: none !important;
+    box-shadow: none !important;
+}
+
+footer .wp-block-group:hover {
+    transform: none !important;
+    box-shadow: none !important;
+}
+
+footer .wp-block-social-links .wp-social-link svg{
+    color: #000 !important;
+    font-size: 20px;
+}
+footer .wp-block-social-links .wp-social-link svg:hover{
+    color:var(--wp--preset--color--primary) !important;
+}
+.foot-grid{
+    display: grid !important;
+    grid-template-columns: 150px auto auto auto;
+    margin: 0;
+}
+.footer-coll {
+    height: 100%;
+}
+
+a.wp-block-social-link-anchor:hover svg path {
+    color:var(--wp--preset--color--secondary) !important;
+}
+
+/* ========================================
+   topbar
+   ======================================== */
+
+.topbar .wp-block-social-links, .topbar .wp-block-social-links.has-normal-icon-size {
+    font-size: 24px;
+    margin: 0;
+}
+
+.topbar .wp-block-social-links .wp-block-social-link.wp-social-link:hover .wp-block-social-link-anchor svg {
+    color: var(--wp--preset--color--primary) !important;
+}
+.topbar-detail {
+    gap: 30px;
+}
+.cart-detail{
+    gap: 10px;
+}
+.header-cart span {
+    display: none !important;
+}
+.topbar .wp-block-social-links{
+    margin: 0 !important;
+}
+.heads-detail{
+    max-width: 100% !important;
+    width: auto !important;
+} 
+.mail-address{
+    position: relative;
+}
+
+.header-search .wp-block-search__inside-wrapper{
+    position: relative !important;
+}
+
+h1.alignwide.wp-block-query-title{
+    text-align: center;
+}
+
+.header-search.wp-block-search.wp-block-search__button-only .wp-block-search__input{
+    position: absolute !important;
+    bottom: -53px !important;
+    z-index: 999;
+}
+
+.header-search button{
+    padding: 0 !important;
+}
+
+header.coffee-cafe-corner-header{
+    position: relative;
+    z-index: 9;
+}
+
+.topbar i {
+    color: var(--wp--preset--color--slidebg);
+    font-size: 18px;
+}
+
+.wc-block-mini-cart__button span svg{
+    color: var(--wp--preset--color--slidebg) !important; 
+}
+
+.detail-gap{
+    gap: 10px;
+}
+
+.header-btns {
+    position: relative;
+}
+
+.detail-icon{
+    max-width: 25px !important;
+}
+.coffee-cafe-corner-header-cta{
+    position: relative;
+}
+.coffee-cafe-corner-header-cta:hover{
+    background: var(--wp--preset--color--heading) !important;
+    border-radius: 6px;
+}
+.heads-detail {
+    padding: 10px 0px;
+    position: relative;
+}
+
+.wp-block-button.header-btn a{
+    background: transparent;
+}
+
+.logo-box{
+    display: flex;
+    align-items: center;
+    position: relative;
+}
+
+.header-search .wp-block-search__button{
+    position: relative;
+}
+
+.wp-block-social-links, .wp-block-social-links.has-normal-icon-size{
+    font-size: 20px !important;
+}
+/* ========================================
+   BANNER
+   ======================================== */
+
+.banner-main-section{
+    position: relative;
+    min-height: 700px !important;
+}
+.slider-box{
+   min-height: 700px !important; 
+}
+.slide-group{
+    width: 100%;
+}
+.banner-contentt{
+    display: flex;
+    align-items: center;
+}
+p.banner-extra-head{
+    display: inline-block;
+    align-items: center;
+    margin: 0 auto;
+    padding: 7px 12px !important;
+    justify-content: center;
+    border-left: 3px solid var(--wp--preset--color--primary);
+}
+p.sub-head{
+    width: fit-content;
+    align-items: center;
+    margin: 0 auto;
+    padding: 5px 10px !important;
+    justify-content: center;
+}
+.banner-main-section .wp-block-button a:hover {
+    color: #fff !important;
+    background: var(--wp--preset--color--primary) !important;
+}
+.banner-position{
+    position: relative;
+}
+.banner-position img{
+    mask-image: url(../images/banner-mask.png);
+    mask-size: 100% 100%;
+    mask-repeat: no-repeat;
+    width: 100%;
+}
+.banner-position figure{
+    background: url(../images/banner-mask.png) no-repeat center;
+    background-size: 101% 101%;
+}
+.banner-position figure{
+    display: block !important;
+}
+.slide-content-box{
+    position: relative;
+}
+.slide-content-box::after {
+    content: "";
+    width: 100%;
+    height: 200px;
+    background-image: url(../images/dotten-line.png);
+    background-repeat: no-repeat;
+    display: block;
+    position: absolute;
+    top: 0;
+    right: -50%;
+}
+
+/* ========================================
+   PRODUCT SECTION
+   ======================================== */
+
+.service-box{
+    text-align: left;
+}
+
+.service-section del {
+    display: none;
+}
+
+a.wp-block-post-excerpt__more-link {
+    text-decoration: none;
+    margin-top: 14px;
+}
+
+h3.product-main-heading {
+    position: relative;
+    padding-left: 40px;
+}
+
+h3.product-main-heading::after {
+    content: "";
+    margin: 10px auto 0;
+    width: 150px;
+    height: 25px;
+    background-image: url(../images/pro-head.png);
+    background-size: 100%;
+    background-repeat: no-repeat;
+    display: block;
+}
+
+p.wp-block-post-excerpt__more-text {
+    padding: 0;
+    margin: 7px 0;
+    font-size: 16px;
+    text-transform: uppercase;
+}
+
+p.wp-block-post-excerpt__more-text{
+    text-decoration: none; 
+}
+
+.wp-block-group.pro-single-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.popular-img img{
+    width: 100% !important;
+    object-fit: cover;
+}
+
+/* ========================================
+   SERVICE SECTION SLIDER
+   ======================================== */
+
+.service-section .our-services {
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+.service-section .service-box {
+    position: relative;
+    height: 320px;
+    overflow: hidden;
+    padding: 0;
+    cursor: pointer;
+}
+
+/* Image always visible, covers full card */
+.service-section .service-img {
+    position: absolute !important;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    margin: 0 !important;
+    padding: 0 !important;
+    z-index: 0;
+    transition: transform 0.4s ease;
+}
+
+.service-section .service-img img {
+    width: 100% !important;
+    height: 320px !important;
+    object-fit: cover !important;
+    display: block;
+    transition: transform 0.4s ease;
+}
+
+/* Hover overlay - hidden by default */
+.service-section .service-box > .service-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(254, 207, 57, 0.92);
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 25px 20px;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.35s ease, transform 0.35s ease;
+    pointer-events: none;
+    margin: 0;
+}
+
+.service-section .service-box:hover > .service-overlay {
+    opacity: 0.9;
+    transform: translateY(0);
+    pointer-events: auto;
+}
+
+.service-section .service-box:hover .service-img img {
+    transform: scale(1.05);
+}
+
+/* Title inside overlay */
+.service-section .service-title,
+.service-section .service-content,
+.service-section .service-btn {
+    display: none;
+}
+
+.service-section .service-overlay .service-title {
+    display: block;
+    margin: 0 0 10px 0;
+    padding: 0;
+}
+
+.service-section .service-overlay .service-title a {
+    color: var(--wp--preset--color--secondary);
+    text-decoration: none;
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 1.3;
+}
+
+.service-section .service-overlay .service-content {
+    display: block;
+    color: #121212;
+    font-size: 14px;
+    line-height: 1.6;
+    margin: 0 0 15px 0;
+    padding: 0;
+}
+
+.service-section .service-overlay .service-content p {
+    margin: 0;
+}
+
+.service-section .service-overlay .service-btn {
+    display: block;
+    padding: 8px 15px;
+    margin-top: 15px;
+    background: var(--wp--preset--color--secondary);
+    color: var(--wp--preset--color--primary);
+}
+
+.service-section .service-overlay .service-btn a,
+.service-section .service-overlay .service-btn .wp-block-read-more {
+    display: inline-block;
+    background: var(--wp--preset--color--secondary);
+    color: #ffffff !important;
+    padding: 10px 24px;
+    font-weight: 600;
+    font-size: 14px;
+    text-decoration: none !important;
+    border: 2px solid var(--wp--preset--color--secondary);
+    transition: background 0.3s ease, color 0.3s ease;
+    cursor: pointer;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+}
+
+.service-section .service-overlay .service-btn a:hover,
+.service-section .service-overlay .service-btn .wp-block-read-more:hover {
+    background: transparent !important;
+    color: var(--wp--preset--color--secondary) !important;
+    text-decoration: none !important;
+}
+.serive-icon-box {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.service-section i{
+    color: #ffffff;
+    font-size: 32px;
+}
+.serive-icon-box::after {
+    position: absolute;
+    content: '';
+    width: 90px;
+    background: transparent;
+    border: 2px solid var(--wp--preset--color--primary);
+    height: 90px;
+    border-radius: 50%;
+}
+.serive-icon-box::before {
+    position: absolute;
+    content: '';
+    width: 100px;
+    background: transparent;
+    border: 2px solid var(--wp--preset--color--primary);
+    height: 100px;
+    border-radius: 50%;
+}
+.our-blog p.sub-head{
+    text-align: center;
+    display: flex;
+}
+.banner-btn i{
+    padding-left: 15px;
+}
+.service-section .banner-btn i {
+    color: #fff;
+    font-size: 20px;
+}
+.service-detail-box{
+    position: relative;
+}
+
+/*figure.wp-block-image.size-full.about-img-1 img {
+    height: 170px;
+    width: 100%;
+    object-fit: cover;
+    margin-top: -100px;
+    clip-path: polygon(80% 0, 100% 30%, 100% 100%, 0 100%, 0 0);
+}*/
+
+h5.serv-box-head a {
+    text-decoration: none;
+}
+.service-box:hover .service-detail-box{
+    background-color: var(--wp--preset--color--primary) !important;
+}
+.service-box:hover .serive-icon-box::before,.service-box:hover .serive-icon-box::after{
+    border-color: #fff;
+}
+.service-box:hover h5.serv-box-head a,.service-box:hover h5.serv-box-head,.service-box:hover p.serv-box-content{
+    color: #fff;
+}
+.service-box:hover .serive-icon-box{
+    background: #fff !important;
+}
+.service-box:hover i {
+    color: var(--wp--preset--color--primary) !important;
+}
+
+/* ========================================
+   FEATURED PROJECTS - SPECIFIC TARGETING
+   ======================================== */
+
+/* Target ONLY the Featured Projects section on homepage using background color selector */
+.wp-block-group.has-light-gray-background-color .wp-block-columns .wp-block-column .wp-block-group {
+    padding: 0 !important;
+    margin: 0 !important;
+    border-radius: 16px !important;
+    overflow: hidden !important;
+    background: var(--wp--preset--color--background) !important;
+    border: none !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08) !important;
+    transition: all 0.3s ease !important;
+}
+
+.wp-block-group.has-light-gray-background-color .wp-block-columns .wp-block-column .wp-block-group:hover {
+    transform: translateY(-8px) !important;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12) !important;
+}
+
+/* Featured Projects - Zero gap images */
+.wp-block-group.has-light-gray-background-color .wp-block-columns .wp-block-column .wp-block-group .wp-block-image {
+    margin: 0 !important;
+    padding: 0 !important;
+    line-height: 0 !important;
+    border-radius: 16px 16px 0 0 !important;
+    overflow: hidden !important;
+}
+
+.wp-block-group.has-light-gray-background-color .wp-block-columns .wp-block-column .wp-block-group .wp-block-image img {
+    width: 100% !important;
+    height: auto !important;
+    display: block !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border-radius: 16px 16px 0 0 !important;
+    vertical-align: top !important;
+    transition: all 0.3s ease !important;
+}
+
+.wp-block-group.has-light-gray-background-color .wp-block-columns .wp-block-column .wp-block-group .wp-block-image figure {
+    margin: 0 !important;
+    padding: 0 !important;
+    line-height: 0 !important;
+}
+
+/* Featured Projects - Content area gets padding */
+.wp-block-group.has-light-gray-background-color .wp-block-columns .wp-block-column .wp-block-group .wp-block-group[style*="padding"] {
+    padding: var(--wp--preset--spacing--medium) !important;
+    margin: 0 !important;
+}
+
+/* Featured Projects - Image hover effect */
+.wp-block-group.has-light-gray-background-color .wp-block-columns .wp-block-column .wp-block-group:hover .wp-block-image img {
+    transform: scale(1.02) !important;
+}
+
+/* ========================================
+   FORM ELEMENTS AND INTERACTIONS
+   ======================================== */
+
+/* Service Cards */
+.wp-block-group[style*="border-radius:16px"] {
+    transition: all 0.3s ease;
+}
+
+.wp-block-group[style*="border-radius:16px"]:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+}
+
+/* Form Elements */
+input[type="text"],
+input[type="email"],
+input[type="url"],
+input[type="password"],
+input[type="search"],
+input[type="number"],
+input[type="tel"],
+textarea,
+select {
+    border: 1px solid var(--wp--preset--color--border);
+    border-radius: 8px;
+    padding: 12px 16px;
+    font-family: var(--wp--preset--font-family--lora);
+    transition: all 0.3s ease;
+}
+
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="url"]:focus,
+input[type="password"]:focus,
+input[type="search"]:focus,
+input[type="number"]:focus,
+input[type="tel"]:focus,
+textarea:focus,
+select:focus {
+    border-color: var(--wp--preset--color--primary);
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+    outline: none;
+}
+
+/* Search Block Styling */
+.wp-block-search {
+    border-radius: 8px;
+}
+
+.wp-block-search__input {
+    border: 1px solid var(--wp--preset--color--border);
+    border-radius: 8px;
+    padding: 12px 16px;
+    font-family: var(--wp--preset--font-family--lora);
+}
+
+.wp-block-search__button {
+    background: #000;
+    border: none;
+    color: #ffffff;
+    border-radius: 8px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.wp-block-search__button:hover,p.form-submit.wp-block-button:hover input {
+    background: var(--wp--preset--color--primary);
+}
+
+p.form-submit.wp-block-button input {
+    background: #000000;
+}
+
+/* ========================================
+   BLOG AND PAGINATION STYLES
+   ======================================== */
+
+/* Pagination */
+.wp-block-query-pagination {
+    margin-top: var(--wp--preset--spacing--xx-large);
+}
+
+.wp-block-query-pagination .page-numbers {
+    display: inline-block;
+    padding: 12px 16px;
+    margin: 0 4px;
+    border: 1px solid var(--wp--preset--color--border);
+    border-radius: 8px;
+    color: var(--wp--preset--color--heading);
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.wp-block-query-pagination .page-numbers:hover,
+.wp-block-query-pagination .page-numbers.current {
+    background: var(--wp--preset--color--primary);
+    color: white;
+    border-color: var(--wp--preset--color--primary);
+}
+
+/* Social Links */
+.wp-block-social-links .wp-social-link {
+    transition: all 0.3s ease;
+}
+
+.wp-block-social-links .wp-social-link:hover {
+    transform: translateY(-2px);
+}
+
+.wp-block-social-links .wp-block-social-link.wp-social-link:hover .wp-block-social-link-anchor svg{
+    fill: var(--wp--preset--color--primary) !important;
+}
+
+/* Portfolio Card Styling */
+.coffee-cafe-corner-portfolio-card {
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.coffee-cafe-corner-portfolio-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+}
+
+/* Blog Archive Grid Layout - SIMPLIFIED TO MATCH SEARCH TEMPLATE */
+.wp-block-query .wp-block-post-template.is-layout-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--wp--preset--spacing--large) !important;
+/*    max-width: 1200px;*/
+    margin: 0 auto;
+}
+
+.simple-blog .wp-block-query .wp-block-post-template.is-layout-grid{
+    max-width: 100% !important;
+}
+
+/* Blog Archive Specific - Make Cards Wider to Match Portfolio */
+.wp-block-query .coffee-cafe-corner-portfolio-card {
+    max-width: none;
+    width: 100%;
+}
+
+/* Portfolio Grid Specific - Keep Original Sizing */
+.wp-block-columns .wp-block-column .wp-block-group {
+    max-width: none;
+    width: 100%;
+}
+
+/* MOBILE RESPONSIVE - SIMPLE OVERRIDE */
+@media (max-width: 768px) {
+    /* Force single column on mobile - simple approach */
+    .wp-block-query .wp-block-post-template.is-layout-grid {
+        grid-template-columns: 1fr !important;
+        gap: var(--wp--preset--spacing--medium) !important;
+    }
+    
+    /* Mobile blog grid - single column - MATCHING EXISTING RULE */
+    .wp-block-query .wp-block-post-template.is-layout-grid {
+        grid-template-columns: 1fr !important;
+    }
+    .slide-content-box::after{
+        display: none;
+    }
+}
+
+/* Blog Archive Specific - Make Cards Wider to Match Portfolio */
+.wp-block-query .coffee-cafe-corner-portfolio-card {
+    max-width: none;
+    width: 100%;
+}
+
+/* Portfolio Grid Specific - Keep Original Sizing */
+.wp-block-columns .wp-block-column .wp-block-group {
+    max-width: none;
+    width: 100%;
+}
+
+/* Blog Archive Featured Images */
+.coffee-cafe-corner-portfolio-card .wp-block-post-featured-image {
+    flex-shrink: 0;
+    overflow: hidden;
+    border-radius: 16px 16px 0 0;
+    height: 200px;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+.coffee-cafe-corner-portfolio-card .wp-block-post-featured-image img {
+    border-radius: 16px 16px 0 0;
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    display: block;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+.coffee-cafe-corner-portfolio-card .wp-block-post-featured-image figure {
+    margin: 0 !important;
+    padding: 0 !important;
+    height: 200px;
+    overflow: hidden;
+}
+
+/* Blog Cards - Same Height as Portfolio Cards */
+.coffee-cafe-corner-portfolio-card {
+    padding: 0 !important;
+    min-height: 420px;
+    width: 100%;
+    max-width: none;
+}
+
+.coffee-cafe-corner-portfolio-card > .wp-block-post-featured-image:first-child {
+    margin-top: 0 !important;
+    border-radius: 16px 16px 0 0;
+}
+
+/* Force Blog Archive Query to Use Full Available Width */
+.wp-block-group .wp-block-query.alignwide {
+/*    max-width: 1200px;*/
+    width: 100%;
+}
+
+/* Override WordPress Default Query Constraints for Blog Cards */
+.wp-block-query .wp-block-post-template {
+    max-width: none;
+    width: 100%;
+}
+
+/* Prevent child elements from inheriting shadow effects */
+.coffee-cafe-corner-portfolio-card * {
+    box-shadow: none !important;
+}
+
+.coffee-cafe-corner-portfolio-card:hover * {
+    box-shadow: none !important;
+}
+
+/* ========================================
+   PRICING CARD STYLING
+   ======================================== */
+
+/* Pricing Card Styling - Remove shadow effects completely */
+.coffee-cafe-corner-pricing-card {
+    transition: all 0.3s ease;
+    position: relative;
+    transform: translateZ(0);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.coffee-cafe-corner-pricing-card:hover {
+    transform: translateY(-4px) translateZ(0);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.coffee-cafe-corner-pricing-featured {
+    position: relative;
+    overflow: visible;
+}
+
+.coffee-cafe-corner-pricing-features {
+    list-style: none;
+}
+
+.coffee-cafe-corner-pricing-features li {
+    color: var(--wp--preset--color--body);
+    font-weight: 500;
+    padding-left: 0;
+}
+
+.coffee-cafe-corner-pricing-features li::before {
+    content: "";
+    margin-right: 0;
+}
+
+/* Complete text shadow elimination for pricing cards */
+.coffee-cafe-corner-pricing-card,
+.coffee-cafe-corner-pricing-card *,
+.coffee-cafe-corner-pricing-card .wp-block-paragraph,
+.coffee-cafe-corner-pricing-card .wp-block-heading,
+.coffee-cafe-corner-pricing-card h1, .coffee-cafe-corner-pricing-card h2, .coffee-cafe-corner-pricing-card h3,
+.coffee-cafe-corner-pricing-card h4, .coffee-cafe-corner-pricing-card h5, .coffee-cafe-corner-pricing-card h6,
+.coffee-cafe-corner-pricing-card p, .coffee-cafe-corner-pricing-card span, .coffee-cafe-corner-pricing-card div {
+    text-shadow: none !important;
+    -webkit-text-shadow: none !important;
+    -moz-text-shadow: none !important;
+    filter: none !important;
+    -webkit-filter: none !important;
+    -moz-filter: none !important;
+    -ms-filter: none !important;
+    -o-filter: none !important;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.coffee-cafe-corner-pricing-card:hover,
+.coffee-cafe-corner-pricing-card:hover *,
+.coffee-cafe-corner-pricing-card:hover .wp-block-paragraph,
+.coffee-cafe-corner-pricing-card:hover .wp-block-heading,
+.coffee-cafe-corner-pricing-card:hover h1, .coffee-cafe-corner-pricing-card:hover h2, .coffee-cafe-corner-pricing-card:hover h3,
+.coffee-cafe-corner-pricing-card:hover h4, .coffee-cafe-corner-pricing-card:hover h5, .coffee-cafe-corner-pricing-card:hover h6,
+.coffee-cafe-corner-pricing-card:hover p, .coffee-cafe-corner-pricing-card:hover span, .coffee-cafe-corner-pricing-card:hover div {
+    text-shadow: none !important;
+    -webkit-text-shadow: none !important;
+    -moz-text-shadow: none !important;
+    filter: none !important;
+    -webkit-filter: none !important;
+    -moz-filter: none !important;
+    -ms-filter: none !important;
+    -o-filter: none !important;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* ========================================
+   FOOTER NAVIGATION LISTS
+   ======================================== */
+
+/* Footer Navigation Lists */
+footer .footer-nav-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+/*footer .footer-nav-list li {
+    margin-bottom: var(--wp--preset--spacing--x-small);
+}*/
+
+footer .footer-nav-list li a {
+    text-decoration: none;
+    transition: all 0.3s ease;
+    color: #fff;
+    display: flex;
+    gap: 10px;
+    margin: 20px 0px;
+}
+
+.cover-padding {
+    align-items: start;
+    padding: 0;
+}
+
+.footer-head{
+    margin-top: 0;
+
+}
+
+footer .footer-nav-list li a:hover {
+    color: #fff;
+    transform: translateY(-2px);
+}
+
+footer .footer-col ul li a:before {
+    font-family: "Font Awesome 5 Free";
+    font-weight: 900;
+    font-size: 12px;
+    content: "\f105";
+    display: inline-block;
+    width: 30px;
+    height: 30px;
+    background: rgba(255, 255, 255, 0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 30px;
+}
+
+.footer-gallery figure figure{
+    height: 80px;
+}
+.footer-gallery figure img{
+    border-radius: 10px;
+    object-fit: cover;
+}
+
+/* FAQ's Section */
+.FAQ details.faq-btm-title summary{ 
+    padding: 5px 0px 5px 50px;
+  list-style: none;
+  position: relative;
+}
+.FAQ details.faq-btm-title summary:after {
+    content: "\f067";
+    font-family: "Font Awesome 5 Free";
+    position: absolute;
+    font-weight: 900;
+    font-size: 12px;
+    left: 0px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 30px;
+    height: 30px;
+    background: rgba(255, 255, 255, 0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 30px;
+}
+.FAQ details[open].faq-btm-title summary:after{
+    content: "\f068";
+    font-family: "Font Awesome 5 Free";
+    position: absolute;
+    font-weight: 900;
+    font-size: 12px;
+    left: 0px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 30px;
+    height: 30px;
+    background: rgba(255, 255, 255, 0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 30px;
+}
+.FAQ details[open].faq-btm-title > summary{
+  background: var(--wp--preset--gradient--banner-background-main);
+  color: var(--wp--preset--color--background);
+  border-color: var(--wp--preset--color--secondary);
+}
+
+.FAQ details p {
+    background: #fff !important;
+    color: rgba(36, 36, 36, 1);
+    padding: 14px;
+    border-radius: 16px;
+    margin: 0;
+}
+
+.wc-block-components-button__text {
+    color: #fff;
+}
+
+/* ========================================
+   RESPONSIVE ADJUSTMENTS
+   ======================================== */
+@media (min-width: 320px) and (max-width: 676px){
+.wp-block-search.wp-block-search__button-only .wp-block-search__button{
+    padding: 10px 20px;
+    }
+.header-carttt{
+    margin: 20px 0;
+}
+.header-search.wp-block-search.wp-block-search__button-only .wp-block-search__input {
+    bottom: -56px !important;
+    right: -130px;
+    }
+.wp-block-columns:not(.is-not-stacked-on-mobile)>.wp-block-column.header-menu{
+        flex-basis: 30% !important;
+    }
+.wp-block-columns:not(.is-not-stacked-on-mobile)>.wp-block-column.header-btns{
+        flex-basis: 60% !important;
+    }
+    .wp-block-group.Banner-btnss {
+        display: flex;
+        flex-direction: column;
+    }
+    .extra-head-main,h2.wp-block-heading.banner-heading,p.banner-para {
+        text-align: center !important;
+    }
+}
+@media (min-width: 1100px) and (max-width: 1200px){
+    .coffee-cafe-corner-header .coffee-cafe-corner-main-navigation .wp-block-navigation-item {
+        margin-right: -10px !important;
+    }
+}
+@media (min-width: 300px) and (max-width: 450px){
+    .header-logo  { 
+        grid-area: logo;
+    }
+    .header-menu { 
+        grid-area: menu;
+    }
+    .custom-sidebar{
+      max-width: 100% !important;
+      margin: 0 auto;
+    }
+    .header-btns { 
+        grid-area: btns;
+    }
+    .coffee-cafe-corner-header-cta{
+        justify-content: center !important;
+    }
+    .coffee-cafe-corner-header .coffee-cafe-corner-main-navigation{
+        display: flex !important;
+    }
+    .coffee-cafe-corner-header{
+        box-shadow: none;
+    }
+    .slide-content-box{
+        background: transparent;
+        margin: 0;
+        padding: 10px;
+    }
+    .banner-main-section, .slider-box {
+        min-height: 550px !important;
+    }
+    ul.header-social-icon{
+        gap: 7px;
+    }
+    .wp-block-social-links, .wp-block-social-links.has-normal-icon-size {
+        font-size: 18px !important;
+        gap: 10px;
+    }
+}
+@media (min-width: 300px) and (max-width: 600px){
+    .foot-grid{
+        grid-template-columns: auto;
+    }
+    .copy-row{
+        display: flex;
+        justify-content: center;
+    }
+    .service-img img,.service-img-col{
+        height: 180px !important;
+    }
+    .cat-position li{
+        margin: 0px 1px;
+    }
+    .heads-detail.mailss::before,.heads-detail.mailss::after{
+        display: none;
+    }
+    .menu-margin.is-layout-flex.wp-container-core-columns-is-layout-1ec2ec05.wp-block-columns-is-layout-flex {
+        display: flex !important;
+        flex-wrap: wrap !important;
+        gap: 0;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+    }
+}
+@media (min-width: 450px) and (max-width: 700px){
+     .menu-margin{
+        display: grid !important;
+        grid-template-columns: auto auto;
+        grid-template-rows: auto auto;
+        grid-template-areas:"logo logo"
+                            "menu btns";
+        gap: 10px;
+    }
+    .header-logo  { 
+        grid-area: logo;
+    }
+    .header-menu { 
+        grid-area: menu;
+    }
+    .header-btns { 
+        grid-area: btns;
+    }
+}
+@media (min-width: 1024px){
+.coffee-cafe-corner-header .coffee-cafe-corner-main-navigation .wp-block-navigation-item{
+    position: relative;
+}
+.coffee-cafe-corner-header .coffee-cafe-corner-main-navigation .wp-block-navigation-item ul li{
+    position: relative;
+    padding: 0px;
+    width: 100%;
+}
+    .header-search.wp-block-search.wp-block-search__button-only .wp-block-search__input{
+        right: 0;
+    }
+}
+@media (min-width: 1024px) and (max-width: 1024px) {
+    .coffee-cafe-corner-header .coffee-cafe-corner-main-navigation .wp-block-navigation-item {
+        padding: 0px !important;
+    }
+.coffee-cafe-corner-header .coffee-cafe-corner-main-navigation .wp-block-navigation__container {
+    gap: 0px;
+}
+.coffee-cafe-corner-header .coffee-cafe-corner-main-navigation .wp-block-navigation-item {
+    margin-right: 0px !important;
+}
+}
+@media (min-width: 1024px) and (max-width: 1400px) {
+    .main-banner-section h1{
+        font-size: 70px !important;
+    }
+    .banner-heading{
+        font-size: 50px !important;
+    }
+    .banner-position figure {
+        display: block !important;
+    }
+    .foot-grid{
+        grid-template-columns: auto auto;
+    }
+    p.footer-detail-text {
+        margin-left: 50px;
+    }
+    .logo-box h1 {
+        text-align: start;
+    }
+    figure.footer-gallery{
+        display: grid;
+        grid-template-columns: auto auto;
+    }
+    .heads-detail.mailss::before,.heads-detail.mailss::after{
+        display: none;
+    }
+    .coffee-cafe-corner-header {
+        padding: 0 !important;
+    }
+    .menu-margin {
+        padding: 10px 0px !important;
+    }
+    figure.foot-gal-img{
+        
+    }
+    .slider-box{
+        height: 500px !important;
+    }
+    .banner-contentt{
+        flex-basis: 80% !important;
+        align-items: center;
+    }
+    .topbar-detail {
+        display: grid !important;
+        flex-wrap: wrap;
+        grid-template-columns: auto auto;
+        padding: 10px !important;
+        gap: 8px;
+    }
+    .banner-position{
+        position: static;
+    }
+    .professional-box {
+        left: 44%;
+    }
+    .header-menu{
+        flex-basis: 88% !important;
+    }
+    .header-btns{
+        flex-basis: 38% !important;
+    }
+    .banner-main-section, .slide-bg{
+        min-height: 500px !important;
+    }
+    .slider-box{
+        min-height: 500px !important;
+    }
+    .slide-content-box {
+        margin: 0;
+    }
+    .social-links{
+        flex-basis: 15%;
+    }
+    .sec-headerss{
+        max-width: 95% !important;
+    }
+    .top-address{
+        flex-basis: 85%;
+    }
+    .topbar .wp-block-social-links, .topbar .wp-block-social-links.has-normal-icon-size {
+        font-size: 20px;
+    }
+    .service-main-col{
+        flex-wrap: wrap !important;
+    }
+    .service-img-div,.service-content-div{
+        flex-basis: 100% !important;
+    }
+    .copy-row {
+        justify-content: center;
+    }
+    .service-1-col{
+        flex-basis: 60% !important;
+    }
+    h3.product-main-heading {
+        font-size: 24px !important;
+    }
+    p.authoir-name {
+        font-size: 18px !important;
+    }
+    p.author-desig{
+        font-size: 13px !important;
+    }
+    .coffee-cafe-corner-header {
+        box-shadow: unset;
+    }
+    .wp-block-columns:not(.is-not-stacked-on-mobile)>.wp-block-column.product-head-1 {
+        flex-basis: 60% !important;
+    }
+    .wp-block-columns:not(.is-not-stacked-on-mobile)>.wp-block-column.product-head-2 {
+        flex-basis: 10% !important;
+    }
+    .wp-block-columns:not(.is-not-stacked-on-mobile)>.wp-block-column.product-head-3 {
+        flex-basis: 30% !important;
+    }
+
+}
+@media (max-width: 767px){
+    .topbar-detail{
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+    .header-carttt{
+        justify-content: center;
+    }
+    p.mail-address{
+        padding: 18px 0px !important;
+    }
+    .home .whole-header{
+        background: var(--wp--preset--color--secondary) !important;
+    }
+    .header-menu {
+        padding-top: 0;
+    }
+    .home .whole-header{
+        position: static;
+    }
+
+    .header-social-icon{
+        justify-content: center;
+    }
+    p.banner-para {
+        text-align: center;
+    }
+    .menu-margin{
+        /*display: grid !important;*/
+        grid-template-columns: auto auto;
+        grid-template-rows: auto auto;
+        grid-template-areas:
+        "menu btns";
+        gap: 10px;
+    }
+    .header-logo  { grid-area: logo;
+    }
+    .header-menu { grid-area: menu;
+    }
+    .header-btns { grid-area: btns;
+    }
+    .menu-margin{
+        text-align: center;
+    }
+    .coffee-cafe-corner-header{
+        display: flex;
+        justify-content: center;
+        padding: 10px 0px !important;
+    }
+    .topbar-detail{
+        gap: 12px;
+    }
+    .coffee-cafe-corner-header,.topbar{
+        border-radius: unset !important;
+    }
+}
+@media (min-width: 1024px) and (max-width: 1400px){
+    figure.wp-block-image.size-large.foot-gal-img {
+        width: 100% !important;
+    }
+}
+@media (min-width: 1024px) and (max-width: 1440px){
+    .wp-block-columns:not(.is-not-stacked-on-mobile)>.wp-block-column.header-text {
+        flex-basis: 60% !important;
+    }
+    .wp-block-columns:not(.is-not-stacked-on-mobile)>.wp-block-column.header-social {
+        flex-basis: 20% !important;
+    }
+    .wp-block-columns:not(.is-not-stacked-on-mobile)>.wp-block-column.header-detail {
+        flex-basis: 20% !important;
+    }
+    ul.wp-block-social-links{
+        gap: 20px !important;
+    }
+}
+@media (min-width: 781px) and (max-width: 999px){
+    .header-logo ,.header-btns{
+        flex-basis: 80% !important;
+    }
+    .header-menu{
+         flex-basis: 20% !important;
+    }
+}
+@media (min-width: 700px) and (max-width: 781px){
+     .menu-margin{
+        display: grid !important;
+        grid-template-columns: auto auto;
+        grid-template-rows: auto;
+        grid-template-areas:"logo menu btns";
+        gap: 10px;
+        padding: 6px 0px;
+}
+.header-logo  { grid-area: logo;
+ }
+.header-menu { grid-area: menu;
+ }
+.header-btns { grid-area: btns;
+ }
+}
+@media (min-width: 768px) and (max-width: 1023px){
+    .topbar-detail{
+        gap: 25px;
+        display: flex !important;
+        flex-wrap: wrap !important;
+        grid-template-columns: auto auto;
+    }
+    .banner-heading,.banner-para{
+        text-align: center;
+    }
+    .header-text {
+        padding: 10px 0px;
+    }
+    .Banner-btnss{
+        justify-content: center;
+    }
+    .header-search.wp-block-search.wp-block-search__button-only .wp-block-search__input{
+        right: 0;
+    }
+    .wp-block-columns:not(.is-not-stacked-on-mobile)>.wp-block-column.product-details-1{
+        flex-basis: 25% !important;
+    }
+
+    .wp-block-columns:not(.is-not-stacked-on-mobile)>.wp-block-column.product-details-2{
+        flex-basis: 65% !important;
+    }
+    .wp-block-columns:not(.is-not-stacked-on-mobile)>.wp-block-column.product-head-1 {
+        flex-basis: 60% !important;
+    }
+    .wp-block-columns:not(.is-not-stacked-on-mobile)>.wp-block-column.product-head-2 {
+        flex-basis: 10% !important;
+    }
+    .wp-block-columns:not(.is-not-stacked-on-mobile)>.wp-block-column.product-head-3 {
+        flex-basis: 30% !important;
+    }
+    .product-head-main{
+        flex-wrap: nowrap !important;
+    }
+    .slider-box{
+        min-height: 300px !important;
+    }
+    .wp-block-group.topbar-main{
+        padding: 0 !important;
+        margin: 0 !important;
+    }
+    .banner-main-section{
+        min-height: 300px !important;
+    }
+    .logo-box {
+        padding: 20px !important;
+    }   
+    ul.header-social-icon{
+        padding-right: 14px;
+    }
+    .header-btns{
+        border-radius: unset !important;
+        box-shadow: unset;
+    }
+    .topbar-detail{
+        display: grid !important;
+        grid-template-columns: auto auto;
+        row-gap: 0px;
+        padding: 10px !important;
+    }
+    .topbar-detail h1 {
+        display: flex;
+        flex-basis: 100%;
+        justify-content: center;
+    }
+    header.coffee-cafe-corner-header{
+        padding: 10px!important;
+    }
+    .coffee-cafe-corner-header{
+        box-shadow: none;
+    }
+    .coffee-cafe-corner-header .coffee-cafe-corner-main-navigation {
+        display: flex !important;
+        justify-content: start;
+    }
+    p.footer-detail-text {
+        margin-left: 30px;
+    }
+    .footer-contact{
+        padding-right: 10px;
+        padding-left: 10px;
+    }
+    .topbar .wp-block-social-links, .topbar .wp-block-social-links.has-normal-icon-size {
+        display: flex;
+        justify-content: start;
+    }
+    .footer-col{
+        display: grid !important;
+        grid-template-columns: auto auto;
+    }
+    .copy-row{
+        display: flex;
+        justify-content: center;
+    }
+    .coffee-cafe-corner-header{
+        border-radius: unset !important;
+    }
+    .topbar-main{
+        margin-top: 10px !important;
+        padding-top: 8px !important;
+    }
+    .slide-content-box{
+        margin-top: 10px !important;
+    }
+    figure.about-img-1 img,figure.about-img-2 img{
+        height: 400px;
+        object-fit: contain;
+    }
+    h3.product-main-heading{
+        font-size: 28px !important;
+    }
+    h3.product-main-heading,p.sub-head{
+        text-align: center !important;
+    }
+    .about-row,.author-row{
+        display: flex !important;
+        justify-content: center !important;
+        text-align: center !important;
+    }
+    .service-1-col{
+        display: flex;
+        flex-direction: column;
+    }
+    .service-content-content {
+        text-align: center;
+    }
+}
+@media (min-width: 1200px) and (max-width: 1399px){
+ .coffee-cafe-corner-header .coffee-cafe-corner-main-navigation .wp-block-navigation-item {
+    margin-right: -10px !important;
+}
+.topbar-detail{
+    display: flex !important;
+}
+.seprate::after{
+    display: none;
+}
+}
+@media (max-width: 1440px){
+    .seprate::after{
+        display: none;
+    }
+}
+@media (min-width: 1440px) and (max-width: 1600px){
+.coffee-cafe-corner-header .coffee-cafe-corner-main-navigation .wp-block-navigation-item {
+    margin-right: -10px !important;
+}
+    .seprate::after{
+        display: none;
+    }
+.coffee-cafe-corner-header .coffee-cafe-corner-main-navigation .wp-block-navigation-item{
+    padding: 10px 0px !important;
+}
+.banner-contentt{
+    flex-basis: 60% !important;
+}
+.banner-position{
+    flex-basis: 55% !important;
+}
+.topbar-detail {
+    gap: 0px;
+}
+.topbar-detail .dashicons, .dashicons-before:before{
+    display: none;
+}
+ul.wp-block-social-links {
+    gap: 20px !important;
+}
+    .logo-box{
+        flex-basis: 20% !important;
+    }
+    .menu-head{
+        flex-basis: 79% !important;
+    }
+    .whole-header {
+        background-image: linear-gradient(90deg, var(--wp--preset--color--primary) 26%, var(--wp--preset--color--secondary) 26%) !important;
+    }
+}
+@media (max-width: 768px) {
+    /* Base responsive */
+    .logo-box {
+        padding: 25px !important;
+        background: var(--wp--preset--color--primary);
+        justify-content: center;
+    }
+    
+    /*    .wp-block-column {
+        flex-basis: 100% !important;
+    }*/
+    
+    h1, .has-huge-font-size {
+        font-size: 2.5rem !important;
+    }
+    
+    h2, .has-xxxx-large-font-size {
+        font-size: 2rem !important;
+    }
+    
+    /* Mobile blog grid - single column */
+    .wp-block-query .wp-block-post-template.is-layout-grid {
+        grid-template-columns: 1fr !important;
+        gap: var(--wp--preset--spacing--medium) !important;
+    }
+    
+    /* Ensure cards are full width */
+    .coffee-cafe-corner-portfolio-card {
+        width: 100% !important;
+        max-width: 100% !important;
+        margin-bottom: var(--wp--preset--spacing--large) !important;
+    }
+}
+@media (max-width: 999px) {
+    .wp-block-navigation__responsive-container:not(.hidden-by-default):not(.is-menu-open) {
+        display: none;
+    }
+    .wp-block-navigation__responsive-container-open:not(.always-shown){
+        display: block;
+    }
+     /* MOBILE HEADER - Logo left, hamburger right, single row */
+    .coffee-cafe-corner-header-container {
+        flex-direction: row !important;
+        justify-content: space-between !important;
+        align-items: center !important;
+    }
+
+    /* Mobile navigation - hamburger button */
+    .coffee-cafe-corner-header .wp-block-navigation .wp-block-navigation__responsive-container-open {
+        background: var(--wp--preset--color--primary) !important;
+        color: white !important;
+        border: none !important;
+        border-radius: 8px !important;
+        padding: 12px !important;
+        width: 48px !important;
+        height: 48px !important;
+        cursor: pointer !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+    }
+
+
+    .coffee-cafe-corner-header .wp-block-navigation__responsive-container-close{
+        top: 20px !important;
+    }
+    .wp-block-navigation__responsive-container-close, .wp-block-navigation__responsive-container-open{
+        background: #000000 !important;
+        color: #fff;
+    }
+    
+    /* Mobile menu when open */
+    .coffee-cafe-corner-header .wp-block-navigation .wp-block-navigation__responsive-container.is-menu-open {
+        background: #bfbaba !important;
+        padding: 40px 20px !important;
+    }
+    
+    /* Vertical menu items */
+    .coffee-cafe-corner-header .wp-block-navigation .wp-block-navigation__responsive-container.is-menu-open ul {
+        flex-direction: column !important;
+        gap: 0 !important;
+        align-items: stretch !important;
+        width: 100%;
+    }
+    
+    /* Menu item styling */
+    .coffee-cafe-corner-header .wp-block-navigation .wp-block-navigation__responsive-container.is-menu-open .wp-block-navigation-item {
+        width: 100% !important;
+        margin: 0 !important;
+        border-bottom: 1px solid #eee !important;
+    }
+    
+    .coffee-cafe-corner-header .wp-block-navigation .wp-block-navigation__responsive-container.is-menu-open .wp-block-navigation-item:last-child {
+        border-bottom: none !important;
+    }
+    
+    /* Menu link styling */
+    .coffee-cafe-corner-header .wp-block-navigation .wp-block-navigation__responsive-container.is-menu-open .wp-block-navigation-item a {
+        display: block !important;
+        padding: 12px 0 !important;
+        text-align: center !important;
+        font-size: 18px !important;
+        font-weight: 600 !important;
+        color: var(--wp--preset--color--heading) !important;
+        text-decoration: none !important;
+    }
+    
+    .coffee-cafe-corner-header .wp-block-navigation .wp-block-navigation__responsive-container.is-menu-open .wp-block-navigation-item a:hover {
+        color: var(--wp--preset--color--primary) !important;
+    }
+    
+    /* MOBILE TEAM SECTION - Professional styling */
+    .coffee-cafe-corner-team-section .wp-block-image img[style*="border-radius:100px"] {
+        width: 120px !important;
+        height: 120px !important;
+        border: 3px solid var(--wp--preset--color--surface) !important;
+    }
+    .whole-header {
+        background: #1b1b19 !important;
+    }
+    .topbar{
+        padding: 0 !important;
+    }
+    .home .whole-header{
+        position: static;
+        background: var(--wp--preset--color--secondary) !important;
+    }
+    .header-menu{
+        padding: 0;
+    }
+}
+@media (min-width: 991px) and (max-width: 1199px) {
+.wp-block-query .wp-block-post-template.is-layout-grid{
+    grid-template-columns: repeat(2, 1fr);
+}
+}
+/* ========================================
+   PRINT STYLES
+   ======================================== */
+
+/* Print Styles */
+@media print {
+    .wp-block-navigation,
+    .wp-block-buttons,
+    .wp-block-social-links {
+        display: none;
+    }
+    
+    .wp-block-group {
+        box-shadow: none !important;
+        transform: none !important;
+    }
+}
+
+/* --- Block Widget Sidebar
+-------------------------------------------------------- */
+.wp-block-sidebar > * h2 {
+  font-weight:bold }
+
+.wp-block-sidebar .wp-block-latest-posts__list > li:not(:last-child) {
+  border-bottom: 1px solid;
+  margin-bottom: 21px;
+  padding-bottom: 21px; }
+
+.wp-block-widget-area .wp-block-latest-posts__list > li > a {
+  font-weight: var(--wp--custom--typography--font-weight--normal);}
+
+.wp-block-widget-area .wp-block-latest-posts__post-author,
+.wp-block-widget-area .wp-block-latest-posts__post-date {
+  font-size: var(--wp--preset--font-size--tiny);
+  line-height: 1.62;
+  margin-top: 5px; }
+
+.sidebar-box{
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    border: 1px solid #e5e7eb;
+    border-radius: 16px;
+}
+
+.sidebar-box h2 {
+    font-size: 32px;
+    font-weight: 800;
+}
+
+/* ========================================================
+   QUILLS COFFEE HEADER STYLES (Matching Target Design)
+   ======================================================== */
+
+.quills-header-wrapper {
+    background-color: #FFFDEB !important;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    color: #151515;
+}
+
+header.wp-block-template-part,
+.wp-block-template-part header,
+.wp-block-template-part {
+    background-color: #FFFDEB !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+.quills-header-top {
+    background-color: #FFFDEB;
+    padding: 12px 35px;
+    box-sizing: border-box;
+    width: 100%;
+}
+
+.quills-header-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    gap: 15px;
+}
+
+/* Left: Search Box */
+.quills-header-left {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.quills-search-form {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0;
+    padding: 0;
+    background: transparent;
+    border: none;
+}
+
+.quills-search-btn {
+    background: transparent !important;
+    border: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #151515 !important;
+    line-height: 1;
+}
+
+.quills-search-input {
+    background: transparent !important;
+    border: none !important;
+    outline: none !important;
+    box-shadow: none !important;
+    font-size: 13.5px !important;
+    color: #151515 !important;
+    width: 130px !important;
+    padding: 2px 0 !important;
+    margin: 0 !important;
+    font-family: inherit !important;
+    letter-spacing: 0.1px;
+}
+
+.quills-search-input::placeholder {
+    color: #8c8c8c !important;
+    opacity: 1 !important;
+    font-size: 13.5px !important;
+}
+
+/* Center: Logo */
+.quills-header-center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.quills-logo-link {
+    display: inline-block;
+    text-decoration: none !important;
+    line-height: 1;
+}
+
+.quills-logo-img {
+    height: 38px !important;
+    width: auto !important;
+    max-width: 100% !important;
+    display: block !important;
+    object-fit: contain;
+}
+
+/* Right: Action Items */
+.quills-header-right {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 22px;
+}
+
+.quills-currency-wrap {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+    user-select: none;
+    line-height: 1;
+}
+
+.quills-flag-img {
+    width: 20px !important;
+    height: 14px !important;
+    border-radius: 1px !important;
+    object-fit: cover !important;
+    box-shadow: 0 0 1px rgba(0, 0, 0, 0.25) !important;
+    display: inline-block !important;
+    vertical-align: middle;
+}
+
+.quills-currency-code {
+    font-size: 12.5px;
+    font-weight: 700;
+    color: #151515;
+    letter-spacing: 0.5px;
+    font-family: inherit;
+    line-height: 1;
+}
+
+.quills-icon--chevron {
+    display: inline-block;
+    vertical-align: middle;
+    transition: transform 0.2s ease;
+}
+
+.quills-icon-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: #151515 !important;
+    text-decoration: none !important;
+    line-height: 1;
+    transition: opacity 0.2s ease;
+}
+
+.quills-icon-link:hover {
+    opacity: 0.7;
+}
+
+.quills-cart-icon-wrapper {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.quills-cart-badge {
+    position: absolute;
+    top: -6px;
+    right: -8px;
+    background-color: #151515;
+    color: #ffffff;
+    font-size: 9.5px;
+    font-weight: 700;
+    min-width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+    padding: 0 1px;
+    box-sizing: border-box;
+}
+
+.quills-mobile-toggle {
+    display: none;
+    background: transparent;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    line-height: 1;
+    color: #151515;
+}
+
+/* Horizontal Divider */
+.quills-divider-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 35px;
+    box-sizing: border-box;
+    width: 100%;
+}
+
+.quills-header-divider {
+    height: 1px;
+    width: 100%;
+    background-color: #EDECE8;
+    margin: 0;
+    padding: 0;
+    border: none;
+}
+
+/* Bottom Navigation */
+.quills-header-bottom {
+    background-color: #FFFDEB;
+    padding: 9px 20px 11px 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.quills-nav-list {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 30px;
+    list-style: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    flex-wrap: wrap;
+}
+
+.quills-nav-item {
+    list-style: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+.quills-nav-link {
+    font-size: 12.5px !important;
+    font-weight: 700 !important;
+    color: #151515 !important;
+    text-decoration: none !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.7px !important;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif !important;
+    padding: 3px 0 !important;
+    display: inline-block !important;
+    transition: color 0.2s ease !important;
+}
+
+.quills-nav-link:hover {
+    color: #666666 !important;
+    text-decoration: underline !important;
+    text-underline-offset: 3px !important;
+}
+
+/* Mobile & Tablet Styles */
+@media (max-width: 860px) {
+    .quills-header-top {
+        padding: 10px 15px;
+    }
+
+    .quills-header-right {
+        gap: 15px;
+    }
+
+    .quills-mobile-toggle {
+        display: inline-flex;
+        align-items: center;
+    }
+
+    .quills-header-bottom {
+        display: none;
+        padding: 15px 20px;
+    }
+
+    .quills-header-bottom.is-open {
+        display: block;
+    }
+
+    .quills-nav-list {
+        flex-direction: column;
+        align-items: center;
+        gap: 15px;
+    }
+
+    .quills-search-input {
+        width: 85px !important;
+    }
+}
