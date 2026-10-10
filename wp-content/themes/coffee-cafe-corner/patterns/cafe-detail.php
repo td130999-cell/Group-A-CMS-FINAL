@@ -232,11 +232,4 @@ $g3_url       = filter_var( $cafe['gallery_3'], FILTER_VALIDATE_URL ) ? $cafe['g
         </div>
     </section>
 
-    <!-- Bottom Back to All Locations Button -->
-    <div class="quills-subpage-back-wrap">
-        <a href="<?php echo esc_url( home_url( '/visit/' ) ); ?>" class="quills-subpage-back-btn">
-            ← ALL LOCATIONS & HOURS
-        </a>
-    </div>
-
 </div>
