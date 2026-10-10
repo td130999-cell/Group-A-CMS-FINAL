@@ -446,3 +446,266 @@
         padding-right: 16px;
     }
 }
+
+/* =========================================
+   Cafe Detail Subpage (?view=...)
+   ========================================= */
+
+.quills-cafe-subpage-container {
+    background-color: #FAF8F5;
+    background-image: url('../images/visit/bg-quills.png');
+    background-repeat: repeat;
+    color: #3A3837;
+    font-family: 'Clarendon URW Extra Narrow', Georgia, 'Times New Roman', serif;
+    font-size: 16px;
+    line-height: 1.5;
+    padding: 0 24px 90px 24px;
+    margin: 0 auto;
+    width: 100%;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.quills-subpage-top-bar {
+    display: none;
+}
+
+.quills-subpage-header {
+    text-align: center;
+    max-width: 1040px;
+    margin: 45px auto 40px auto;
+    padding: 0 16px;
+}
+
+.quills-subpage-title {
+    font-family: 'Revelstoke', sans-serif;
+    font-weight: 700;
+    font-size: 38px;
+    line-height: 1.15;
+    letter-spacing: 2.5px;
+    color: #4a6348;
+    text-transform: uppercase;
+    margin: 0 0 20px 0;
+}
+
+.quills-subpage-desc {
+    font-family: 'Clarendon URW Extra Narrow', Georgia, serif;
+    font-size: 16px;
+    line-height: 1.65;
+    color: #3A3837;
+    max-width: 880px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+/* Main Section: Left Photo, Right Address Details */
+.quills-subpage-main-section {
+    max-width: 1040px;
+    margin: 0 auto 35px auto;
+    padding: 0 16px;
+}
+
+.quills-subpage-main-grid {
+    display: grid;
+    grid-template-columns: 1.15fr 0.85fr;
+    gap: 40px;
+    align-items: center;
+}
+
+.quills-subpage-main-image-wrap {
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.06);
+    aspect-ratio: 16 / 10;
+    background-color: #E7E3DC;
+}
+
+.quills-subpage-main-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.quills-subpage-details-col {
+    font-family: 'Clarendon URW Extra Narrow', Georgia, serif;
+    font-size: 15.5px;
+    line-height: 1.6;
+    color: #3A3837;
+    padding-left: 10px;
+}
+
+.quills-subpage-info-item {
+    margin-bottom: 12px;
+}
+
+.quills-subpage-info-item:last-child {
+    margin-bottom: 0;
+}
+
+.quills-subpage-label {
+    font-weight: 700;
+    color: #222222;
+    margin-right: 6px;
+}
+
+.quills-subpage-link {
+    color: #3A3837;
+    text-decoration: underline;
+    text-underline-offset: 2.5px;
+    transition: color 0.2s ease;
+}
+
+.quills-subpage-link:hover {
+    color: #ED4E31;
+}
+
+.quills-subpage-val {
+    color: #3A3837;
+}
+
+/* Gallery: Left Large Photo, Right Two Stacked Photos */
+.quills-subpage-gallery-section {
+    max-width: 1040px;
+    margin: 0 auto 65px auto;
+    padding: 0 16px;
+}
+
+.quills-subpage-gallery-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    align-items: stretch;
+}
+
+.quills-subpage-gallery-left {
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.06);
+    background-color: #E7E3DC;
+    height: 100%;
+}
+
+.quills-subpage-gallery-left .quills-subpage-gallery-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    border-radius: 8px;
+}
+
+.quills-subpage-gallery-right {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    height: 100%;
+}
+
+.quills-subpage-gallery-right-item {
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.06);
+    aspect-ratio: 16 / 9;
+    flex: 1;
+    background-color: #E7E3DC;
+}
+
+.quills-subpage-gallery-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    border-radius: 8px;
+}
+
+/* Testimonial Section */
+.quills-subpage-testimonial-section {
+    text-align: center;
+    max-width: 780px;
+    margin: 0 auto 60px auto;
+    padding: 0 16px;
+}
+
+.quills-subpage-testimonial-heading {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-style: italic;
+    font-size: 28px;
+    font-weight: 400;
+    color: #4a6348;
+    margin: 0 0 14px 0;
+}
+
+.quills-subpage-stars {
+    color: #EE7B30;
+    font-size: 18px;
+    letter-spacing: 4px;
+    margin-bottom: 16px;
+}
+
+.quills-subpage-quote {
+    margin: 0 0 14px 0;
+    padding: 0;
+    border: none;
+    font-family: 'Clarendon URW Extra Narrow', Georgia, serif;
+    font-style: italic;
+    font-size: 15.5px;
+    line-height: 1.65;
+    color: #3A3837;
+}
+
+.quills-subpage-author {
+    font-family: 'Clarendon URW Extra Narrow', Georgia, serif;
+    font-size: 14.5px;
+    font-weight: 700;
+    color: #3A3837;
+}
+
+.quills-subpage-back-wrap {
+    text-align: center;
+    padding-top: 10px;
+    margin-bottom: 20px;
+}
+
+.quills-subpage-back-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background-color: transparent;
+    color: #4a6348 !important;
+    border: 1.5px solid #4a6348;
+    font-family: 'Revelstoke', sans-serif;
+    font-weight: 700;
+    font-size: 13.5px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    text-decoration: none !important;
+    padding: 10px 24px;
+    border-radius: 4px;
+    transition: all 0.2s ease;
+}
+
+.quills-subpage-back-btn:hover {
+    background-color: #4a6348;
+    color: #ffffff !important;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(74, 99, 72, 0.25);
+}
+
+@media screen and (max-width: 860px) {
+    .quills-subpage-main-grid {
+        grid-template-columns: 1fr;
+        gap: 24px;
+    }
+    .quills-subpage-details-col {
+        padding-left: 0;
+    }
+    .quills-subpage-gallery-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+    .quills-subpage-title {
+        font-size: 28px;
+    }
+}
+

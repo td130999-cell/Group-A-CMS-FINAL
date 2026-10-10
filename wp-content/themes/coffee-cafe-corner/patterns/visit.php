@@ -6,6 +6,15 @@
  * Description: Quills Coffee authentic Locations & Hours page pattern, dynamically pulling content from WordPress database.
  */
 
+// If a cafe detail view is requested via ?view=..., delegate to the cafe detail subpage
+if ( ! empty( $_GET['view'] ) ) {
+	$cafe_detail_pattern = get_template_directory() . '/patterns/cafe-detail.php';
+	if ( file_exists( $cafe_detail_pattern ) ) {
+		include $cafe_detail_pattern;
+		return;
+	}
+}
+
 // 1. Resolve Target Page ID from Database
 $page_id = get_the_ID();
 $valid_slugs = array( 'visit', 'our-cafes', 'locations', 'locations-hours' );

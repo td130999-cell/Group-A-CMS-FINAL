@@ -404,6 +404,20 @@ function coffee_cafe_corner_init_visit_database() {
 			if ( ! get_post_meta( $page_id, '_visit_cafes', true ) ) {
 				update_post_meta( $page_id, '_visit_cafes', $cafes );
 			}
+			if ( ! get_post_meta( $page_id, '_quills_cafe_details', true ) ) {
+				$all_details = get_option( 'quills_cafe_details' );
+				if ( ! empty( $all_details ) ) {
+					update_post_meta( $page_id, '_quills_cafe_details', $all_details );
+				}
+			}
+		}
+	}
+
+	$about_page = get_page_by_path( 'about-us', OBJECT, 'page' );
+	if ( $about_page && ! get_post_meta( $about_page->ID, '_quills_cafe_details', true ) ) {
+		$all_details = get_option( 'quills_cafe_details' );
+		if ( ! empty( $all_details ) ) {
+			update_post_meta( $about_page->ID, '_quills_cafe_details', $all_details );
 		}
 	}
 }
