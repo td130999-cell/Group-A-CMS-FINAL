@@ -1,0 +1,448 @@
+/**
+ * Quills Coffee Authentic Brand Stylesheet - Visit (Locations & Hours)
+ * For coffee-cafe-corner theme
+ * Pixel-accurate typography & layout matched to quillscoffee.com/pages/our-cafes
+ */
+
+/* =========================================
+   Quills Coffee Original Font Faces
+   ========================================= */
+
+@font-face {
+    font-family: 'El Hidrant';
+    src: url('../fonts/ElHidrant.woff2') format('woff2');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Revelstoke';
+    src: url('../fonts/Revelstoke-Bold.woff2') format('woff2');
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Revelstoke';
+    src: url('../fonts/Revelstoke-Regular.woff2') format('woff2');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Revelstoke Grunge';
+    src: url('../fonts/Revelstoke-Grunge.woff2') format('woff2');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Clarendon URW Extra Narrow';
+    src: url('../fonts/ClarendonURWExtNar-Reg.woff2') format('woff2');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Clarendon URW Extra Narrow';
+    src: url('../fonts/ClarendonURWExtNar-Bol.woff2') format('woff2');
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Clarendon URW Extra Narrow';
+    src: url('../fonts/ClarendonURWExtNar-RegObl.woff2') format('woff2');
+    font-weight: 400;
+    font-style: italic;
+    font-display: swap;
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&display=swap');
+
+/* =========================================
+   Page Container & Background
+   ========================================= */
+
+.quills-visit-page-container {
+    background-color: #FAF8F5;
+    background-image: url('../images/visit/bg-quills.png');
+    background-repeat: repeat;
+    color: #3A3837;
+    font-family: 'Clarendon URW Extra Narrow', Georgia, 'Times New Roman', serif;
+    font-size: 16px;
+    line-height: 1.5;
+    padding-bottom: 90px;
+    margin: 0;
+    width: 100%;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* =========================================
+   Breadcrumbs
+   ========================================= */
+
+.quills-visit-breadcrumb-wrap {
+    max-width: 1240px;
+    margin: 0 auto;
+    padding: 18px 24px 14px 24px;
+}
+
+.quills-visit-breadcrumbs {
+    font-family: 'Clarendon URW Extra Narrow', Georgia, serif;
+    font-size: 13.5px;
+    color: #666666;
+}
+
+.quills-visit-breadcrumbs a {
+    color: #666666;
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.quills-visit-breadcrumbs a:hover {
+    color: #111111;
+    text-decoration: underline;
+}
+
+.quills-visit-bc-sep {
+    margin: 0 8px;
+    color: #999999;
+}
+
+.quills-visit-bc-current {
+    color: #111111;
+    font-weight: 700;
+}
+
+/* =========================================
+   Hero Banner Section
+   ========================================= */
+
+.quills-visit-hero-section {
+    max-width: 1240px;
+    margin: 0 auto 50px auto;
+    padding: 0 24px;
+}
+
+.quills-visit-hero-banner {
+    position: relative;
+    width: 100%;
+    height: 420px;
+    min-height: 360px;
+    border-radius: 8px;
+    overflow: hidden;
+    background-size: cover;
+    background-position: center 35%;
+    background-repeat: no-repeat;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+.quills-visit-hero-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(0, 0, 0, 0.15) 0%, rgba(0, 0, 0, 0.25) 100%);
+    pointer-events: none;
+}
+
+.quills-visit-hero-title {
+    position: relative;
+    z-index: 2;
+    margin: 0;
+    padding: 0 20px;
+    color: #ffffff;
+    font-family: 'Playfair Display', Georgia, 'Times New Roman', serif;
+    font-style: italic;
+    font-weight: 400;
+    font-size: 58px;
+    line-height: 1.1;
+    text-align: center;
+    letter-spacing: 0.5px;
+    text-shadow: 0 2px 14px rgba(0, 0, 0, 0.45);
+}
+
+/* =========================================
+   Intro Section
+   ========================================= */
+
+.quills-visit-intro-section {
+    max-width: 780px;
+    margin: 0 auto 65px auto;
+    padding: 0 24px;
+}
+
+.quills-visit-intro-content {
+    font-family: 'Clarendon URW Extra Narrow', Georgia, serif;
+    font-size: 16px;
+    line-height: 1.6;
+    color: #3A3837;
+    text-align: center;
+}
+
+.quills-visit-intro-content p {
+    margin: 0 0 16px 0;
+}
+
+.quills-visit-intro-content p:last-child {
+    margin-bottom: 0;
+}
+
+/* =========================================
+   Section Header: LOCATIONS & HOURS
+   ========================================= */
+
+.quills-visit-section-header {
+    text-align: center;
+    margin-bottom: 45px;
+    padding: 0 24px;
+}
+
+.quills-visit-section-title {
+    font-family: 'Revelstoke', sans-serif;
+    font-weight: 700;
+    font-size: 26px;
+    line-height: 1.2;
+    letter-spacing: 2.5px;
+    color: #436242;
+    text-transform: uppercase;
+    margin: 0;
+}
+
+/* =========================================
+   Cafes Grid & Cards
+   ========================================= */
+
+.quills-cafes-wrapper {
+    max-width: 1240px;
+    margin: 0 auto;
+    padding: 0 24px;
+}
+
+/* Row 1: 3 Cafes */
+.quills-cafes-row-top {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 36px 32px;
+    margin-bottom: 50px;
+}
+
+/* Row 2: 4 Cafes */
+.quills-cafes-row-bottom {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 36px 26px;
+}
+
+/* Individual Cafe Card */
+.quills-cafe-card {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.quills-cafe-image-link {
+    display: block;
+    width: 100%;
+    overflow: hidden;
+    border-radius: 4px;
+    background-color: #E7E3DC;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+    aspect-ratio: 4 / 3;
+}
+
+.quills-cafe-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.4s ease, filter 0.3s ease;
+}
+
+.quills-cafe-image-link:hover .quills-cafe-image {
+    transform: scale(1.03);
+    filter: brightness(1.03);
+}
+
+.quills-cafe-body {
+    padding-top: 18px;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+
+.quills-cafe-title {
+    font-family: 'Revelstoke', sans-serif;
+    font-weight: 700;
+    font-size: 20px;
+    line-height: 1.25;
+    letter-spacing: 1.5px;
+    color: #436242;
+    text-transform: uppercase;
+    margin: 0 0 12px 0;
+}
+
+.quills-cafe-details {
+    font-family: 'Clarendon URW Extra Narrow', Georgia, serif;
+    font-size: 14.5px;
+    line-height: 1.48;
+    color: #3A3837;
+    margin-bottom: 16px;
+    flex-grow: 1;
+}
+
+.quills-cafe-info-row {
+    margin-bottom: 7px;
+}
+
+.quills-cafe-info-row:last-child {
+    margin-bottom: 0;
+}
+
+.quills-cafe-label {
+    font-weight: 700;
+    color: #222222;
+}
+
+.quills-cafe-address-link {
+    color: #3A3837;
+    text-decoration: underline;
+    text-underline-offset: 2.5px;
+    transition: color 0.2s ease;
+}
+
+.quills-cafe-address-link:hover {
+    color: #ED4E31;
+}
+
+.quills-cafe-phone-link {
+    color: #3A3837;
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.quills-cafe-phone-link:hover {
+    color: #ED4E31;
+    text-decoration: underline;
+}
+
+/* READ MORE Button */
+.quills-cafe-btn-wrap {
+    margin-top: auto;
+    padding-top: 6px;
+}
+
+.quills-cafe-btn {
+    display: inline-block;
+    background-color: #ED4E31;
+    color: #ffffff !important;
+    font-family: 'Revelstoke', sans-serif;
+    font-weight: 700;
+    font-size: 13.5px;
+    line-height: 1;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    text-decoration: none !important;
+    padding: 10px 22px;
+    border-radius: 3px;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(237, 78, 49, 0.2);
+    transition: background-color 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease;
+}
+
+.quills-cafe-btn:hover {
+    background-color: #D73F23;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 10px rgba(237, 78, 49, 0.35);
+}
+
+.quills-cafe-btn:active {
+    transform: translateY(0);
+}
+
+/* =========================================
+   Responsive Breakpoints
+   ========================================= */
+
+@media screen and (max-width: 1080px) {
+    .quills-cafes-row-top {
+        gap: 28px 22px;
+    }
+    .quills-cafes-row-bottom {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 32px 24px;
+    }
+    .quills-visit-hero-banner {
+        height: 360px;
+    }
+    .quills-visit-hero-title {
+        font-size: 50px;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .quills-cafes-row-top {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 28px 20px;
+        margin-bottom: 36px;
+    }
+    .quills-cafes-row-bottom {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 28px 20px;
+    }
+    .quills-visit-hero-banner {
+        height: 290px;
+        min-height: 260px;
+    }
+    .quills-visit-hero-title {
+        font-size: 42px;
+    }
+    .quills-visit-section-title {
+        font-size: 22px;
+        letter-spacing: 2px;
+    }
+    .quills-visit-intro-section {
+        margin-bottom: 45px;
+    }
+}
+
+@media screen and (max-width: 560px) {
+    .quills-cafes-row-top {
+        grid-template-columns: 1fr;
+        gap: 36px;
+        margin-bottom: 36px;
+    }
+    .quills-cafes-row-bottom {
+        grid-template-columns: 1fr;
+        gap: 36px;
+    }
+    .quills-visit-hero-banner {
+        height: 230px;
+        min-height: 200px;
+        border-radius: 6px;
+    }
+    .quills-visit-hero-title {
+        font-size: 34px;
+    }
+    .quills-cafe-image-link {
+        aspect-ratio: 16 / 10;
+    }
+    .quills-visit-breadcrumb-wrap,
+    .quills-visit-hero-section,
+    .quills-visit-intro-section,
+    .quills-cafes-wrapper {
+        padding-left: 16px;
+        padding-right: 16px;
+    }
+}
