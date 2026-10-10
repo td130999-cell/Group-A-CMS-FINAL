@@ -148,19 +148,8 @@ $where_going_img    = $img_dir . ( get_post_meta( $page_id, '_quills_where_were_
 
     <!-- 5. TERROIR Definition Banner (Rounded Feature Card) -->
     <section class="quills-section quills-terroir-section">
-        <div class="quills-terroir-card" style="background-image: url('<?php echo esc_url( $terroir_bg_img ); ?>');">
-            <div class="quills-terroir-overlay"></div>
-            <div class="quills-terroir-content">
-                <h2 class="quills-terroir-title"><?php echo esc_html( $terroir_title ); ?></h2>
-                <div class="quills-terroir-phonetic">
-                    <span><?php echo esc_html( $terroir_phonetic ); ?></span>
-                    <span class="quills-terroir-pos"><?php echo esc_html( $terroir_pos ); ?></span>
-                </div>
-                <div class="quills-terroir-definitions">
-                    <p class="quills-def-item"><?php echo esc_html( $terroir_def_1 ); ?></p>
-                    <p class="quills-def-item"><?php echo esc_html( $terroir_def_2 ); ?></p>
-                </div>
-            </div>
+        <div class="quills-terroir-card">
+            <img src="<?php echo esc_url( $terroir_bg_img ); ?>" alt="<?php echo esc_attr( $terroir_title . ': ' . $terroir_phonetic . ' ' . $terroir_pos ); ?>" loading="lazy" />
         </div>
     </section>
 
