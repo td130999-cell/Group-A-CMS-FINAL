@@ -1,0 +1,451 @@
+/**
+ * Quills Coffee Authentic Brand Stylesheet
+ * For coffee-cafe-corner theme
+ * Pixel-accurate typography & layout matched to quillscoffee.com/pages/about-us
+ */
+
+/* =========================================
+   Quills Coffee Original Font Faces
+   ========================================= */
+
+@font-face {
+    font-family: 'El Hidrant';
+    src: url('../fonts/ElHidrant.woff2') format('woff2');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Revelstoke';
+    src: url('../fonts/Revelstoke-Bold.woff2') format('woff2');
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Revelstoke';
+    src: url('../fonts/Revelstoke-Regular.woff2') format('woff2');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Revelstoke Grunge';
+    src: url('../fonts/Revelstoke-Grunge.woff2') format('woff2');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Clarendon URW Extra Narrow';
+    src: url('../fonts/ClarendonURWExtNar-Reg.woff2') format('woff2');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Clarendon URW Extra Narrow';
+    src: url('../fonts/ClarendonURWExtNar-Bol.woff2') format('woff2');
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Clarendon URW Extra Narrow';
+    src: url('../fonts/ClarendonURWExtNar-RegObl.woff2') format('woff2');
+    font-weight: 400;
+    font-style: italic;
+    font-display: swap;
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&display=swap');
+
+/* =========================================
+   Page Container & Background
+   ========================================= */
+
+.quills-about-page-container {
+    background-color: #FAF8F5;
+    background-image: url('../images/about/bg-quills.png');
+    background-repeat: repeat;
+    color: #3A3837;
+    font-family: 'Clarendon URW Extra Narrow', Georgia, 'Times New Roman', serif;
+    font-size: 16px;
+    line-height: 1.5;
+    padding-bottom: 70px;
+    margin: 0;
+    width: 100%;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* Breadcrumbs */
+.quills-breadcrumb-container {
+    max-width: 1140px;
+    margin: 0 auto;
+    padding: 16px 20px 8px 20px;
+}
+
+.quills-breadcrumbs {
+    font-family: 'Clarendon URW Extra Narrow', Georgia, serif;
+    font-size: 13.5px;
+    color: #666666;
+}
+
+.quills-breadcrumbs a {
+    color: #444444;
+    text-decoration: none;
+    border-bottom: 1px dotted transparent;
+    transition: all 0.2s ease;
+}
+
+.quills-breadcrumbs a:hover {
+    color: #678464;
+    border-bottom-color: #678464;
+}
+
+.quills-bc-sep {
+    margin: 0 6px;
+    color: #999999;
+}
+
+.quills-bc-current {
+    color: #222222;
+    font-weight: 700;
+}
+
+/* =========================================
+   1. Hero Banner
+   ========================================= */
+
+.quills-hero-section {
+    max-width: 1140px;
+    margin: 10px auto 48px auto;
+    padding: 0 20px;
+}
+
+.quills-hero-banner {
+    position: relative;
+    width: 100%;
+    height: 440px;
+    border-radius: 22px;
+    overflow: hidden;
+    background-size: cover;
+    background-position: center 35%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+}
+
+.quills-hero-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(180deg, rgba(20, 25, 20, 0.15) 0%, rgba(20, 25, 20, 0.3) 100%);
+    pointer-events: none;
+}
+
+/* Authentic El Hidrant Script Heading */
+.quills-hero-title {
+    position: relative;
+    z-index: 2;
+    color: #FFFFFF;
+    font-family: 'El Hidrant', cursive, serif;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 82px;
+    letter-spacing: 0.01em;
+    margin: 0;
+    text-shadow: 0 2px 14px rgba(0, 0, 0, 0.45);
+    text-align: center;
+    line-height: 1.1;
+}
+
+/* =========================================
+   Headings & Common Layouts
+   ========================================= */
+
+.quills-section {
+    margin-bottom: 55px;
+    padding: 0 20px;
+}
+
+/* The exact narrow text container width (440px) matching Quills line breaks */
+.quills-inner-narrow {
+    max-width: 440px;
+    margin: 0 auto;
+}
+
+.quills-inner-medium {
+    max-width: 720px;
+    margin: 0 auto;
+}
+
+/* Authentic Revelstoke Bold Heading (Solid, no grunge/hollow strokes) */
+.quills-slab-heading {
+    color: #587661;
+    font-family: 'Revelstoke', sans-serif;
+    font-size: 32px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-top: 0;
+    margin-bottom: 24px;
+    line-height: 1.2;
+}
+
+.quills-serif-heading {
+    color: #3A3837;
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 32px;
+    font-weight: 600;
+    font-style: italic;
+    letter-spacing: -0.01em;
+    margin-top: 0;
+    margin-bottom: 24px;
+}
+
+.text-center {
+    text-align: center;
+}
+
+/* =========================================
+   2. Story Section (WHERE WE STARTED)
+   ========================================= */
+
+.quills-story-section {
+    margin-top: 20px;
+    margin-bottom: 60px;
+}
+
+.quills-story-paragraphs p {
+    font-family: 'Clarendon URW Extra Narrow', Georgia, serif;
+    margin-top: 0;
+    margin-bottom: 22px;
+    font-size: 18px;
+    line-height: 1.5;
+    color: #32302F;
+}
+
+.quills-story-paragraphs p:last-child {
+    margin-bottom: 0;
+}
+
+/* =========================================
+   3, 6, 7, 8. Split Grid Sections
+   ========================================= */
+
+.quills-split-section {
+    max-width: 980px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 60px;
+}
+
+.quills-split-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 52px;
+    align-items: center;
+}
+
+.quills-split-image-col .quills-image-wrapper {
+    position: relative;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+    line-height: 0;
+}
+
+.quills-split-image-col img {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    border-radius: 20px;
+    display: block;
+    transition: transform 0.4s ease;
+}
+
+.quills-split-image-col:hover img {
+    transform: scale(1.02);
+}
+
+.quills-split-text-col {
+    max-width: 460px;
+}
+
+.quills-split-text-col .quills-body-text p {
+    font-family: 'Clarendon URW Extra Narrow', Georgia, serif;
+    margin-top: 0;
+    margin-bottom: 0;
+    font-size: 17.5px;
+    line-height: 1.55;
+    color: #32302F;
+}
+
+/* =========================================
+   4. HOW WE WORK
+   ========================================= */
+
+.quills-how-we-work-section {
+    margin-top: 70px;
+    margin-bottom: 50px;
+}
+
+.quills-how-we-work-section .quills-body-text p {
+    font-family: 'Clarendon URW Extra Narrow', Georgia, serif;
+    font-size: 17.5px;
+    line-height: 1.55;
+    color: #32302F;
+    margin: 0;
+}
+
+/* =========================================
+   5. TERROIR Definition Card
+   ========================================= */
+
+.quills-terroir-section {
+    max-width: 980px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 40px;
+    margin-bottom: 65px;
+}
+
+.quills-terroir-card {
+    border-radius: 22px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    line-height: 0;
+}
+
+.quills-terroir-card img {
+    width: 100%;
+    height: auto;
+    border-radius: 22px;
+    display: block;
+}
+
+/* =========================================
+   9. Where We're Going Founder Quote
+   ========================================= */
+
+.quills-where-going-section {
+    margin-top: 70px;
+    margin-bottom: 45px;
+}
+
+.quills-founder-quote p {
+    font-family: 'Clarendon URW Extra Narrow', Georgia, serif;
+    font-style: italic;
+    font-size: 17.5px;
+    line-height: 1.55;
+    color: #32302F;
+    margin-top: 0;
+    margin-bottom: 14px;
+}
+
+.quills-quote-author {
+    font-family: 'Revelstoke', sans-serif;
+    font-style: normal;
+    font-weight: 700;
+    font-size: 14px;
+    color: #587661;
+    letter-spacing: 0.1em;
+    display: inline-block;
+}
+
+/* =========================================
+   10. Bottom Banner
+   ========================================= */
+
+.quills-bottom-banner-section {
+    max-width: 980px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 30px;
+}
+
+.quills-bottom-banner {
+    border-radius: 22px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    line-height: 0;
+}
+
+.quills-bottom-banner img {
+    width: 100%;
+    height: auto;
+    border-radius: 22px;
+    display: block;
+}
+
+/* =========================================
+   Responsive Adjustments
+   ========================================= */
+
+@media (max-width: 860px) {
+    .quills-hero-banner {
+        height: 320px;
+        border-radius: 16px;
+    }
+
+    .quills-hero-title {
+        font-size: 54px;
+    }
+
+    .quills-split-grid {
+        grid-template-columns: 1fr;
+        gap: 28px;
+    }
+
+    .quills-split-text-col {
+        max-width: 100%;
+    }
+
+    .quills-grid-reverse {
+        display: flex;
+        flex-direction: column-reverse;
+    }
+
+    .quills-slab-heading {
+        font-size: 22px;
+    }
+
+    .quills-serif-heading {
+        font-size: 28px;
+    }
+
+    .quills-terroir-card,
+    .quills-terroir-card img,
+    .quills-bottom-banner,
+    .quills-bottom-banner img,
+    .quills-split-image-col img,
+    .quills-split-image-col .quills-image-wrapper {
+        border-radius: 16px;
+    }
+}
+
+@media (max-width: 480px) {
+    .quills-hero-banner {
+        height: 240px;
+    }
+
+    .quills-hero-title {
+        font-size: 42px;
+    }
+
+    .quills-about-page-container {
+        font-size: 15px;
+    }
+}
