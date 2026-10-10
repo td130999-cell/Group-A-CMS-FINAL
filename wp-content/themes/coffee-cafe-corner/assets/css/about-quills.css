@@ -1,23 +1,89 @@
 /**
- * Quills Coffee Inspired About Us Page Stylesheet
+ * Quills Coffee Authentic Brand Stylesheet
  * For coffee-cafe-corner theme
+ * Pixel-accurate typography & layout matched to quillscoffee.com/pages/about-us
  */
 
-@import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,400;0,600;0,700;1,400&family=Besley:ital,wght@0,400;0,600;0,700;0,800;1,400;1,700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&display=swap');
+/* =========================================
+   Quills Coffee Original Font Faces
+   ========================================= */
 
-/* Main Container with authentic warm parchment texture */
+@font-face {
+    font-family: 'El Hidrant';
+    src: url('../fonts/ElHidrant.woff2') format('woff2');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Revelstoke';
+    src: url('../fonts/Revelstoke-Bold.woff2') format('woff2');
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Revelstoke';
+    src: url('../fonts/Revelstoke-Regular.woff2') format('woff2');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Revelstoke Grunge';
+    src: url('../fonts/Revelstoke-Grunge.woff2') format('woff2');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Clarendon URW Extra Narrow';
+    src: url('../fonts/ClarendonURWExtNar-Reg.woff2') format('woff2');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Clarendon URW Extra Narrow';
+    src: url('../fonts/ClarendonURWExtNar-Bol.woff2') format('woff2');
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Clarendon URW Extra Narrow';
+    src: url('../fonts/ClarendonURWExtNar-RegObl.woff2') format('woff2');
+    font-weight: 400;
+    font-style: italic;
+    font-display: swap;
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&display=swap');
+
+/* =========================================
+   Page Container & Background
+   ========================================= */
+
 .quills-about-page-container {
     background-color: #FAF8F5;
     background-image: url('../images/about/bg-quills.png');
     background-repeat: repeat;
-    color: #2E2E2E;
-    font-family: 'Besley', Georgia, 'Times New Roman', serif;
+    color: #3A3837;
+    font-family: 'Clarendon URW Extra Narrow', Georgia, 'Times New Roman', serif;
     font-size: 16px;
-    line-height: 1.85;
-    padding-bottom: 60px;
+    line-height: 1.5;
+    padding-bottom: 70px;
     margin: 0;
     width: 100%;
     overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
 
 /* Breadcrumbs */
@@ -28,8 +94,8 @@
 }
 
 .quills-breadcrumbs {
-    font-family: 'Besley', Georgia, serif;
-    font-size: 13px;
+    font-family: 'Clarendon URW Extra Narrow', Georgia, serif;
+    font-size: 13.5px;
     color: #666666;
 }
 
@@ -41,8 +107,8 @@
 }
 
 .quills-breadcrumbs a:hover {
-    color: #3F5C45;
-    border-bottom-color: #3F5C45;
+    color: #678464;
+    border-bottom-color: #678464;
 }
 
 .quills-bc-sep {
@@ -52,13 +118,16 @@
 
 .quills-bc-current {
     color: #222222;
-    font-weight: 600;
+    font-weight: 700;
 }
 
-/* 1. Hero Section */
+/* =========================================
+   1. Hero Banner
+   ========================================= */
+
 .quills-hero-section {
     max-width: 1140px;
-    margin: 10px auto 40px auto;
+    margin: 10px auto 48px auto;
     padding: 0 20px;
 }
 
@@ -82,57 +151,65 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background: linear-gradient(180deg, rgba(20, 25, 20, 0.18) 0%, rgba(20, 25, 20, 0.35) 100%);
+    background: linear-gradient(180deg, rgba(20, 25, 20, 0.15) 0%, rgba(20, 25, 20, 0.3) 100%);
     pointer-events: none;
 }
 
+/* Authentic El Hidrant Script Heading */
 .quills-hero-title {
     position: relative;
     z-index: 2;
     color: #FFFFFF;
-    font-family: 'Playfair Display', Georgia, serif;
-    font-style: italic;
-    font-weight: 600;
-    font-size: 56px;
-    letter-spacing: 0.02em;
+    font-family: 'El Hidrant', cursive, serif;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 82px;
+    letter-spacing: 0.01em;
     margin: 0;
-    text-shadow: 0 2px 12px rgba(0, 0, 0, 0.45);
+    text-shadow: 0 2px 14px rgba(0, 0, 0, 0.45);
     text-align: center;
+    line-height: 1.1;
 }
 
-/* Common Section Layouts */
+/* =========================================
+   Headings & Common Layouts
+   ========================================= */
+
 .quills-section {
     margin-bottom: 55px;
     padding: 0 20px;
 }
 
+/* The exact narrow text container width (440px) matching Quills line breaks */
 .quills-inner-narrow {
-    max-width: 720px;
+    max-width: 440px;
     margin: 0 auto;
 }
 
 .quills-inner-medium {
-    max-width: 860px;
+    max-width: 720px;
     margin: 0 auto;
 }
 
-/* Headings */
+/* Authentic Revelstoke Bold Heading (Solid, no grunge/hollow strokes) */
 .quills-slab-heading {
-    color: #3F5C45;
-    font-family: 'Besley', 'Barlow Condensed', Georgia, serif;
-    font-size: 22px;
-    font-weight: 800;
-    letter-spacing: 0.07em;
+    color: #587661;
+    font-family: 'Revelstoke', sans-serif;
+    font-size: 32px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
     text-transform: uppercase;
     margin-top: 0;
-    margin-bottom: 22px;
+    margin-bottom: 24px;
+    line-height: 1.2;
 }
 
 .quills-serif-heading {
-    color: #1F1F1F;
+    color: #3A3837;
     font-family: 'Playfair Display', Georgia, serif;
-    font-size: 34px;
-    font-weight: 700;
+    font-size: 32px;
+    font-weight: 600;
+    font-style: italic;
     letter-spacing: -0.01em;
     margin-top: 0;
     margin-bottom: 24px;
@@ -142,36 +219,49 @@
     text-align: center;
 }
 
-/* 2. Where We Started Story */
+/* =========================================
+   2. Story Section (WHERE WE STARTED)
+   ========================================= */
+
+.quills-story-section {
+    margin-top: 20px;
+    margin-bottom: 60px;
+}
+
 .quills-story-paragraphs p {
+    font-family: 'Clarendon URW Extra Narrow', Georgia, serif;
     margin-top: 0;
     margin-bottom: 22px;
-    font-size: 15.5px;
-    line-height: 1.85;
-    color: #2F2F2F;
+    font-size: 18px;
+    line-height: 1.5;
+    color: #32302F;
 }
 
 .quills-story-paragraphs p:last-child {
     margin-bottom: 0;
 }
 
-/* 3. Two-Column Split Sections */
+/* =========================================
+   3, 6, 7, 8. Split Grid Sections
+   ========================================= */
+
 .quills-split-section {
     max-width: 980px;
     margin-left: auto;
     margin-right: auto;
+    margin-bottom: 60px;
 }
 
 .quills-split-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 48px;
+    gap: 52px;
     align-items: center;
 }
 
 .quills-split-image-col .quills-image-wrapper {
     position: relative;
-    border-radius: 18px;
+    border-radius: 20px;
     overflow: hidden;
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
     line-height: 0;
@@ -181,7 +271,7 @@
     width: 100%;
     height: auto;
     object-fit: cover;
-    border-radius: 18px;
+    border-radius: 20px;
     display: block;
     transition: transform 0.4s ease;
 }
@@ -190,34 +280,46 @@
     transform: scale(1.02);
 }
 
-.quills-split-text-col .quills-body-text p {
-    margin-top: 0;
-    margin-bottom: 0;
-    font-size: 15px;
-    line-height: 1.85;
-    color: #333333;
+.quills-split-text-col {
+    max-width: 460px;
 }
 
-/* 4. How We Work Centered Block */
+.quills-split-text-col .quills-body-text p {
+    font-family: 'Clarendon URW Extra Narrow', Georgia, serif;
+    margin-top: 0;
+    margin-bottom: 0;
+    font-size: 17.5px;
+    line-height: 1.55;
+    color: #32302F;
+}
+
+/* =========================================
+   4. HOW WE WORK
+   ========================================= */
+
 .quills-how-we-work-section {
-    margin-top: 60px;
+    margin-top: 70px;
     margin-bottom: 50px;
 }
 
 .quills-how-we-work-section .quills-body-text p {
-    font-size: 15.5px;
-    line-height: 1.85;
-    color: #333333;
+    font-family: 'Clarendon URW Extra Narrow', Georgia, serif;
+    font-size: 17.5px;
+    line-height: 1.55;
+    color: #32302F;
     margin: 0;
 }
 
-/* 5. Terroir Definition Card */
+/* =========================================
+   5. TERROIR Definition Card
+   ========================================= */
+
 .quills-terroir-section {
     max-width: 980px;
     margin-left: auto;
     margin-right: auto;
     margin-top: 40px;
-    margin-bottom: 60px;
+    margin-bottom: 65px;
 }
 
 .quills-terroir-card {
@@ -234,33 +336,39 @@
     display: block;
 }
 
-/* 9. Where We're Going Founder Quote */
+/* =========================================
+   9. Where We're Going Founder Quote
+   ========================================= */
+
 .quills-where-going-section {
     margin-top: 70px;
     margin-bottom: 45px;
 }
 
 .quills-founder-quote p {
-    font-family: 'Besley', Georgia, serif;
+    font-family: 'Clarendon URW Extra Narrow', Georgia, serif;
     font-style: italic;
-    font-size: 16px;
-    line-height: 1.85;
-    color: #383838;
+    font-size: 17.5px;
+    line-height: 1.55;
+    color: #32302F;
     margin-top: 0;
-    margin-bottom: 16px;
+    margin-bottom: 14px;
 }
 
 .quills-quote-author {
-    font-family: 'Besley', sans-serif;
+    font-family: 'Revelstoke', sans-serif;
     font-style: normal;
     font-weight: 700;
     font-size: 14px;
-    color: #2F2F2F;
-    letter-spacing: 0.02em;
+    color: #587661;
+    letter-spacing: 0.1em;
     display: inline-block;
 }
 
-/* 10. Bottom Banner */
+/* =========================================
+   10. Bottom Banner
+   ========================================= */
+
 .quills-bottom-banner-section {
     max-width: 980px;
     margin-left: auto;
@@ -285,6 +393,7 @@
 /* =========================================
    Responsive Adjustments
    ========================================= */
+
 @media (max-width: 860px) {
     .quills-hero-banner {
         height: 320px;
@@ -292,12 +401,16 @@
     }
 
     .quills-hero-title {
-        font-size: 38px;
+        font-size: 54px;
     }
 
     .quills-split-grid {
         grid-template-columns: 1fr;
         gap: 28px;
+    }
+
+    .quills-split-text-col {
+        max-width: 100%;
     }
 
     .quills-grid-reverse {
@@ -306,7 +419,7 @@
     }
 
     .quills-slab-heading {
-        font-size: 20px;
+        font-size: 22px;
     }
 
     .quills-serif-heading {
@@ -329,7 +442,7 @@
     }
 
     .quills-hero-title {
-        font-size: 30px;
+        font-size: 42px;
     }
 
     .quills-about-page-container {

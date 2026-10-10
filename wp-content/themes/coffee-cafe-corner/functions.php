@@ -18,8 +18,8 @@ function coffee_cafe_corner_scripts() {
 	// Enqueue custom footer stylesheet
 	wp_enqueue_style( 'coffee-cafe-corner-footer', trailingslashit( get_template_directory_uri() ) . 'assets/css/custom-footer.css', array(), COFFEE_CAFE_CORNER_VERSION );
 
-	// Enqueue Quills About Us stylesheet
-	wp_enqueue_style( 'coffee-cafe-corner-about', trailingslashit( get_template_directory_uri() ) . 'assets/css/about-quills.css', array(), COFFEE_CAFE_CORNER_VERSION );
+	// Enqueue Quills About Us stylesheet with auto cache-busting
+	wp_enqueue_style( 'coffee-cafe-corner-about', trailingslashit( get_template_directory_uri() ) . 'assets/css/about-quills.css', array(), filemtime( get_template_directory() . '/assets/css/about-quills.css' ) );
 }
 add_action( 'wp_enqueue_scripts', 'coffee_cafe_corner_scripts' );
 
