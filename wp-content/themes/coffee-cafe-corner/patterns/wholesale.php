@@ -27,54 +27,35 @@ $typeform_id    = $wholesale['typeform_id'];
 ?>
 <div class="wholesale-page-wrapper">
 	<!-- Hero Section: Wholesale Coffee Roasting -->
-	<section class="wholesale-hero">
-		<h1 class="wholesale-hero__title"><?php echo esc_html( $hero_title ); ?></h1>
+	<section class="quills-wholesale-hero-section">
+		<h2 class="quills-wholesale-hero-title"><?php echo esc_html( $hero_title ); ?></h2>
 	</section>
 
-	<!-- Main Content Section: Video & Intro Text -->
-	<section class="wholesale-content-section">
-		<div class="wholesale-grid">
-			<!-- Left Column: Video Card -->
-			<div class="wholesale-video-container" id="wholesale-video-card" data-video-id="<?php echo esc_attr( $video_id ); ?>">
-				<img 
-					src="<?php echo esc_url( $video_poster ); ?>" 
-					alt="Michael Quills Wholesale Coffee" 
-					class="wholesale-video-poster" 
-					id="wholesale-poster-img"
-				/>
-				
-				<!-- Sound / Audio Toggle Button -->
-				<button class="wholesale-sound-btn" id="wholesale-sound-toggle" aria-label="Play video with sound">
-					<svg viewBox="0 0 24 24" aria-hidden="true">
-						<path d="M14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77zm-2.5 0L6.5 7.5H3v9h3.5l5 4.27V3.23zM16.5 12c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/>
-					</svg>
-				</button>
-
-				<!-- Subtitle Overlay Pill -->
-				<div class="wholesale-subtitle-pill" id="wholesale-subtitle">
-					<?php echo esc_html( $video_subtitle ); ?>
-				</div>
-
-				<!-- Embedded Wistia Video Container -->
-				<div class="wholesale-wistia-embed" id="wholesale-wistia-box"></div>
+	<!-- Main Content Section: Video & Intro Text (quills-coffee-fest) -->
+	<section class="quills-wholesale-content-section">
+		<script async src="https://fast.wistia.com/player.js"></script>
+		<script async src="https://fast.wistia.com/embed/<?php echo esc_attr( $video_id ); ?>.js" type="module"></script>
+		
+		<div class="quills-coffee-fest">
+			<!-- Left Column: Wistia Video Player -->
+			<div class="quills-coffee-fest__video">
+				<wistia-player aspect="1.7777777777777777" media-id="<?php echo esc_attr( $video_id ); ?>"></wistia-player>
 			</div>
 
 			<!-- Right Column: Michael's Introduction & Copy -->
-			<div class="wholesale-text-container">
-				<h2 class="wholesale-heading"><?php echo esc_html( $intro_heading ); ?></h2>
-				<p class="wholesale-lead-bold"><?php echo esc_html( $intro_lead ); ?></p>
+			<div class="quills-coffee-fest__text">
+				<h2><?php echo esc_html( $intro_heading ); ?></h2>
+				<p><strong><?php echo esc_html( $intro_lead ); ?></strong></p>
 				<?php foreach ( $paragraphs as $p ) : ?>
-					<p class="wholesale-paragraph"><?php echo esc_html( $p ); ?></p>
+					<p><?php echo esc_html( $p ); ?></p>
 				<?php endforeach; ?>
 			</div>
 		</div>
 	</section>
 
 	<!-- Typeform / Questionnaire Section (Embed from Quills Coffee) -->
-	<section class="wholesale-form-section">
-		<div class="wholesale-form-container">
-			<!-- Live Typeform Embed from Quills Coffee -->
-			<div data-tf-live="<?php echo esc_attr( $typeform_id ); ?>" id="wholesale-typeform-widget"></div>
-		</div>
+	<section class="quills-wholesale-typeform-section">
+		<div data-tf-live="<?php echo esc_attr( $typeform_id ); ?>" id="wholesale-typeform-widget"></div>
+		<script src="//embed.typeform.com/next/embed.js"></script>
 	</section>
 </div>
