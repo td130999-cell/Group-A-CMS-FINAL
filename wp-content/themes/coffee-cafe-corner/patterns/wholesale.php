@@ -70,60 +70,11 @@ $typeform_id    = $wholesale['typeform_id'];
 		</div>
 	</section>
 
-	<!-- Typeform / Questionnaire Section -->
+	<!-- Typeform / Questionnaire Section (Embed from Quills Coffee) -->
 	<section class="wholesale-form-section">
 		<div class="wholesale-form-container">
 			<!-- Live Typeform Embed from Quills Coffee -->
 			<div data-tf-live="<?php echo esc_attr( $typeform_id ); ?>" id="wholesale-typeform-widget"></div>
-
-			<!-- Fallback Direct Inquiry Form (Visible if Typeform is blocked or loading) -->
-			<form class="wholesale-fallback-form" id="wholesale-inquiry-form" method="post" action="">
-				<?php wp_nonce_field( 'wholesale_nonce', 'wholesale_nonce_field' ); ?>
-				<h3><?php esc_html_e( 'Request Wholesale Samples', 'coffee-cafe-corner' ); ?></h3>
-				<p class="form-desc"><?php esc_html_e( 'Tell us a little bit about your cafe or project and we\'ll send you a curated sample kit.', 'coffee-cafe-corner' ); ?></p>
-				
-				<div class="wholesale-form-grid">
-					<div class="wholesale-form-field">
-						<label for="wholesale-name"><?php esc_html_e( 'Your Name *', 'coffee-cafe-corner' ); ?></label>
-						<input type="text" id="wholesale-name" name="name" required placeholder="e.g. Jane Doe" />
-					</div>
-					<div class="wholesale-form-field">
-						<label for="wholesale-email"><?php esc_html_e( 'Email Address *', 'coffee-cafe-corner' ); ?></label>
-						<input type="email" id="wholesale-email" name="email" required placeholder="e.g. jane@mycafe.com" />
-					</div>
-					<div class="wholesale-form-field">
-						<label for="wholesale-phone"><?php esc_html_e( 'Phone Number', 'coffee-cafe-corner' ); ?></label>
-						<input type="tel" id="wholesale-phone" name="phone" placeholder="e.g. (502) 555-0199" />
-					</div>
-					<div class="wholesale-form-field">
-						<label for="wholesale-cafe"><?php esc_html_e( 'Cafe / Business Name', 'coffee-cafe-corner' ); ?></label>
-						<input type="text" id="wholesale-cafe" name="cafe_name" placeholder="e.g. Sunnyside Cafe" />
-					</div>
-					<div class="wholesale-form-field">
-						<label for="wholesale-location"><?php esc_html_e( 'City & State', 'coffee-cafe-corner' ); ?></label>
-						<input type="text" id="wholesale-location" name="location" placeholder="e.g. Louisville, KY" />
-					</div>
-					<div class="wholesale-form-field">
-						<label for="wholesale-timeline"><?php esc_html_e( 'Target Launch Timeline', 'coffee-cafe-corner' ); ?></label>
-						<select id="wholesale-timeline" name="timeline">
-							<option value="Already open"><?php esc_html_e( 'Already open', 'coffee-cafe-corner' ); ?></option>
-							<option value="1-3 months"><?php esc_html_e( 'Next 1 - 3 months', 'coffee-cafe-corner' ); ?></option>
-							<option value="3-6 months"><?php esc_html_e( 'Next 3 - 6 months', 'coffee-cafe-corner' ); ?></option>
-							<option value="6+ months"><?php esc_html_e( '6+ months out', 'coffee-cafe-corner' ); ?></option>
-						</select>
-					</div>
-					<div class="wholesale-form-field full-width">
-						<label for="wholesale-message"><?php esc_html_e( 'Anything specific you\'d like to discuss?', 'coffee-cafe-corner' ); ?></label>
-						<textarea id="wholesale-message" name="message" rows="3" placeholder="Tell us about your equipment, volume, or preferred flavor profile..."></textarea>
-					</div>
-					<div class="wholesale-form-submit">
-						<button type="submit" class="wholesale-submit-btn" id="wholesale-submit-button">
-							<?php esc_html_e( 'Send Sample Request', 'coffee-cafe-corner' ); ?>
-						</button>
-						<div class="wholesale-form-feedback" id="wholesale-feedback"></div>
-					</div>
-				</div>
-			</form>
 		</div>
 	</section>
 </div>
