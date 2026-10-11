@@ -116,9 +116,33 @@ $total_products = $products_query->found_posts;
 					$image_url    = Coffee_Cafe_Corner_Brew_Gear_DB::get_product_image_url( $product_id );
 					$permalink    = get_permalink( $product_id );
 					?>
-					<article class="quills-product-card" onclick="window.location.href='<?php echo esc_url( $permalink ); ?>';">
+					<article class="quills-product-card" data-product-id="<?php echo esc_attr( $product_id ); ?>">
 						<div class="quills-product-image-box">
-							<img src="<?php echo esc_url( $image_url ); ?>" alt="<?php echo esc_attr( get_the_title() ); ?>" class="quills-product-image" loading="lazy" />
+							<!-- Default View (Non-hover) -->
+							<div class="quills-product-default-view">
+								<img src="<?php echo esc_url( $image_url ); ?>" alt="<?php echo esc_attr( get_the_title() ); ?>" class="quills-product-image" loading="lazy" />
+							</div>
+
+							<!-- Hover Overlay (Exact Match to User Mockup) -->
+							<div class="quills-product-hover-overlay">
+								<div class="quills-hover-header">
+									<span class="quills-hover-title"><?php the_title(); ?></span>
+									<div class="quills-hover-divider"></div>
+								</div>
+
+								<div class="quills-hover-image-wrap">
+									<img src="<?php echo esc_url( $image_url ); ?>" alt="<?php echo esc_attr( get_the_title() ); ?>" class="quills-hover-image" loading="lazy" />
+								</div>
+
+								<div class="quills-hover-action">
+									<form class="quills-add-to-cart-form" method="post" action="<?php echo esc_url( function_exists( 'wc_get_cart_url' ) ? wc_get_cart_url() : home_url( '/cart/' ) ); ?>">
+										<input type="hidden" name="add-to-cart" value="<?php echo esc_attr( $product_id ); ?>" />
+										<button type="submit" class="quills-add-to-cart-btn" data-product-id="<?php echo esc_attr( $product_id ); ?>" aria-label="<?php echo esc_attr( sprintf( __( 'Add %s to cart', 'coffee-cafe-corner' ), get_the_title() ) ); ?>">
+											<?php esc_html_e( 'ADD TO CART', 'coffee-cafe-corner' ); ?>
+										</button>
+									</form>
+								</div>
+							</div>
 						</div>
 
 						<div class="quills-product-info">
