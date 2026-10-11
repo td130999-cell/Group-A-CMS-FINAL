@@ -108,7 +108,7 @@ class Coffee_Cafe_Corner_Wholesale_DB {
 				foreach ( $defaults as $meta_key => $meta_val ) {
 					update_post_meta( $page_id, $meta_key, $meta_val );
 				}
-				flush_rewrite_rules( false );
+				self::ensure_navigation_records();
 				return $page_id;
 			}
 		} else {
@@ -126,10 +126,59 @@ class Coffee_Cafe_Corner_Wholesale_DB {
 				update_post_meta( $page->ID, '_wp_page_template', self::TEMPLATE_NAME );
 			}
 
+			self::ensure_navigation_records();
 			return $page->ID;
 		}
 
 		return 0;
+	}
+
+	/**
+	 * Ensure Wholesale is included in the navigation menus in the database
+	 */
+	public static function ensure_navigation_records() {
+		// 1. Ensure Wholesale is in Company footer menu
+		$company_menu = wp_get_nav_menu_object( 'Company' );
+		if ( ! $company_menu ) {
+			$company_menu = wp_get_nav_menu_object( 'company' );
+		}
+
+		if ( $company_menu ) {
+			$items = wp_get_nav_menu_items( $company_menu->term_id );
+			$has_wholesale = false;
+
+			if ( ! empty( $items ) ) {
+				foreach ( $items as $item ) {
+					if ( strtolower( trim( $item->title ) ) === 'wholesale' || false !== strpos( $item->url, '/wholesale' ) ) {
+						$has_wholesale = true;
+						break;
+					}
+				}
+			}
+
+			if ( ! $has_wholesale ) {
+				// Shift items with menu_order >= 4 to make room for Wholesale at position 4
+				if ( ! empty( $items ) ) {
+					foreach ( $items as $item ) {
+						if ( (int) $item->menu_order >= 4 ) {
+							wp_update_post( array(
+								'ID'         => $item->ID,
+								'menu_order' => (int) $item->menu_order + 1,
+							) );
+						}
+					}
+				}
+
+				// Add Wholesale menu item at position 4
+				wp_update_nav_menu_item( $company_menu->term_id, 0, array(
+					'menu-item-title'    => 'Wholesale',
+					'menu-item-url'      => home_url( '/wholesale/' ),
+					'menu-item-status'   => 'publish',
+					'menu-item-type'     => 'custom',
+					'menu-item-position' => 4,
+				) );
+			}
+		}
 	}
 
 	/**
