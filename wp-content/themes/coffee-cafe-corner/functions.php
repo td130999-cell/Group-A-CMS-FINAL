@@ -35,6 +35,19 @@ function coffee_cafe_corner_scripts() {
 	if ( file_exists( get_template_directory() . '/assets/js/brew-gear.js' ) ) {
 		wp_enqueue_script( 'coffee-cafe-corner-brew-gear-js', trailingslashit( get_template_directory_uri() ) . 'assets/js/brew-gear.js', array(), filemtime( get_template_directory() . '/assets/js/brew-gear.js' ), true );
 	}
+
+	// Enqueue Quills Wholesale stylesheet with auto cache-busting
+	if ( file_exists( get_template_directory() . '/assets/css/wholesale.css' ) ) {
+		wp_enqueue_style( 'coffee-cafe-corner-wholesale', trailingslashit( get_template_directory_uri() ) . 'assets/css/wholesale.css', array(), filemtime( get_template_directory() . '/assets/css/wholesale.css' ) );
+	}
+
+	// Enqueue Quills Wholesale JS
+	if ( file_exists( get_template_directory() . '/assets/js/wholesale.js' ) ) {
+		wp_enqueue_script( 'coffee-cafe-corner-wholesale-js', trailingslashit( get_template_directory_uri() ) . 'assets/js/wholesale.js', array(), filemtime( get_template_directory() . '/assets/js/wholesale.js' ), true );
+		wp_localize_script( 'coffee-cafe-corner-wholesale-js', 'wholesaleData', array(
+			'ajaxUrl' => admin_url( 'admin-ajax.php' ),
+		) );
+	}
 }
 add_action( 'wp_enqueue_scripts', 'coffee_cafe_corner_scripts' );
 
@@ -52,6 +65,7 @@ function coffee_cafe_corner_enqueue_editor_block_styles() {
 	add_editor_style( trailingslashit( get_template_directory_uri() ) . 'assets/css/custom-footer.css' );
 	add_editor_style( trailingslashit( get_template_directory_uri() ) . 'assets/css/visit-quills.css' );
 	add_editor_style( trailingslashit( get_template_directory_uri() ) . 'assets/css/brew-gear.css' );
+	add_editor_style( trailingslashit( get_template_directory_uri() ) . 'assets/css/wholesale.css' );
 }
 add_action( 'after_setup_theme', 'coffee_cafe_corner_enqueue_editor_block_styles' );
 
