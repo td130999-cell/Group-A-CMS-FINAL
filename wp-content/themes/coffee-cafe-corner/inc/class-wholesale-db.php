@@ -32,11 +32,36 @@ class Coffee_Cafe_Corner_Wholesale_DB {
 	 * Initialize hooks
 	 */
 	public static function init() {
+		add_action( 'init', array( __CLASS__, 'register_pattern' ), 9 );
 		add_action( 'init', array( __CLASS__, 'ensure_database_records' ) );
 		add_action( 'init', array( __CLASS__, 'register_rewrite_rules' ) );
 		add_action( 'customize_register', array( __CLASS__, 'register_customizer_settings' ) );
 		add_action( 'wp_ajax_wholesale_submit_inquiry', array( __CLASS__, 'handle_inquiry_submission' ) );
 		add_action( 'wp_ajax_nopriv_wholesale_submit_inquiry', array( __CLASS__, 'handle_inquiry_submission' ) );
+	}
+
+	/**
+	 * Explicitly register Wholesale block pattern in WordPress Block Patterns Registry
+	 */
+	public static function register_pattern() {
+		if ( class_exists( 'WP_Block_Patterns_Registry' ) && ! WP_Block_Patterns_Registry::get_instance()->is_registered( 'coffee-cafe-corner/wholesale' ) ) {
+			$pattern_file = get_template_directory() . '/patterns/wholesale.php';
+			if ( file_exists( $pattern_file ) ) {
+				ob_start();
+				include $pattern_file;
+				$pattern_content = ob_get_clean();
+
+				register_block_pattern(
+					'coffee-cafe-corner/wholesale',
+					array(
+						'title'       => __( 'Wholesale Coffee Roasting', 'coffee-cafe-corner' ),
+						'categories'  => array( 'coffee-cafe-corner', 'pages' ),
+						'description' => __( 'Quills Coffee Wholesale page pattern, dynamically pulling content from WordPress database.', 'coffee-cafe-corner' ),
+						'content'     => $pattern_content,
+					)
+				);
+			}
+		}
 	}
 
 	/**
@@ -57,7 +82,7 @@ class Coffee_Cafe_Corner_Wholesale_DB {
 		$defaults = array(
 			'_wp_page_template'          => self::TEMPLATE_NAME,
 			'_wholesale_hero_title'      => 'Wholesale Coffee Roasting',
-			'_wholesale_intro_heading'    => 'Hey there! I’m Michael.',
+			'_wholesale_intro_heading'    => "Hey there! I'm Michael.",
 			'_wholesale_intro_lead'       => 'We want to help you build a cafe people love coming back to.',
 			'_wholesale_paragraph_1'     => 'After 19 years and seven cafes of our own, we know what a new owner needs from a coffee partner.',
 			'_wholesale_paragraph_2'     => 'You get coffee we serve in our own cafes, recipes and training for your baristas, and my personal cell for when you need a hand.',
@@ -123,7 +148,7 @@ class Coffee_Cafe_Corner_Wholesale_DB {
 
 		$intro_heading = $page_id ? get_post_meta( $page_id, '_wholesale_intro_heading', true ) : '';
 		if ( empty( $intro_heading ) ) {
-			$intro_heading = 'Hey there! I’m Michael.';
+			$intro_heading = "Hey there! I'm Michael.";
 		}
 
 		$intro_lead = $page_id ? get_post_meta( $page_id, '_wholesale_intro_lead', true ) : '';
