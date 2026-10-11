@@ -438,4 +438,9 @@ add_action( 'init', 'coffee_cafe_corner_init_visit_database' );
  * Brew Gear Collection Database Management
  */
 require_once get_template_directory() . '/inc/class-brew-gear-db.php';
+
+/**
+ * Wholesale Page Database Management
+ */
+require_once get_template_directory() . '/inc/class-wholesale-db.php';
 
