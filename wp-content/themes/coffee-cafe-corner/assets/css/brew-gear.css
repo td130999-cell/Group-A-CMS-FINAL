@@ -66,8 +66,11 @@
    Global Brew Gear Layout
    ========================================= */
 
+body,
 .quills-brew-gear-wrapper {
-    background-color: #FFFDEB !important;
+    background-color: #ece8d7 !important;
+    background-image: url('../images/about/bg-quills.png') !important;
+    background-repeat: repeat !important;
     color: #151515;
     font-family: 'Clarendon URW Extra Narrow', Georgia, 'Times New Roman', serif;
     width: 100%;
@@ -268,29 +271,154 @@
     text-decoration: none !important;
 }
 
-/* Image Container */
+/* Image Container (1:1 Aspect Ratio Matching Mockup) */
 .quills-product-image-box {
     width: 100%;
-    height: 380px;
+    aspect-ratio: 1 / 1;
+    position: relative;
+    margin-bottom: 22px;
+    background: transparent;
+    overflow: hidden;
+}
+
+/* Default View */
+.quills-product-default-view {
+    width: 100%;
+    height: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-bottom: 24px;
-    overflow: hidden;
-    position: relative;
+    transition: opacity 0.25s ease;
 }
 
 .quills-product-image {
-    max-width: 92%;
-    max-height: 92%;
+    max-width: 90%;
+    max-height: 90%;
     width: auto;
     height: auto;
     object-fit: contain;
-    transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
+    transition: transform 0.3s ease;
 }
 
-.quills-product-card:hover .quills-product-image {
-    transform: scale(1.035);
+/* Hover Overlay State - Exact Match to User Screenshot */
+.quills-product-hover-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #726f68; /* Exact hex measured from user screenshot */
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: opacity 0.25s ease, visibility 0.25s ease;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 22px 18px 18px 18px;
+    box-sizing: border-box;
+    z-index: 5;
+}
+
+.quills-product-card:hover .quills-product-hover-overlay {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+}
+
+/* Hover Header: Script Title + Clean White Divider Line */
+.quills-hover-header {
+    width: 100%;
+    text-align: left;
+}
+
+.quills-hover-title {
+    font-family: 'El Hidrant', cursive, serif !important;
+    font-style: italic !important;
+    font-size: 22px !important;
+    line-height: 1.2 !important;
+    font-weight: 400 !important;
+    color: #FFFFFF !important;
+    display: block;
+    margin: 0 0 8px 0;
+    letter-spacing: 0.3px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.quills-hover-divider {
+    width: 100%;
+    height: 1.5px;
+    background-color: #FFFFFF;
+}
+
+/* Hover Center Image */
+.quills-hover-image-wrap {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px 0;
+    overflow: hidden;
+}
+
+.quills-hover-image {
+    max-width: 82%;
+    max-height: 82%;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    filter: brightness(0.92) contrast(1.05);
+}
+
+/* Hover Action: ADD TO CART Button */
+.quills-hover-action {
+    width: 100%;
+}
+
+.quills-add-to-cart-form {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+}
+
+.quills-add-to-cart-btn {
+    width: 100%;
+    height: 44px;
+    background-color: #dfcd81 !important; /* Exact measured warm yellow/golden tan from user mockup */
+    border: 1px solid #151515 !important;
+    color: #151515 !important;
+    font-family: 'Revelstoke', sans-serif !important;
+    font-weight: 700 !important;
+    font-size: 15px !important;
+    letter-spacing: 1.8px !important;
+    text-transform: uppercase !important;
+    cursor: pointer !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    transition: background-color 0.2s ease, transform 0.15s ease !important;
+}
+
+.quills-add-to-cart-btn:hover {
+    background-color: #d1bf73 !important;
+}
+
+.quills-add-to-cart-btn:active {
+    transform: scale(0.99);
+}
+
+.quills-add-to-cart-btn.is-added {
+    background-color: #5c7056 !important;
+    color: #ffffff !important;
+    border-color: #5c7056 !important;
 }
 
 /* Product Meta Info */
