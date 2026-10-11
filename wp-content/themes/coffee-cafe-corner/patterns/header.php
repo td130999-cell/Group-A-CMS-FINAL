@@ -97,6 +97,7 @@
       <li class="quills-nav-item"><a href="<?php echo esc_url( home_url('/shop/') ); ?>" class="quills-nav-link">COFFEE</a></li>
       <li class="quills-nav-item"><a href="<?php echo esc_url( home_url('/subscriptions/') ); ?>" class="quills-nav-link">SUBSCRIPTIONS</a></li>
       <li class="quills-nav-item"><a href="<?php echo esc_url( home_url('/brew-gear/') ); ?>" class="quills-nav-link">BREW GEAR</a></li>
+      <li class="quills-nav-item"><a href="<?php echo esc_url( home_url('/wholesale/') ); ?>" class="quills-nav-link">WHOLESALE</a></li>
       <li class="quills-nav-item"><a href="<?php echo esc_url( home_url('/merch/') ); ?>" class="quills-nav-link">MERCH</a></li>
       <li class="quills-nav-item"><a href="<?php echo esc_url( home_url('/gift-cards/') ); ?>" class="quills-nav-link">GIFT CARDS</a></li>
       <li class="quills-nav-item"><a href="<?php echo esc_url( home_url('/visit/') ); ?>" class="quills-nav-link">VISIT</a></li>
