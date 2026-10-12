@@ -1,0 +1,273 @@
+/**
+ * Custom Footer Styles - Matching Authentic Quills Coffee Design
+ * Background: Rich Moss/Olive Green (#5c7056)
+ * Headings: Revelstoke Bold
+ * Body & Links: Clarendon URW Extra Narrow / Besley (#fffdeb)
+ */
+
+.quills-footer-wrapper {
+    background-color: #5c7056 !important;
+    color: #fffdeb;
+    padding: 70px 24px 35px 24px;
+    font-family: 'Clarendon URW Extra Narrow', 'Besley', Georgia, 'Times New Roman', serif;
+    position: relative;
+    width: 100%;
+    box-sizing: border-box;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.quills-footer-container {
+    max-width: 1140px;
+    margin: 0 auto;
+    padding: 0 16px;
+    box-sizing: border-box;
+}
+
+/* 3-Column Top Section */
+.quills-footer-top {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 50px;
+    margin-bottom: 55px;
+}
+
+.quills-footer-col {
+    display: flex;
+    flex-direction: column;
+}
+
+/* Column Headings (Revelstoke Bold) */
+.quills-footer-title {
+    font-family: 'Revelstoke', sans-serif !important;
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #ffffff !important;
+    margin: 0 0 22px 0;
+    padding: 0;
+    line-height: 1.2;
+}
+
+/* Brand & Contact Column */
+.quills-footer-contact {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.quills-footer-contact p,
+.quills-contact-line {
+    margin: 0;
+    padding: 0;
+    font-family: 'Clarendon URW Extra Narrow', 'Besley', Georgia, serif !important;
+    font-size: 15px;
+    line-height: 1.65;
+    color: #fffdeb !important;
+}
+
+.quills-footer-contact a {
+    color: #fffdeb !important;
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.quills-footer-contact a:hover {
+    color: #ffffff !important;
+    text-decoration: underline;
+}
+
+/* Menu Lists in Quick Links & Company */
+.quills-footer-menu {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+}
+
+.quills-footer-menu li {
+    margin: 0;
+    padding: 0;
+    line-height: 1.6;
+}
+
+.quills-footer-menu li a {
+    font-family: 'Clarendon URW Extra Narrow', 'Besley', Georgia, serif !important;
+    color: #fffdeb !important;
+    text-decoration: none;
+    font-size: 15px;
+    transition: color 0.2s ease, opacity 0.2s ease;
+    display: inline-block;
+}
+
+.quills-footer-menu li a:hover {
+    color: #ffffff !important;
+    text-decoration: underline;
+}
+
+/* Bottom Bar */
+.quills-footer-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 24px;
+    padding-top: 25px;
+    margin-bottom: 25px;
+    border-top: none;
+}
+
+/* Left: Currency, Language & Socials */
+.quills-footer-left {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.quills-selector {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    font-family: 'Clarendon URW Extra Narrow', Georgia, serif;
+    font-size: 14px;
+    font-weight: 600;
+    color: #fffdeb;
+    cursor: pointer;
+    user-select: none;
+    transition: opacity 0.2s ease;
+}
+
+.quills-selector:hover {
+    color: #ffffff;
+    opacity: 0.95;
+}
+
+.quills-flag-icon {
+    display: inline-block;
+    vertical-align: middle;
+    width: 20px;
+    height: 14px;
+    border-radius: 1.5px;
+    object-fit: cover;
+}
+
+.quills-chevron {
+    margin-left: 2px;
+    display: inline-block;
+    vertical-align: middle;
+    opacity: 0.85;
+}
+
+/* Social icons */
+.quills-social-links {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-left: 6px;
+}
+
+.quills-social-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: #fffdeb;
+    text-decoration: none;
+    transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.quills-social-icon svg {
+    width: 18px;
+    height: 18px;
+    fill: currentColor;
+}
+
+.quills-social-icon:hover {
+    color: #ffffff;
+    transform: translateY(-1px);
+}
+
+/* Right: Payment Method Authentic Strip */
+.quills-footer-payment {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.quills-footer-payment-img {
+    display: block;
+    width: auto;
+    max-width: 360px;
+    height: 24px;
+    object-fit: contain;
+}
+
+/* Copyright Row */
+.quills-footer-copyright {
+    text-align: center;
+    padding-top: 15px;
+}
+
+.quills-footer-copyright p {
+    margin: 0;
+    font-size: 12.5px;
+    color: #c4d2c2;
+    letter-spacing: 0.3px;
+    font-family: 'Clarendon URW Extra Narrow', 'Besley', Georgia, serif;
+}
+
+.quills-footer-copyright a {
+    color: inherit;
+    text-decoration: none;
+}
+
+.quills-footer-copyright a:hover {
+    text-decoration: underline;
+    color: #ffffff;
+}
+
+/* Responsive Breakpoints */
+@media (max-width: 900px) {
+    .quills-footer-top {
+        grid-template-columns: 1fr 1fr;
+        gap: 36px;
+    }
+    .quills-footer-bottom {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        gap: 20px;
+    }
+    .quills-footer-left {
+        justify-content: center;
+    }
+    .quills-footer-payment {
+        justify-content: center;
+    }
+}
+
+@media (max-width: 600px) {
+    .quills-footer-wrapper {
+        padding: 50px 16px 25px 16px;
+    }
+    .quills-footer-top {
+        grid-template-columns: 1fr;
+        gap: 32px;
+    }
+    .quills-footer-title {
+        margin-bottom: 16px;
+    }
+    .quills-footer-bottom {
+        gap: 18px;
+    }
+    .quills-footer-left {
+        gap: 16px;
+    }
+    .quills-footer-payment-img {
+        max-width: 290px;
+        height: auto;
+    }
+}
