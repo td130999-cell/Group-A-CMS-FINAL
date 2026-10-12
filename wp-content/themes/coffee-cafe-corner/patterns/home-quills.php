@@ -33,28 +33,20 @@ $img_dir   = $theme_uri . 'assets/images/home/';
           </a>
         </div>
         <div class="quills-hero-reviews">
-          <div class="quills-rating-stars">★★★★★</div>
+          <div class="quills-hero-stars-wrap">
+            <img src="<?php echo esc_url( $img_dir . 'hero-stars.png' ); ?>" alt="5 Stars" class="quills-hero-stars-img" width="135" height="25" />
+          </div>
           <p class="quills-rating-text">4.62 stars across 13,082 reviews</p>
-          <p class="quills-featured-label">Featured in</p>
+          <p class="quills-featured-label"><strong>Featured in</strong></p>
           <div class="quills-press-logos">
-            <div class="quills-press-item quills-press-garden">
-              <span class="quills-logo-garden">GARDEN &amp; GUN</span>
-            </div>
-            <div class="quills-press-item quills-press-cosmo">
-              <span class="quills-logo-cosmo">COSMOPOLITAN</span>
-              <span class="quills-press-caption">“Forget the PSL and try the EVL here at Quills...”</span>
-            </div>
-            <div class="quills-press-item quills-press-foodwine">
-              <span class="quills-logo-foodwine">FOOD &amp; WINE</span>
-              <span class="quills-press-caption">“Look to the single origin offerings.”</span>
-            </div>
-            <div class="quills-press-item quills-press-courier">
-              <span class="quills-logo-courier">courier journal</span>
-            </div>
+            <img src="<?php echo esc_url( $img_dir . 'logo-garden-and-gun.png' ); ?>" alt="Garden &amp; Gun" class="quills-press-logo quills-press-garden" />
+            <img src="<?php echo esc_url( $img_dir . 'logo-cosmopolitan.png' ); ?>" alt="Cosmopolitan" class="quills-press-logo quills-press-cosmo" />
+            <img src="<?php echo esc_url( $img_dir . 'logo-food-and-wine.png' ); ?>" alt="Food &amp; Wine" class="quills-press-logo quills-press-foodwine" />
+            <img src="<?php echo esc_url( $img_dir . 'logo-courier-journal.png' ); ?>" alt="Courier Journal" class="quills-press-logo quills-press-courier" />
           </div>
         </div>
         <div class="quills-hero-quote">
-          <p>“I’ve searched far and wide and this is the place to get your cup or bag of greatness if you happen to be a true coffee aficionado.” — Jacob Y.</p>
+          <p><em>“I’ve searched far and wide and this is the place to get your cup or bag of greatness if you happen to be a true coffee aficionado.”</em> — Jacob Y.</p>
         </div>
       </div>
     </div>
@@ -239,23 +231,25 @@ $img_dir   = $theme_uri . 'assets/images/home/';
                   <h4 class="quills-rollover-title">Blacksmith | Espresso Blend</h4>
                   <div class="quills-rollover-text">
                     <p class="quills-rollover-tasting"><em><strong>Baker's chocolate, blueberries, hazelnut</strong></em></p>
-                    <p><strong>Our Signature Espresso</strong><br><strong>Process: </strong>Washed & Natural<br><strong>Origins: </strong>Colombia, Nicaragua, Ethiopia</p>
+                    <p><strong>Our Signature Espresso</strong><br><strong>Process: </strong>Washed &amp; Natural<br><strong>Origins: </strong>Colombia, Nicaragua, Ethiopia</p>
                   </div>
                 </div>
               </div>
             </a>
+            <div class="quills-product-quick-add">
+              <button type="button" class="quills-btn quills-btn--add-to-cart" aria-label="ADD TO CART">
+                <span>ADD TO CART</span>
+              </button>
+            </div>
           </div>
           <div class="quills-product-info">
-            <span class="quills-product-brand">QuillsCoffee</span>
+            <span class="quills-product-brand">QUILLSCOFFEE</span>
             <h3 class="quills-product-name"><a href="<?php echo esc_url( home_url( '/product/blacksmith-espresso/' ) ); ?>">Blacksmith | Espresso Blend</a></h3>
             <div class="quills-rating-row">
               <span class="quills-stars">★★★★★</span>
               <span class="quills-review-count">(56 reviews)</span>
             </div>
-            <div class="quills-product-price">From $20.00</div>
-            <a href="<?php echo esc_url( home_url( '/product/blacksmith-espresso/' ) ); ?>" class="quills-btn quills-btn--add-to-cart">
-              Add to cart
-            </a>
+            <div class="quills-product-price">FROM $20.00</div>
           </div>
         </div>
 
@@ -276,23 +270,25 @@ $img_dir   = $theme_uri . 'assets/images/home/';
                   <h4 class="quills-rollover-title">Inkwell | Signature Blend</h4>
                   <div class="quills-rollover-text">
                     <p class="quills-rollover-tasting"><em><strong>Graham cracker, cooked cherries, vanilla</strong></em></p>
-                    <p><strong>Our Signature House Blend</strong><br><strong>Process: </strong>Washed & Natural<br><strong>Origins: </strong>Colombia, Guatemala, Ethiopia</p>
+                    <p><strong>Our Signature House Blend</strong><br><strong>Process: </strong>Washed &amp; Natural<br><strong>Origins: </strong>Colombia, Guatemala, Ethiopia</p>
                   </div>
                 </div>
               </div>
             </a>
+            <div class="quills-product-quick-add">
+              <button type="button" class="quills-btn quills-btn--add-to-cart" aria-label="ADD TO CART">
+                <span>ADD TO CART</span>
+              </button>
+            </div>
           </div>
           <div class="quills-product-info">
-            <span class="quills-product-brand">QuillsCoffee</span>
+            <span class="quills-product-brand">QUILLSCOFFEE</span>
             <h3 class="quills-product-name"><a href="<?php echo esc_url( home_url( '/product/inkwell-house-blend/' ) ); ?>">Inkwell | Signature Blend</a></h3>
             <div class="quills-rating-row">
               <span class="quills-stars">★★★★★</span>
               <span class="quills-review-count">(80 reviews)</span>
             </div>
-            <div class="quills-product-price">From $20.00</div>
-            <a href="<?php echo esc_url( home_url( '/product/inkwell-house-blend/' ) ); ?>" class="quills-btn quills-btn--add-to-cart">
-              Add to cart
-            </a>
+            <div class="quills-product-price">FROM $20.00</div>
           </div>
         </div>
 
@@ -313,23 +309,25 @@ $img_dir   = $theme_uri . 'assets/images/home/';
                   <h4 class="quills-rollover-title">Southern Gothic | Cold Brew Blend</h4>
                   <div class="quills-rollover-text">
                     <p class="quills-rollover-tasting"><em><strong>Dark chocolate, sweet orange, subtle sweetness</strong></em></p>
-                    <p><strong>Our Signature Cold Brew Blend</strong><br><strong>Process: </strong>Washed & Natural<br><strong>Origins: </strong>Colombia, Honduras</p>
+                    <p><strong>Our Signature Cold Brew Blend</strong><br><strong>Process: </strong>Washed &amp; Natural<br><strong>Origins: </strong>Colombia, Honduras</p>
                   </div>
                 </div>
               </div>
             </a>
+            <div class="quills-product-quick-add">
+              <button type="button" class="quills-btn quills-btn--add-to-cart" aria-label="ADD TO CART">
+                <span>ADD TO CART</span>
+              </button>
+            </div>
           </div>
           <div class="quills-product-info">
-            <span class="quills-product-brand">QuillsCoffee</span>
+            <span class="quills-product-brand">QUILLSCOFFEE</span>
             <h3 class="quills-product-name"><a href="<?php echo esc_url( home_url( '/product/southern-gothic-12oz/' ) ); ?>">Southern Gothic | Cold Brew Blend</a></h3>
             <div class="quills-rating-row">
               <span class="quills-stars">★★★★★</span>
-              <span class="quills-review-count">(42 reviews)</span>
+              <span class="quills-review-count">(20 reviews)</span>
             </div>
-            <div class="quills-product-price">From $20.00</div>
-            <a href="<?php echo esc_url( home_url( '/product/southern-gothic-12oz/' ) ); ?>" class="quills-btn quills-btn--add-to-cart">
-              Add to cart
-            </a>
+            <div class="quills-product-price">FROM $20.00</div>
           </div>
         </div>
 
@@ -463,14 +461,16 @@ $img_dir   = $theme_uri . 'assets/images/home/';
   <section class="quills-hoot-section">
     <div class="quills-hoot-bg-left" style="background-image: url('<?php echo esc_url( $img_dir . 'hoot-bg-left.png' ); ?>');"></div>
     <div class="quills-hoot-bg-right" style="background-image: url('<?php echo esc_url( $img_dir . 'hoot-bg-right.png' ); ?>');"></div>
-    <div class="quills-hoot-card">
-      <div class="quills-hoot-tab">
-        <h2 class="quills-hoot-heading">THE HOOT</h2>
-        <div class="quills-hoot-icon-badge">
-          <img src="<?php echo esc_url( $img_dir . 'hoot-icon.png' ); ?>" alt="The Hoot Owl Icon" class="quills-hoot-icon" width="48" height="48" />
+    <div class="quills-hoot-card newsletter-card">
+      <div class="quills-hoot-tab newsletter-card__tab">
+        <div class="quills-hoot-tab-head newsletter-card__tab_head">
+          <h2 class="quills-hoot-heading newsletter-card__heading">THE HOOT</h2>
+          <span class="quills-hoot-icon-badge wrapp-icon">
+            <img src="<?php echo esc_url( $img_dir . 'hoot-icon.png' ); ?>" alt="The Hoot Owl Icon" class="quills-hoot-icon newsletter-card__icon" width="48" height="48" />
+          </span>
         </div>
       </div>
-      <div class="quills-hoot-body">
+      <div class="quills-hoot-body newsletter-card__body">
         <div class="quills-hoot-text">
           <p>The Hoot is one short email from us sent every Friday morning. It takes about 5 minutes to read. It’s less of a 'newsletter' and more like an actual letter.</p>
           <p>We sometimes send readers links to secret coffees and exclusive reader-only merch.</p>
