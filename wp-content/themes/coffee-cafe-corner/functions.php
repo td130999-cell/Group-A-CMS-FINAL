@@ -18,8 +18,10 @@ function coffee_cafe_corner_scripts() {
 	// Enqueue custom footer stylesheet with auto cache-busting
 	wp_enqueue_style( 'coffee-cafe-corner-footer', trailingslashit( get_template_directory_uri() ) . 'assets/css/custom-footer.css', array(), filemtime( get_template_directory() . '/assets/css/custom-footer.css' ) );
 
-	// Enqueue Quills About Us stylesheet with auto cache-busting
-	wp_enqueue_style( 'coffee-cafe-corner-about', trailingslashit( get_template_directory_uri() ) . 'assets/css/about-quills.css', array(), filemtime( get_template_directory() . '/assets/css/about-quills.css' ) );
+	// Enqueue Quills About Us stylesheet with auto cache-busting (only when not on front page to prevent collision)
+	if ( ! is_front_page() && file_exists( get_template_directory() . '/assets/css/about-quills.css' ) ) {
+		wp_enqueue_style( 'coffee-cafe-corner-about', trailingslashit( get_template_directory_uri() ) . 'assets/css/about-quills.css', array(), filemtime( get_template_directory() . '/assets/css/about-quills.css' ) );
+	}
 
 	// Enqueue Quills Visit stylesheet with auto cache-busting
 	if ( file_exists( get_template_directory() . '/assets/css/visit-quills.css' ) ) {
@@ -48,6 +50,16 @@ function coffee_cafe_corner_scripts() {
 			'ajaxUrl' => admin_url( 'admin-ajax.php' ),
 		) );
 	}
+
+	// Enqueue Quills Home stylesheet with auto cache-busting
+	if ( file_exists( get_template_directory() . '/assets/css/home-quills.css' ) ) {
+		wp_enqueue_style( 'coffee-cafe-corner-home', trailingslashit( get_template_directory_uri() ) . 'assets/css/home-quills.css', array(), filemtime( get_template_directory() . '/assets/css/home-quills.css' ) );
+	}
+
+	// Enqueue Quills Home JS
+	if ( file_exists( get_template_directory() . '/assets/js/home-quills.js' ) ) {
+		wp_enqueue_script( 'coffee-cafe-corner-home-js', trailingslashit( get_template_directory_uri() ) . 'assets/js/home-quills.js', array(), filemtime( get_template_directory() . '/assets/js/home-quills.js' ), true );
+	}
 }
 add_action( 'wp_enqueue_scripts', 'coffee_cafe_corner_scripts' );
 
@@ -66,6 +78,7 @@ function coffee_cafe_corner_enqueue_editor_block_styles() {
 	add_editor_style( trailingslashit( get_template_directory_uri() ) . 'assets/css/visit-quills.css' );
 	add_editor_style( trailingslashit( get_template_directory_uri() ) . 'assets/css/brew-gear.css' );
 	add_editor_style( trailingslashit( get_template_directory_uri() ) . 'assets/css/wholesale.css' );
+	add_editor_style( trailingslashit( get_template_directory_uri() ) . 'assets/css/home-quills.css' );
 }
 add_action( 'after_setup_theme', 'coffee_cafe_corner_enqueue_editor_block_styles' );
 
