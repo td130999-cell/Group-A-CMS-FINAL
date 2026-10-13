@@ -285,3 +285,18 @@ foreach ($products_data as $data) {
 }
 
 echo "All Quills Coffee products and reviews seeded successfully!\n";
+
+if ( class_exists( 'Coffee_Cafe_Corner_Coffee_DB' ) ) {
+    Coffee_Cafe_Corner_Coffee_DB::ensure_database_records();
+    echo "Coffee collection products & page seeded successfully!\n";
+}
+
+if ( class_exists( 'Coffee_Cafe_Corner_Subscription_DB' ) ) {
+    Coffee_Cafe_Corner_Subscription_DB::ensure_database_records();
+    echo "Subscription plans & page seeded successfully!\n";
+}
+
+if ( class_exists( 'Coffee_Cafe_Corner_Merch_DB' ) ) {
+    Coffee_Cafe_Corner_Merch_DB::ensure_database_records();
+    echo "Merch products & page seeded successfully!\n";
+}
