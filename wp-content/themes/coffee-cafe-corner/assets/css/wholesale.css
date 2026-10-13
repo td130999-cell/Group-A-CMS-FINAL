@@ -1,0 +1,200 @@
+/**
+ * Wholesale Page Stylesheet
+ * 100% Pixel-Accurate Recreation matching Quills Coffee Wholesale page (quillscoffee.com/pages/wholesale)
+ *
+ * Design Specifications:
+ * - Color Palette:
+ *   * Page body & sections: #ECE8D7 with bg-quills.png linen texture
+ *   * Hero title text: #3A3837 (Clarendon URW Extra Narrow, 48px)
+ *   * Body text & headings: #262626
+ * - Typography:
+ *   * Clarendon URW Extra Narrow (Regular 400, Bold 700, Italic)
+ * - Layout:
+ *   * .quills-coffee-fest: 8fr / 7fr grid, 20px gap, 4px padding
+ */
+
+/* ----------------------------------------------------
+   1. Font Faces
+   ---------------------------------------------------- */
+@font-face {
+    font-family: 'Clarendon URW Extra Narrow';
+    src: url('../fonts/ClarendonURWExtNar-Reg.woff2') format('woff2');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Clarendon URW Extra Narrow';
+    src: url('../fonts/ClarendonURWExtNar-Bol.woff2') format('woff2');
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Clarendon URW Extra Narrow';
+    src: url('../fonts/ClarendonURWExtNar-RegObl.woff2') format('woff2');
+    font-weight: 400;
+    font-style: italic;
+    font-display: swap;
+}
+
+/* ----------------------------------------------------
+   2. Page Container & Linen Texture Background
+   ---------------------------------------------------- */
+body.page-template-page-wholesale,
+.page-template-page-wholesale,
+.wholesale-page-wrapper {
+    background-color: #ECE8D7 !important;
+    background-image: url('../images/about/bg-quills.png') !important;
+    background-repeat: repeat !important;
+    color: #262626;
+    font-family: 'Clarendon URW Extra Narrow', Georgia, 'Times New Roman', serif;
+    margin: 0;
+    padding: 0;
+    -webkit-font-smoothing: antialiased;
+}
+
+/* ----------------------------------------------------
+   3. Hero Title Section (Wholesale Coffee Roasting)
+   ---------------------------------------------------- */
+.quills-wholesale-hero-section {
+    width: 100%;
+    padding: 24px 20px 8px;
+    box-sizing: border-box;
+    text-align: center;
+}
+
+.quills-wholesale-hero-title {
+    font-family: 'Clarendon URW Extra Narrow', Georgia, serif;
+    font-weight: 400;
+    font-style: normal;
+    font-size: clamp(32px, 3.4vw, 48px);
+    line-height: 1.2;
+    color: #3A3837;
+    margin: 0;
+    padding: 0;
+    text-align: center;
+    letter-spacing: -0.2px;
+}
+
+/* ----------------------------------------------------
+   4. Main 2-Column Content: .quills-coffee-fest
+   ---------------------------------------------------- */
+.quills-wholesale-content-section {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 8px 16px 20px;
+}
+
+.quills-coffee-fest {
+    display: grid;
+    grid-template-columns: minmax(0, 8fr) minmax(0, 7fr);
+    align-items: center;
+    gap: 20px;
+    max-width: none;
+    width: 100%;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 4px;
+}
+
+/* ----------------------------------------------------
+   5. Video Container & Wistia Player
+   ---------------------------------------------------- */
+.quills-coffee-fest__video {
+    min-width: 0;
+    border-radius: 12px;
+    overflow: hidden;
+    background-color: #000000;
+    position: relative;
+    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.08);
+}
+
+.quills-coffee-fest wistia-player {
+    display: block;
+    width: 100%;
+    border-radius: 12px;
+}
+
+.quills-coffee-fest wistia-player[media-id='zihbfybcjm']:not(:defined) {
+    background: center / contain no-repeat url('https://fast.wistia.com/embed/medias/zihbfybcjm/swatch');
+    filter: blur(5px);
+    padding-top: 56.25%;
+}
+
+/* ----------------------------------------------------
+   6. Michael's Copy & Typography
+   ---------------------------------------------------- */
+.quills-coffee-fest__text {
+    min-width: 0;
+    box-sizing: border-box;
+    padding-left: 24px;
+    padding-right: 24px;
+}
+
+.quills-coffee-fest__text h2 {
+    font-family: 'Clarendon URW Extra Narrow', Georgia, serif;
+    font-style: italic;
+    font-weight: 400;
+    font-size: clamp(24px, 2.2vw, 30px);
+    line-height: 1.3;
+    color: #262626;
+    margin: 0 0 16px;
+}
+
+.quills-coffee-fest__text p {
+    font-family: 'Clarendon URW Extra Narrow', Georgia, serif;
+    font-weight: 400;
+    font-size: clamp(14.5px, 1.1vw, 16px);
+    line-height: 1.6;
+    color: #262626;
+    margin: 0 0 16px;
+}
+
+.quills-coffee-fest__text p strong {
+    font-weight: 700;
+    color: #262626;
+}
+
+.quills-coffee-fest__text p:last-child {
+    margin-bottom: 0;
+}
+
+/* ----------------------------------------------------
+   7. Typeform / Questionnaire Section
+   ---------------------------------------------------- */
+.quills-wholesale-typeform-section {
+    width: 100%;
+    box-sizing: border-box;
+    margin: 16px 0 60px;
+    padding: 0 16px;
+    min-height: 550px;
+}
+
+.quills-wholesale-typeform-section [data-tf-live] {
+    width: 100%;
+    min-height: 550px;
+    border: none;
+}
+
+/* ----------------------------------------------------
+   8. Responsive Layout
+   ---------------------------------------------------- */
+@media screen and (max-width: 749px) {
+    .quills-coffee-fest {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 16px;
+        padding: 4px;
+    }
+
+    .quills-coffee-fest__text {
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+
+    .quills-wholesale-hero-title {
+        font-size: 28px;
+    }
+}

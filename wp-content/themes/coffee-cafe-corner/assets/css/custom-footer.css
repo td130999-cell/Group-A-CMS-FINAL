@@ -1,21 +1,24 @@
 /**
- * Custom Footer Styles - Matching Quills Coffee Design
- * Background: Sage/Olive Green (#596e54)
- * Typography: Warm off-white (#e8ede5)
+ * Custom Footer Styles - Matching Authentic Quills Coffee Design
+ * Background: Rich Moss/Olive Green (#5c7056)
+ * Headings: Revelstoke Bold
+ * Body & Links: Clarendon URW Extra Narrow / Besley (#fffdeb)
  */
 
 .quills-footer-wrapper {
-    background-color: #596e54 !important;
-    color: #e8ede5;
-    padding: 70px 24px 30px 24px;
-    font-family: var(--wp--preset--font-family--lora, 'Lora', Georgia, serif);
+    background-color: #5c7056 !important;
+    color: #fffdeb;
+    padding: 70px 24px 35px 24px;
+    font-family: 'Clarendon URW Extra Narrow', 'Besley', Georgia, 'Times New Roman', serif;
     position: relative;
     width: 100%;
     box-sizing: border-box;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
 
 .quills-footer-container {
-    max-width: 1200px;
+    max-width: 1140px;
     margin: 0 auto;
     padding: 0 16px;
     box-sizing: border-box;
@@ -25,8 +28,8 @@
 .quills-footer-top {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 48px;
-    margin-bottom: 60px;
+    gap: 50px;
+    margin-bottom: 55px;
 }
 
 .quills-footer-col {
@@ -34,15 +37,17 @@
     flex-direction: column;
 }
 
+/* Column Headings (Revelstoke Bold) */
 .quills-footer-title {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-    font-size: 15px;
+    font-family: 'Revelstoke', sans-serif !important;
+    font-size: 16px;
     font-weight: 700;
-    letter-spacing: 2.2px;
+    letter-spacing: 2px;
     text-transform: uppercase;
-    color: #ffffff;
-    margin: 0 0 24px 0;
+    color: #ffffff !important;
+    margin: 0 0 22px 0;
     padding: 0;
+    line-height: 1.2;
 }
 
 /* Brand & Contact Column */
@@ -56,19 +61,20 @@
 .quills-contact-line {
     margin: 0;
     padding: 0;
-    font-size: 14.5px;
-    line-height: 1.6;
-    color: #e8ede5;
+    font-family: 'Clarendon URW Extra Narrow', 'Besley', Georgia, serif !important;
+    font-size: 15px;
+    line-height: 1.65;
+    color: #fffdeb !important;
 }
 
 .quills-footer-contact a {
-    color: #e8ede5;
+    color: #fffdeb !important;
     text-decoration: none;
-    transition: color 0.2s ease, opacity 0.2s ease;
+    transition: color 0.2s ease;
 }
 
 .quills-footer-contact a:hover {
-    color: #ffffff;
+    color: #ffffff !important;
     text-decoration: underline;
 }
 
@@ -79,7 +85,7 @@
     padding: 0;
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: 9px;
 }
 
 .quills-footer-menu li {
@@ -89,16 +95,16 @@
 }
 
 .quills-footer-menu li a {
-    color: #e8ede5;
+    font-family: 'Clarendon URW Extra Narrow', 'Besley', Georgia, serif !important;
+    color: #fffdeb !important;
     text-decoration: none;
-    font-size: 14.5px;
+    font-size: 15px;
     transition: color 0.2s ease, opacity 0.2s ease;
     display: inline-block;
 }
 
 .quills-footer-menu li a:hover {
-    color: #ffffff;
-    opacity: 0.9;
+    color: #ffffff !important;
     text-decoration: underline;
 }
 
@@ -109,25 +115,27 @@
     align-items: center;
     flex-wrap: wrap;
     gap: 24px;
-    padding-top: 20px;
-    margin-bottom: 30px;
+    padding-top: 25px;
+    margin-bottom: 25px;
+    border-top: none;
 }
 
 /* Left: Currency, Language & Socials */
 .quills-footer-left {
     display: flex;
     align-items: center;
-    gap: 24px;
+    gap: 20px;
     flex-wrap: wrap;
 }
 
 .quills-selector {
     display: inline-flex;
     align-items: center;
-    gap: 6px;
-    font-size: 13px;
+    gap: 7px;
+    font-family: 'Clarendon URW Extra Narrow', Georgia, serif;
+    font-size: 14px;
     font-weight: 600;
-    color: #e8ede5;
+    color: #fffdeb;
     cursor: pointer;
     user-select: none;
     transition: opacity 0.2s ease;
@@ -135,18 +143,19 @@
 
 .quills-selector:hover {
     color: #ffffff;
-    opacity: 0.9;
+    opacity: 0.95;
 }
 
 .quills-flag-icon {
     display: inline-block;
     vertical-align: middle;
-    border-radius: 1px;
-    box-shadow: 0 0 1px rgba(0,0,0,0.4);
+    width: 20px;
+    height: 14px;
+    border-radius: 1.5px;
+    object-fit: cover;
 }
 
 .quills-chevron {
-    font-size: 10px;
     margin-left: 2px;
     display: inline-block;
     vertical-align: middle;
@@ -157,72 +166,57 @@
 .quills-social-links {
     display: flex;
     align-items: center;
-    gap: 16px;
-    margin-left: 8px;
+    gap: 14px;
+    margin-left: 6px;
 }
 
 .quills-social-icon {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    color: #e8ede5;
+    color: #fffdeb;
     text-decoration: none;
-    font-size: 16px;
     transition: color 0.2s ease, transform 0.2s ease;
 }
 
 .quills-social-icon svg {
-    width: 16px;
-    height: 16px;
+    width: 18px;
+    height: 18px;
     fill: currentColor;
 }
 
 .quills-social-icon:hover {
     color: #ffffff;
-    transform: translateY(-2px);
+    transform: translateY(-1px);
 }
 
-/* Right: Payment Method Badges */
+/* Right: Payment Method Authentic Strip */
 .quills-footer-payment {
     display: flex;
     align-items: center;
-    gap: 12px;
-    flex-wrap: wrap;
+    justify-content: flex-end;
 }
 
-.quills-payment-badge {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    height: 24px;
-    opacity: 0.95;
-    transition: opacity 0.2s ease, transform 0.2s ease;
-}
-
-.quills-payment-badge:hover {
-    opacity: 1;
-    transform: scale(1.05);
-}
-
-.quills-payment-badge svg {
-    height: 22px;
+.quills-footer-payment-img {
+    display: block;
     width: auto;
-    max-width: 44px;
-    fill: #ffffff;
+    max-width: 360px;
+    height: 24px;
+    object-fit: contain;
 }
 
 /* Copyright Row */
 .quills-footer-copyright {
     text-align: center;
-    padding-top: 20px;
+    padding-top: 15px;
 }
 
 .quills-footer-copyright p {
     margin: 0;
-    font-size: 11.5px;
-    color: #c9d2c6;
+    font-size: 12.5px;
+    color: #c4d2c2;
     letter-spacing: 0.3px;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    font-family: 'Clarendon URW Extra Narrow', 'Besley', Georgia, serif;
 }
 
 .quills-footer-copyright a {
@@ -272,7 +266,8 @@
     .quills-footer-left {
         gap: 16px;
     }
-    .quills-footer-payment {
-        gap: 10px;
+    .quills-footer-payment-img {
+        max-width: 290px;
+        height: auto;
     }
 }
