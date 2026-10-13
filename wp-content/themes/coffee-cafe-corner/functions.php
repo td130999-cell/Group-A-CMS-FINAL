@@ -453,4 +453,13 @@ require_once get_template_directory() . '/inc/class-brew-gear-db.php';
  * Wholesale Page Database Management
  */
 require_once get_template_directory() . '/inc/class-wholesale-db.php';
+
+/**
+ * Cafe Locations & Subpages Database Management
+ */
+require_once get_template_directory() . '/inc/class-cafe-locations-db.php';
+if ( class_exists( 'Coffee_Cafe_Corner_Cafe_Locations_DB' ) ) {
+	Coffee_Cafe_Corner_Cafe_Locations_DB::init();
+}
+
 
