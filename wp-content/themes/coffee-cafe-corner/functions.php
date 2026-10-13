@@ -15,16 +15,29 @@ function coffee_cafe_corner_scripts() {
 	wp_enqueue_script( 'coffee-cafe-corner-theme', trailingslashit( get_template_directory_uri() ) . 'assets/js/theme.js',
 	    array( 'jquery' ), COFFEE_CAFE_CORNER_VERSION,true );
 
-	// Enqueue custom footer stylesheet with auto cache-busting
-	wp_enqueue_style( 'coffee-cafe-corner-footer', trailingslashit( get_template_directory_uri() ) . 'assets/css/custom-footer.css', array(), filemtime( get_template_directory() . '/assets/css/custom-footer.css' ) );
+	// Enqueue custom footer stylesheet
+	wp_enqueue_style( 'coffee-cafe-corner-footer', trailingslashit( get_template_directory_uri() ) . 'assets/css/custom-footer.css', array(), COFFEE_CAFE_CORNER_VERSION );
 
-	// Enqueue Quills About Us stylesheet with auto cache-busting
-	wp_enqueue_style( 'coffee-cafe-corner-about', trailingslashit( get_template_directory_uri() ) . 'assets/css/about-quills.css', array(), filemtime( get_template_directory() . '/assets/css/about-quills.css' ) );
+	// Enqueue Quills About Us stylesheet
+	wp_enqueue_style( 'coffee-cafe-corner-about', trailingslashit( get_template_directory_uri() ) . 'assets/css/about-quills.css', array(), COFFEE_CAFE_CORNER_VERSION );
 
-	// Enqueue Quills Visit stylesheet with auto cache-busting
-	if ( file_exists( get_template_directory() . '/assets/css/visit-quills.css' ) ) {
-		wp_enqueue_style( 'coffee-cafe-corner-visit', trailingslashit( get_template_directory_uri() ) . 'assets/css/visit-quills.css', array(), filemtime( get_template_directory() . '/assets/css/visit-quills.css' ) );
-	}
+	// Enqueue Quills Visit stylesheet
+	wp_enqueue_style( 'coffee-cafe-corner-visit', trailingslashit( get_template_directory_uri() ) . 'assets/css/visit-quills.css', array(), COFFEE_CAFE_CORNER_VERSION );
+
+	// Enqueue Quills Brew Gear stylesheet
+	wp_enqueue_style( 'coffee-cafe-corner-brew-gear', trailingslashit( get_template_directory_uri() ) . 'assets/css/brew-gear.css', array(), COFFEE_CAFE_CORNER_VERSION );
+
+	// Enqueue Quills Brew Gear JS
+	wp_enqueue_script( 'coffee-cafe-corner-brew-gear-js', trailingslashit( get_template_directory_uri() ) . 'assets/js/brew-gear.js', array(), COFFEE_CAFE_CORNER_VERSION, true );
+
+	// Enqueue Quills Wholesale stylesheet
+	wp_enqueue_style( 'coffee-cafe-corner-wholesale', trailingslashit( get_template_directory_uri() ) . 'assets/css/wholesale.css', array(), COFFEE_CAFE_CORNER_VERSION );
+
+	// Enqueue Quills Wholesale JS
+	wp_enqueue_script( 'coffee-cafe-corner-wholesale-js', trailingslashit( get_template_directory_uri() ) . 'assets/js/wholesale.js', array(), COFFEE_CAFE_CORNER_VERSION, true );
+	wp_localize_script( 'coffee-cafe-corner-wholesale-js', 'wholesaleData', array(
+		'ajaxUrl' => admin_url( 'admin-ajax.php' ),
+	) );
 }
 add_action( 'wp_enqueue_scripts', 'coffee_cafe_corner_scripts' );
 
@@ -41,6 +54,8 @@ function coffee_cafe_corner_enqueue_editor_block_styles() {
 	add_editor_style( trailingslashit( get_template_directory_uri() ) . 'assets/css/editor-style.css' );
 	add_editor_style( trailingslashit( get_template_directory_uri() ) . 'assets/css/custom-footer.css' );
 	add_editor_style( trailingslashit( get_template_directory_uri() ) . 'assets/css/visit-quills.css' );
+	add_editor_style( trailingslashit( get_template_directory_uri() ) . 'assets/css/brew-gear.css' );
+	add_editor_style( trailingslashit( get_template_directory_uri() ) . 'assets/css/wholesale.css' );
 }
 add_action( 'after_setup_theme', 'coffee_cafe_corner_enqueue_editor_block_styles' );
 
@@ -282,6 +297,10 @@ add_action( 'init', 'coffee_cafe_corner_register_visit_pattern', 9 );
  * Seed Visit Page and Cafes Post Meta in Database if not present
  */
 function coffee_cafe_corner_init_visit_database() {
+	if ( get_option( 'coffee_cafe_corner_visit_seeded' ) ) {
+		return;
+	}
+
 	$pages_to_seed = array(
 		'visit'     => 'Locations & Hours',
 		'our-cafes' => 'Our Cafes',
@@ -420,5 +439,18 @@ function coffee_cafe_corner_init_visit_database() {
 			update_post_meta( $about_page->ID, '_quills_cafe_details', $all_details );
 		}
 	}
+
+	update_option( 'coffee_cafe_corner_visit_seeded', 1 );
 }
-add_action( 'init', 'coffee_cafe_corner_init_visit_database' );
+add_action( 'init', 'coffee_cafe_corner_init_visit_database' );
+
+/**
+ * Brew Gear Collection Database Management
+ */
+require_once get_template_directory() . '/inc/class-brew-gear-db.php';
+
+/**
+ * Wholesale Page Database Management
+ */
+require_once get_template_directory() . '/inc/class-wholesale-db.php';
+
