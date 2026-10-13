@@ -77,6 +77,10 @@ class Coffee_Cafe_Corner_Wholesale_DB {
 	 * @return int Page ID
 	 */
 	public static function ensure_database_records() {
+		if ( get_option( 'coffee_cafe_corner_wholesale_seeded' ) ) {
+			return 0;
+		}
+
 		$page = get_page_by_path( self::PAGE_SLUG );
 
 		$defaults = array(
@@ -109,6 +113,7 @@ class Coffee_Cafe_Corner_Wholesale_DB {
 					update_post_meta( $page_id, $meta_key, $meta_val );
 				}
 				self::ensure_navigation_records();
+				update_option( 'coffee_cafe_corner_wholesale_seeded', 1 );
 				return $page_id;
 			}
 		} else {
@@ -127,9 +132,11 @@ class Coffee_Cafe_Corner_Wholesale_DB {
 			}
 
 			self::ensure_navigation_records();
+			update_option( 'coffee_cafe_corner_wholesale_seeded', 1 );
 			return $page->ID;
 		}
 
+		update_option( 'coffee_cafe_corner_wholesale_seeded', 1 );
 		return 0;
 	}
 
