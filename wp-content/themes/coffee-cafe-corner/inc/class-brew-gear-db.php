@@ -43,9 +43,13 @@ class Coffee_Cafe_Corner_Brew_Gear_DB {
 	 * Ensure Category, Products, and Page exist in the WordPress database
 	 */
 	public static function ensure_database_records() {
+		if ( get_option( 'coffee_cafe_corner_brew_gear_seeded' ) ) {
+			return;
+		}
 		self::ensure_category();
 		self::ensure_page();
 		self::ensure_products();
+		update_option( 'coffee_cafe_corner_brew_gear_seeded', 1 );
 	}
 
 	/**
