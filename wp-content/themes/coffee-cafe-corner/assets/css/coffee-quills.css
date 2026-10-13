@@ -1,0 +1,599 @@
+/**
+ * Quills Coffee - Coffee Collection Stylesheet
+ * 
+ * High-fidelity styling matching Coffe.png (>95% fidelity)
+ * Authentic Quills brand identity:
+ * - Colors: Warm Cream #FBF8EB, Deep Charcoal #151515, Gold Stars #D1A868, Review Gray #777777, Linen #ECE8D7
+ * - Typography: El Hidrant (Cursive script), Clarendon URW Extra Narrow (Serif text & titles), Revelstoke (Headings)
+ *
+ * @package Coffee_Cafe_Corner
+ */
+
+/* =========================================
+   Container & Global Layout
+   ========================================= */
+
+.quills-coffee-page-wrapper {
+    background-color: #fbf8eb;
+    color: #151515;
+    font-family: 'Clarendon URW Extra Narrow', Georgia, 'Times New Roman', serif;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.quills-coffee-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 20px 40px 60px 40px;
+}
+
+@media (max-width: 768px) {
+    .quills-coffee-container {
+        padding: 15px 20px 40px 20px;
+    }
+}
+
+/* =========================================
+   Breadcrumbs
+   ========================================= */
+
+.quills-coffee-breadcrumb {
+    font-family: 'Clarendon URW Extra Narrow', Georgia, serif;
+    font-size: 14px;
+    color: #444444;
+    margin-bottom: 25px;
+}
+
+.quills-coffee-breadcrumb a {
+    color: #444444;
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.quills-coffee-breadcrumb a:hover {
+    color: #151515;
+    text-decoration: underline;
+}
+
+.quills-breadcrumb-sep {
+    margin: 0 6px;
+    color: #888888;
+}
+
+.quills-breadcrumb-current {
+    color: #151515;
+    font-weight: 600;
+}
+
+/* =========================================
+   Hero Card Banner with Cursive Script
+   ========================================= */
+
+.quills-coffee-hero {
+    margin-bottom: 45px;
+}
+
+.quills-coffee-hero-card {
+    background-color: #f6f2dd;
+    border-radius: 16px;
+    min-height: 240px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.02);
+}
+
+.quills-coffee-hero-title {
+    font-family: 'El Hidrant', cursive, serif;
+    font-size: 76px;
+    font-weight: 400;
+    font-style: italic;
+    color: #ffffff;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+    margin: 0;
+    letter-spacing: 1px;
+}
+
+@media (max-width: 768px) {
+    .quills-coffee-hero-card {
+        min-height: 180px;
+    }
+    .quills-coffee-hero-title {
+        font-size: 52px;
+    }
+}
+
+/* =========================================
+   Roasting Philosophy Announcement
+   ========================================= */
+
+.quills-coffee-announcement {
+    text-align: center;
+    max-width: 860px;
+    margin: 0 auto 35px auto;
+}
+
+.quills-announcement-headline {
+    font-family: 'Clarendon URW Extra Narrow', Georgia, serif;
+    font-size: 21px;
+    line-height: 1.5;
+    color: #666666;
+    margin: 0 0 18px 0;
+    font-weight: 500;
+}
+
+.quills-announcement-schedule {
+    font-family: 'Clarendon URW Extra Narrow', Georgia, serif;
+    font-size: 19px;
+    line-height: 1.6;
+    color: #666666;
+    margin: 0;
+}
+
+.quills-separator-line {
+    width: 100%;
+    height: 1px;
+    background-color: #ded9c5;
+    margin: 35px 0;
+}
+
+.quills-separator-line--bottom {
+    margin-top: 55px;
+    margin-bottom: 0;
+}
+
+/* =========================================
+   Customer Quote Slider Section
+   ========================================= */
+
+.quills-quote-slider-section {
+    text-align: center;
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 10px 0;
+}
+
+.quills-quote-stars,
+.quills-testimonials-stars {
+    display: flex;
+    justify-content: center;
+    gap: 4px;
+    margin-bottom: 14px;
+}
+
+.quills-gold-star {
+    color: #d1a868;
+    font-size: 18px;
+    line-height: 1;
+}
+
+.quills-quote-text {
+    font-family: 'Clarendon URW Extra Narrow', Georgia, serif;
+    font-size: 20px;
+    font-style: italic;
+    color: #151515;
+    margin: 0 0 10px 0;
+    line-height: 1.4;
+    transition: opacity 0.3s ease;
+}
+
+.quills-quote-author {
+    display: block;
+    font-family: 'Clarendon URW Extra Narrow', Georgia, serif;
+    font-size: 16px;
+    font-style: normal;
+    color: #555555;
+    margin-bottom: 18px;
+    transition: opacity 0.3s ease;
+}
+
+.quills-slider-dots {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+}
+
+.quills-slider-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: #c9c3af;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    transition: all 0.25s ease;
+}
+
+.quills-slider-dot.is-active,
+.quills-slider-dot:hover {
+    background-color: #555555;
+    transform: scale(1.15);
+}
+
+/* =========================================
+   Category Filter Tabs Bar
+   ========================================= */
+
+.quills-coffee-tabs-bar {
+    display: flex;
+    justify-content: center;
+    margin: 30px 0 25px 0;
+}
+
+.quills-tabs-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 12px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.quills-tab-btn {
+    background: transparent;
+    border: 1px solid #d4cdb7;
+    border-radius: 20px;
+    padding: 8px 22px;
+    font-family: 'Clarendon URW Extra Narrow', Georgia, serif;
+    font-size: 15px;
+    font-weight: 600;
+    color: #444444;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.quills-tab-btn:hover {
+    border-color: #151515;
+    color: #151515;
+}
+
+.quills-tab-btn.is-active {
+    background-color: #151515;
+    border-color: #151515;
+    color: #ffffff;
+}
+
+/* =========================================
+   Toolbar: Process, Product Count, Sort
+   ========================================= */
+
+.quills-coffee-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 0;
+    margin-bottom: 30px;
+    border-bottom: 1px solid #e5dfcb;
+    position: relative;
+}
+
+.quills-toolbar-left {
+    position: relative;
+}
+
+.quills-process-toggle-btn {
+    background: transparent;
+    border: none;
+    font-family: 'Clarendon URW Extra Narrow', Georgia, serif;
+    font-size: 18px;
+    font-style: italic;
+    color: #151515;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 0;
+}
+
+.quills-process-plus {
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 300;
+}
+
+.quills-process-menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background-color: #ffffff;
+    border: 1px solid #ded9c5;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    padding: 8px 0;
+    min-width: 180px;
+    z-index: 50;
+    display: none;
+}
+
+.quills-process-menu.is-open {
+    display: block;
+}
+
+.quills-process-option {
+    display: block;
+    width: 100%;
+    text-align: left;
+    background: none;
+    border: none;
+    padding: 8px 16px;
+    font-family: 'Clarendon URW Extra Narrow', Georgia, serif;
+    font-size: 15px;
+    color: #333333;
+    cursor: pointer;
+    transition: background-color 0.15s ease;
+}
+
+.quills-process-option:hover,
+.quills-process-option.is-active {
+    background-color: #f7f4e7;
+    color: #151515;
+    font-weight: 600;
+}
+
+.quills-toolbar-center {
+    font-family: 'Clarendon URW Extra Narrow', Georgia, serif;
+    font-size: 16px;
+    color: #555555;
+    font-weight: 600;
+}
+
+.quills-toolbar-right {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.quills-sort-label {
+    font-family: 'Clarendon URW Extra Narrow', Georgia, serif;
+    font-size: 15px;
+    color: #555555;
+}
+
+.quills-sort-select-wrapper {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+}
+
+.quills-sort-select {
+    appearance: none;
+    -webkit-appearance: none;
+    background: transparent;
+    border: none;
+    font-family: 'Clarendon URW Extra Narrow', Georgia, serif;
+    font-size: 15px;
+    font-weight: 600;
+    color: #151515;
+    padding-right: 20px;
+    cursor: pointer;
+}
+
+.quills-sort-select:focus {
+    outline: none;
+}
+
+.quills-sort-arrow {
+    position: absolute;
+    right: 0;
+    pointer-events: none;
+    font-size: 12px;
+    color: #151515;
+}
+
+/* =========================================
+   Product Grid (3 Columns)
+   ========================================= */
+
+.quills-coffee-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 35px 30px;
+    margin-bottom: 40px;
+}
+
+@media (max-width: 992px) {
+    .quills-coffee-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 25px 20px;
+    }
+}
+
+@media (max-width: 600px) {
+    .quills-coffee-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* =========================================
+   Product Card
+   ========================================= */
+
+.quills-coffee-card {
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.25s ease;
+}
+
+.quills-coffee-card-media {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    border-radius: 14px;
+    overflow: hidden;
+    background-color: #f0ece0;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.04);
+}
+
+.quills-coffee-card-link {
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+.quills-coffee-card-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.4s ease;
+}
+
+.quills-coffee-card-media:hover .quills-coffee-card-img {
+    transform: scale(1.04);
+}
+
+/* Hover Overlay with Add To Cart */
+.quills-coffee-card-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(21, 21, 21, 0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s ease;
+}
+
+.quills-coffee-card-media:hover .quills-coffee-card-overlay {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.quills-quick-add-btn {
+    background-color: #151515;
+    color: #ffffff;
+    border: 1px solid #ffffff;
+    border-radius: 6px;
+    padding: 12px 26px;
+    font-family: 'Revelstoke', sans-serif;
+    font-size: 14px;
+    letter-spacing: 1px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    transform: translateY(10px);
+}
+
+.quills-coffee-card-media:hover .quills-quick-add-btn {
+    transform: translateY(0);
+}
+
+.quills-quick-add-btn:hover {
+    background-color: #ffffff;
+    color: #151515;
+}
+
+/* Card Content */
+.quills-coffee-card-content {
+    padding-top: 14px;
+}
+
+.quills-coffee-card-title {
+    font-family: 'Clarendon URW Extra Narrow', Georgia, serif;
+    font-size: 17px;
+    font-weight: 600;
+    margin: 0 0 6px 0;
+    line-height: 1.35;
+}
+
+.quills-coffee-card-title a {
+    color: #151515;
+    text-decoration: none;
+    transition: color 0.15s ease;
+}
+
+.quills-coffee-card-title a:hover {
+    color: #666666;
+}
+
+.quills-coffee-card-rating {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 6px;
+}
+
+.quills-stars {
+    color: #d1a868;
+    font-size: 14px;
+    letter-spacing: 1px;
+}
+
+.quills-star--filled {
+    color: #d1a868;
+}
+
+.quills-star--empty {
+    color: #c8c2af;
+}
+
+.quills-review-count {
+    font-family: 'Clarendon URW Extra Narrow', Georgia, serif;
+    font-size: 13px;
+    color: #777777;
+}
+
+.quills-coffee-card-price {
+    font-family: 'Clarendon URW Extra Narrow', Georgia, serif;
+    font-size: 16px;
+    font-weight: 700;
+    color: #151515;
+    letter-spacing: 0.5px;
+}
+
+/* =========================================
+   Bottom Testimonial Section (Canvas Texture)
+   ========================================= */
+
+.quills-coffee-testimonials-banner {
+    background-color: #ece8d7;
+    background-image: url('../images/about/bg-quills.png');
+    background-repeat: repeat;
+    border-radius: 14px;
+    padding: 60px 30px;
+    text-align: center;
+    margin-top: 20px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.02);
+}
+
+.quills-testimonials-inner {
+    max-width: 760px;
+    margin: 0 auto;
+}
+
+.quills-testimonials-heading {
+    font-family: 'El Hidrant', cursive, serif;
+    font-size: 46px;
+    font-weight: 400;
+    font-style: italic;
+    color: #8b8574;
+    margin: 0 0 16px 0;
+}
+
+@media (max-width: 768px) {
+    .quills-testimonials-heading {
+        font-size: 34px;
+    }
+}
+
+.quills-testimonials-quote {
+    font-family: 'Clarendon URW Extra Narrow', Georgia, serif;
+    font-size: 21px;
+    line-height: 1.5;
+    color: #151515;
+    margin: 0 0 12px 0;
+    font-style: italic;
+}
+
+.quills-testimonials-author {
+    display: block;
+    font-family: 'Clarendon URW Extra Narrow', Georgia, serif;
+    font-size: 17px;
+    color: #555555;
+    margin-bottom: 22px;
+    font-style: normal;
+}

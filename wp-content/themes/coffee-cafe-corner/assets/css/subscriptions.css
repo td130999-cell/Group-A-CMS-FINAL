@@ -1,0 +1,426 @@
+/**
+ * Quills Coffee - Subscriptions Stylesheet
+ *
+ * @package Coffee_Cafe_Corner
+ */
+
+.quills-subscriptions-wrapper {
+    background-color: #fbf8eb;
+    color: #151515;
+    font-family: 'Clarendon URW Extra Narrow', Georgia, 'Times New Roman', serif;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.quills-subscriptions-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 20px 40px 70px 40px;
+}
+
+@media (max-width: 768px) {
+    .quills-subscriptions-container {
+        padding: 15px 20px 40px 20px;
+    }
+}
+
+/* Breadcrumb */
+.quills-sub-breadcrumb {
+    font-size: 14px;
+    color: #444444;
+    margin-bottom: 25px;
+}
+
+.quills-sub-breadcrumb a {
+    color: #444444;
+    text-decoration: none;
+}
+
+.quills-sub-breadcrumb a:hover {
+    color: #151515;
+    text-decoration: underline;
+}
+
+.quills-sub-breadcrumb-sep {
+    margin: 0 6px;
+    color: #888888;
+}
+
+.quills-sub-breadcrumb-current {
+    color: #151515;
+    font-weight: 600;
+}
+
+/* Hero Box with Script Title */
+.quills-sub-hero {
+    margin-bottom: 30px;
+}
+
+.quills-sub-hero-card {
+    background-color: #f6f2dd;
+    border-radius: 16px;
+    min-height: 220px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.quills-sub-hero-title {
+    font-family: 'El Hidrant', cursive, serif;
+    font-size: 72px;
+    font-weight: 400;
+    font-style: italic;
+    color: #ffffff;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+    margin: 0;
+}
+
+@media (max-width: 768px) {
+    .quills-sub-hero-card {
+        min-height: 160px;
+    }
+    .quills-sub-hero-title {
+        font-size: 48px;
+    }
+}
+
+/* Promo Gift Bar */
+.quills-sub-promo-bar {
+    background-color: #2e473b;
+    color: #ffffff;
+    border-radius: 12px;
+    padding: 16px 24px;
+    margin-bottom: 30px;
+    text-align: center;
+    box-shadow: 0 3px 12px rgba(46, 71, 59, 0.15);
+}
+
+.quills-sub-promo-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 8px 14px;
+}
+
+.quills-sub-promo-icon {
+    font-size: 22px;
+}
+
+.quills-sub-promo-text {
+    font-size: 18px;
+    letter-spacing: 0.5px;
+}
+
+.quills-sub-promo-subtext {
+    font-size: 15px;
+    opacity: 0.9;
+}
+
+/* Intro Text */
+.quills-sub-intro {
+    max-width: 860px;
+    margin: 0 auto 45px auto;
+    text-align: center;
+}
+
+.quills-sub-intro-text {
+    font-size: 20px;
+    line-height: 1.6;
+    color: #555555;
+    margin: 0;
+}
+
+/* Grid of Subscriptions */
+.quills-sub-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 35px 28px;
+    margin-bottom: 60px;
+}
+
+@media (max-width: 1024px) {
+    .quills-sub-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 650px) {
+    .quills-sub-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Subscription Card */
+.quills-sub-card {
+    background-color: #ffffff;
+    border: 1px solid #e8e3d2;
+    border-radius: 14px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.quills-sub-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+}
+
+.quills-sub-card-media {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 11;
+    overflow: hidden;
+    background-color: #f3efe2;
+}
+
+.quills-sub-card-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.quills-sub-badge {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    background-color: #d1a868;
+    color: #151515;
+    font-family: 'Revelstoke', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    padding: 5px 10px;
+    border-radius: 4px;
+}
+
+.quills-sub-card-body {
+    padding: 22px 20px;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+
+.quills-sub-card-title {
+    font-size: 19px;
+    font-weight: 700;
+    margin: 0 0 6px 0;
+    color: #151515;
+    line-height: 1.35;
+}
+
+.quills-sub-card-rating {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 12px;
+}
+
+.quills-sub-reviews {
+    font-size: 13px;
+    color: #777777;
+}
+
+.quills-sub-card-desc {
+    font-size: 15px;
+    line-height: 1.45;
+    color: #555555;
+    margin: 0 0 18px 0;
+}
+
+/* Option Groups */
+.quills-sub-option-group {
+    margin-bottom: 14px;
+}
+
+.quills-sub-label {
+    display: block;
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: #444444;
+    margin-bottom: 6px;
+}
+
+.quills-sub-frequency-pills {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.quills-pill-label {
+    display: block;
+    cursor: pointer;
+    margin: 0;
+}
+
+.quills-freq-radio {
+    display: none;
+}
+
+.quills-pill {
+    display: block;
+    padding: 7px 12px;
+    border: 1px solid #dcd5bf;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #333333;
+    transition: all 0.2s ease;
+}
+
+.quills-freq-radio:checked + .quills-pill {
+    background-color: #151515;
+    border-color: #151515;
+    color: #ffffff;
+}
+
+.quills-sub-grind-select {
+    width: 100%;
+    padding: 8px 12px;
+    border: 1px solid #dcd5bf;
+    border-radius: 6px;
+    background-color: #faf8f2;
+    font-family: 'Clarendon URW Extra Narrow', Georgia, serif;
+    font-size: 14px;
+    color: #151515;
+    cursor: pointer;
+}
+
+/* Action Row */
+.quills-sub-action-row {
+    margin-top: auto;
+    padding-top: 16px;
+    border-top: 1px solid #f0ebe0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.quills-sub-price-wrapper {
+    display: flex;
+    flex-direction: column;
+}
+
+.quills-sub-price-label {
+    font-size: 11px;
+    text-transform: uppercase;
+    color: #777777;
+    font-weight: 600;
+}
+
+.quills-sub-calculated-price {
+    font-size: 20px;
+    font-weight: 700;
+    color: #151515;
+}
+
+.quills-sub-original-price {
+    font-size: 13px;
+    color: #999999;
+}
+
+.quills-sub-submit-btn {
+    background-color: #151515;
+    color: #ffffff;
+    border: none;
+    border-radius: 6px;
+    padding: 12px 18px;
+    font-family: 'Revelstoke', sans-serif;
+    font-size: 13px;
+    letter-spacing: 1px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.quills-sub-submit-btn:hover {
+    background-color: #3a5c48;
+}
+
+/* Perks Bar */
+.quills-sub-perks {
+    background-color: #ffffff;
+    border: 1px solid #eae5d4;
+    border-radius: 14px;
+    padding: 35px 25px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 25px;
+    text-align: center;
+    margin-bottom: 45px;
+}
+
+@media (max-width: 768px) {
+    .quills-sub-perks {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+}
+
+.quills-perk-icon {
+    font-size: 28px;
+    margin-bottom: 8px;
+}
+
+.quills-perk-title {
+    font-size: 18px;
+    font-weight: 700;
+    margin: 0 0 6px 0;
+    color: #151515;
+}
+
+.quills-perk-desc {
+    font-size: 14px;
+    color: #666666;
+    margin: 0;
+}
+
+/* Merch Link Banner */
+.quills-sub-merch-link-banner {
+    background-color: #ece8d7;
+    background-image: url('../images/about/bg-quills.png');
+    background-repeat: repeat;
+    border-radius: 14px;
+    padding: 40px 30px;
+    text-align: center;
+}
+
+.quills-sub-merch-title {
+    font-family: 'El Hidrant', cursive, serif;
+    font-size: 38px;
+    font-weight: 400;
+    font-style: italic;
+    color: #151515;
+    margin: 0 0 10px 0;
+}
+
+.quills-sub-merch-desc {
+    font-size: 16px;
+    color: #555555;
+    margin: 0 0 20px 0;
+}
+
+.quills-sub-merch-btn {
+    display: inline-block;
+    background-color: #151515;
+    color: #ffffff;
+    padding: 12px 28px;
+    border-radius: 6px;
+    font-family: 'Revelstoke', sans-serif;
+    font-size: 13px;
+    letter-spacing: 1px;
+    text-decoration: none;
+    transition: background-color 0.2s ease;
+}
+
+.quills-sub-merch-btn:hover {
+    background-color: #333333;
+}
