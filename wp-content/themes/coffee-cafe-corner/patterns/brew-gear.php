@@ -30,8 +30,8 @@ if ( empty( $banner_title ) ) {
 	$banner_title = 'Brew Gear';
 }
 
-$banner_image_url = '';
-if ( $page_id ) {
+$banner_image_url = get_option( 'brew_gear_banner_image' );
+if ( empty( $banner_image_url ) && $page_id ) {
 	$custom_banner = get_post_meta( $page_id, '_brew_gear_banner_image', true );
 	if ( ! empty( $custom_banner ) ) {
 		$banner_image_url = $custom_banner;
@@ -39,6 +39,16 @@ if ( $page_id ) {
 }
 if ( empty( $banner_image_url ) ) {
 	$banner_image_url = trailingslashit( get_template_directory_uri() ) . 'assets/images/brew-gear/brew-gear-banner.jpg';
+}
+
+$sort_label = get_option( 'brew_gear_sort_label', __( 'Sort by:', 'coffee-cafe-corner' ) );
+if ( empty( $sort_label ) ) {
+	$sort_label = __( 'Sort by:', 'coffee-cafe-corner' );
+}
+
+$add_to_cart_text = get_option( 'brew_gear_add_to_cart_text', 'ADD TO CART' );
+if ( empty( $add_to_cart_text ) ) {
+	$add_to_cart_text = 'ADD TO CART';
 }
 
 // 3. Process Dynamic Sorting from Request
@@ -88,7 +98,7 @@ $total_products = $products_query->found_posts;
 			</p>
 
 			<div class="quills-sort-container">
-				<span class="quills-sort-label"><?php esc_html_e( 'Sort by:', 'coffee-cafe-corner' ); ?></span>
+				<span class="quills-sort-label"><?php echo esc_html( $sort_label ); ?></span>
 				<div class="quills-sort-select-wrap">
 					<select id="quills-sort-by-select" class="quills-sort-select" aria-label="<?php esc_attr_e( 'Sort by', 'coffee-cafe-corner' ); ?>">
 						<?php foreach ( $allowed_sorts as $key => $label ) : ?>
@@ -138,7 +148,7 @@ $total_products = $products_query->found_posts;
 									<form class="quills-add-to-cart-form" method="post" action="<?php echo esc_url( function_exists( 'wc_get_cart_url' ) ? wc_get_cart_url() : home_url( '/cart/' ) ); ?>">
 										<input type="hidden" name="add-to-cart" value="<?php echo esc_attr( $product_id ); ?>" />
 										<button type="submit" class="quills-add-to-cart-btn" data-product-id="<?php echo esc_attr( $product_id ); ?>" aria-label="<?php echo esc_attr( sprintf( __( 'Add %s to cart', 'coffee-cafe-corner' ), get_the_title() ) ); ?>">
-											<?php esc_html_e( 'ADD TO CART', 'coffee-cafe-corner' ); ?>
+											<?php echo esc_html( $add_to_cart_text ); ?>
 										</button>
 									</form>
 								</div>
