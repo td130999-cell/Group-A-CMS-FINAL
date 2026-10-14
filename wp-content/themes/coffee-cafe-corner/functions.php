@@ -60,6 +60,11 @@ function coffee_cafe_corner_scripts() {
 	if ( file_exists( get_template_directory() . '/assets/js/home-quills.js' ) ) {
 		wp_enqueue_script( 'coffee-cafe-corner-home-js', trailingslashit( get_template_directory_uri() ) . 'assets/js/home-quills.js', array(), filemtime( get_template_directory() . '/assets/js/home-quills.js' ), true );
 	}
+
+	// Enqueue Quills Merch stylesheet with auto cache-busting
+	if ( ( is_page( 'merch' ) || is_page( 33 ) || is_page_template( 'templates/page-merch.html' ) ) && file_exists( get_template_directory() . '/assets/css/merch-quills.css' ) ) {
+		wp_enqueue_style( 'coffee-cafe-corner-merch', trailingslashit( get_template_directory_uri() ) . 'assets/css/merch-quills.css', array(), filemtime( get_template_directory() . '/assets/css/merch-quills.css' ) );
+	}
 }
 add_action( 'wp_enqueue_scripts', 'coffee_cafe_corner_scripts' );
 

@@ -1,0 +1,430 @@
+/* ========================================================
+   QUILLS COFFEE - MERCH COLLECTION STYLESHEET
+   Exact 100% Replication of https://quillscoffee.com/collections/merch
+   ======================================================== */
+
+/* Page Background & Wrapper */
+.quills-merch-wrapper {
+  background-color: #f4efe6 !important;
+  background-image: url('../images/home/hoot-paper-bg.jpg') !important;
+  background-repeat: repeat !important;
+  min-height: 100vh !important;
+  padding-bottom: 60px !important;
+  font-family: 'Clarendon URW Extra Narrow', Georgia, 'Times New Roman', serif !important;
+  color: #3A3837 !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+}
+
+/* Master Container (Matches 1600px Max-Width Standard) */
+.quills-merch-container {
+  max-width: 1600px !important;
+  margin: 0 auto !important;
+  padding: 0 40px !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+}
+
+/* ========================================================
+   BREADCRUMBS
+   ======================================================== */
+.quills-merch-breadcrumbs {
+  display: flex !important;
+  align-items: center !important;
+  padding: 24px 0 16px 0 !important;
+  font-family: 'Clarendon URW Extra Narrow', Georgia, serif !important;
+  font-size: 14.5px !important;
+  line-height: 1.4 !important;
+  color: #717171 !important;
+}
+
+.quills-merch-bc-link {
+  color: #3A3837 !important;
+  text-decoration: underline !important;
+  transition: color 0.2s ease !important;
+}
+
+.quills-merch-bc-link:hover {
+  color: #678464 !important;
+}
+
+.quills-merch-bc-sep {
+  margin: 0 8px !important;
+  color: #9e9e9e !important;
+  font-size: 13px !important;
+}
+
+.quills-merch-bc-current {
+  color: #717171 !important;
+}
+
+/* ========================================================
+   COLLECTION BANNER
+   ======================================================== */
+.quills-merch-banner {
+  position: relative !important;
+  width: 100% !important;
+  height: 380px !important;
+  max-height: 420px !important;
+  border-radius: 12px !important;
+  overflow: hidden !important;
+  margin-bottom: 24px !important;
+  background-color: #2b2520 !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08) !important;
+}
+
+.quills-merch-banner-img {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  object-position: center 30% !important;
+  display: block !important;
+}
+
+.quills-merch-banner-overlay {
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  background: rgba(0, 0, 0, 0.12) !important;
+  pointer-events: none !important;
+}
+
+.quills-merch-banner-title {
+  font-family: 'El Hidrant', cursive, serif !important;
+  font-style: italic !important;
+  font-size: 56px !important;
+  font-weight: 400 !important;
+  line-height: 1.2 !important;
+  color: #FFFDEB !important;
+  margin: 0 !important;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3) !important;
+  letter-spacing: 0.02em !important;
+}
+
+/* ========================================================
+   TOOLBAR: PRODUCT COUNT & SORTING
+   ======================================================== */
+.quills-merch-toolbar {
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  padding: 8px 0 24px 0 !important;
+  width: 100% !important;
+}
+
+.quills-merch-count {
+  font-family: 'Clarendon URW Extra Narrow', Georgia, serif !important;
+  font-size: 15.5px !important;
+  color: #3A3837 !important;
+  font-weight: 500 !important;
+}
+
+.quills-merch-sort {
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+}
+
+.quills-merch-sort-label {
+  font-family: 'Clarendon URW Extra Narrow', Georgia, serif !important;
+  font-size: 15px !important;
+  color: #717171 !important;
+  margin: 0 !important;
+}
+
+.quills-merch-sort-wrap {
+  position: relative !important;
+  display: inline-flex !important;
+  align-items: center !important;
+}
+
+.quills-merch-sort-select {
+  appearance: none !important;
+  -webkit-appearance: none !important;
+  -moz-appearance: none !important;
+  background: transparent !important;
+  border: none !important;
+  font-family: 'Clarendon URW Extra Narrow', Georgia, serif !important;
+  font-size: 15.5px !important;
+  font-weight: 700 !important;
+  color: #3A3837 !important;
+  padding: 4px 22px 4px 4px !important;
+  cursor: pointer !important;
+  outline: none !important;
+}
+
+.quills-merch-sort-chevron {
+  position: absolute !important;
+  right: 4px !important;
+  pointer-events: none !important;
+}
+
+/* ========================================================
+   PRODUCT GRID: 4 COLUMNS ON DESKTOP
+   ======================================================== */
+.quills-merch-grid {
+  display: grid !important;
+  grid-template-columns: repeat(4, 1fr) !important;
+  gap: 24px !important;
+  width: 100% !important;
+  margin-bottom: 50px !important;
+}
+
+.quills-merch-card {
+  display: flex !important;
+  flex-direction: column !important;
+  background: transparent !important;
+  border: none !important;
+}
+
+/* Pure White Rounded Square Photo Container */
+.quills-merch-image-box {
+  position: relative !important;
+  width: 100% !important;
+  aspect-ratio: 1 / 1 !important;
+  background-color: #ffffff !important;
+  border-radius: 8px !important;
+  overflow: hidden !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04) !important;
+}
+
+.quills-merch-img-link {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 100% !important;
+  height: 100% !important;
+  text-decoration: none !important;
+  position: relative !important;
+}
+
+.quills-merch-img {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: contain !important;
+  padding: 10px !important;
+  display: block !important;
+  transition: transform 0.3s ease !important;
+  box-sizing: border-box !important;
+}
+
+.quills-merch-card:hover .quills-merch-img {
+  transform: scale(1.02) !important;
+}
+
+/* Rollover Overlay on Hover */
+.quills-merch-rollover {
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  background: rgba(20, 20, 20, 0.88) !important;
+  color: #ffffff !important;
+  padding: 24px 20px 68px 20px !important;
+  z-index: 5 !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+  transition: opacity 0.25s ease, visibility 0.25s ease !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: flex-start !important;
+  text-align: left !important;
+  box-sizing: border-box !important;
+}
+
+.quills-merch-card:hover .quills-merch-rollover {
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+.quills-merch-rollover-title {
+  font-family: 'El Hidrant', cursive, serif !important;
+  font-style: italic !important;
+  font-size: 19px !important;
+  font-weight: 600 !important;
+  color: #ffffff !important;
+  margin: 0 0 10px 0 !important;
+  line-height: 1.3 !important;
+  text-decoration: underline !important;
+  text-underline-offset: 4px !important;
+}
+
+.quills-merch-rollover-line {
+  width: 100% !important;
+  height: 1px !important;
+  background: rgba(255, 255, 255, 0.3) !important;
+  margin-bottom: 14px !important;
+}
+
+.quills-merch-rollover-desc {
+  font-family: 'Clarendon URW Extra Narrow', Georgia, serif !important;
+  font-size: 14.5px !important;
+  line-height: 1.5 !important;
+  color: #ffffff !important;
+  margin: 0 !important;
+}
+
+/* Quick Add Button on Hover */
+.quills-merch-quick-add {
+  position: absolute !important;
+  bottom: 12px !important;
+  left: 0 !important;
+  right: 0 !important;
+  padding: 0 14px !important;
+  z-index: 10 !important;
+  width: 100% !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+  transform: translateY(100%) !important;
+  pointer-events: none !important;
+  transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.25s ease, visibility 0.25s ease !important;
+  box-sizing: border-box !important;
+}
+
+.quills-merch-card:hover .quills-merch-quick-add {
+  opacity: 1 !important;
+  visibility: visible !important;
+  transform: translateY(0) !important;
+  pointer-events: auto !important;
+}
+
+.quills-merch-btn-add {
+  width: 100% !important;
+  background-color: #DFC98A !important;
+  color: #3A3836 !important;
+  height: 46px !important;
+  padding: 10px 16px !important;
+  font-size: 15px !important;
+  letter-spacing: 2.5px !important;
+  font-weight: 700 !important;
+  border-radius: 4px !important;
+  border: none !important;
+  cursor: pointer !important;
+  text-transform: uppercase !important;
+  font-family: 'Barlow Condensed', sans-serif !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  transition: background-color 0.2s ease !important;
+}
+
+.quills-merch-btn-add:hover {
+  background-color: #cbba6f !important;
+}
+
+/* ========================================================
+   PRODUCT INFO BELOW IMAGE
+   ======================================================== */
+.quills-merch-info {
+  padding: 14px 0 0 0 !important;
+  text-align: left !important;
+}
+
+.quills-merch-name {
+  margin: 0 0 6px 0 !important;
+  font-family: 'Clarendon URW Extra Narrow', Georgia, serif !important;
+  font-size: 17.5px !important;
+  font-weight: 400 !important;
+  line-height: 1.35 !important;
+}
+
+.quills-merch-name a {
+  color: #3A3837 !important;
+  text-decoration: none !important;
+  transition: color 0.2s ease !important;
+}
+
+.quills-merch-name a:hover {
+  color: #678464 !important;
+}
+
+.quills-merch-rating-row {
+  display: flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  margin-bottom: 6px !important;
+}
+
+.quills-merch-stars {
+  font-size: 13.5px !important;
+  letter-spacing: 1.5px !important;
+  line-height: 1 !important;
+}
+
+.quills-merch-stars--filled {
+  color: #f5a623 !important;
+}
+
+.quills-merch-stars--empty {
+  color: #e09f3e !important;
+  opacity: 0.8 !important;
+}
+
+.quills-merch-reviews {
+  font-family: 'Clarendon URW Extra Narrow', Georgia, serif !important;
+  font-size: 13.5px !important;
+  color: #717171 !important;
+}
+
+.quills-merch-price {
+  font-family: 'Barlow Condensed', sans-serif !important;
+  font-size: 18.5px !important;
+  font-weight: 700 !important;
+  color: #151515 !important;
+  letter-spacing: 0.04em !important;
+  margin: 0 !important;
+}
+
+/* ========================================================
+   RESPONSIVE BREAKPOINTS
+   ======================================================== */
+@media (max-width: 1200px) {
+  .quills-merch-grid {
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: 20px !important;
+  }
+  .quills-merch-banner {
+    height: 320px !important;
+  }
+}
+
+@media (max-width: 899px) {
+  .quills-merch-container {
+    padding: 0 20px !important;
+  }
+  .quills-merch-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 16px !important;
+  }
+  .quills-merch-banner {
+    height: 240px !important;
+  }
+  .quills-merch-banner-title {
+    font-size: 40px !important;
+  }
+}
+
+@media (max-width: 599px) {
+  .quills-merch-container {
+    padding: 0 16px !important;
+  }
+  .quills-merch-grid {
+    grid-template-columns: 1fr !important;
+    gap: 20px !important;
+  }
+  .quills-merch-banner {
+    height: 190px !important;
+  }
+  .quills-merch-banner-title {
+    font-size: 34px !important;
+  }
+}
