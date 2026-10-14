@@ -61,7 +61,7 @@ if ( empty( $where_started_paragraphs ) || ! is_array( $where_started_paragraphs
 // Section: Why We're Here
 $why_here_title   = get_post_meta( $page_id, '_quills_why_were_here_title', true ) ?: "WHY WE'RE HERE";
 $why_here_img     = $img_dir . ( get_post_meta( $page_id, '_quills_why_were_here_image', true ) ?: 'why-were-here.jpg' );
-$why_here_content = get_post_meta( $page_id, '_quills_why_were_here_content', true ) ?: "Quills Coffee is here to deliver a coffee that connects people. Between the barista behind the counter and the customer in front of it. Between strangers at neighboring tables. Between all of us and the farmers who picked the coffee we're enjoying. We believe delivering great coffee is a chance to make memorable human experiences. It's a chance for us to be together, to pause, to talk, to connect.";
+$why_here_content = get_post_meta( $page_id, '_quills_why_were_here_content', true ) ?: "Quills Coffee is here to deliver <strong>coffee that connects people</strong>. Between the barista behind the counter and the customer in front of it, between strangers at neighboring tables, between all of us and the farmers who picked the coffee we're enjoying. We believe delivering great coffee is a chance to make memorable human experiences. It's a chance for us to sit together, to pause, to talk, to connect.";
 
 // Section: How We Work
 $how_work_title   = get_post_meta( $page_id, '_quills_how_we_work_title', true ) ?: 'HOW WE WORK';
@@ -136,10 +136,10 @@ $where_going_img    = $img_dir . ( get_post_meta( $page_id, '_quills_where_were_
                     <img src="<?php echo esc_url( $why_here_img ); ?>" alt="<?php echo esc_attr( $why_here_title ); ?>" loading="lazy" />
                 </div>
             </div>
-            <div class="quills-split-col quills-split-text-col">
+            <div class="quills-split-col quills-split-text-col text-center">
                 <h2 class="quills-slab-heading"><?php echo esc_html( $why_here_title ); ?></h2>
                 <div class="quills-body-text">
-                    <p><?php echo esc_html( $why_here_content ); ?></p>
+                    <p><?php echo wp_kses_post( $why_here_content ); ?></p>
                 </div>
             </div>
         </div>

@@ -293,6 +293,16 @@
     color: #32302F;
 }
 
+.quills-why-here .quills-split-text-col {
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.quills-why-here .quills-body-text p strong {
+    font-weight: 700;
+}
+
 /* =========================================
    4. HOW WE WORK
    ========================================= */
