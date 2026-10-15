@@ -2,10 +2,11 @@
  * Quills Coffee - Coffee Collection Script
  * 
  * Handles:
- * - Live AJAX category tabs & process filtering
- * - Live sorting without full page reload
- * - Testimonial quote sliders
- * - Quick Add To Cart AJAX handling
+ * - Category pill filtering (Blends, Single Origin, Espresso, Decaf)
+ * - Accordion sidebar toggling (Process, Roast Profile, Coffee)
+ * - Accordion filter radio changes with live AJAX updates
+ * - Live sorting dropdown (Best selling, Featured, Price, Title, Date)
+ * - Testimonial quote sliders (Top & Bottom)
  *
  * @package Coffee_Cafe_Corner
  */
@@ -18,41 +19,66 @@
         var $count = $('#quills-products-count');
         var currentTab = 'all';
         var currentProcess = 'all';
-        var currentSort = 'manual';
+        var currentRoast = 'all';
+        var currentSort = $('#quills-coffee-sort-select').val() || 'best-selling';
 
-        // 1. Process Dropdown Toggle
-        $('#quills-process-toggle').on('click', function(e) {
-            e.stopPropagation();
-            var $menu = $('#quills-process-menu');
-            var isOpen = $menu.hasClass('is-open');
-            $menu.toggleClass('is-open', !isOpen);
-            $(this).attr('aria-expanded', !isOpen);
-        });
+        // 1. Accordion Toggle
+        $('.quills-accordion-header').on('click', function(e) {
+            e.preventDefault();
+            var $item = $(this).closest('.quills-accordion-item');
+            var isOpen = $item.hasClass('is-open');
+            var $icon = $(this).find('.quills-accordion-icon');
 
-        $(document).on('click', function(e) {
-            if (!$(e.target).closest('.quills-process-dropdown-wrapper').length) {
-                $('#quills-process-menu').removeClass('is-open');
-                $('#quills-process-toggle').attr('aria-expanded', 'false');
+            if (isOpen) {
+                $item.removeClass('is-open');
+                $(this).attr('aria-expanded', 'false');
+                $icon.text('+');
+            } else {
+                $item.addClass('is-open');
+                $(this).attr('aria-expanded', 'true');
+                $icon.text('−');
             }
         });
 
-        // 2. Filter Tabs
-        $('.quills-tab-btn').on('click', function() {
-            var $btn = $(this);
-            $('.quills-tab-btn').removeClass('is-active');
-            $btn.addClass('is-active');
-            currentTab = $btn.data('tab');
+        // 2. Category Quick Pills
+        $('.quills-category-pill').on('click', function(e) {
+            e.preventDefault();
+            var $pill = $(this);
+            var selectedTab = $pill.data('tab');
+
+            if ($pill.hasClass('is-active')) {
+                // Toggle off back to all
+                $pill.removeClass('is-active');
+                currentTab = 'all';
+                $('input[name="filter_type"][value="all"]').prop('checked', true);
+            } else {
+                $('.quills-category-pill').removeClass('is-active');
+                $pill.addClass('is-active');
+                currentTab = selectedTab;
+                $('input[name="filter_type"][value="' + selectedTab + '"]').prop('checked', true);
+            }
+
             fetchFilteredCoffee();
         });
 
-        // 3. Process Options
-        $('.quills-process-option').on('click', function() {
-            var $opt = $(this);
-            $('.quills-process-option').removeClass('is-active');
-            $opt.addClass('is-active');
-            currentProcess = $opt.data('process');
-            $('#quills-process-menu').removeClass('is-open');
-            $('#quills-process-toggle').attr('aria-expanded', 'false');
+        // 3. Sidebar Radio Filters
+        $('input[name="filter_process"]').on('change', function() {
+            currentProcess = $(this).val();
+            fetchFilteredCoffee();
+        });
+
+        $('input[name="filter_roast"]').on('change', function() {
+            currentRoast = $(this).val();
+            fetchFilteredCoffee();
+        });
+
+        $('input[name="filter_type"]').on('change', function() {
+            currentTab = $(this).val();
+            // Sync pill buttons
+            $('.quills-category-pill').removeClass('is-active');
+            if (currentTab !== 'all') {
+                $('.quills-category-pill[data-tab="' + currentTab + '"]').addClass('is-active');
+            }
             fetchFilteredCoffee();
         });
 
@@ -67,18 +93,23 @@
             $grid.css('opacity', '0.4');
 
             $.ajax({
-                url: quillsData.ajaxUrl,
+                url: (typeof quillsData !== 'undefined' && quillsData.ajaxUrl) ? quillsData.ajaxUrl : '/wp-admin/admin-ajax.php',
                 type: 'POST',
                 data: {
                     action: 'quills_filter_coffee',
                     tab: currentTab,
                     process: currentProcess,
+                    roast: currentRoast,
                     sort_by: currentSort
                 },
                 success: function(res) {
                     if (res && res.success) {
                         $grid.html(res.data.html);
-                        $count.text(res.data.count + (res.data.count === 1 ? ' product' : ' products'));
+                        if (res.data.total_text) {
+                            $count.text(res.data.total_text);
+                        } else {
+                            $count.text(res.data.count + (res.data.count === 1 ? ' product' : ' products'));
+                        }
                     }
                     $grid.css('opacity', '1');
                 },
@@ -99,67 +130,34 @@
             var idx = parseInt($(this).data('index'), 10);
             $('.quills-slider-dot[data-index]').removeClass('is-active');
             $(this).addClass('is-active');
-            var q = topQuotes[idx] || topQuotes[0];
-            $('#quills-quote-text').css('opacity', 0);
-            $('#quills-quote-author').css('opacity', 0);
-            setTimeout(function() {
-                $('#quills-quote-text').text(q.text).css('opacity', 1);
-                $('#quills-quote-author').text(q.author).css('opacity', 1);
-            }, 200);
+
+            if (topQuotes[idx]) {
+                $('#quills-quote-text').fadeOut(150, function() {
+                    $(this).text(topQuotes[idx].text).fadeIn(150);
+                });
+                $('#quills-quote-author').fadeOut(150, function() {
+                    $(this).text(topQuotes[idx].author).fadeIn(150);
+                });
+            }
         });
 
         var bottomQuotes = [
             { text: '"Amazing coffee. Quills is consistently head and shoulders above others."', author: '— Mitchell George' },
-            { text: '"Their single-origin coffees rival the finest roasters anywhere in the country."', author: '— Coffee Review Daily' },
-            { text: '"Subscribing to Inkwell was the best morning upgrade I\'ve ever made."', author: '— Daniel P.' }
+            { text: '"Their single-origin Ethiopia Bombe is hands-down the best coffee I had this year."', author: '— Sarah Jenkins' },
+            { text: '"Subscribed to Blacksmith espresso for over 2 years now. Never disappointed."', author: '— David R.' }
         ];
 
         $('.quills-slider-dot[data-bottom-index]').on('click', function() {
             var idx = parseInt($(this).data('bottom-index'), 10);
             $('.quills-slider-dot[data-bottom-index]').removeClass('is-active');
             $(this).addClass('is-active');
-            var q = bottomQuotes[idx] || bottomQuotes[0];
-            $('#quills-bottom-quote-text').css('opacity', 0);
-            $('#quills-bottom-quote-author').css('opacity', 0);
-            setTimeout(function() {
-                $('#quills-bottom-quote-text').text(q.text).css('opacity', 1);
-                $('#quills-bottom-quote-author').text(q.author).css('opacity', 1);
-            }, 200);
-        });
 
-        // 6. Quick Add to Cart AJAX
-        $(document).on('click', '.quills-quick-add-btn', function(e) {
-            e.preventDefault();
-            var $btn = $(this);
-            var productId = $btn.data('product-id');
-            var originalText = $btn.text();
-
-            $btn.prop('disabled', true).text('ADDING...');
-
-            $.ajax({
-                url: quillsData.ajaxUrl,
-                type: 'POST',
-                data: {
-                    action: 'woocommerce_add_to_cart',
-                    product_id: productId,
-                    quantity: 1
-                },
-                success: function() {
-                    $btn.text('ADDED ✓');
-                    // Update header cart count badge if available
-                    var $badge = $('.quills-cart-badge');
-                    if ($badge.length) {
-                        var c = parseInt($badge.first().text(), 10) || 0;
-                        $badge.text(c + 1);
-                    }
-                    setTimeout(function() {
-                        $btn.prop('disabled', false).text(originalText);
-                    }, 1500);
-                },
-                error: function() {
-                    $btn.prop('disabled', false).text(originalText);
-                }
-            });
+            if (bottomQuotes[idx]) {
+                $('#quills-bottom-quote-text').fadeOut(150, function() {
+                    $(this).text(bottomQuotes[idx].text).fadeIn(150);
+                });
+            }
         });
     });
+
 })(jQuery);

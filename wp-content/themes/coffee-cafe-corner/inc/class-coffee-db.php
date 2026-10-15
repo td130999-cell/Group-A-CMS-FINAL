@@ -84,6 +84,48 @@ class Coffee_Cafe_Corner_Coffee_DB {
 		return $page->ID;
 	}
 
+	public static function get_product_image_url( $product_id ) {
+		$coffee_img = get_post_meta( $product_id, '_coffee_image', true );
+		$fallback   = get_post_meta( $product_id, '_coffee_fallback_image', true );
+
+		$candidates = array_unique( array_filter( array( $coffee_img, $fallback ) ) );
+
+		$upload_dir = wp_upload_dir();
+		$base_dir   = $upload_dir['basedir'];
+		$base_url   = $upload_dir['baseurl'];
+		$theme_dir  = get_template_directory();
+		$theme_uri  = get_template_directory_uri();
+
+		foreach ( $candidates as $rel ) {
+			$rel = ltrim( $rel, '/\\' );
+
+			// Check wp-content/uploads/
+			if ( file_exists( $base_dir . '/' . $rel ) ) {
+				return $base_url . '/' . $rel;
+			}
+
+			// Check theme assets/images/
+			if ( file_exists( $theme_dir . '/assets/images/' . $rel ) ) {
+				return trailingslashit( $theme_uri ) . 'assets/images/' . $rel;
+			}
+
+			// Check basename in uploads/quills/ or theme assets/images/coffee/
+			$basename = basename( $rel );
+			if ( file_exists( $base_dir . '/quills/' . $basename ) ) {
+				return $base_url . '/quills/' . $basename;
+			}
+			if ( file_exists( $theme_dir . '/assets/images/coffee/' . $basename ) ) {
+				return trailingslashit( $theme_uri ) . 'assets/images/coffee/' . $basename;
+			}
+		}
+
+		if ( has_post_thumbnail( $product_id ) ) {
+			return get_the_post_thumbnail_url( $product_id, 'medium_large' );
+		}
+
+		return trailingslashit( $theme_uri ) . 'assets/images/coffee/inkwell.jpg';
+	}
+
 	public static function ensure_products() {
 		$category_term = get_term_by( 'slug', self::CATEGORY_SLUG, self::TAXONOMY );
 		$term_id       = $category_term ? (int) $category_term->term_id : 0;
@@ -99,7 +141,7 @@ class Coffee_Cafe_Corner_Coffee_DB {
 				'roast'         => 'Medium',
 				'rating'        => '5.0',
 				'review_count'  => 80,
-				'image'         => 'coffee/inkwell.jpg',
+				'image'         => 'quills/inkwell.jpg',
 				'fallback'      => 'quills/inkwell_main.jpg',
 				'notes'         => 'honey, chocolate, clementine',
 				'menu_order'    => 1,
@@ -114,7 +156,7 @@ class Coffee_Cafe_Corner_Coffee_DB {
 				'roast'         => 'Medium',
 				'rating'        => '5.0',
 				'review_count'  => 56,
-				'image'         => 'coffee/blacksmith.jpg',
+				'image'         => 'quills/blacksmith.jpg',
 				'fallback'      => 'quills/blacksmith_main.jpg',
 				'notes'         => 'dark chocolate, caramelized sugar, candied orange',
 				'menu_order'    => 2,
@@ -128,8 +170,8 @@ class Coffee_Cafe_Corner_Coffee_DB {
 				'process'       => 'Washed & Natural',
 				'roast'         => 'Medium-Light',
 				'rating'        => '5.0',
-				'review_count'  => 20,
-				'image'         => 'coffee/southern-gothic.jpg',
+				'review_count'  => 31,
+				'image'         => 'quills/southern-gothic.jpg',
 				'fallback'      => 'quills/southern_gothic_main.jpg',
 				'notes'         => 'berries, chocolate, sweet cream',
 				'menu_order'    => 3,
@@ -144,7 +186,7 @@ class Coffee_Cafe_Corner_Coffee_DB {
 				'roast'         => 'Dark',
 				'rating'        => '5.0',
 				'review_count'  => 19,
-				'image'         => 'coffee/night-owl.jpg',
+				'image'         => 'quills/night-owl.jpg',
 				'fallback'      => 'quills/night_owl_main.jpg',
 				'notes'         => 'smoky dark cacao, molasses, toasted almond',
 				'menu_order'    => 4,
@@ -159,7 +201,7 @@ class Coffee_Cafe_Corner_Coffee_DB {
 				'roast'         => 'Medium-Light',
 				'rating'        => '0',
 				'review_count'  => 0,
-				'image'         => 'coffee/black-condor.jpg',
+				'image'         => 'quills/black-condor.jpg',
 				'fallback'      => 'quills/colombia_paraiso_feat.jpg',
 				'notes'         => 'cane sugar, red apple, caramel',
 				'menu_order'    => 5,
@@ -174,8 +216,8 @@ class Coffee_Cafe_Corner_Coffee_DB {
 				'roast'         => 'Mixed',
 				'rating'        => '0',
 				'review_count'  => 0,
-				'image'         => 'quills/inkwell_main.jpg',
-				'fallback'      => 'coffee/inkwell.jpg',
+				'image'         => 'quills/bit-of-both.jpg',
+				'fallback'      => 'quills/inkwell_main.jpg',
 				'notes'         => 'Inkwell house blend + rotating seasonal single origin',
 				'menu_order'    => 6,
 			),
@@ -189,8 +231,8 @@ class Coffee_Cafe_Corner_Coffee_DB {
 				'roast'         => 'Medium',
 				'rating'        => '5.0',
 				'review_count'  => 1,
-				'image'         => 'quills/guatemala_alma_main.jpg',
-				'fallback'      => 'coffee/southern-gothic.jpg',
+				'image'         => 'quills/ommagourd.jpg',
+				'fallback'      => 'quills/southern_gothic_main.jpg',
 				'notes'         => 'spiced pumpkin, brown sugar, nutmeg, baked pecan',
 				'menu_order'    => 7,
 			),
@@ -204,7 +246,7 @@ class Coffee_Cafe_Corner_Coffee_DB {
 				'roast'         => 'Medium',
 				'rating'        => '0',
 				'review_count'  => 0,
-				'image'         => 'coffee/colombia-ea-decaf.jpg',
+				'image'         => 'quills/colombia-ea-decaf.jpg',
 				'fallback'      => 'quills/blacksmith_back.jpg',
 				'notes'         => 'sweet maple, plum, cocoa powder',
 				'menu_order'    => 8,
@@ -219,7 +261,7 @@ class Coffee_Cafe_Corner_Coffee_DB {
 				'roast'         => 'Medium',
 				'rating'        => '0',
 				'review_count'  => 0,
-				'image'         => 'coffee/blacksmith.jpg',
+				'image'         => 'quills/the-home-barista.jpg',
 				'fallback'      => 'quills/blacksmith_main.jpg',
 				'notes'         => 'Two 12oz bags curated for the home espresso and milk drinks lover',
 				'menu_order'    => 9,
@@ -234,8 +276,8 @@ class Coffee_Cafe_Corner_Coffee_DB {
 				'roast'         => 'Light',
 				'rating'        => '0',
 				'review_count'  => 0,
-				'image'         => 'quills/guatemala_alma_main.jpg',
-				'fallback'      => 'coffee/inkwell.jpg',
+				'image'         => 'quills/guatemala-quetzal.jpg',
+				'fallback'      => 'quills/guatemala_alma_main.jpg',
 				'notes'         => 'green apple, floral honey, milk chocolate',
 				'menu_order'    => 10,
 			),
@@ -264,39 +306,39 @@ class Coffee_Cafe_Corner_Coffee_DB {
 				'roast'         => 'Light',
 				'rating'        => '0',
 				'review_count'  => 0,
-				'image'         => 'quills/guatemala_alma_main.jpg',
+				'image'         => 'quills/guatemala-alma.jpg',
 				'fallback'      => 'quills/guatemala_alma_farm.jpg',
 				'notes'         => 'malt chocolate, date, pecan',
 				'menu_order'    => 12,
 			),
 			array(
-				'slug'          => 'kenya-embu-aa',
-				'title'         => 'Kenya | Embu AA',
-				'price'         => '24.00',
-				'price_display' => 'FROM $24.00',
-				'type'          => 'single-origin',
-				'process'       => 'Washed',
-				'roast'         => 'Light',
-				'rating'        => '0',
-				'review_count'  => 0,
-				'image'         => 'quills/kenya_embu_main.jpg',
-				'fallback'      => 'coffee/inkwell.jpg',
-				'notes'         => 'blackcurrant, grapefruit, cane sugar',
-				'menu_order'    => 13,
-			),
-			array(
 				'slug'          => 'colombia-el-paraiso',
 				'title'         => 'Colombia | El Paraiso',
-				'price'         => '24.00',
-				'price_display' => 'FROM $24.00',
+				'price'         => '26.00',
+				'price_display' => 'FROM $26.00',
 				'type'          => 'single-origin',
 				'process'       => 'Anaerobic Washed',
 				'roast'         => 'Light',
-				'rating'        => '5.0',
-				'review_count'  => 2,
-				'image'         => 'quills/colombia_paraiso_main.jpg',
-				'fallback'      => 'coffee/black-condor.jpg',
+				'rating'        => '0',
+				'review_count'  => 0,
+				'image'         => 'quills/colombia-el-paraiso.jpg',
+				'fallback'      => 'quills/colombia_paraiso_main.jpg',
 				'notes'         => 'white peach, jasmine, meyer lemon, honey',
+				'menu_order'    => 13,
+			),
+			array(
+				'slug'          => 'sunrise-sunset',
+				'title'         => 'Sunrise & Sunset',
+				'price'         => '44.00',
+				'price_display' => '$44.00',
+				'type'          => 'blend',
+				'process'       => 'Curated Selection',
+				'roast'         => 'Medium',
+				'rating'        => '0',
+				'review_count'  => 0,
+				'image'         => 'quills/sunrise-sunset.jpg',
+				'fallback'      => 'quills/sunrise-sunset.jpg',
+				'notes'         => 'Sunrise light roast blend + Sunset dark roast blend pairing',
 				'menu_order'    => 14,
 			),
 			array(
@@ -310,7 +352,7 @@ class Coffee_Cafe_Corner_Coffee_DB {
 				'rating'        => '5.0',
 				'review_count'  => 15,
 				'image'         => 'quills/guatemala_alma_farm.jpg',
-				'fallback'      => 'coffee/blacksmith.jpg',
+				'fallback'      => 'quills/blacksmith_main.jpg',
 				'notes'         => 'Bi-weekly rotating rare micro-lot single origin',
 				'menu_order'    => 15,
 			),
@@ -372,7 +414,7 @@ class Coffee_Cafe_Corner_Coffee_DB {
 		}
 	}
 
-	public static function get_products_query( $tab = 'all', $process = '', $sort_by = 'manual' ) {
+	public static function get_products_query( $tab = 'all', $process = '', $roast = '', $sort_by = 'best-selling' ) {
 		$args = array(
 			'post_type'      => 'product',
 			'post_status'    => 'publish',
@@ -388,7 +430,7 @@ class Coffee_Cafe_Corner_Coffee_DB {
 
 		$meta_queries = array();
 
-		// Filter by Tab: 'blends', 'single-origin', 'espresso', 'decaf'
+		// Filter by Tab: 'blend', 'single-origin', 'espresso', 'decaf'
 		if ( ! empty( $tab ) && 'all' !== $tab ) {
 			$meta_queries[] = array(
 				'key'     => '_coffee_type',
@@ -397,11 +439,20 @@ class Coffee_Cafe_Corner_Coffee_DB {
 			);
 		}
 
-		// Filter by Process: Washed, Natural, Decaf, etc.
+		// Filter by Process: Washed, Natural, EA Decaf, etc.
 		if ( ! empty( $process ) && 'all' !== $process ) {
 			$meta_queries[] = array(
 				'key'     => '_coffee_process',
 				'value'   => $process,
+				'compare' => 'LIKE',
+			);
+		}
+
+		// Filter by Roast Profile: Light, Medium, Dark
+		if ( ! empty( $roast ) && 'all' !== $roast ) {
+			$meta_queries[] = array(
+				'key'     => '_coffee_roast',
+				'value'   => $roast,
 				'compare' => 'LIKE',
 			);
 		}
@@ -442,17 +493,17 @@ class Coffee_Cafe_Corner_Coffee_DB {
 				$args['order']   = 'DESC';
 				break;
 
+			case 'manual':
+			case 'featured':
+				$args['orderby'] = 'menu_order title';
+				$args['order']   = 'ASC';
+				break;
+
 			case 'best-selling':
+			default:
 				$args['meta_key'] = '_wc_review_count';
 				$args['orderby']  = 'meta_value_num';
 				$args['order']    = 'DESC';
-				break;
-
-			case 'manual':
-			case 'featured':
-			default:
-				$args['orderby'] = 'menu_order title';
-				$args['order']   = 'ASC';
 				break;
 		}
 
@@ -470,9 +521,10 @@ class Coffee_Cafe_Corner_Coffee_DB {
 	public static function ajax_filter_coffee() {
 		$tab     = isset( $_POST['tab'] ) ? sanitize_text_field( wp_unslash( $_POST['tab'] ) ) : 'all';
 		$process = isset( $_POST['process'] ) ? sanitize_text_field( wp_unslash( $_POST['process'] ) ) : '';
-		$sort_by = isset( $_POST['sort_by'] ) ? sanitize_text_field( wp_unslash( $_POST['sort_by'] ) ) : 'manual';
+		$roast   = isset( $_POST['roast'] ) ? sanitize_text_field( wp_unslash( $_POST['roast'] ) ) : '';
+		$sort_by = isset( $_POST['sort_by'] ) ? sanitize_text_field( wp_unslash( $_POST['sort_by'] ) ) : 'best-selling';
 
-		$query = self::get_products_query( $tab, $process, $sort_by );
+		$query = self::get_products_query( $tab, $process, $roast, $sort_by );
 
 		ob_start();
 		if ( $query->have_posts() ) :
@@ -487,30 +539,13 @@ class Coffee_Cafe_Corner_Coffee_DB {
 				}
 				$rating        = (float) get_post_meta( $product_id, '_wc_average_rating', true );
 				$review_count  = (int) get_post_meta( $product_id, '_wc_review_count', true );
-				$image_rel     = get_post_meta( $product_id, '_coffee_image', true );
-				$fallback_rel  = get_post_meta( $product_id, '_coffee_fallback_image', true );
-
-				$image_url = '';
-				if ( ! empty( $image_rel ) && file_exists( get_template_directory() . '/assets/images/' . $image_rel ) ) {
-					$image_url = trailingslashit( get_template_directory_uri() ) . 'assets/images/' . $image_rel;
-				} elseif ( ! empty( $fallback_rel ) && file_exists( ABSPATH . 'wp-content/uploads/' . $fallback_rel ) ) {
-					$image_url = content_url( '/uploads/' . $fallback_rel );
-				} elseif ( has_post_thumbnail( $product_id ) ) {
-					$image_url = get_the_post_thumbnail_url( $product_id, 'medium_large' );
-				} else {
-					$image_url = trailingslashit( get_template_directory_uri() ) . 'assets/images/coffee/inkwell.jpg';
-				}
+				$image_url     = self::get_product_image_url( $product_id );
 				?>
 				<article class="quills-coffee-card">
 					<div class="quills-coffee-card-media">
 						<a href="<?php the_permalink(); ?>" class="quills-coffee-card-link">
 							<img src="<?php echo esc_url( $image_url ); ?>" alt="<?php echo esc_attr( $title ); ?>" class="quills-coffee-card-img" loading="lazy" />
 						</a>
-						<div class="quills-coffee-card-overlay">
-							<button type="button" class="quills-quick-add-btn" data-product-id="<?php echo esc_attr( $product_id ); ?>">
-								<?php esc_html_e( 'ADD TO CART', 'coffee-cafe-corner' ); ?>
-							</button>
-						</div>
 					</div>
 					<div class="quills-coffee-card-content">
 						<h3 class="quills-coffee-card-title">
@@ -555,8 +590,9 @@ class Coffee_Cafe_Corner_Coffee_DB {
 		$html = ob_get_clean();
 
 		wp_send_json_success( array(
-			'html'  => $html,
-			'count' => $query->found_posts,
+			'html'       => $html,
+			'count'      => (int) $query->found_posts,
+			'total_text' => sprintf( esc_html__( '%d products', 'coffee-cafe-corner' ), (int) $query->found_posts ),
 		) );
 	}
 }
