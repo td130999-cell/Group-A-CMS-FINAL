@@ -81,13 +81,92 @@
             });
         }
 
+        function updateUrlParams() {
+            var filters = getSelectedFilters();
+            var params = new URLSearchParams();
+            if (currentSort && currentSort !== 'best-selling') {
+                params.set('sort_by', currentSort);
+            }
+            filters.process.forEach(function(p) {
+                params.append('filter.p.m.custom.process', p);
+            });
+            filters.roast.forEach(function(r) {
+                params.append('filter.p.m.custom.roast_profile', r);
+            });
+            filters.tab.forEach(function(t) {
+                params.append('filter.p.m.custom.coffee_type', t);
+            });
+            var newQuery = params.toString();
+            var newUrl = window.location.pathname + (newQuery ? '?' + newQuery : '');
+            window.history.replaceState({}, '', newUrl);
+        }
+
+        function initFromUrl() {
+            if (!window.location.search) {
+                updateActiveFilterTags();
+                updateAccordionHeaderCounts();
+                return;
+            }
+            var params = new URLSearchParams(window.location.search);
+            var changed = false;
+
+            if (params.has('sort_by')) {
+                currentSort = params.get('sort_by');
+                $('#quills-coffee-sort-select').val(currentSort);
+            }
+
+            params.getAll('filter.p.m.custom.process').forEach(function(val) {
+                var $chk = $('input[name="filter_process[]"][value="' + val + '"]');
+                if ($chk.length && !$chk.is(':checked')) {
+                    $chk.prop('checked', true);
+                    changed = true;
+                }
+            });
+
+            params.getAll('filter.p.m.custom.roast_profile').forEach(function(val) {
+                var $chk = $('input[name="filter_roast[]"][value="' + val + '"]');
+                if ($chk.length && !$chk.is(':checked')) {
+                    $chk.prop('checked', true);
+                    changed = true;
+                }
+            });
+
+            params.getAll('filter.p.m.custom.coffee_type').forEach(function(val) {
+                var $chk = $('input[name="filter_type[]"][value="' + val + '"]');
+                if ($chk.length && !$chk.is(':checked')) {
+                    $chk.prop('checked', true);
+                    changed = true;
+                }
+            });
+
+            $('.quills-accordion-item').each(function() {
+                var hasChecked = $(this).find('input[type="checkbox"]:checked').length > 0;
+                if (hasChecked) {
+                    $(this).addClass('is-open');
+                    $(this).find('.quills-accordion-header').attr('aria-expanded', 'true');
+                    $(this).find('.quills-accordion-icon').text('−');
+                }
+            });
+
+            updateActiveFilterTags();
+            updateAccordionHeaderCounts();
+            syncCategoryPills(getSelectedFilters().tab);
+
+            if (changed) {
+                fetchFilteredCoffee();
+            }
+        }
+
         function onFiltersChanged() {
             var filters = getSelectedFilters();
             updateActiveFilterTags();
             updateAccordionHeaderCounts();
             syncCategoryPills(filters.tab);
+            updateUrlParams();
             fetchFilteredCoffee();
         }
+
+        initFromUrl();
 
         // 1. Accordion Toggle
         $('.quills-accordion-header').on('click', function(e) {
@@ -125,22 +204,22 @@
             onFiltersChanged();
         });
 
-        // 3. Sidebar Square Checkbox Filters
-        $('input[name="filter_process[]"], input[name="filter_roast[]"], input[name="filter_type[]"]').on('change', function() {
+        // 3. Sidebar Square Checkbox Filters (Event Delegation)
+        $(document).on('change', 'input[name="filter_process[]"], input[name="filter_roast[]"], input[name="filter_type[]"]', function() {
             onFiltersChanged();
         });
 
         // 4. Click individual active filter tag to remove it
         $(document).on('click', '.quills-filter-tag', function(e) {
             e.preventDefault();
-            var name = $(this).data('target-name');
-            var val = $(this).data('target-val');
+            var name = $(this).attr('data-target-name') || $(this).data('target-name');
+            var val = $(this).attr('data-target-val') || $(this).data('target-val');
             $('input[name="' + name + '"][value="' + val + '"]').prop('checked', false);
             onFiltersChanged();
         });
 
         // 5. Click "Remove all" to clear all active filters
-        $('#quills-filters-remove-all').on('click', function(e) {
+        $(document).on('click', '#quills-filters-remove-all', function(e) {
             e.preventDefault();
             $('input[name^="filter_"]').prop('checked', false);
             $('.quills-category-pill').removeClass('is-active');
@@ -148,14 +227,17 @@
         });
 
         // 6. Sort Dropdown
-        $('#quills-coffee-sort-select').on('change', function() {
+        $(document).on('change', '#quills-coffee-sort-select', function() {
             currentSort = $(this).val();
+            updateUrlParams();
             fetchFilteredCoffee();
         });
 
         // AJAX Fetch Function
         function fetchFilteredCoffee() {
-            $grid.css('opacity', '0.4');
+            var $productGrid = $('#quills-coffee-grid');
+            var $productCount = $('#quills-products-count');
+            $productGrid.css('opacity', '0.4');
             var filters = getSelectedFilters();
 
             $.ajax({
@@ -170,18 +252,18 @@
                 },
                 success: function(res) {
                     if (res && res.success) {
-                        $grid.html(res.data.html);
+                        $productGrid.html(res.data.html);
                         var count = res.data.count;
                         if (filters.totalChecked > 0) {
-                            $count.text(count + ' of ' + TOTAL_PRODUCTS + ' products');
+                            $productCount.text(count + ' of ' + TOTAL_PRODUCTS + ' products');
                         } else {
-                            $count.text(TOTAL_PRODUCTS + ' products');
+                            $productCount.text(TOTAL_PRODUCTS + ' products');
                         }
                     }
-                    $grid.css('opacity', '1');
+                    $productGrid.css('opacity', '1');
                 },
                 error: function() {
-                    $grid.css('opacity', '1');
+                    $productGrid.css('opacity', '1');
                 }
             });
         }

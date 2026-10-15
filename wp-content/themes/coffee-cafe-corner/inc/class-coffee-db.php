@@ -213,9 +213,9 @@ class Coffee_Cafe_Corner_Coffee_DB {
 				'title'         => 'Inkwell | Signature Blend',
 				'price'         => '20.00',
 				'price_display' => 'FROM $20.00',
-				'type'          => 'blend',
-				'process'       => 'Washed & Natural',
-				'roast'         => 'Medium',
+				'type'          => array( 'blend' ),
+				'process'       => array( 'Washed' ),
+				'roast'         => array( 'Medium' ),
 				'rating'        => '5.0',
 				'review_count'  => 80,
 				'image'         => 'quills/inkwell.jpg',
@@ -228,9 +228,9 @@ class Coffee_Cafe_Corner_Coffee_DB {
 				'title'         => 'Blacksmith | Espresso Blend',
 				'price'         => '20.00',
 				'price_display' => 'FROM $20.00',
-				'type'          => 'espresso',
-				'process'       => 'Washed & Natural',
-				'roast'         => 'Medium',
+				'type'          => array( 'espresso' ),
+				'process'       => array( 'Natural', 'Washed' ),
+				'roast'         => array( 'Medium' ),
 				'rating'        => '5.0',
 				'review_count'  => 56,
 				'image'         => 'quills/blacksmith.jpg',
@@ -243,9 +243,9 @@ class Coffee_Cafe_Corner_Coffee_DB {
 				'title'         => 'Southern Gothic | Cold Brew Blend',
 				'price'         => '20.00',
 				'price_display' => 'FROM $20.00',
-				'type'          => 'blend',
-				'process'       => 'Washed & Natural',
-				'roast'         => 'Medium',
+				'type'          => array( 'blend' ),
+				'process'       => array( 'Natural', 'Washed' ),
+				'roast'         => array( 'Medium' ),
 				'rating'        => '5.0',
 				'review_count'  => 31,
 				'image'         => 'quills/southern-gothic.jpg',
@@ -258,9 +258,9 @@ class Coffee_Cafe_Corner_Coffee_DB {
 				'title'         => 'Night Owl | Dark Blend',
 				'price'         => '20.00',
 				'price_display' => 'FROM $20.00',
-				'type'          => 'blend',
-				'process'       => 'Washed',
-				'roast'         => 'Dark',
+				'type'          => array( 'blend' ),
+				'process'       => array( 'Washed' ),
+				'roast'         => array( 'Dark' ),
 				'rating'        => '5.0',
 				'review_count'  => 19,
 				'image'         => 'quills/night-owl.jpg',
@@ -273,9 +273,9 @@ class Coffee_Cafe_Corner_Coffee_DB {
 				'title'         => 'Colombia Earthquake Relief | Black Condor',
 				'price'         => '23.00',
 				'price_display' => 'FROM $23.00',
-				'type'          => 'single-origin',
-				'process'       => 'Washed',
-				'roast'         => 'Medium',
+				'type'          => array( 'single-origin' ),
+				'process'       => array( 'Washed' ),
+				'roast'         => array( 'Light' ),
 				'rating'        => '0',
 				'review_count'  => 0,
 				'image'         => 'quills/black-condor.jpg',
@@ -288,9 +288,9 @@ class Coffee_Cafe_Corner_Coffee_DB {
 				'title'         => 'Bit of Both',
 				'price'         => '46.00',
 				'price_display' => '$46.00',
-				'type'          => 'blend',
-				'process'       => 'Washed',
-				'roast'         => '',
+				'type'          => array( 'blend' ),
+				'process'       => array( 'Washed & Natural' ),
+				'roast'         => array( 'Light' ),
 				'rating'        => '0',
 				'review_count'  => 0,
 				'image'         => 'quills/bit-of-both.jpg',
@@ -303,9 +303,9 @@ class Coffee_Cafe_Corner_Coffee_DB {
 				'title'         => 'Ommagourd | Fall Blend',
 				'price'         => '24.00',
 				'price_display' => '$24.00',
-				'type'          => 'blend',
-				'process'       => 'Washed',
-				'roast'         => 'Medium',
+				'type'          => array( 'blend' ),
+				'process'       => array( 'Washed' ),
+				'roast'         => array( 'Medium' ),
 				'rating'        => '5.0',
 				'review_count'  => 1,
 				'image'         => 'quills/ommagourd.jpg',
@@ -318,9 +318,9 @@ class Coffee_Cafe_Corner_Coffee_DB {
 				'title'         => 'Colombia | EA Decaf',
 				'price'         => '21.00',
 				'price_display' => 'FROM $21.00',
-				'type'          => 'decaf',
-				'process'       => 'Washed',
-				'roast'         => 'Medium',
+				'type'          => array( 'decaf', 'single-origin' ),
+				'process'       => array( 'Washed' ),
+				'roast'         => array( 'Medium' ),
 				'rating'        => '0',
 				'review_count'  => 0,
 				'image'         => 'quills/colombia-ea-decaf.jpg',
@@ -333,9 +333,9 @@ class Coffee_Cafe_Corner_Coffee_DB {
 				'title'         => 'The Home Barista',
 				'price'         => '46.00',
 				'price_display' => '$46.00',
-				'type'          => 'blend',
-				'process'       => 'Washed',
-				'roast'         => '',
+				'type'          => array( 'blend' ),
+				'process'       => array( 'Washed & Natural' ),
+				'roast'         => array( 'Light' ),
 				'rating'        => '0',
 				'review_count'  => 0,
 				'image'         => 'quills/the-home-barista.jpg',
@@ -348,9 +348,9 @@ class Coffee_Cafe_Corner_Coffee_DB {
 				'title'         => 'Guatemala | Quetzal',
 				'price'         => '26.00',
 				'price_display' => 'FROM $26.00',
-				'type'          => 'single-origin',
-				'process'       => 'Washed',
-				'roast'         => 'Light',
+				'type'          => array( 'single-origin' ),
+				'process'       => array( 'Washed' ),
+				'roast'         => array( 'Light' ),
 				'rating'        => '0',
 				'review_count'  => 0,
 				'image'         => 'quills/guatemala-quetzal.jpg',
@@ -363,9 +363,9 @@ class Coffee_Cafe_Corner_Coffee_DB {
 				'title'         => 'Guatemala | Alma',
 				'price'         => '23.00',
 				'price_display' => '$23.00',
-				'type'          => 'single-origin',
-				'process'       => 'Washed',
-				'roast'         => 'Light',
+				'type'          => array( 'single-origin' ),
+				'process'       => array( 'Washed' ),
+				'roast'         => array( 'Light' ),
 				'rating'        => '0',
 				'review_count'  => 0,
 				'image'         => 'quills/guatemala-alma.jpg',
@@ -378,9 +378,9 @@ class Coffee_Cafe_Corner_Coffee_DB {
 				'title'         => 'Colombia | El Paraiso',
 				'price'         => '26.00',
 				'price_display' => 'FROM $26.00',
-				'type'          => 'single-origin',
-				'process'       => 'Honey',
-				'roast'         => 'Light',
+				'type'          => array( 'single-origin' ),
+				'process'       => array( 'Honey' ),
+				'roast'         => array( 'Medium' ),
 				'rating'        => '0',
 				'review_count'  => 0,
 				'image'         => 'quills/colombia-el-paraiso.jpg',
@@ -393,9 +393,9 @@ class Coffee_Cafe_Corner_Coffee_DB {
 				'title'         => 'Sunrise & Sunset',
 				'price'         => '44.00',
 				'price_display' => '$44.00',
-				'type'          => 'blend',
-				'process'       => 'Washed',
-				'roast'         => 'Medium',
+				'type'          => array( 'blend' ),
+				'process'       => array( 'Washed & Natural' ),
+				'roast'         => array( 'Medium' ),
 				'rating'        => '0',
 				'review_count'  => 0,
 				'image'         => 'quills/sunrise-sunset.jpg',
@@ -429,9 +429,22 @@ class Coffee_Cafe_Corner_Coffee_DB {
 					update_post_meta( $product_id, '_visibility', 'visible' );
 					update_post_meta( $product_id, '_wc_average_rating', $item['rating'] );
 					update_post_meta( $product_id, '_wc_review_count', $item['review_count'] );
-					update_post_meta( $product_id, '_coffee_type', $item['type'] );
-					update_post_meta( $product_id, '_coffee_process', $item['process'] );
-					update_post_meta( $product_id, '_coffee_roast', $item['roast'] );
+
+					delete_post_meta( $product_id, '_coffee_type' );
+					foreach ( (array) $item['type'] as $t ) {
+						if ( ! empty( $t ) ) add_post_meta( $product_id, '_coffee_type', sanitize_text_field( $t ) );
+					}
+
+					delete_post_meta( $product_id, '_coffee_process' );
+					foreach ( (array) $item['process'] as $p ) {
+						if ( ! empty( $p ) ) add_post_meta( $product_id, '_coffee_process', sanitize_text_field( $p ) );
+					}
+
+					delete_post_meta( $product_id, '_coffee_roast' );
+					foreach ( (array) $item['roast'] as $r ) {
+						if ( ! empty( $r ) ) add_post_meta( $product_id, '_coffee_roast', sanitize_text_field( $r ) );
+					}
+
 					update_post_meta( $product_id, '_coffee_tasting_notes', $item['notes'] );
 					update_post_meta( $product_id, '_coffee_image', $item['image'] );
 					update_post_meta( $product_id, '_coffee_fallback_image', $item['fallback'] );
@@ -448,9 +461,22 @@ class Coffee_Cafe_Corner_Coffee_DB {
 				update_post_meta( $pid, '_price_display', $item['price_display'] );
 				update_post_meta( $pid, '_wc_average_rating', $item['rating'] );
 				update_post_meta( $pid, '_wc_review_count', $item['review_count'] );
-				update_post_meta( $pid, '_coffee_type', $item['type'] );
-				update_post_meta( $pid, '_coffee_process', $item['process'] );
-				update_post_meta( $pid, '_coffee_roast', $item['roast'] );
+
+				delete_post_meta( $pid, '_coffee_type' );
+				foreach ( (array) $item['type'] as $t ) {
+					if ( ! empty( $t ) ) add_post_meta( $pid, '_coffee_type', sanitize_text_field( $t ) );
+				}
+
+				delete_post_meta( $pid, '_coffee_process' );
+				foreach ( (array) $item['process'] as $p ) {
+					if ( ! empty( $p ) ) add_post_meta( $pid, '_coffee_process', sanitize_text_field( $p ) );
+				}
+
+				delete_post_meta( $pid, '_coffee_roast' );
+				foreach ( (array) $item['roast'] as $r ) {
+					if ( ! empty( $r ) ) add_post_meta( $pid, '_coffee_roast', sanitize_text_field( $r ) );
+				}
+
 				update_post_meta( $pid, '_coffee_tasting_notes', $item['notes'] );
 				update_post_meta( $pid, '_coffee_image', $item['image'] );
 				update_post_meta( $pid, '_coffee_fallback_image', $item['fallback'] );
@@ -494,42 +520,32 @@ class Coffee_Cafe_Corner_Coffee_DB {
 
 		// Filter by Coffee Type (Blend, Decaf, Espresso, Single Origin)
 		if ( ! empty( $tabs ) ) {
-			$type_query = array( 'relation' => 'OR' );
-			foreach ( $tabs as $t ) {
-				$t_clean = sanitize_title( $t );
-				$type_query[] = array(
-					'key'     => '_coffee_type',
-					'value'   => $t_clean,
-					'compare' => 'LIKE',
-				);
-			}
-			$meta_queries[] = $type_query;
+			$clean_tabs = array_values( array_map( 'sanitize_title', $tabs ) );
+			$meta_queries[] = array(
+				'key'     => '_coffee_type',
+				'value'   => $clean_tabs,
+				'compare' => 'IN',
+			);
 		}
 
 		// Filter by Process (Honey, Natural, Washed, Washed & Natural)
 		if ( ! empty( $processes ) ) {
-			$proc_query = array( 'relation' => 'OR' );
-			foreach ( $processes as $p ) {
-				$proc_query[] = array(
-					'key'     => '_coffee_process',
-					'value'   => $p,
-					'compare' => '=',
-				);
-			}
-			$meta_queries[] = $proc_query;
+			$clean_proc = array_values( $processes );
+			$meta_queries[] = array(
+				'key'     => '_coffee_process',
+				'value'   => $clean_proc,
+				'compare' => 'IN',
+			);
 		}
 
 		// Filter by Roast Profile (Dark, Light, Medium)
 		if ( ! empty( $roasts ) ) {
-			$roast_query = array( 'relation' => 'OR' );
-			foreach ( $roasts as $r ) {
-				$roast_query[] = array(
-					'key'     => '_coffee_roast',
-					'value'   => $r,
-					'compare' => 'LIKE',
-				);
-			}
-			$meta_queries[] = $roast_query;
+			$clean_roast = array_values( $roasts );
+			$meta_queries[] = array(
+				'key'     => '_coffee_roast',
+				'value'   => $clean_roast,
+				'compare' => 'IN',
+			);
 		}
 
 		if ( ! empty( $meta_queries ) ) {
@@ -582,15 +598,7 @@ class Coffee_Cafe_Corner_Coffee_DB {
 				break;
 		}
 
-		$query = new WP_Query( $args );
-
-		// Fallback query if no category match is found
-		if ( ! $query->have_posts() ) {
-			unset( $args['tax_query'] );
-			$query = new WP_Query( $args );
-		}
-
-		return $query;
+		return new WP_Query( $args );
 	}
 
 	public static function ajax_filter_coffee() {
