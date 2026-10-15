@@ -1,0 +1,1823 @@
+/**
+ * Quills Coffee Complete Styling (100% Visual Parity with quillscoffee.com)
+ * Fonts: Besley (Serif), Barlow Condensed (Condensed Sans), Inter (Sans)
+ */
+
+:root {
+    --quills-font-serif: 'Besley', 'Playfair Display', Georgia, serif;
+    --quills-font-ui: 'Barlow Condensed', -apple-system, BlinkMacSystemFont, sans-serif;
+    --quills-font-body: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+
+    --quills-color-bg: #ffffff;
+    --quills-color-bg-alt: #fbf9f6;
+    --quills-color-surface: #f4eee5;
+    --quills-color-border: #e6e2dc;
+    --quills-color-border-dark: #1a1a1a;
+
+    --quills-color-text: #1a1a1a;
+    --quills-color-text-muted: #6e6b66;
+    --quills-color-primary: #1a1a1a;
+    --quills-color-primary-hover: #383431;
+
+    --quills-color-star: #e59819;
+    --quills-color-verified: #2e7d32;
+    --quills-color-verified-bg: #eaf5ea;
+    --quills-color-save-bg: #feeceb;
+    --quills-color-save-text: #c0392b;
+
+    --quills-radius-sm: 4px;
+    --quills-radius-md: 8px;
+    --quills-radius-pill: 50px;
+    --quills-shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.04);
+    --quills-shadow-md: 0 6px 20px rgba(0, 0, 0, 0.08);
+}
+
+/* Reset & Base */
+*, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body.quills-body {
+    background-color: var(--quills-color-bg);
+    color: var(--quills-color-text);
+    font-family: var(--quills-font-body);
+    font-size: 15px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+}
+
+.quills-container {
+    max-width: 1320px;
+    margin: 0 auto;
+    padding: 0 24px;
+}
+
+/* 1. Announcement Bar */
+.quills-announcement-bar {
+    background-color: #111111;
+    color: #ffffff;
+    text-align: center;
+    padding: 10px 16px;
+    font-family: var(--quills-font-ui);
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+}
+
+/* 2. Header */
+.quills-header {
+    background: #ffffff;
+    border-bottom: 1px solid var(--quills-color-border);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.quills-header__inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 76px;
+}
+
+.quills-nav {
+    display: flex;
+    gap: 28px;
+}
+
+.quills-nav-link {
+    font-family: var(--quills-font-ui);
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--quills-color-text);
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.quills-nav-link:hover,
+.quills-nav-link.active {
+    color: #8b572a;
+}
+
+.quills-header__logo .quills-logo-img {
+    height: 38px;
+    width: auto;
+    display: block;
+}
+
+.quills-header__actions {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+}
+
+.quills-icon-link,
+.quills-cart-toggle {
+    color: var(--quills-color-text);
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    position: relative;
+    padding: 4px;
+    transition: opacity 0.2s;
+}
+
+.quills-icon-link:hover,
+.quills-cart-toggle:hover {
+    opacity: 0.7;
+}
+
+.quills-cart-count {
+    position: absolute;
+    top: -4px;
+    right: -8px;
+    background: #111111;
+    color: #ffffff;
+    font-family: var(--quills-font-ui);
+    font-size: 11px;
+    font-weight: 700;
+    min-width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+}
+
+/* Breadcrumbs */
+.quills-breadcrumbs-section {
+    padding: 16px 0;
+    background: var(--quills-color-bg);
+}
+
+.quills-breadcrumbs {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    list-style: none;
+    font-size: 13px;
+    color: var(--quills-color-text-muted);
+}
+
+.quills-breadcrumbs a {
+    color: var(--quills-color-text-muted);
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.quills-breadcrumbs a:hover {
+    color: var(--quills-color-text);
+}
+
+.quills-breadcrumbs .sep {
+    color: #c2beba;
+}
+
+.quills-breadcrumbs .active {
+    color: var(--quills-color-text);
+    font-weight: 600;
+}
+
+/* 3. Product Single Main */
+.quills-product-main {
+    padding: 24px 0 60px;
+}
+
+.quills-product-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 56px;
+    align-items: flex-start;
+}
+
+/* Gallery */
+.quills-product-gallery {
+    position: sticky;
+    top: 96px;
+}
+
+.quills-gallery-stage {
+    position: relative;
+    background-color: var(--quills-color-bg-alt);
+    border: 1px solid var(--quills-color-border);
+    border-radius: var(--quills-radius-md);
+    overflow: hidden;
+    aspect-ratio: 1 / 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.quills-featured-image {
+    max-width: 90%;
+    max-height: 90%;
+    object-fit: contain;
+    transition: transform 0.4s ease;
+}
+
+.quills-gallery-stage:hover .quills-featured-image {
+    transform: scale(1.05);
+}
+
+.quills-gallery-badge {
+    position: absolute;
+    top: 16px;
+    left: 16px;
+    background: #ffffff;
+    border: 1px solid var(--quills-color-border);
+    padding: 6px 14px;
+    border-radius: var(--quills-radius-pill);
+    font-family: var(--quills-font-ui);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.quills-gallery-thumbs {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    margin-top: 16px;
+}
+
+.quills-thumb {
+    aspect-ratio: 1 / 1;
+    background: var(--quills-color-bg-alt);
+    border: 2px solid var(--quills-color-border);
+    border-radius: var(--quills-radius-sm);
+    cursor: pointer;
+    overflow: hidden;
+    padding: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+}
+
+.quills-thumb img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+}
+
+.quills-thumb:hover,
+.quills-thumb.active {
+    border-color: var(--quills-color-primary);
+    box-shadow: 0 0 0 1px var(--quills-color-primary);
+}
+
+/* Product Details Column */
+.quills-brand-tag {
+    font-family: var(--quills-font-ui);
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--quills-color-text-muted);
+    margin-bottom: 6px;
+}
+
+.quills-product-title {
+    font-family: var(--quills-font-serif);
+    font-size: 38px;
+    font-weight: 700;
+    line-height: 1.15;
+    color: var(--quills-color-text);
+    margin-bottom: 12px;
+}
+
+/* Rating Badge */
+.quills-rating-badge {
+    margin-bottom: 18px;
+}
+
+.quills-rating-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none;
+    font-size: 14px;
+    color: var(--quills-color-text);
+}
+
+.quills-stars {
+    color: var(--quills-color-star);
+    letter-spacing: 2px;
+    font-size: 16px;
+}
+
+.quills-rating-num {
+    font-weight: 700;
+}
+
+.quills-rating-reviews {
+    color: var(--quills-color-text-muted);
+    text-decoration: underline;
+}
+
+/* Price Box */
+.quills-price-box {
+    margin-bottom: 24px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--quills-color-border);
+}
+
+.quills-price-current {
+    font-family: var(--quills-font-ui);
+    font-size: 32px;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    color: var(--quills-color-text);
+}
+
+.quills-tax-notice {
+    display: block;
+    font-size: 13px;
+    color: var(--quills-color-text-muted);
+    margin-top: 4px;
+}
+
+/* Section Labels */
+.quills-section-label {
+    font-family: var(--quills-font-ui);
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--quills-color-text);
+    margin-bottom: 10px;
+}
+
+/* Tasting Notes Badges */
+.quills-tasting-notes-block {
+    margin-bottom: 24px;
+}
+
+.quills-notes-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.quills-note-pill {
+    background-color: var(--quills-color-surface);
+    border: 1px solid #dfd7cc;
+    color: #4a382c;
+    padding: 7px 18px;
+    border-radius: var(--quills-radius-pill);
+    font-family: var(--quills-font-ui);
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+}
+
+/* Roast Meter */
+.quills-roast-meter-block {
+    margin-bottom: 26px;
+}
+
+.quills-roast-bar {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 6px;
+    max-width: 320px;
+}
+
+.quills-roast-step {
+    background: #eae7e1;
+    text-align: center;
+    padding: 8px 4px;
+    font-family: var(--quills-font-ui);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #7b766f;
+    border-radius: var(--quills-radius-sm);
+    transition: all 0.2s;
+}
+
+.quills-roast-step.active {
+    background: var(--quills-color-primary);
+    color: #ffffff;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+}
+
+/* Option Groups (Size & Grind) */
+.quills-option-group {
+    margin-bottom: 24px;
+}
+
+.quills-pills-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.quills-pill-btn {
+    background: #ffffff;
+    border: 1.5px solid var(--quills-color-border);
+    border-radius: var(--quills-radius-sm);
+    padding: 10px 18px;
+    font-family: var(--quills-font-ui);
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    cursor: pointer;
+    color: var(--quills-color-text);
+    transition: all 0.2s ease;
+}
+
+.quills-pill-btn:hover {
+    border-color: #888888;
+}
+
+.quills-pill-btn.active {
+    background: var(--quills-color-primary);
+    border-color: var(--quills-color-primary);
+    color: #ffffff;
+}
+
+/* Subscription Toggle */
+.quills-subscription-toggle {
+    margin-bottom: 28px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.quills-sub-option {
+    display: block;
+    border: 1.5px solid var(--quills-color-border);
+    border-radius: var(--quills-radius-md);
+    padding: 14px 18px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    background: #ffffff;
+}
+
+.quills-sub-option:hover {
+    border-color: #888888;
+}
+
+.quills-sub-option.active {
+    border-color: var(--quills-color-primary);
+    background: #fdfcfb;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.quills-sub-option input[type="radio"] {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.quills-sub-info {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.quills-sub-title {
+    font-family: var(--quills-font-ui);
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.quills-badge-save {
+    background: var(--quills-color-save-bg);
+    color: var(--quills-color-save-text);
+    font-size: 11px;
+    font-weight: 800;
+    padding: 3px 8px;
+    border-radius: var(--quills-radius-pill);
+}
+
+.quills-sub-price {
+    font-family: var(--quills-font-ui);
+    font-size: 16px;
+    font-weight: 700;
+}
+
+.quills-sub-frequency-dropdown {
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px dashed var(--quills-color-border);
+    display: none;
+}
+
+.quills-sub-option.active .quills-sub-frequency-dropdown {
+    display: block;
+}
+
+.quills-sub-frequency-dropdown select {
+    width: 100%;
+    padding: 10px 14px;
+    border: 1px solid var(--quills-color-border);
+    border-radius: var(--quills-radius-sm);
+    font-family: var(--quills-font-body);
+    font-size: 14px;
+    background: #ffffff;
+}
+
+/* Add to Cart Row */
+.quills-add-cart-row {
+    display: flex;
+    gap: 14px;
+    margin-bottom: 24px;
+}
+
+.quills-qty-stepper {
+    display: flex;
+    border: 1.5px solid var(--quills-color-border);
+    border-radius: var(--quills-radius-sm);
+    overflow: hidden;
+    height: 54px;
+}
+
+.quills-qty-btn {
+    background: #ffffff;
+    border: none;
+    width: 44px;
+    font-size: 18px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.quills-qty-btn:hover {
+    background: #f0ece6;
+}
+
+.quills-qty-stepper input {
+    width: 48px;
+    border: none;
+    text-align: center;
+    font-family: var(--quills-font-ui);
+    font-size: 18px;
+    font-weight: 700;
+}
+
+.quills-btn-add-cart {
+    flex: 1;
+    background: var(--quills-color-primary);
+    color: #ffffff;
+    border: none;
+    border-radius: var(--quills-radius-sm);
+    height: 54px;
+    cursor: pointer;
+    font-family: var(--quills-font-ui);
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: all 0.2s ease;
+}
+
+.quills-btn-add-cart:hover {
+    background: var(--quills-color-primary-hover);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.quills-btn-spinner {
+    display: none;
+    width: 18px;
+    height: 18px;
+    border: 2px solid #ffffff;
+    border-top-color: transparent;
+    border-radius: 50%;
+    animation: spin 0.6s linear infinite;
+}
+
+.quills-btn-add-cart.loading .quills-btn-spinner {
+    display: inline-block;
+}
+
+.quills-btn-add-cart.loading .quills-btn-text {
+    display: none;
+}
+
+/* Toast */
+.quills-cart-toast {
+    display: none;
+    align-items: center;
+    gap: 10px;
+    background: #eaf5ea;
+    border: 1px solid #c2e2c2;
+    color: #205c24;
+    padding: 12px 16px;
+    border-radius: var(--quills-radius-sm);
+    margin-bottom: 24px;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.quills-toast-view-cart {
+    margin-left: auto;
+    color: #1a4d1d;
+    text-decoration: underline;
+}
+
+/* Value Props */
+.quills-props-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 18px 0;
+    border-top: 1px solid var(--quills-color-border);
+    border-bottom: 1px solid var(--quills-color-border);
+    margin-bottom: 28px;
+}
+
+.quills-prop-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 13.5px;
+    color: #383431;
+}
+
+.quills-prop-item svg {
+    color: #6a5a4b;
+    flex-shrink: 0;
+}
+
+/* Accordions */
+.quills-accordions {
+    display: flex;
+    flex-direction: column;
+}
+
+.quills-accordion-item {
+    border-bottom: 1px solid var(--quills-color-border);
+}
+
+.quills-accordion-header {
+    width: 100%;
+    background: none;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 18px 0;
+    cursor: pointer;
+    font-family: var(--quills-font-ui);
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--quills-color-text);
+}
+
+.quills-acc-icon {
+    font-size: 20px;
+    font-weight: 400;
+}
+
+.quills-accordion-content {
+    display: none;
+    padding-bottom: 20px;
+    font-size: 14.5px;
+    color: #4a4642;
+    line-height: 1.7;
+}
+
+.quills-accordion-item.open .quills-accordion-content {
+    display: block;
+}
+
+/* Specs Table */
+.quills-specs-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.quills-specs-table tr {
+    border-bottom: 1px solid #f0ece6;
+}
+
+.quills-specs-table th {
+    text-align: left;
+    padding: 9px 0;
+    font-family: var(--quills-font-ui);
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: #6e6b66;
+    width: 35%;
+}
+
+.quills-specs-table td {
+    padding: 9px 0;
+    color: var(--quills-color-text);
+    font-weight: 500;
+}
+
+/* Brew Guide Grid */
+.quills-brew-guide-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+}
+
+.quills-brew-card {
+    background: var(--quills-color-bg-alt);
+    border: 1px solid var(--quills-color-border);
+    padding: 14px;
+    border-radius: var(--quills-radius-sm);
+    font-size: 13.5px;
+}
+
+.quills-brew-title {
+    font-family: var(--quills-font-ui);
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    margin-bottom: 8px;
+    color: var(--quills-color-primary);
+}
+
+.quills-brew-card p {
+    margin-bottom: 4px;
+}
+
+/* =========================================
+   4. REVIEWS SECTION (Judge.me Parity)
+   ========================================= */
+.quills-reviews-section {
+    background: var(--quills-color-bg-alt);
+    padding: 64px 0 80px;
+    border-top: 1px solid var(--quills-color-border);
+}
+
+.quills-reviews-header {
+    text-align: center;
+    margin-bottom: 36px;
+}
+
+.quills-reviews-title {
+    font-family: var(--quills-font-serif);
+    font-size: 32px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    color: var(--quills-color-text);
+    margin-bottom: 6px;
+}
+
+.quills-reviews-subtitle {
+    color: var(--quills-color-text-muted);
+    font-size: 15px;
+}
+
+/* Summary Card */
+.quills-review-summary-card {
+    background: #ffffff;
+    border: 1px solid var(--quills-color-border);
+    border-radius: var(--quills-radius-md);
+    padding: 32px 36px;
+    display: grid;
+    grid-template-columns: 240px 1fr 220px;
+    gap: 36px;
+    align-items: center;
+    box-shadow: var(--quills-shadow-sm);
+    margin-bottom: 32px;
+}
+
+.quills-summary-score {
+    text-align: center;
+    border-right: 1px solid var(--quills-color-border);
+    padding-right: 24px;
+}
+
+.quills-big-rating {
+    font-family: var(--quills-font-ui);
+    font-size: 64px;
+    font-weight: 700;
+    line-height: 1;
+    color: var(--quills-color-text);
+}
+
+.quills-stars--large {
+    font-size: 22px;
+    margin: 8px 0 4px;
+}
+
+.quills-summary-count {
+    font-size: 13px;
+    color: var(--quills-color-text-muted);
+}
+
+/* Distribution Bars */
+.quills-summary-bars {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.quills-bar-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 13px;
+}
+
+.quills-bar-label {
+    width: 40px;
+    font-weight: 600;
+    color: var(--quills-color-text);
+}
+
+.quills-bar-track {
+    flex: 1;
+    height: 10px;
+    background: #ece8e1;
+    border-radius: var(--quills-radius-pill);
+    overflow: hidden;
+}
+
+.quills-bar-fill {
+    height: 100%;
+    background: var(--quills-color-star);
+    border-radius: var(--quills-radius-pill);
+}
+
+.quills-bar-percent {
+    width: 65px;
+    text-align: right;
+    color: var(--quills-color-text-muted);
+    font-size: 12px;
+}
+
+/* Write Review CTA */
+.quills-summary-action {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.quills-btn-write-review {
+    background: #ffffff;
+    border: 2px solid var(--quills-color-primary);
+    color: var(--quills-color-primary);
+    padding: 14px 24px;
+    border-radius: var(--quills-radius-sm);
+    font-family: var(--quills-font-ui);
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    width: 100%;
+}
+
+.quills-btn-write-review:hover {
+    background: var(--quills-color-primary);
+    color: #ffffff;
+}
+
+/* Review Form */
+.quills-review-form-wrapper {
+    background: #ffffff;
+    border: 1px solid var(--quills-color-border);
+    border-radius: var(--quills-radius-md);
+    padding: 32px;
+    margin-bottom: 32px;
+    box-shadow: var(--quills-shadow-md);
+}
+
+.quills-form-heading {
+    font-family: var(--quills-font-serif);
+    font-size: 24px;
+    font-weight: 700;
+    margin-bottom: 4px;
+}
+
+.quills-form-subheading {
+    font-size: 14px;
+    color: var(--quills-color-text-muted);
+    margin-bottom: 24px;
+}
+
+.quills-form-row {
+    margin-bottom: 18px;
+}
+
+.quills-form-row label {
+    display: block;
+    font-family: var(--quills-font-ui);
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+}
+
+.quills-form-row input,
+.quills-form-row textarea,
+.quills-form-row select {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1.5px solid var(--quills-color-border);
+    border-radius: var(--quills-radius-sm);
+    font-family: var(--quills-font-body);
+    font-size: 14px;
+}
+
+.quills-form-row input:focus,
+.quills-form-row textarea:focus,
+.quills-form-row select:focus {
+    border-color: var(--quills-color-primary);
+    outline: none;
+}
+
+.quills-form-grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+}
+
+/* Star Picker */
+.quills-star-picker {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.quills-star-item {
+    font-size: 28px;
+    color: #ddd5c9;
+    cursor: pointer;
+    transition: color 0.15s;
+    user-select: none;
+}
+
+.quills-star-item.active,
+.quills-star-item.hover {
+    color: var(--quills-color-star);
+}
+
+.quills-star-rating-text {
+    margin-left: 14px;
+    font-size: 14px;
+    font-weight: 600;
+    color: #555555;
+}
+
+.quills-form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    margin-top: 24px;
+}
+
+.quills-btn-cancel-review {
+    background: none;
+    border: 1.5px solid var(--quills-color-border);
+    padding: 12px 22px;
+    border-radius: var(--quills-radius-sm);
+    cursor: pointer;
+    font-family: var(--quills-font-ui);
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.quills-btn-submit-review {
+    background: var(--quills-color-primary);
+    color: #ffffff;
+    border: none;
+    padding: 12px 28px;
+    border-radius: var(--quills-radius-sm);
+    cursor: pointer;
+    font-family: var(--quills-font-ui);
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.quills-form-feedback {
+    margin-top: 14px;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+/* Reviews Toolbar */
+.quills-reviews-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 24px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--quills-color-border);
+}
+
+.quills-filter-tabs {
+    display: flex;
+    gap: 8px;
+}
+
+.quills-filter-tab {
+    background: #ffffff;
+    border: 1px solid var(--quills-color-border);
+    border-radius: var(--quills-radius-pill);
+    padding: 6px 16px;
+    font-family: var(--quills-font-ui);
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.quills-filter-tab.active {
+    background: var(--quills-color-primary);
+    border-color: var(--quills-color-primary);
+    color: #ffffff;
+}
+
+.quills-sort-reviews {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.quills-sort-reviews select {
+    padding: 6px 12px;
+    border: 1px solid var(--quills-color-border);
+    border-radius: var(--quills-radius-sm);
+    background: #ffffff;
+}
+
+/* Review Cards */
+.quills-reviews-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.quills-review-card {
+    background: #ffffff;
+    border: 1px solid var(--quills-color-border);
+    border-radius: var(--quills-radius-md);
+    padding: 24px 28px;
+    box-shadow: var(--quills-shadow-sm);
+}
+
+.quills-review-card__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.quills-author-box {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.quills-author-name {
+    font-weight: 700;
+    font-size: 15px;
+    color: var(--quills-color-text);
+}
+
+.quills-verified-badge {
+    background: var(--quills-color-verified-bg);
+    color: var(--quills-color-verified);
+    font-size: 11.5px;
+    font-weight: 700;
+    padding: 3px 8px;
+    border-radius: var(--quills-radius-pill);
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.quills-review-date {
+    font-size: 12.5px;
+    color: var(--quills-color-text-muted);
+}
+
+.quills-review-card__meta {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 12px;
+}
+
+.quills-stars--card {
+    font-size: 14px;
+}
+
+.quills-brew-pill {
+    background: #f4eee5;
+    color: #554433;
+    font-size: 11.5px;
+    font-weight: 600;
+    padding: 3px 10px;
+    border-radius: var(--quills-radius-pill);
+}
+
+.quills-review-item-title {
+    font-family: var(--quills-font-ui);
+    font-size: 17px;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    margin-bottom: 8px;
+    color: var(--quills-color-text);
+}
+
+.quills-review-item-body {
+    font-size: 14.5px;
+    color: #44403c;
+    line-height: 1.6;
+    margin-bottom: 16px;
+}
+
+.quills-review-card__footer {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border-top: 1px solid #f2ede7;
+    padding-top: 12px;
+    font-size: 12.5px;
+    color: var(--quills-color-text-muted);
+}
+
+.quills-btn-vote {
+    background: none;
+    border: 1px solid var(--quills-color-border);
+    padding: 4px 10px;
+    border-radius: var(--quills-radius-sm);
+    cursor: pointer;
+    font-size: 12px;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    transition: all 0.2s;
+}
+
+.quills-btn-vote:hover {
+    border-color: #888888;
+    background: #faf8f5;
+}
+
+/* =========================================
+   5. COLLECTION PAGE & FACETED FILTERS
+   ========================================= */
+.quills-collection-hero {
+    background: var(--quills-color-bg-alt);
+    border-bottom: 1px solid var(--quills-color-border);
+    padding: 24px 0 44px;
+}
+
+.quills-collection-hero__title {
+    font-family: var(--quills-font-serif);
+    font-size: 44px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    margin-top: 12px;
+    margin-bottom: 8px;
+}
+
+.quills-collection-hero__desc {
+    max-width: 640px;
+    color: var(--quills-color-text-muted);
+    font-size: 15.5px;
+}
+
+.quills-collection-main {
+    padding: 36px 0 80px;
+}
+
+/* Collection Toolbar */
+.quills-collection-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 28px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--quills-color-border);
+}
+
+.quills-toolbar__left {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+}
+
+.quills-results-count {
+    font-family: var(--quills-font-ui);
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+}
+
+.quills-active-facets {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.quills-active-pill {
+    background: var(--quills-color-primary);
+    color: #ffffff;
+    font-family: var(--quills-font-ui);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    padding: 4px 12px;
+    border-radius: var(--quills-radius-pill);
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+}
+
+.quills-active-pill span {
+    font-size: 14px;
+}
+
+.quills-sort-box {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-family: var(--quills-font-ui);
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+}
+
+.quills-sort-select {
+    padding: 8px 14px;
+    border: 1.5px solid var(--quills-color-border);
+    border-radius: var(--quills-radius-sm);
+    font-family: var(--quills-font-ui);
+    font-size: 14px;
+    font-weight: 600;
+    background: #ffffff;
+}
+
+/* 2-Column Collection Layout */
+.quills-collection-layout {
+    display: grid;
+    grid-template-columns: 260px 1fr;
+    gap: 40px;
+    align-items: flex-start;
+}
+
+/* Sidebar Filters */
+.quills-filter-sidebar {
+    background: #ffffff;
+    border: 1px solid var(--quills-color-border);
+    border-radius: var(--quills-radius-md);
+    padding: 20px;
+    position: sticky;
+    top: 96px;
+}
+
+.quills-filter-sidebar__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--quills-color-border);
+}
+
+.quills-filter-sidebar__header h3 {
+    font-family: var(--quills-font-ui);
+    font-size: 15px;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+}
+
+.quills-clear-all-btn {
+    background: none;
+    border: none;
+    color: var(--quills-color-text-muted);
+    font-family: var(--quills-font-ui);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+.quills-clear-all-btn:hover {
+    color: var(--quills-color-primary);
+}
+
+.quills-filter-group {
+    border-bottom: 1px solid #f0ece6;
+    padding: 14px 0;
+}
+
+.quills-filter-group:last-child {
+    border-bottom: none;
+}
+
+.quills-filter-group__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+    font-family: var(--quills-font-ui);
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--quills-color-text);
+}
+
+.quills-filter-toggle-icon {
+    font-size: 16px;
+}
+
+.quills-filter-group__body {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 12px;
+}
+
+.quills-filter-checkbox {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    font-size: 13.5px;
+    color: #44403c;
+    user-select: none;
+}
+
+.quills-filter-checkbox input {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.quills-checkbox-custom {
+    width: 17px;
+    height: 17px;
+    border: 1.5px solid #b5b0a8;
+    border-radius: 3px;
+    background: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.15s;
+    flex-shrink: 0;
+}
+
+.quills-filter-checkbox input:checked ~ .quills-checkbox-custom {
+    background: var(--quills-color-primary);
+    border-color: var(--quills-color-primary);
+}
+
+.quills-filter-checkbox input:checked ~ .quills-checkbox-custom::after {
+    content: "✓";
+    color: #ffffff;
+    font-size: 12px;
+    font-weight: 800;
+}
+
+.quills-checkbox-label {
+    flex: 1;
+}
+
+.quills-checkbox-count {
+    color: var(--quills-color-text-muted);
+    font-size: 12px;
+}
+
+/* Product Cards Grid */
+.quills-collection-grid-area {
+    position: relative;
+    min-height: 400px;
+}
+
+.quills-products-grid {
+    display: grid;
+    gap: 28px;
+}
+
+.quills-products-grid--3 {
+    grid-template-columns: repeat(3, 1fr);
+}
+
+.quills-products-grid--4 {
+    grid-template-columns: repeat(4, 1fr);
+}
+
+/* Product Card Matching Quills Coffee */
+.quills-product-card {
+    background: #ffffff;
+    border: 1px solid var(--quills-color-border);
+    border-radius: var(--quills-radius-md);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    transition: all 0.3s ease;
+}
+
+.quills-product-card:hover {
+    border-color: #cac5bc;
+    box-shadow: var(--quills-shadow-md);
+    transform: translateY(-3px);
+}
+
+.quills-card-media-wrapper {
+    position: relative;
+    background: var(--quills-color-bg-alt);
+    aspect-ratio: 1 / 1;
+    overflow: hidden;
+    display: block;
+}
+
+.quills-card-image-box {
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
+
+.quills-card-img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    padding: 16px;
+    transition: opacity 0.4s ease, transform 0.4s ease;
+}
+
+.quills-card-img--primary {
+    opacity: 1;
+    z-index: 1;
+}
+
+.quills-card-img--secondary {
+    opacity: 0;
+    z-index: 2;
+}
+
+.quills-product-card:hover .quills-card-img--primary {
+    opacity: 0;
+}
+
+.quills-product-card:hover .quills-card-img--secondary {
+    opacity: 1;
+    transform: scale(1.04);
+}
+
+.quills-card-roast-badge {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    background: #ffffff;
+    border: 1px solid var(--quills-color-border);
+    padding: 4px 10px;
+    border-radius: var(--quills-radius-pill);
+    font-family: var(--quills-font-ui);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    z-index: 3;
+}
+
+.quills-card-info {
+    padding: 20px 18px;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
+.quills-card-tasting-notes {
+    font-family: var(--quills-font-ui);
+    font-size: 12.5px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: #8b572a;
+    margin-bottom: 6px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.quills-card-title {
+    font-family: var(--quills-font-serif);
+    font-size: 19px;
+    font-weight: 700;
+    line-height: 1.25;
+    margin-bottom: 8px;
+}
+
+.quills-card-title a {
+    color: var(--quills-color-text);
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.quills-card-title a:hover {
+    color: #8b572a;
+}
+
+.quills-card-rating {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    margin-bottom: 10px;
+}
+
+.quills-rating-count {
+    color: var(--quills-color-text-muted);
+}
+
+.quills-card-price {
+    font-family: var(--quills-font-ui);
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--quills-color-text);
+    margin-top: auto;
+    margin-bottom: 14px;
+}
+
+.quills-card-quick-buy {
+    background: var(--quills-color-primary);
+    color: #ffffff;
+    text-decoration: none;
+    display: block;
+    text-align: center;
+    padding: 10px;
+    border-radius: var(--quills-radius-sm);
+    font-family: var(--quills-font-ui);
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    transition: background 0.2s;
+}
+
+.quills-card-quick-buy:hover {
+    background: var(--quills-color-primary-hover);
+}
+
+/* Loading Overlay */
+.quills-grid-loader {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(255, 255, 255, 0.7);
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--quills-radius-md);
+}
+
+.quills-spinner {
+    width: 36px;
+    height: 36px;
+    border: 3px solid #d4cebe;
+    border-top-color: var(--quills-color-primary);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+.quills-no-products {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 60px 20px;
+    background: #ffffff;
+    border: 1px dashed var(--quills-color-border);
+    border-radius: var(--quills-radius-md);
+}
+
+.quills-reset-filters-btn {
+    margin-top: 14px;
+    background: var(--quills-color-primary);
+    color: #ffffff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: var(--quills-radius-sm);
+    font-family: var(--quills-font-ui);
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+/* Related Coffees */
+.quills-related-coffees-section {
+    padding: 64px 0 80px;
+    border-top: 1px solid var(--quills-color-border);
+}
+
+.quills-related-heading {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.quills-related-heading h2 {
+    font-family: var(--quills-font-serif);
+    font-size: 30px;
+    font-weight: 700;
+    margin-bottom: 6px;
+}
+
+.quills-related-heading p {
+    color: var(--quills-color-text-muted);
+}
+
+/* Footer */
+.quills-footer {
+    background: #111111;
+    color: #a8a49e;
+    padding: 60px 0 0;
+}
+
+.quills-footer__inner {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 2fr;
+    gap: 40px;
+    padding-bottom: 50px;
+}
+
+.quills-footer-logo {
+    height: 34px;
+    filter: invert(1);
+    margin-bottom: 18px;
+}
+
+.quills-footer p {
+    font-size: 14px;
+    line-height: 1.6;
+    margin-bottom: 16px;
+}
+
+.quills-social-links {
+    display: flex;
+    gap: 14px;
+}
+
+.quills-social-links a {
+    color: #ffffff;
+    font-family: var(--quills-font-ui);
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    text-decoration: none;
+}
+
+.quills-footer h4 {
+    font-family: var(--quills-font-ui);
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #ffffff;
+    margin-bottom: 18px;
+}
+
+.quills-footer ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.quills-footer ul a {
+    color: #a8a49e;
+    text-decoration: none;
+    font-size: 14px;
+    transition: color 0.2s;
+}
+
+.quills-footer ul a:hover {
+    color: #ffffff;
+}
+
+.quills-newsletter-form {
+    display: flex;
+    gap: 8px;
+    margin-top: 14px;
+}
+
+.quills-newsletter-form input {
+    flex: 1;
+    padding: 10px 14px;
+    background: #222222;
+    border: 1px solid #333333;
+    color: #ffffff;
+    border-radius: var(--quills-radius-sm);
+    font-size: 13.5px;
+}
+
+.quills-newsletter-form button {
+    background: #ffffff;
+    color: #111111;
+    border: none;
+    padding: 0 18px;
+    border-radius: var(--quills-radius-sm);
+    font-family: var(--quills-font-ui);
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    cursor: pointer;
+}
+
+.quills-footer__bottom {
+    border-top: 1px solid #222222;
+    padding: 20px 0;
+    text-align: center;
+    font-size: 12.5px;
+    color: #6e6b66;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+    .quills-product-layout {
+        grid-template-columns: 1fr;
+        gap: 36px;
+    }
+    .quills-product-gallery {
+        position: static;
+    }
+    .quills-collection-layout {
+        grid-template-columns: 1fr;
+    }
+    .quills-filter-sidebar {
+        position: static;
+    }
+    .quills-products-grid--3 {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    .quills-review-summary-card {
+        grid-template-columns: 1fr;
+        gap: 24px;
+        text-align: center;
+    }
+    .quills-summary-score {
+        border-right: none;
+        border-bottom: 1px solid var(--quills-color-border);
+        padding-right: 0;
+        padding-bottom: 20px;
+    }
+    .quills-footer__inner {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+@media (max-width: 640px) {
+    .quills-products-grid--3,
+    .quills-products-grid--4 {
+        grid-template-columns: 1fr;
+    }
+    .quills-header__inner {
+        height: 64px;
+    }
+    .quills-nav {
+        display: none;
+    }
+    .quills-product-title {
+        font-size: 28px;
+    }
+    .quills-brew-guide-grid {
+        grid-template-columns: 1fr;
+    }
+    .quills-footer__inner {
+        grid-template-columns: 1fr;
+    }
+}
