@@ -59,6 +59,14 @@ if ( ! file_exists( ABSPATH . 'wp-content/uploads/quills/coffeesfreebagbanner2.p
 
 		<!-- 4. Top Testimonial Slider -->
 		<section class="quills-sub-testimonial-slider" id="quills-top-testimonial-slider" aria-label="<?php esc_attr_e( 'Customer Reviews', 'coffee-cafe-corner' ); ?>">
+			<!-- Navigation Arrows (Hidden by default, visible on hover) -->
+			<button type="button" class="quills-sub-nav-btn quills-sub-nav-prev is-disabled" aria-label="<?php esc_attr_e( 'Previous review', 'coffee-cafe-corner' ); ?>">
+				<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="15 18 9 12 15 6"></polyline></svg>
+			</button>
+			<button type="button" class="quills-sub-nav-btn quills-sub-nav-next" aria-label="<?php esc_attr_e( 'Next review', 'coffee-cafe-corner' ); ?>">
+				<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"></polyline></svg>
+			</button>
+
 			<div class="quills-sub-slider-track">
 				<!-- Slide 1 -->
 				<div class="quills-sub-slide is-active" data-index="0">
@@ -82,9 +90,9 @@ if ( ! file_exists( ABSPATH . 'wp-content/uploads/quills/coffeesfreebagbanner2.p
 				<div class="quills-sub-slide" data-index="2">
 					<div class="quills-sub-stars">★★★★★</div>
 					<blockquote class="quills-sub-quote">
-						"Mega delicious! Just sent some to my sister in California to try to get her hooked."
+						"Quills has the best coffee and great customer service! 5 stars!!! We love getting to try a variety of different roasts!"
 					</blockquote>
-					<div class="quills-sub-author">— Lisa Peters</div>
+					<div class="quills-sub-author">— Kelly Davis</div>
 				</div>
 			</div>
 
@@ -200,6 +208,14 @@ if ( ! file_exists( ABSPATH . 'wp-content/uploads/quills/coffeesfreebagbanner2.p
 				<?php esc_html_e( 'More kind words from customers', 'coffee-cafe-corner' ); ?>
 			</h2>
 
+			<!-- Navigation Arrows (Hidden by default, visible on hover) -->
+			<button type="button" class="quills-sub-nav-btn quills-sub-nav-prev is-disabled" aria-label="<?php esc_attr_e( 'Previous review', 'coffee-cafe-corner' ); ?>">
+				<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="15 18 9 12 15 6"></polyline></svg>
+			</button>
+			<button type="button" class="quills-sub-nav-btn quills-sub-nav-next" aria-label="<?php esc_attr_e( 'Next review', 'coffee-cafe-corner' ); ?>">
+				<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"></polyline></svg>
+			</button>
+
 			<div class="quills-sub-bottom-track">
 				<!-- Slide 1 -->
 				<div class="quills-sub-bottom-slide is-active" data-index="0">
@@ -216,7 +232,7 @@ if ( ! file_exists( ABSPATH . 'wp-content/uploads/quills/coffeesfreebagbanner2.p
 					<blockquote class="quills-sub-quote">
 						"It’s our favorite coffee!! We entertain frequently and everyone seems to enjoy this coffee."
 					</blockquote>
-					<div class="quills-sub-author">— Kelly Davis</div>
+					<div class="quills-sub-author">— Lisa Peters</div>
 				</div>
 
 				<!-- Slide 3 -->

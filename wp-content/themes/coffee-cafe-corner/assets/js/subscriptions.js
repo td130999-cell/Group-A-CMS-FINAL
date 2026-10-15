@@ -14,14 +14,36 @@
         if ($topSlider.length) {
             var $topSlides = $topSlider.find('.quills-sub-slide');
             var $topDots   = $topSlider.find('.quills-sub-dot');
+            var $topPrev   = $topSlider.find('.quills-sub-nav-prev');
+            var $topNext   = $topSlider.find('.quills-sub-nav-next');
             var topTimer   = null;
             var topIndex   = 0;
             var topCount   = $topSlides.length;
 
+            function updateTopNavState() {
+                if (topIndex === 0) {
+                    $topPrev.addClass('is-disabled');
+                } else {
+                    $topPrev.removeClass('is-disabled');
+                }
+
+                if (topIndex === topCount - 1) {
+                    $topNext.addClass('is-disabled');
+                } else {
+                    $topNext.removeClass('is-disabled');
+                }
+            }
+
             function goToTopSlide(index) {
-                topIndex = (index + topCount) % topCount;
+                if (index < 0) {
+                    index = 0;
+                } else if (index >= topCount) {
+                    index = topCount - 1;
+                }
+                topIndex = index;
                 $topSlides.removeClass('is-active').eq(topIndex).addClass('is-active');
                 $topDots.removeClass('is-active').eq(topIndex).addClass('is-active');
+                updateTopNavState();
             }
 
             $topDots.on('click', function() {
@@ -30,9 +52,29 @@
                 resetTopTimer();
             });
 
+            $topPrev.on('click', function(e) {
+                e.preventDefault();
+                if (topIndex > 0) {
+                    goToTopSlide(topIndex - 1);
+                    resetTopTimer();
+                }
+            });
+
+            $topNext.on('click', function(e) {
+                e.preventDefault();
+                if (topIndex < topCount - 1) {
+                    goToTopSlide(topIndex + 1);
+                    resetTopTimer();
+                }
+            });
+
             function startTopTimer() {
                 topTimer = setInterval(function() {
-                    goToTopSlide(topIndex + 1);
+                    var nextIdx = topIndex + 1;
+                    if (nextIdx >= topCount) {
+                        nextIdx = 0;
+                    }
+                    goToTopSlide(nextIdx);
                 }, 6000);
             }
 
@@ -41,6 +83,16 @@
                 startTopTimer();
             }
 
+            $topSlider.on('mouseenter', function() {
+                if (topTimer) {
+                    clearInterval(topTimer);
+                    topTimer = null;
+                }
+            }).on('mouseleave', function() {
+                resetTopTimer();
+            });
+
+            updateTopNavState();
             startTopTimer();
         }
 
@@ -49,14 +101,36 @@
         if ($botSlider.length) {
             var $botSlides = $botSlider.find('.quills-sub-bottom-slide');
             var $botDots   = $botSlider.find('.quills-sub-bottom-dot');
+            var $botPrev   = $botSlider.find('.quills-sub-nav-prev');
+            var $botNext   = $botSlider.find('.quills-sub-nav-next');
             var botTimer   = null;
             var botIndex   = 0;
             var botCount   = $botSlides.length;
 
+            function updateBotNavState() {
+                if (botIndex === 0) {
+                    $botPrev.addClass('is-disabled');
+                } else {
+                    $botPrev.removeClass('is-disabled');
+                }
+
+                if (botIndex === botCount - 1) {
+                    $botNext.addClass('is-disabled');
+                } else {
+                    $botNext.removeClass('is-disabled');
+                }
+            }
+
             function goToBotSlide(index) {
-                botIndex = (index + botCount) % botCount;
+                if (index < 0) {
+                    index = 0;
+                } else if (index >= botCount) {
+                    index = botCount - 1;
+                }
+                botIndex = index;
                 $botSlides.removeClass('is-active').eq(botIndex).addClass('is-active');
                 $botDots.removeClass('is-active').eq(botIndex).addClass('is-active');
+                updateBotNavState();
             }
 
             $botDots.on('click', function() {
@@ -65,9 +139,29 @@
                 resetBotTimer();
             });
 
+            $botPrev.on('click', function(e) {
+                e.preventDefault();
+                if (botIndex > 0) {
+                    goToBotSlide(botIndex - 1);
+                    resetBotTimer();
+                }
+            });
+
+            $botNext.on('click', function(e) {
+                e.preventDefault();
+                if (botIndex < botCount - 1) {
+                    goToBotSlide(botIndex + 1);
+                    resetBotTimer();
+                }
+            });
+
             function startBotTimer() {
                 botTimer = setInterval(function() {
-                    goToBotSlide(botIndex + 1);
+                    var nextIdx = botIndex + 1;
+                    if (nextIdx >= botCount) {
+                        nextIdx = 0;
+                    }
+                    goToBotSlide(nextIdx);
                 }, 7000);
             }
 
@@ -76,6 +170,16 @@
                 startBotTimer();
             }
 
+            $botSlider.on('mouseenter', function() {
+                if (botTimer) {
+                    clearInterval(botTimer);
+                    botTimer = null;
+                }
+            }).on('mouseleave', function() {
+                resetBotTimer();
+            });
+
+            updateBotNavState();
             startBotTimer();
         }
 
