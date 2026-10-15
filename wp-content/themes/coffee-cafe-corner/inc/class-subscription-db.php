@@ -105,6 +105,7 @@ class Coffee_Cafe_Corner_Subscription_DB {
 				'notes'         => 'dark chocolate, caramelized sugar, candied orange',
 				'process'       => 'Washed, Natural',
 				'origins'       => 'Guatemala & Colombia',
+				'rollover_html' => '<p><em><strong>Baker\'s chocolate, blueberries, hazelnut<br /><br /></strong></em><strong>Our Signature Espresso<br />Process: </strong>Washed &amp; Natural<strong><br />Origins: </strong>Colombia, Nicaragua, Ethiopia</p>',
 				'order'         => 1,
 			),
 			array(
@@ -119,6 +120,7 @@ class Coffee_Cafe_Corner_Subscription_DB {
 				'notes'         => 'honey, chocolate, clementine',
 				'process'       => 'Washed',
 				'origins'       => 'Colombia, Guatemala, & Ethiopia',
+				'rollover_html' => '<p><em><strong>Graham cracker, cooked cherries, vanilla<br /><br /></strong></em><strong>Our Signature House Blend</strong><em><strong><br /></strong></em><strong>Process: </strong>Washed &amp; Natural<strong><br />Origins: </strong>Colombia, Guatemala, Ethiopia</p>',
 				'order'         => 2,
 			),
 			array(
@@ -133,6 +135,7 @@ class Coffee_Cafe_Corner_Subscription_DB {
 				'notes'         => 'Chocolate, caramel, well-balanced.',
 				'process'       => 'Washed, Natural',
 				'origins'       => 'Brazil & Colombia',
+				'rollover_html' => '<p><em><strong>Chocolate, caramel, well-balanced.<br /></strong></em><strong><br />Process: </strong>Washed, Natural<br /><strong>Origins:</strong> Brazil &amp; Colombia</p>',
 				'order'         => 3,
 			),
 			array(
@@ -147,6 +150,7 @@ class Coffee_Cafe_Corner_Subscription_DB {
 				'notes'         => 'smoky dark cacao, molasses, toasted almond',
 				'process'       => 'Washed',
 				'origins'       => 'Colombia & Ethiopia',
+				'rollover_html' => '<p><em><strong>Chocolate cake, caramel, rich, tobacco finish<br /><br /></strong></em><strong>Origins:</strong> Colombia, Ethiopia<br /><strong>Producers:</strong> Various smallholder farms<br /><strong>Process: </strong>Washed<br /><strong>Varietals:</strong> Bourbon, Caturra, Catuai, Parainema<br /><strong>Elevation: </strong>1200-2100 MASL</p>',
 				'order'         => 4,
 			),
 			array(
@@ -161,6 +165,7 @@ class Coffee_Cafe_Corner_Subscription_DB {
 				'notes'         => 'Rotating single origins curated by our head roaster',
 				'process'       => 'Seasonal Selection',
 				'origins'       => 'Curated Single Origins',
+				'rollover_html' => '<p>Our flagship subscription offering features a rotation of our favorite single-origin coffees</p>',
 				'order'         => 5,
 			),
 			array(
@@ -175,6 +180,7 @@ class Coffee_Cafe_Corner_Subscription_DB {
 				'notes'         => 'One bag of Inkwell house blend + one bag of rotating single origin',
 				'process'       => 'Washed & Natural',
 				'origins'       => 'Blend & Single Origin',
+				'rollover_html' => '<p>Our house blend Inkwell and the current seasonal coffee.</p>',
 				'order'         => 6,
 			),
 			array(
@@ -189,6 +195,7 @@ class Coffee_Cafe_Corner_Subscription_DB {
 				'notes'         => 'Sunrise light roast blend + Sunset dark roast blend pairing',
 				'process'       => 'Washed & Natural',
 				'origins'       => 'Blend & Decaf',
+				'rollover_html' => '<p>Our signature house blend Inkwell and Decaf de Caña.</p>',
 				'order'         => 7,
 			),
 			array(
@@ -203,6 +210,7 @@ class Coffee_Cafe_Corner_Subscription_DB {
 				'notes'         => 'Two 12oz bags curated for the dedicated espresso and milk drinks lover',
 				'process'       => 'Washed & Natural',
 				'origins'       => 'Espresso Selections',
+				'rollover_html' => '<p>Our signature Blacksmith espresso and our seasonal espresso.</p>',
 				'order'         => 8,
 			),
 			array(
@@ -217,6 +225,7 @@ class Coffee_Cafe_Corner_Subscription_DB {
 				'notes'         => 'sweet maple, plum, cocoa powder',
 				'process'       => 'Sugarcane EA Decaf',
 				'origins'       => 'Colombia',
+				'rollover_html' => '<p><em><strong>Milk chocolate, hazelnut, red apple</strong></em></p><p><strong>Country</strong>: Colombia<br /><strong>Region</strong>: Huila<br /><strong>Process:</strong> Sugarcane Decaf<br /><strong>Elevation</strong>: 1,400 - 2,000 Meters Above Sea Level (MASL)</p>',
 				'order'         => 9,
 			),
 		);
@@ -270,6 +279,7 @@ class Coffee_Cafe_Corner_Subscription_DB {
 				update_post_meta( $product_id, '_coffee_origins', $item['origins'] );
 				update_post_meta( $product_id, '_coffee_image', $item['image'] );
 				update_post_meta( $product_id, '_coffee_fallback_image', $item['fallback'] );
+				update_post_meta( $product_id, '_subscription_rollover_html', $item['rollover_html'] );
 				update_post_meta( $product_id, '_is_subscription_product', 'yes' );
 
 				// Assign to Subscriptions category (append = true so Coffee category is preserved)
@@ -432,6 +442,7 @@ class Coffee_Cafe_Corner_Subscription_DB {
 		$tasting_notes = get_post_meta( $product_id, '_coffee_tasting_notes', true );
 		$process       = get_post_meta( $product_id, '_coffee_process', true );
 		$origins       = get_post_meta( $product_id, '_coffee_origins', true );
+		$rollover_html = get_post_meta( $product_id, '_subscription_rollover_html', true );
 		?>
 		<div class="quills-product-card" data-product-id="<?php echo esc_attr( $product_id ); ?>">
 			<div class="quills-product-media">
@@ -439,19 +450,36 @@ class Coffee_Cafe_Corner_Subscription_DB {
 					<img src="<?php echo esc_url( $image_url ); ?>" alt="<?php echo esc_attr( $title ); ?>" class="quills-product-img" loading="lazy" />
 				</a>
 
-				<!-- Hover Tasting Details Card -->
-				<div class="quills-product-hover-card">
-					<h4 class="quills-hover-title"><?php echo esc_html( $title ); ?></h4>
-					<div class="quills-hover-divider"></div>
-					<?php if ( ! empty( $tasting_notes ) ) : ?>
-						<p class="quills-hover-notes"><?php echo esc_html( $tasting_notes ); ?></p>
-					<?php endif; ?>
-					<?php if ( ! empty( $process ) ) : ?>
-						<p class="quills-hover-meta"><strong><?php esc_html_e( 'Process:', 'coffee-cafe-corner' ); ?></strong> <?php echo esc_html( $process ); ?></p>
-					<?php endif; ?>
-					<?php if ( ! empty( $origins ) ) : ?>
-						<p class="quills-hover-meta"><strong><?php esc_html_e( 'Origins:', 'coffee-cafe-corner' ); ?></strong> <?php echo esc_html( $origins ); ?></p>
-					<?php endif; ?>
+				<!-- Hover Tasting Details Card matching Image 1 & Quills Coffee -->
+				<div class="rollover_inner">
+					<div class="rollover_wrapper">
+						<div class="rollover_top">
+							<span class="collection_name"></span>
+							<h4 class="prod_title"><?php echo esc_html( $title ); ?></h4>
+						</div>
+						<div class="rollover_content">
+							<div class="rte">
+								<div class="metafield-rich_text_field">
+									<?php
+									if ( ! empty( $rollover_html ) ) {
+										echo wp_kses_post( $rollover_html );
+									} else {
+										?>
+										<p><em><strong><?php echo esc_html( $tasting_notes ); ?></strong></em></p>
+										<?php if ( ! empty( $process ) ) : ?>
+											<p><strong><?php esc_html_e( 'Process:', 'coffee-cafe-corner' ); ?></strong> <?php echo esc_html( $process ); ?></p>
+										<?php endif; ?>
+										<?php if ( ! empty( $origins ) ) : ?>
+											<p><strong><?php esc_html_e( 'Origins:', 'coffee-cafe-corner' ); ?></strong> <?php echo esc_html( $origins ); ?></p>
+										<?php endif; ?>
+										<?php
+									}
+									?>
+								</div>
+							</div>
+							<p class="rollover_short"></p>
+						</div>
+					</div>
 				</div>
 			</div>
 

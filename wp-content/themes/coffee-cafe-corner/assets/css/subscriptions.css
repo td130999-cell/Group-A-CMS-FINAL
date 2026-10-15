@@ -9,6 +9,8 @@
    Typography & Font Faces
    ========================================= */
 
+@import url('https://fonts.googleapis.com/css2?family=Questrial&display=swap');
+
 @font-face {
     font-family: 'El Hidrant';
     src: url('../fonts/ElHidrant.woff2') format('woff2');
@@ -449,70 +451,93 @@
     transform: scale(1.03);
 }
 
-/* Hover Tasting Details Card */
-.quills-product-hover-card {
+/* Hover Tasting Details Card (Rollover) matching Image 1 & Quills Coffee */
+.rollover_inner {
     position: absolute;
     top: 0;
     left: 0;
-    right: 0;
-    background: rgba(22, 22, 22, 0.88);
-    backdrop-filter: blur(4px);
+    width: 100%;
+    height: 100%;
+    background: #00000087; /* Exact Quills Coffee overlay */
+    padding: 24px 20px;
     color: #ffffff;
-    padding: 18px 20px 22px 20px;
-    border-top-left-radius: 12px;
-    border-top-right-radius: 12px;
     box-sizing: border-box;
+    border-radius: 12px;
     opacity: 0;
     visibility: hidden;
-    transform: translateY(-4px);
-    transition: opacity 0.25s ease, transform 0.25s ease, visibility 0.25s ease;
+    transition: opacity 0.15s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.15s ease;
     pointer-events: none;
-    z-index: 5;
+    z-index: 10;
 }
 
-.quills-product-card:hover .quills-product-hover-card {
+.quills-product-card:hover .rollover_inner {
     opacity: 1;
     visibility: visible;
-    transform: translateY(0);
 }
 
-.quills-hover-title {
-    font-family: 'Clarendon URW Extra Narrow', Georgia, serif;
-    font-style: italic;
-    font-size: 17px;
+.rollover_inner .rollover_wrapper {
+    max-height: calc(100% - 10px);
+    overflow: auto;
+    scrollbar-width: thin;
+}
+
+.rollover_inner .rollover_top {
+    display: block;
+    border-bottom: 2px solid #ffffff;
+    padding-bottom: 10px;
+    margin-bottom: 16px;
+}
+
+.rollover_inner .rollover_top .collection_name {
+    display: block;
+    font-size: 15px;
+}
+
+.rollover_inner .rollover_top .prod_title {
+    font-family: 'Clarendon URW Extra Narrow', Georgia, 'Times New Roman', serif;
     font-weight: 700;
+    font-style: italic;
+    font-size: 19px;
     color: #ffffff;
+    display: block;
+    margin: 4px 0 0 0;
+    line-height: 1.25;
+    letter-spacing: 0.2px;
+}
+
+.rollover_inner .rollover_content p {
+    display: block;
     margin: 0 0 10px 0;
-    line-height: 1.3;
-}
-
-.quills-hover-divider {
-    height: 1px;
-    background-color: #ffffff;
-    opacity: 0.7;
-    margin-bottom: 12px;
-    width: 100%;
-}
-
-.quills-hover-notes {
-    font-family: 'Clarendon URW Extra Narrow', Georgia, serif;
-    font-style: italic;
-    font-size: 14.5px;
+    font-size: 15px;
     line-height: 1.45;
+    font-family: 'Questrial', 'Century Gothic', -apple-system, sans-serif;
+    font-weight: 400;
+    font-style: normal;
     color: #ffffff;
-    margin: 0 0 14px 0;
+    letter-spacing: 0.1px;
 }
 
-.quills-hover-meta {
-    font-size: 13.5px;
+.rollover_inner .rollover_content p em,
+.rollover_inner .rollover_content p em strong {
+    font-family: 'Questrial', 'Century Gothic', -apple-system, sans-serif;
+    font-style: italic;
+    font-weight: 600;
+    color: #ffffff;
+    display: block;
+    margin-bottom: 14px;
+    font-size: 15px;
     line-height: 1.4;
-    color: #f0f0f0;
-    margin: 0 0 5px 0;
 }
 
-.quills-hover-meta strong {
+.rollover_inner .rollover_content strong {
+    font-family: 'Questrial', 'Century Gothic', -apple-system, sans-serif;
     font-weight: 700;
     color: #ffffff;
+}
+
+.rollover_inner .rollover_content .rollover_short {
+    display: block;
+    margin-top: 14px;
 }
 
 /* Product Info below Media */
