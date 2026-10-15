@@ -17,10 +17,29 @@
     $(document).ready(function() {
         var $grid = $('#quills-coffee-grid');
         var $count = $('#quills-products-count');
-        var currentTab = 'all';
-        var currentProcess = 'all';
-        var currentRoast = 'all';
         var currentSort = $('#quills-coffee-sort-select').val() || 'best-selling';
+
+        function getSelectedFilters() {
+            var process = $('input[name="filter_process[]"]:checked').map(function() { return this.value; }).get();
+            var roast = $('input[name="filter_roast[]"]:checked').map(function() { return this.value; }).get();
+            var types = $('input[name="filter_type[]"]:checked').map(function() { return this.value; }).get();
+            return {
+                process: process,
+                roast: roast,
+                tab: types
+            };
+        }
+
+        function syncCategoryPills(selectedTypes) {
+            $('.quills-category-pill').each(function() {
+                var tab = $(this).data('tab');
+                if (selectedTypes.indexOf(tab) !== -1) {
+                    $(this).addClass('is-active');
+                } else {
+                    $(this).removeClass('is-active');
+                }
+            });
+        }
 
         // 1. Accordion Toggle
         $('.quills-accordion-header').on('click', function(e) {
@@ -45,40 +64,26 @@
             e.preventDefault();
             var $pill = $(this);
             var selectedTab = $pill.data('tab');
+            var $targetCheckbox = $('input[name="filter_type[]"][value="' + selectedTab + '"]');
 
             if ($pill.hasClass('is-active')) {
-                // Toggle off back to all
                 $pill.removeClass('is-active');
-                currentTab = 'all';
-                $('input[name="filter_type"][value="all"]').prop('checked', true);
+                $targetCheckbox.prop('checked', false);
             } else {
-                $('.quills-category-pill').removeClass('is-active');
+                // If single pill click mode preferred, uncheck other pills or toggle
                 $pill.addClass('is-active');
-                currentTab = selectedTab;
-                $('input[name="filter_type"][value="' + selectedTab + '"]').prop('checked', true);
+                $targetCheckbox.prop('checked', true);
             }
 
+            var filters = getSelectedFilters();
+            syncCategoryPills(filters.tab);
             fetchFilteredCoffee();
         });
 
-        // 3. Sidebar Radio Filters
-        $('input[name="filter_process"]').on('change', function() {
-            currentProcess = $(this).val();
-            fetchFilteredCoffee();
-        });
-
-        $('input[name="filter_roast"]').on('change', function() {
-            currentRoast = $(this).val();
-            fetchFilteredCoffee();
-        });
-
-        $('input[name="filter_type"]').on('change', function() {
-            currentTab = $(this).val();
-            // Sync pill buttons
-            $('.quills-category-pill').removeClass('is-active');
-            if (currentTab !== 'all') {
-                $('.quills-category-pill[data-tab="' + currentTab + '"]').addClass('is-active');
-            }
+        // 3. Sidebar Square Checkbox Filters
+        $('input[name="filter_process[]"], input[name="filter_roast[]"], input[name="filter_type[]"]').on('change', function() {
+            var filters = getSelectedFilters();
+            syncCategoryPills(filters.tab);
             fetchFilteredCoffee();
         });
 
@@ -91,15 +96,16 @@
         // AJAX Fetch Function
         function fetchFilteredCoffee() {
             $grid.css('opacity', '0.4');
+            var filters = getSelectedFilters();
 
             $.ajax({
                 url: (typeof quillsData !== 'undefined' && quillsData.ajaxUrl) ? quillsData.ajaxUrl : '/wp-admin/admin-ajax.php',
                 type: 'POST',
                 data: {
                     action: 'quills_filter_coffee',
-                    tab: currentTab,
-                    process: currentProcess,
-                    roast: currentRoast,
+                    tab: filters.tab,
+                    process: filters.process,
+                    roast: filters.roast,
                     sort_by: currentSort
                 },
                 success: function(res) {

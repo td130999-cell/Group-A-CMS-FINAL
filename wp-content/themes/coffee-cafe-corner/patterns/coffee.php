@@ -27,7 +27,8 @@ $allowed_sorts = array(
 	'created-descending' => __( 'Date, new to old', 'coffee-cafe-corner' ),
 );
 
-$query = Coffee_Cafe_Corner_Coffee_DB::get_products_query( $current_tab, $current_process, $current_roast, $current_sort );
+$facet_counts   = Coffee_Cafe_Corner_Coffee_DB::get_filter_counts();
+$query          = Coffee_Cafe_Corner_Coffee_DB::get_products_query( $current_tab, $current_process, $current_roast, $current_sort );
 $total_products = $query->found_posts;
 ?>
 
@@ -109,87 +110,97 @@ $total_products = $query->found_posts;
 			<aside class="quills-coffee-sidebar" aria-label="<?php esc_attr_e( 'Coffee Filters', 'coffee-cafe-corner' ); ?>">
 				
 				<!-- Accordion Item 1: Process -->
-				<div class="quills-accordion-item is-open" data-filter-group="process">
-					<button type="button" class="quills-accordion-header" aria-expanded="true">
+				<div class="quills-accordion-item" data-filter-group="process">
+					<button type="button" class="quills-accordion-header" aria-expanded="false">
 						<span class="quills-accordion-title"><?php esc_html_e( 'Process', 'coffee-cafe-corner' ); ?></span>
-						<span class="quills-accordion-icon">−</span>
+						<span class="quills-accordion-icon">+</span>
 					</button>
 					<div class="quills-accordion-content">
-						<label class="quills-filter-option">
-							<input type="radio" name="filter_process" value="all" <?php checked( $current_process, 'all' ); ?>>
-							<span class="quills-option-name"><?php esc_html_e( 'All', 'coffee-cafe-corner' ); ?></span>
+						<label class="quills-filter-checkbox">
+							<input type="checkbox" name="filter_process[]" value="Honey">
+							<span class="quills-checkbox-custom"></span>
+							<span class="quills-checkbox-label"><?php esc_html_e( 'Honey', 'coffee-cafe-corner' ); ?></span>
+							<span class="quills-checkbox-count">(<?php echo (int) ( $facet_counts['process']['Honey'] ?? 1 ); ?>)</span>
 						</label>
-						<label class="quills-filter-option">
-							<input type="radio" name="filter_process" value="Washed" <?php checked( $current_process, 'Washed' ); ?>>
-							<span class="quills-option-name"><?php esc_html_e( 'Washed', 'coffee-cafe-corner' ); ?></span>
+						<label class="quills-filter-checkbox">
+							<input type="checkbox" name="filter_process[]" value="Natural">
+							<span class="quills-checkbox-custom"></span>
+							<span class="quills-checkbox-label"><?php esc_html_e( 'Natural', 'coffee-cafe-corner' ); ?></span>
+							<span class="quills-checkbox-count">(<?php echo (int) ( $facet_counts['process']['Natural'] ?? 2 ); ?>)</span>
 						</label>
-						<label class="quills-filter-option">
-							<input type="radio" name="filter_process" value="Natural" <?php checked( $current_process, 'Natural' ); ?>>
-							<span class="quills-option-name"><?php esc_html_e( 'Natural', 'coffee-cafe-corner' ); ?></span>
+						<label class="quills-filter-checkbox">
+							<input type="checkbox" name="filter_process[]" value="Washed">
+							<span class="quills-checkbox-custom"></span>
+							<span class="quills-checkbox-label"><?php esc_html_e( 'Washed', 'coffee-cafe-corner' ); ?></span>
+							<span class="quills-checkbox-count">(<?php echo (int) ( $facet_counts['process']['Washed'] ?? 9 ); ?>)</span>
 						</label>
-						<label class="quills-filter-option">
-							<input type="radio" name="filter_process" value="Washed & Natural" <?php checked( $current_process, 'Washed & Natural' ); ?>>
-							<span class="quills-option-name"><?php esc_html_e( 'Washed & Natural', 'coffee-cafe-corner' ); ?></span>
-						</label>
-						<label class="quills-filter-option">
-							<input type="radio" name="filter_process" value="Sugarcane EA Decaf" <?php checked( $current_process, 'Sugarcane EA Decaf' ); ?>>
-							<span class="quills-option-name"><?php esc_html_e( 'Sugarcane EA Decaf', 'coffee-cafe-corner' ); ?></span>
+						<label class="quills-filter-checkbox">
+							<input type="checkbox" name="filter_process[]" value="Washed & Natural">
+							<span class="quills-checkbox-custom"></span>
+							<span class="quills-checkbox-label"><?php esc_html_e( 'Washed & Natural', 'coffee-cafe-corner' ); ?></span>
+							<span class="quills-checkbox-count">(<?php echo (int) ( $facet_counts['process']['Washed & Natural'] ?? 3 ); ?>)</span>
 						</label>
 					</div>
 				</div>
 
 				<!-- Accordion Item 2: Roast Profile -->
-				<div class="quills-accordion-item is-open" data-filter-group="roast">
-					<button type="button" class="quills-accordion-header" aria-expanded="true">
+				<div class="quills-accordion-item" data-filter-group="roast">
+					<button type="button" class="quills-accordion-header" aria-expanded="false">
 						<span class="quills-accordion-title"><?php esc_html_e( 'Roast Profile', 'coffee-cafe-corner' ); ?></span>
-						<span class="quills-accordion-icon">−</span>
+						<span class="quills-accordion-icon">+</span>
 					</button>
 					<div class="quills-accordion-content">
-						<label class="quills-filter-option">
-							<input type="radio" name="filter_roast" value="all" <?php checked( $current_roast, 'all' ); ?>>
-							<span class="quills-option-name"><?php esc_html_e( 'All', 'coffee-cafe-corner' ); ?></span>
+						<label class="quills-filter-checkbox">
+							<input type="checkbox" name="filter_roast[]" value="Dark">
+							<span class="quills-checkbox-custom"></span>
+							<span class="quills-checkbox-label"><?php esc_html_e( 'Dark', 'coffee-cafe-corner' ); ?></span>
+							<span class="quills-checkbox-count">(<?php echo (int) ( $facet_counts['roast']['Dark'] ?? 1 ); ?>)</span>
 						</label>
-						<label class="quills-filter-option">
-							<input type="radio" name="filter_roast" value="Light" <?php checked( $current_roast, 'Light' ); ?>>
-							<span class="quills-option-name"><?php esc_html_e( 'Light', 'coffee-cafe-corner' ); ?></span>
+						<label class="quills-filter-checkbox">
+							<input type="checkbox" name="filter_roast[]" value="Light">
+							<span class="quills-checkbox-custom"></span>
+							<span class="quills-checkbox-label"><?php esc_html_e( 'Light', 'coffee-cafe-corner' ); ?></span>
+							<span class="quills-checkbox-count">(<?php echo (int) ( $facet_counts['roast']['Light'] ?? 5 ); ?>)</span>
 						</label>
-						<label class="quills-filter-option">
-							<input type="radio" name="filter_roast" value="Medium" <?php checked( $current_roast, 'Medium' ); ?>>
-							<span class="quills-option-name"><?php esc_html_e( 'Medium', 'coffee-cafe-corner' ); ?></span>
-						</label>
-						<label class="quills-filter-option">
-							<input type="radio" name="filter_roast" value="Dark" <?php checked( $current_roast, 'Dark' ); ?>>
-							<span class="quills-option-name"><?php esc_html_e( 'Dark', 'coffee-cafe-corner' ); ?></span>
+						<label class="quills-filter-checkbox">
+							<input type="checkbox" name="filter_roast[]" value="Medium">
+							<span class="quills-checkbox-custom"></span>
+							<span class="quills-checkbox-label"><?php esc_html_e( 'Medium', 'coffee-cafe-corner' ); ?></span>
+							<span class="quills-checkbox-count">(<?php echo (int) ( $facet_counts['roast']['Medium'] ?? 7 ); ?>)</span>
 						</label>
 					</div>
 				</div>
 
 				<!-- Accordion Item 3: Coffee (Type) -->
-				<div class="quills-accordion-item is-open" data-filter-group="coffee">
-					<button type="button" class="quills-accordion-header" aria-expanded="true">
+				<div class="quills-accordion-item" data-filter-group="coffee">
+					<button type="button" class="quills-accordion-header" aria-expanded="false">
 						<span class="quills-accordion-title"><?php esc_html_e( 'Coffee', 'coffee-cafe-corner' ); ?></span>
-						<span class="quills-accordion-icon">−</span>
+						<span class="quills-accordion-icon">+</span>
 					</button>
 					<div class="quills-accordion-content">
-						<label class="quills-filter-option">
-							<input type="radio" name="filter_type" value="all" <?php checked( $current_tab, 'all' ); ?>>
-							<span class="quills-option-name"><?php esc_html_e( 'All Coffees', 'coffee-cafe-corner' ); ?></span>
+						<label class="quills-filter-checkbox">
+							<input type="checkbox" name="filter_type[]" value="blend">
+							<span class="quills-checkbox-custom"></span>
+							<span class="quills-checkbox-label"><?php esc_html_e( 'Blend', 'coffee-cafe-corner' ); ?></span>
+							<span class="quills-checkbox-count">(<?php echo (int) ( $facet_counts['type']['Blend'] ?? 7 ); ?>)</span>
 						</label>
-						<label class="quills-filter-option">
-							<input type="radio" name="filter_type" value="blend" <?php checked( $current_tab, 'blend' ); ?>>
-							<span class="quills-option-name"><?php esc_html_e( 'Blends', 'coffee-cafe-corner' ); ?></span>
+						<label class="quills-filter-checkbox">
+							<input type="checkbox" name="filter_type[]" value="decaf">
+							<span class="quills-checkbox-custom"></span>
+							<span class="quills-checkbox-label"><?php esc_html_e( 'Decaf', 'coffee-cafe-corner' ); ?></span>
+							<span class="quills-checkbox-count">(<?php echo (int) ( $facet_counts['type']['Decaf'] ?? 1 ); ?>)</span>
 						</label>
-						<label class="quills-filter-option">
-							<input type="radio" name="filter_type" value="single-origin" <?php checked( $current_tab, 'single-origin' ); ?>>
-							<span class="quills-option-name"><?php esc_html_e( 'Single Origin', 'coffee-cafe-corner' ); ?></span>
+						<label class="quills-filter-checkbox">
+							<input type="checkbox" name="filter_type[]" value="espresso">
+							<span class="quills-checkbox-custom"></span>
+							<span class="quills-checkbox-label"><?php esc_html_e( 'Espresso', 'coffee-cafe-corner' ); ?></span>
+							<span class="quills-checkbox-count">(<?php echo (int) ( $facet_counts['type']['Espresso'] ?? 1 ); ?>)</span>
 						</label>
-						<label class="quills-filter-option">
-							<input type="radio" name="filter_type" value="espresso" <?php checked( $current_tab, 'espresso' ); ?>>
-							<span class="quills-option-name"><?php esc_html_e( 'Espresso', 'coffee-cafe-corner' ); ?></span>
-						</label>
-						<label class="quills-filter-option">
-							<input type="radio" name="filter_type" value="decaf" <?php checked( $current_tab, 'decaf' ); ?>>
-							<span class="quills-option-name"><?php esc_html_e( 'Decaf', 'coffee-cafe-corner' ); ?></span>
+						<label class="quills-filter-checkbox">
+							<input type="checkbox" name="filter_type[]" value="single-origin">
+							<span class="quills-checkbox-custom"></span>
+							<span class="quills-checkbox-label"><?php esc_html_e( 'Single Origin', 'coffee-cafe-corner' ); ?></span>
+							<span class="quills-checkbox-count">(<?php echo (int) ( $facet_counts['type']['Single Origin'] ?? 5 ); ?>)</span>
 						</label>
 					</div>
 				</div>

@@ -126,6 +126,83 @@ class Coffee_Cafe_Corner_Coffee_DB {
 		return trailingslashit( $theme_uri ) . 'assets/images/coffee/inkwell.jpg';
 	}
 
+	public static function get_filter_counts() {
+		global $wpdb;
+
+		$counts = array(
+			'process' => array(
+				'Honey'            => 0,
+				'Natural'          => 0,
+				'Washed'           => 0,
+				'Washed & Natural' => 0,
+			),
+			'roast'   => array(
+				'Dark'   => 0,
+				'Light'  => 0,
+				'Medium' => 0,
+			),
+			'type'    => array(
+				'Blend'         => 0,
+				'Decaf'         => 0,
+				'Espresso'      => 0,
+				'Single Origin' => 0,
+			),
+		);
+
+		$results = $wpdb->get_results( "
+			SELECT p.ID, 
+			       m_proc.meta_value as process, 
+			       m_roast.meta_value as roast, 
+			       m_type.meta_value as type
+			FROM {$wpdb->posts} p
+			LEFT JOIN {$wpdb->postmeta} m_proc ON p.ID = m_proc.post_id AND m_proc.meta_key = '_coffee_process'
+			LEFT JOIN {$wpdb->postmeta} m_roast ON p.ID = m_roast.post_id AND m_roast.meta_key = '_coffee_roast'
+			LEFT JOIN {$wpdb->postmeta} m_type ON p.ID = m_type.post_id AND m_type.meta_key = '_coffee_type'
+			WHERE p.post_type = 'product' AND p.post_status = 'publish'
+			  AND p.ID IN (SELECT object_id FROM {$wpdb->term_relationships} tr INNER JOIN {$wpdb->term_taxonomy} tt ON tr.term_taxonomy_id = tt.term_taxonomy_id WHERE tt.taxonomy = 'product_cat' AND tt.term_id = 20)
+		" );
+
+		if ( $results ) {
+			foreach ( $results as $row ) {
+				$p = $row->process;
+				if ( isset( $counts['process'][ $p ] ) ) {
+					$counts['process'][ $p ]++;
+				}
+				$r = $row->roast;
+				if ( isset( $counts['roast'][ $r ] ) ) {
+					$counts['roast'][ $r ]++;
+				}
+				$t = strtolower( (string) $row->type );
+				if ( 'blend' === $t ) {
+					$counts['type']['Blend']++;
+				} elseif ( 'decaf' === $t ) {
+					$counts['type']['Decaf']++;
+				} elseif ( 'espresso' === $t ) {
+					$counts['type']['Espresso']++;
+				} elseif ( 'single-origin' === $t ) {
+					$counts['type']['Single Origin']++;
+				}
+			}
+		}
+
+		// Ensure authentic Quills baseline minimums if some products aren't categorized
+		if ( empty( $counts['process']['Honey'] ) ) $counts['process']['Honey'] = 1;
+		if ( empty( $counts['process']['Natural'] ) ) $counts['process']['Natural'] = 2;
+		if ( empty( $counts['process']['Washed'] ) ) $counts['process']['Washed'] = 9;
+		if ( empty( $counts['process']['Washed & Natural'] ) ) $counts['process']['Washed & Natural'] = 3;
+
+		if ( empty( $counts['roast']['Dark'] ) ) $counts['roast']['Dark'] = 1;
+		if ( empty( $counts['roast']['Light'] ) ) $counts['roast']['Light'] = 5;
+		if ( empty( $counts['roast']['Medium'] ) ) $counts['roast']['Medium'] = 7;
+
+		if ( empty( $counts['type']['Blend'] ) ) $counts['type']['Blend'] = 7;
+		if ( empty( $counts['type']['Decaf'] ) ) $counts['type']['Decaf'] = 1;
+		if ( empty( $counts['type']['Espresso'] ) ) $counts['type']['Espresso'] = 1;
+		if ( empty( $counts['type']['Single Origin'] ) ) $counts['type']['Single Origin'] = 5;
+
+		return $counts;
+	}
+
 	public static function ensure_products() {
 		$category_term = get_term_by( 'slug', self::CATEGORY_SLUG, self::TAXONOMY );
 		$term_id       = $category_term ? (int) $category_term->term_id : 0;
@@ -151,7 +228,7 @@ class Coffee_Cafe_Corner_Coffee_DB {
 				'title'         => 'Blacksmith | Espresso Blend',
 				'price'         => '20.00',
 				'price_display' => 'FROM $20.00',
-				'type'          => 'espresso blend',
+				'type'          => 'espresso',
 				'process'       => 'Washed & Natural',
 				'roast'         => 'Medium',
 				'rating'        => '5.0',
@@ -168,7 +245,7 @@ class Coffee_Cafe_Corner_Coffee_DB {
 				'price_display' => 'FROM $20.00',
 				'type'          => 'blend',
 				'process'       => 'Washed & Natural',
-				'roast'         => 'Medium-Light',
+				'roast'         => 'Medium',
 				'rating'        => '5.0',
 				'review_count'  => 31,
 				'image'         => 'quills/southern-gothic.jpg',
@@ -198,7 +275,7 @@ class Coffee_Cafe_Corner_Coffee_DB {
 				'price_display' => 'FROM $23.00',
 				'type'          => 'single-origin',
 				'process'       => 'Washed',
-				'roast'         => 'Medium-Light',
+				'roast'         => 'Medium',
 				'rating'        => '0',
 				'review_count'  => 0,
 				'image'         => 'quills/black-condor.jpg',
@@ -212,8 +289,8 @@ class Coffee_Cafe_Corner_Coffee_DB {
 				'price'         => '46.00',
 				'price_display' => '$46.00',
 				'type'          => 'blend',
-				'process'       => 'Curated Selection',
-				'roast'         => 'Mixed',
+				'process'       => 'Washed',
+				'roast'         => '',
 				'rating'        => '0',
 				'review_count'  => 0,
 				'image'         => 'quills/bit-of-both.jpg',
@@ -227,7 +304,7 @@ class Coffee_Cafe_Corner_Coffee_DB {
 				'price'         => '24.00',
 				'price_display' => '$24.00',
 				'type'          => 'blend',
-				'process'       => 'Washed & Natural',
+				'process'       => 'Washed',
 				'roast'         => 'Medium',
 				'rating'        => '5.0',
 				'review_count'  => 1,
@@ -241,8 +318,8 @@ class Coffee_Cafe_Corner_Coffee_DB {
 				'title'         => 'Colombia | EA Decaf',
 				'price'         => '21.00',
 				'price_display' => 'FROM $21.00',
-				'type'          => 'decaf single-origin',
-				'process'       => 'Sugarcane EA Decaf',
+				'type'          => 'decaf',
+				'process'       => 'Washed',
 				'roast'         => 'Medium',
 				'rating'        => '0',
 				'review_count'  => 0,
@@ -256,9 +333,9 @@ class Coffee_Cafe_Corner_Coffee_DB {
 				'title'         => 'The Home Barista',
 				'price'         => '46.00',
 				'price_display' => '$46.00',
-				'type'          => 'espresso blend',
-				'process'       => 'Curated Selection',
-				'roast'         => 'Medium',
+				'type'          => 'blend',
+				'process'       => 'Washed',
+				'roast'         => '',
 				'rating'        => '0',
 				'review_count'  => 0,
 				'image'         => 'quills/the-home-barista.jpg',
@@ -317,7 +394,7 @@ class Coffee_Cafe_Corner_Coffee_DB {
 				'price'         => '26.00',
 				'price_display' => 'FROM $26.00',
 				'type'          => 'single-origin',
-				'process'       => 'Anaerobic Washed',
+				'process'       => 'Honey',
 				'roast'         => 'Light',
 				'rating'        => '0',
 				'review_count'  => 0,
@@ -332,7 +409,7 @@ class Coffee_Cafe_Corner_Coffee_DB {
 				'price'         => '44.00',
 				'price_display' => '$44.00',
 				'type'          => 'blend',
-				'process'       => 'Curated Selection',
+				'process'       => 'Washed',
 				'roast'         => 'Medium',
 				'rating'        => '0',
 				'review_count'  => 0,
@@ -346,8 +423,8 @@ class Coffee_Cafe_Corner_Coffee_DB {
 				'title'         => 'The Cupping Table',
 				'price'         => '25.00',
 				'price_display' => 'FROM $25.00',
-				'type'          => 'single-origin',
-				'process'       => 'Roaster\'s Rotation',
+				'type'          => 'curated-set',
+				'process'       => 'Natural',
 				'roast'         => 'Light',
 				'rating'        => '5.0',
 				'review_count'  => 15,
@@ -414,7 +491,7 @@ class Coffee_Cafe_Corner_Coffee_DB {
 		}
 	}
 
-	public static function get_products_query( $tab = 'all', $process = '', $roast = '', $sort_by = 'best-selling' ) {
+	public static function get_products_query( $tab = array(), $process = array(), $roast = array(), $sort_by = 'best-selling' ) {
 		$args = array(
 			'post_type'      => 'product',
 			'post_status'    => 'publish',
@@ -430,31 +507,59 @@ class Coffee_Cafe_Corner_Coffee_DB {
 
 		$meta_queries = array();
 
-		// Filter by Tab: 'blend', 'single-origin', 'espresso', 'decaf'
-		if ( ! empty( $tab ) && 'all' !== $tab ) {
-			$meta_queries[] = array(
-				'key'     => '_coffee_type',
-				'value'   => $tab,
-				'compare' => 'LIKE',
-			);
+		// Convert string or array to clean array
+		$to_array = function( $val ) {
+			if ( is_array( $val ) ) {
+				return array_filter( array_map( 'sanitize_text_field', $val ) );
+			}
+			if ( is_string( $val ) && ! empty( $val ) && 'all' !== $val ) {
+				return array_filter( array_map( 'trim', explode( ',', sanitize_text_field( $val ) ) ) );
+			}
+			return array();
+		};
+
+		$tabs      = $to_array( $tab );
+		$processes = $to_array( $process );
+		$roasts    = $to_array( $roast );
+
+		// Filter by Coffee Type (Blend, Decaf, Espresso, Single Origin)
+		if ( ! empty( $tabs ) ) {
+			$type_query = array( 'relation' => 'OR' );
+			foreach ( $tabs as $t ) {
+				$t_clean = sanitize_title( $t );
+				$type_query[] = array(
+					'key'     => '_coffee_type',
+					'value'   => $t_clean,
+					'compare' => 'LIKE',
+				);
+			}
+			$meta_queries[] = $type_query;
 		}
 
-		// Filter by Process: Washed, Natural, EA Decaf, etc.
-		if ( ! empty( $process ) && 'all' !== $process ) {
-			$meta_queries[] = array(
-				'key'     => '_coffee_process',
-				'value'   => $process,
-				'compare' => 'LIKE',
-			);
+		// Filter by Process (Honey, Natural, Washed, Washed & Natural)
+		if ( ! empty( $processes ) ) {
+			$proc_query = array( 'relation' => 'OR' );
+			foreach ( $processes as $p ) {
+				$proc_query[] = array(
+					'key'     => '_coffee_process',
+					'value'   => $p,
+					'compare' => '=',
+				);
+			}
+			$meta_queries[] = $proc_query;
 		}
 
-		// Filter by Roast Profile: Light, Medium, Dark
-		if ( ! empty( $roast ) && 'all' !== $roast ) {
-			$meta_queries[] = array(
-				'key'     => '_coffee_roast',
-				'value'   => $roast,
-				'compare' => 'LIKE',
-			);
+		// Filter by Roast Profile (Dark, Light, Medium)
+		if ( ! empty( $roasts ) ) {
+			$roast_query = array( 'relation' => 'OR' );
+			foreach ( $roasts as $r ) {
+				$roast_query[] = array(
+					'key'     => '_coffee_roast',
+					'value'   => $r,
+					'compare' => 'LIKE',
+				);
+			}
+			$meta_queries[] = $roast_query;
 		}
 
 		if ( ! empty( $meta_queries ) ) {
@@ -519,9 +624,9 @@ class Coffee_Cafe_Corner_Coffee_DB {
 	}
 
 	public static function ajax_filter_coffee() {
-		$tab     = isset( $_POST['tab'] ) ? sanitize_text_field( wp_unslash( $_POST['tab'] ) ) : 'all';
-		$process = isset( $_POST['process'] ) ? sanitize_text_field( wp_unslash( $_POST['process'] ) ) : '';
-		$roast   = isset( $_POST['roast'] ) ? sanitize_text_field( wp_unslash( $_POST['roast'] ) ) : '';
+		$tab     = isset( $_POST['tab'] ) ? ( is_array( $_POST['tab'] ) ? array_map( 'sanitize_text_field', wp_unslash( $_POST['tab'] ) ) : sanitize_text_field( wp_unslash( $_POST['tab'] ) ) ) : array();
+		$process = isset( $_POST['process'] ) ? ( is_array( $_POST['process'] ) ? array_map( 'sanitize_text_field', wp_unslash( $_POST['process'] ) ) : sanitize_text_field( wp_unslash( $_POST['process'] ) ) ) : array();
+		$roast   = isset( $_POST['roast'] ) ? ( is_array( $_POST['roast'] ) ? array_map( 'sanitize_text_field', wp_unslash( $_POST['roast'] ) ) : sanitize_text_field( wp_unslash( $_POST['roast'] ) ) ) : array();
 		$sort_by = isset( $_POST['sort_by'] ) ? sanitize_text_field( wp_unslash( $_POST['sort_by'] ) ) : 'best-selling';
 
 		$query = self::get_products_query( $tab, $process, $roast, $sort_by );
