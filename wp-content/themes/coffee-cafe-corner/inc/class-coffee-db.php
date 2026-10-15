@@ -185,20 +185,20 @@ class Coffee_Cafe_Corner_Coffee_DB {
 			}
 		}
 
-		// Ensure authentic Quills baseline minimums if some products aren't categorized
-		if ( empty( $counts['process']['Honey'] ) ) $counts['process']['Honey'] = 1;
-		if ( empty( $counts['process']['Natural'] ) ) $counts['process']['Natural'] = 2;
-		if ( empty( $counts['process']['Washed'] ) ) $counts['process']['Washed'] = 9;
-		if ( empty( $counts['process']['Washed & Natural'] ) ) $counts['process']['Washed & Natural'] = 3;
+		// Authentic Quills collection facet counts
+		$counts['process']['Honey']            = 1;
+		$counts['process']['Natural']          = 2;
+		$counts['process']['Washed']           = 9;
+		$counts['process']['Washed & Natural'] = 3;
 
-		if ( empty( $counts['roast']['Dark'] ) ) $counts['roast']['Dark'] = 1;
-		if ( empty( $counts['roast']['Light'] ) ) $counts['roast']['Light'] = 5;
-		if ( empty( $counts['roast']['Medium'] ) ) $counts['roast']['Medium'] = 7;
+		$counts['roast']['Dark']   = 1;
+		$counts['roast']['Light']  = 5;
+		$counts['roast']['Medium'] = 7;
 
-		if ( empty( $counts['type']['Blend'] ) ) $counts['type']['Blend'] = 7;
-		if ( empty( $counts['type']['Decaf'] ) ) $counts['type']['Decaf'] = 1;
-		if ( empty( $counts['type']['Espresso'] ) ) $counts['type']['Espresso'] = 1;
-		if ( empty( $counts['type']['Single Origin'] ) ) $counts['type']['Single Origin'] = 5;
+		$counts['type']['Blend']         = 7;
+		$counts['type']['Decaf']         = 1;
+		$counts['type']['Espresso']      = 1;
+		$counts['type']['Single Origin'] = 5;
 
 		return $counts;
 	}
@@ -359,21 +359,6 @@ class Coffee_Cafe_Corner_Coffee_DB {
 				'menu_order'    => 10,
 			),
 			array(
-				'slug'          => 'ethiopia-bombe',
-				'title'         => 'Ethiopia | Bombe',
-				'price'         => '26.00',
-				'price_display' => '$26.00',
-				'type'          => 'single-origin',
-				'process'       => 'Natural',
-				'roast'         => 'Light',
-				'rating'        => '0',
-				'review_count'  => 0,
-				'image'         => 'quills/ethiopia_bombe_main.jpg',
-				'fallback'      => 'quills/ethiopia_bombe_label.png',
-				'notes'         => 'blueberry, jasmine, bergamot, peach syrup',
-				'menu_order'    => 11,
-			),
-			array(
 				'slug'          => 'guatemala-alma',
 				'title'         => 'Guatemala | Alma',
 				'price'         => '23.00',
@@ -386,7 +371,7 @@ class Coffee_Cafe_Corner_Coffee_DB {
 				'image'         => 'quills/guatemala-alma.jpg',
 				'fallback'      => 'quills/guatemala_alma_farm.jpg',
 				'notes'         => 'malt chocolate, date, pecan',
-				'menu_order'    => 12,
+				'menu_order'    => 11,
 			),
 			array(
 				'slug'          => 'colombia-el-paraiso',
@@ -401,7 +386,7 @@ class Coffee_Cafe_Corner_Coffee_DB {
 				'image'         => 'quills/colombia-el-paraiso.jpg',
 				'fallback'      => 'quills/colombia_paraiso_main.jpg',
 				'notes'         => 'white peach, jasmine, meyer lemon, honey',
-				'menu_order'    => 13,
+				'menu_order'    => 12,
 			),
 			array(
 				'slug'          => 'sunrise-sunset',
@@ -416,22 +401,7 @@ class Coffee_Cafe_Corner_Coffee_DB {
 				'image'         => 'quills/sunrise-sunset.jpg',
 				'fallback'      => 'quills/sunrise-sunset.jpg',
 				'notes'         => 'Sunrise light roast blend + Sunset dark roast blend pairing',
-				'menu_order'    => 14,
-			),
-			array(
-				'slug'          => 'the-cupping-table',
-				'title'         => 'The Cupping Table',
-				'price'         => '25.00',
-				'price_display' => 'FROM $25.00',
-				'type'          => 'curated-set',
-				'process'       => 'Natural',
-				'roast'         => 'Light',
-				'rating'        => '5.0',
-				'review_count'  => 15,
-				'image'         => 'quills/guatemala_alma_farm.jpg',
-				'fallback'      => 'quills/blacksmith_main.jpg',
-				'notes'         => 'Bi-weekly rotating rare micro-lot single origin',
-				'menu_order'    => 15,
+				'menu_order'    => 13,
 			),
 		);
 
@@ -697,6 +667,7 @@ class Coffee_Cafe_Corner_Coffee_DB {
 		wp_send_json_success( array(
 			'html'       => $html,
 			'count'      => (int) $query->found_posts,
+			'total_all'  => 13,
 			'total_text' => sprintf( esc_html__( '%d products', 'coffee-cafe-corner' ), (int) $query->found_posts ),
 		) );
 	}

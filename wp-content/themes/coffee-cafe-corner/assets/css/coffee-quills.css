@@ -308,6 +308,89 @@
     padding-top: 5px;
 }
 
+/* =========================================
+   Active Filters Tag Pills (Quills Exact)
+   ========================================= */
+
+.quills-active-filters {
+    padding-bottom: 16px;
+    margin-bottom: 14px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+}
+
+.quills-active-filters-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 12px;
+}
+
+.quills-active-filters-title {
+    font-family: 'Besley', 'Clarendon URW Extra Narrow', Georgia, 'Times New Roman', serif;
+    font-size: 18px;
+    font-weight: 700;
+    color: #2b2927;
+    letter-spacing: -0.01em;
+}
+
+.quills-active-filters-remove-all {
+    background: transparent;
+    border: none;
+    padding: 0;
+    font-family: 'Besley', 'Clarendon URW Extra Narrow', Georgia, 'Times New Roman', serif;
+    font-size: 13.5px;
+    color: #2b2927;
+    text-decoration: underline;
+    cursor: pointer;
+    transition: color 0.15s ease;
+}
+
+.quills-active-filters-remove-all:hover {
+    color: #b53822;
+}
+
+.quills-active-filters-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.quills-filter-tag {
+    display: inline-flex;
+    align-items: center;
+    justify-content: space-between;
+    width: fit-content;
+    max-width: 100%;
+    background-color: #ffffff;
+    border: 1px solid #d5cfc4;
+    border-radius: 4px;
+    padding: 6px 12px;
+    font-family: 'Besley', 'Clarendon URW Extra Narrow', Georgia, 'Times New Roman', serif;
+    font-size: 12px;
+    font-weight: 600;
+    color: #2b2927;
+    cursor: pointer;
+    transition: border-color 0.15s ease, background-color 0.15s ease;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+}
+
+.quills-filter-tag:hover {
+    border-color: #2b2927;
+    background-color: #faf8f5;
+}
+
+.quills-filter-tag-x {
+    font-size: 12px;
+    font-weight: 400;
+    color: #666666;
+    margin-left: 8px;
+    line-height: 1;
+}
+
+.quills-filter-tag:hover .quills-filter-tag-x {
+    color: #111111;
+}
+
 .quills-accordion-item {
     border-bottom: 1px solid rgba(0, 0, 0, 0.12);
     padding: 6px 0;
@@ -334,6 +417,15 @@
     font-weight: 600;
     color: #2b2927;
     letter-spacing: -0.01em;
+}
+
+.quills-accordion-selected-count {
+    font-family: 'Besley', 'Clarendon URW Extra Narrow', Georgia, 'Times New Roman', serif;
+    font-style: italic;
+    font-weight: 500;
+    font-size: 14px;
+    color: #2b2927;
+    margin-left: 4px;
 }
 
 .quills-accordion-icon {
