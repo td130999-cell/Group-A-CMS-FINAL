@@ -59,15 +59,16 @@ if ( ! file_exists( ABSPATH . 'wp-content/uploads/quills/coffeesfreebagbanner2.p
 
 		<!-- 4. Top Testimonial Slider -->
 		<section class="quills-sub-testimonial-slider" id="quills-top-testimonial-slider" aria-label="<?php esc_attr_e( 'Customer Reviews', 'coffee-cafe-corner' ); ?>">
-			<!-- Navigation Arrows (Hidden by default, visible on hover) -->
-			<button type="button" class="quills-sub-nav-btn quills-sub-nav-prev is-disabled" aria-label="<?php esc_attr_e( 'Previous review', 'coffee-cafe-corner' ); ?>">
-				<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="15 18 9 12 15 6"></polyline></svg>
-			</button>
-			<button type="button" class="quills-sub-nav-btn quills-sub-nav-next" aria-label="<?php esc_attr_e( 'Next review', 'coffee-cafe-corner' ); ?>">
-				<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"></polyline></svg>
-			</button>
+			<div class="quills-sub-track-container">
+				<!-- Navigation Arrows (Hidden by default, visible on hover) -->
+				<button type="button" class="quills-sub-nav-btn quills-sub-nav-prev is-disabled" aria-label="<?php esc_attr_e( 'Previous review', 'coffee-cafe-corner' ); ?>">
+					<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="15 18 9 12 15 6"></polyline></svg>
+				</button>
+				<button type="button" class="quills-sub-nav-btn quills-sub-nav-next" aria-label="<?php esc_attr_e( 'Next review', 'coffee-cafe-corner' ); ?>">
+					<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"></polyline></svg>
+				</button>
 
-			<div class="quills-sub-slider-track">
+				<div class="quills-sub-slider-track">
 				<!-- Slide 1 -->
 				<div class="quills-sub-slide is-active" data-index="0">
 					<div class="quills-sub-stars">★★★★★</div>
@@ -95,8 +96,9 @@ if ( ! file_exists( ABSPATH . 'wp-content/uploads/quills/coffeesfreebagbanner2.p
 					<div class="quills-sub-author">— Kelly Davis</div>
 				</div>
 			</div>
+		</div>
 
-			<!-- Pagination Dots -->
+		<!-- Pagination Dots -->
 			<div class="quills-sub-dots" role="tablist">
 				<button type="button" class="quills-sub-dot is-active" data-slide="0" aria-label="<?php esc_attr_e( 'Slide 1', 'coffee-cafe-corner' ); ?>"></button>
 				<button type="button" class="quills-sub-dot" data-slide="1" aria-label="<?php esc_attr_e( 'Slide 2', 'coffee-cafe-corner' ); ?>"></button>
@@ -208,40 +210,42 @@ if ( ! file_exists( ABSPATH . 'wp-content/uploads/quills/coffeesfreebagbanner2.p
 				<?php esc_html_e( 'More kind words from customers', 'coffee-cafe-corner' ); ?>
 			</h2>
 
-			<!-- Navigation Arrows (Hidden by default, visible on hover) -->
-			<button type="button" class="quills-sub-nav-btn quills-sub-nav-prev is-disabled" aria-label="<?php esc_attr_e( 'Previous review', 'coffee-cafe-corner' ); ?>">
-				<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="15 18 9 12 15 6"></polyline></svg>
-			</button>
-			<button type="button" class="quills-sub-nav-btn quills-sub-nav-next" aria-label="<?php esc_attr_e( 'Next review', 'coffee-cafe-corner' ); ?>">
-				<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"></polyline></svg>
-			</button>
+			<div class="quills-sub-track-container">
+				<!-- Navigation Arrows (Hidden by default, visible on hover) -->
+				<button type="button" class="quills-sub-nav-btn quills-sub-nav-prev is-disabled" aria-label="<?php esc_attr_e( 'Previous review', 'coffee-cafe-corner' ); ?>">
+					<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="15 18 9 12 15 6"></polyline></svg>
+				</button>
+				<button type="button" class="quills-sub-nav-btn quills-sub-nav-next" aria-label="<?php esc_attr_e( 'Next review', 'coffee-cafe-corner' ); ?>">
+					<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"></polyline></svg>
+				</button>
 
-			<div class="quills-sub-bottom-track">
-				<!-- Slide 1 -->
-				<div class="quills-sub-bottom-slide is-active" data-index="0">
-					<div class="quills-sub-stars">★★★★★</div>
-					<blockquote class="quills-sub-quote">
-						"This is probably the best coffee I've ever had."
-					</blockquote>
-					<div class="quills-sub-author">— Jamie W.</div>
-				</div>
+				<div class="quills-sub-bottom-track">
+					<!-- Slide 1 -->
+					<div class="quills-sub-bottom-slide is-active" data-index="0">
+						<div class="quills-sub-stars">★★★★★</div>
+						<blockquote class="quills-sub-quote">
+							"This is probably the best coffee I've ever had."
+						</blockquote>
+						<div class="quills-sub-author">— Jamie W.</div>
+					</div>
 
-				<!-- Slide 2 -->
-				<div class="quills-sub-bottom-slide" data-index="1">
-					<div class="quills-sub-stars">★★★★★</div>
-					<blockquote class="quills-sub-quote">
-						"It’s our favorite coffee!! We entertain frequently and everyone seems to enjoy this coffee."
-					</blockquote>
-					<div class="quills-sub-author">— Lisa Peters</div>
-				</div>
+					<!-- Slide 2 -->
+					<div class="quills-sub-bottom-slide" data-index="1">
+						<div class="quills-sub-stars">★★★★★</div>
+						<blockquote class="quills-sub-quote">
+							"It’s our favorite coffee!! We entertain frequently and everyone seems to enjoy this coffee."
+						</blockquote>
+						<div class="quills-sub-author">— Lisa Peters</div>
+					</div>
 
-				<!-- Slide 3 -->
-				<div class="quills-sub-bottom-slide" data-index="2">
-					<div class="quills-sub-stars">★★★★★</div>
-					<blockquote class="quills-sub-quote">
-						"This coffee makes getting out of bed in the morning so much easier. Incredibly smooth and flavorful."
-					</blockquote>
-					<div class="quills-sub-author">— Sarah R.</div>
+					<!-- Slide 3 -->
+					<div class="quills-sub-bottom-slide" data-index="2">
+						<div class="quills-sub-stars">★★★★★</div>
+						<blockquote class="quills-sub-quote">
+							"Mega delicious! Just sent some to my sister in California to try to get her hooked."
+						</blockquote>
+						<div class="quills-sub-author">— Sarah R.</div>
+					</div>
 				</div>
 			</div>
 
