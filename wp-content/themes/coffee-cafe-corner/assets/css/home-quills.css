@@ -1,0 +1,1239 @@
+/**
+ * Quills Coffee Authentic Brand Stylesheet - Homepage (Front Page)
+ * For coffee-cafe-corner theme
+ * 100% Pixel-accurate typography, colors & layout matched to live quillscoffee.com
+ */
+
+/* ========================================================
+   FONTS DEFINITIONS
+   ======================================================== */
+@font-face {
+  font-family: 'Revelstoke';
+  src: url('../fonts/Revelstoke-Bold.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Revelstoke';
+  src: url('../fonts/Revelstoke-Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Revelstoke Grunge';
+  src: url('../fonts/Revelstoke-Grunge.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'El Hidrant';
+  src: url('../fonts/ElHidrant.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Clarendon URW Extra Narrow';
+  src: url('../fonts/ClarendonURWExtNar-Reg.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Clarendon URW Extra Narrow';
+  src: url('../fonts/ClarendonURWExtNar-Bol.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* ========================================================
+   GLOBAL HOME WRAPPER & LINEN CANVAS BACKGROUND
+   ======================================================== */
+html {
+  padding: 0 !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  overflow-x: hidden !important;
+}
+
+body {
+  margin: 0 !important;
+  padding: 0 !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  overflow-x: hidden !important;
+}
+
+body {
+  background-image: url('../images/home/bg-quills.png');
+  background-size: cover;
+  background-position: center center;
+  background-attachment: fixed;
+  background-repeat: repeat;
+  background-color: #faf7f2;
+}
+
+/* Force WordPress FSE root container to full width with zero padding on front page */
+body.home .wp-site-blocks,
+body.front-page .wp-site-blocks,
+body:has(.quills-home-wrapper) .wp-site-blocks,
+.wp-site-blocks:has(.quills-home-wrapper) {
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  max-width: 100% !important;
+  width: 100% !important;
+}
+
+body.home .wp-site-blocks > :where(:not(.alignleft):not(.alignright)),
+body:has(.quills-home-wrapper) .wp-site-blocks > :where(:not(.alignleft):not(.alignright)),
+.wp-site-blocks:has(.quills-home-wrapper) > :where(:not(.alignleft):not(.alignright)) {
+  max-width: 100% !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+}
+
+body.home main,
+body.home .quills-main-homepage,
+body.home .wp-block-group.quills-main-homepage,
+body.home .quills-home-wrapper,
+.quills-main-homepage,
+.wp-block-group.quills-main-homepage,
+.quills-home-wrapper {
+  max-width: 100% !important;
+  width: 100% !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.quills-home-wrapper {
+  font-family: 'Clarendon URW Extra Narrow', Georgia, 'Times New Roman', serif;
+  color: #3A3837;
+  background-image: url('../images/home/bg-quills.png');
+  background-size: cover;
+  background-position: center center;
+  background-attachment: fixed;
+  background-repeat: repeat;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+  width: 100% !important;
+  max-width: 100% !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.quills-home-wrapper * {
+  box-sizing: border-box;
+}
+
+/* Authentic Quills Section Container: 1600px Max Width with 20px 32px padding */
+.quills-container {
+  max-width: 1600px !important;
+  width: 100% !important;
+  margin: 0 auto !important;
+  padding: 20px 32px !important;
+}
+
+.quills-container--narrow {
+  max-width: 1040px !important;
+  width: 100% !important;
+  margin: 0 auto !important;
+  padding: 20px 32px !important;
+}
+
+.quills-container--center {
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+}
+
+/* ========================================================
+   BASE BUTTONS
+   ======================================================== */
+.quills-btn {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  font-family: 'Barlow Condensed', 'Revelstoke', sans-serif !important;
+  text-decoration: none !important;
+  font-size: 16px !important;
+  font-weight: 700 !important;
+  letter-spacing: 3px !important;
+  text-transform: uppercase !important;
+  border-radius: 5px !important;
+  cursor: pointer !important;
+  transition: all 0.25s ease !important;
+  border: none !important;
+  text-align: center !important;
+  line-height: 24px !important;
+}
+
+/* Orange-Red Primary Brand Button (Exact Quills color #F15239) */
+.quills-btn--hero,
+.quills-btn--orange {
+  background-color: #F15239 !important;
+  color: #ffffff !important;
+  height: 58px !important;
+  padding: 16px 28px !important;
+  box-shadow: 0 4px 14px rgba(241, 82, 57, 0.25) !important;
+}
+
+.quills-btn--hero:hover,
+.quills-btn--orange:hover {
+  background-color: #d8432c !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 0 6px 18px rgba(241, 82, 57, 0.35) !important;
+}
+
+/* Bestsellers Card Button: Hidden by default, reveals on hover */
+.quills-product-quick-add {
+  position: absolute !important;
+  bottom: 14px !important;
+  left: 0 !important;
+  right: 0 !important;
+  padding: 0 16px !important;
+  z-index: 10 !important;
+  width: 100% !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+  transform: translateY(100%) !important;
+  pointer-events: none !important;
+  transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.25s ease, visibility 0.25s ease !important;
+}
+
+.quills-product-card:hover .quills-product-quick-add,
+.quills-product-image-box:hover .quills-product-quick-add {
+  opacity: 1 !important;
+  visibility: visible !important;
+  transform: translateY(0) !important;
+  pointer-events: auto !important;
+}
+
+.quills-btn--add-to-cart {
+  width: 100% !important;
+  background-color: #DFC98A !important;
+  color: #3A3836 !important;
+  height: 50px !important;
+  padding: 12px 20px !important;
+  font-size: 16px !important;
+  letter-spacing: 3px !important;
+  font-weight: 700 !important;
+  border-radius: 4px !important;
+  border: none !important;
+  cursor: pointer !important;
+  text-transform: uppercase !important;
+  font-family: 'Barlow Condensed', sans-serif !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  transition: background-color 0.2s ease !important;
+}
+
+.quills-btn--add-to-cart:hover {
+  background-color: #d0ba79 !important;
+}
+
+/* Authentic Muted Olive Green Section Titles (#678464) */
+.quills-section-title {
+  font-family: 'Revelstoke', sans-serif !important;
+  font-size: 40px !important;
+  font-weight: 700 !important;
+  color: #678464 !important;
+  line-height: 48px !important;
+  letter-spacing: 1px !important;
+  text-transform: uppercase !important;
+  margin: 0 0 16px 0 !important;
+}
+
+.quills-section-title--center {
+  text-align: center !important;
+}
+
+.quills-section-subtitle {
+  font-family: 'Clarendon URW Extra Narrow', Georgia, serif !important;
+  font-size: 18px !important;
+  font-style: normal !important;
+  color: #3A3837 !important;
+  text-align: center !important;
+  margin: 0 0 35px 0 !important;
+}
+
+.quills-text-body p {
+  margin: 0 0 18px 0 !important;
+  font-family: 'Clarendon URW Extra Narrow', Georgia, 'Times New Roman', serif !important;
+  font-size: 18px !important;
+  line-height: 27px !important;
+  color: #3A3837 !important;
+}
+
+.quills-text-body p:last-child {
+  margin-bottom: 0 !important;
+}
+
+/* Quotes in Script Font */
+.quills-split-quote p,
+.quills-features-quote p {
+  font-family: 'El Hidrant', cursive, serif !important;
+  font-style: normal !important;
+  font-size: 18px !important;
+  line-height: 27px !important;
+  color: #3A3837 !important;
+  margin-top: 18px !important;
+}
+
+.quills-features-quote p {
+  text-align: center !important;
+  margin-top: 25px !important;
+}
+
+/* ========================================================
+   SECTION 1: HERO BANNER (820px Height, 1600px Max-Width)
+   ======================================================== */
+.quills-hero-section {
+  position: relative !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  height: 820px !important;
+  min-height: 760px !important;
+  display: flex !important;
+  align-items: flex-end !important;
+  overflow: hidden !important;
+  background-color: #1a1614 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.quills-hero-bg {
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  z-index: 1 !important;
+}
+
+.quills-hero-bg::after {
+  content: '' !important;
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  background: linear-gradient(90deg, rgba(16, 12, 10, 0.78) 0%, rgba(16, 12, 10, 0.54) 38%, rgba(16, 12, 10, 0.12) 68%, transparent 100%) !important;
+  pointer-events: none !important;
+}
+
+.quills-hero-img {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  object-position: 82% center !important;
+  display: block !important;
+}
+
+.quills-hero-content-wrapper {
+  position: relative !important;
+  z-index: 2 !important;
+  width: 100% !important;
+  max-width: 1600px !important;
+  margin: 0 auto !important;
+  padding: 40px clamp(48px, 5.5vw, 90px) clamp(45px, 6vh, 60px) clamp(48px, 5.5vw, 90px) !important;
+  display: flex !important;
+  align-items: flex-end !important;
+  justify-content: flex-start !important;
+}
+
+.quills-hero-content {
+  max-width: 620px !important;
+  color: #fffdeb !important;
+}
+
+.quills-hero-title {
+  font-family: 'El Hidrant', cursive, serif !important;
+  font-style: italic !important;
+  font-size: 44px !important;
+  font-weight: 400 !important;
+  line-height: 52.8px !important;
+  color: #fffdeb !important;
+  margin: 0 0 16px 0 !important;
+  text-shadow: none !important;
+}
+
+.quills-hero-subtitle {
+  font-family: 'Clarendon URW Extra Narrow', Georgia, serif !important;
+  font-size: 18px !important;
+  line-height: 27px !important;
+  color: #fffdeb !important;
+  opacity: 1 !important;
+  margin: 0 0 24px 0 !important;
+  max-width: 600px !important;
+  text-shadow: none !important;
+}
+
+.quills-hero-cta {
+  margin-bottom: 24px !important;
+}
+
+.quills-hero-reviews {
+  margin-top: 20px !important;
+}
+
+.quills-hero-stars-wrap {
+  margin-bottom: 8px !important;
+  display: block !important;
+}
+
+.quills-hero-stars-img {
+  max-width: 135px !important;
+  width: 135px !important;
+  height: auto !important;
+  display: block !important;
+}
+
+.quills-rating-text {
+  font-family: 'Clarendon URW Extra Narrow', Georgia, serif !important;
+  font-size: 16px !important;
+  line-height: 24px !important;
+  font-weight: 500 !important;
+  color: #fffdeb !important;
+  margin: 0 0 14px 0 !important;
+}
+
+.quills-featured-label {
+  font-family: 'Clarendon URW Extra Narrow', Georgia, serif !important;
+  font-size: 16px !important;
+  color: #fffdeb !important;
+  margin: 0 0 12px 0 !important;
+}
+
+.quills-featured-label strong {
+  font-weight: 700 !important;
+}
+
+.quills-press-logos {
+  display: flex !important;
+  align-items: center !important;
+  flex-wrap: wrap !important;
+  gap: 22px !important;
+  margin-bottom: 20px !important;
+}
+
+.quills-press-logo {
+  display: block !important;
+  height: auto !important;
+  filter: none !important;
+  opacity: 1 !important;
+}
+
+.quills-press-garden {
+  max-width: 122px !important;
+}
+
+.quills-press-cosmo {
+  max-width: 140px !important;
+}
+
+.quills-press-foodwine {
+  max-width: 124px !important;
+}
+
+.quills-press-courier {
+  max-width: 124px !important;
+}
+
+.quills-hero-quote p {
+  font-family: 'Clarendon URW Extra Narrow', Georgia, serif !important;
+  font-style: normal !important;
+  font-size: 16px !important;
+  line-height: 24px !important;
+  color: #fffdeb !important;
+  margin-top: 20px !important;
+  max-width: 580px !important;
+  text-shadow: none !important;
+}
+
+.quills-hero-quote em {
+  font-style: italic !important;
+}
+
+/* ========================================================
+   SECTIONS 2, 4, 5, 8: 50/50 SPLIT SECTIONS (768px x 600px)
+   ======================================================== */
+.quills-split-section {
+  padding: 30px 0 !important;
+  width: 100% !important;
+}
+
+.quills-split-row {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 48px !important;
+  width: 100% !important;
+}
+
+.quills-split-row--reverse {
+  flex-direction: row-reverse !important;
+}
+
+.quills-split-media {
+  flex: 0 0 calc(50% - 24px) !important;
+  width: calc(50% - 24px) !important;
+  max-width: calc(50% - 24px) !important;
+  height: 600px !important;
+  min-width: 0 !important;
+}
+
+.quills-split-img {
+  width: 100% !important;
+  height: 600px !important;
+  display: block !important;
+  object-fit: cover !important;
+  border-radius: 12px !important;
+  box-shadow: none !important;
+}
+
+/* Cupping / Taste-Tested Section image is 500px high */
+.quills-section-cupping .quills-split-media,
+.quills-section-cupping .quills-split-img {
+  height: 500px !important;
+}
+
+.quills-split-content {
+  flex: 0 0 calc(50% - 24px) !important;
+  width: calc(50% - 24px) !important;
+  max-width: calc(50% - 24px) !important;
+  min-width: 0 !important;
+  padding: 0 !important;
+}
+
+.quills-split-cta {
+  margin-top: 20px !important;
+  margin-bottom: 12px !important;
+}
+
+/* ========================================================
+   SECTION 3: 3-COLUMN FEATURES BANNER
+   ======================================================== */
+.quills-features-section {
+  padding: 30px 0 !important;
+}
+
+.quills-features-headline {
+  text-align: center !important;
+  margin-bottom: 35px !important;
+}
+
+.quills-features-main-title {
+  font-family: 'El Hidrant', cursive, serif !important;
+  font-style: normal !important;
+  font-size: 40px !important;
+  line-height: 48px !important;
+  font-weight: 400 !important;
+  color: #3A3837 !important;
+  letter-spacing: 1px !important;
+  margin: 0 !important;
+  padding: 8px 0 24px 0 !important;
+  text-align: center !important;
+}
+
+.quills-features-grid {
+  display: grid !important;
+  grid-template-columns: repeat(3, 1fr) !important;
+  gap: 40px !important;
+  text-align: center !important;
+  margin-bottom: 30px !important;
+}
+
+.quills-feature-item {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  text-align: center !important;
+}
+
+.quills-feature-icon-wrap {
+  width: 48px !important;
+  height: 48px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  margin: 0 auto 16px auto !important;
+}
+
+.quills-feature-icon {
+  width: 48px !important;
+  height: 48px !important;
+  object-fit: contain !important;
+}
+
+.quills-feature-title {
+  font-family: 'Revelstoke', sans-serif !important;
+  font-size: 20px !important;
+  font-weight: 700 !important;
+  color: #678464 !important;
+  letter-spacing: 1px !important;
+  text-transform: uppercase !important;
+  margin: 0 0 12px 0 !important;
+}
+
+.quills-feature-desc {
+  font-family: 'Clarendon URW Extra Narrow', Georgia, serif !important;
+  font-size: 18px !important;
+  line-height: 27px !important;
+  color: #3A3837 !important;
+  max-width: 440px !important;
+  margin: 0 auto !important;
+}
+
+.quills-features-cta-wrap {
+  text-align: center !important;
+  margin-top: 25px !important;
+}
+
+.quills-section-divider {
+  border: 0 !important;
+  border-top: 1px solid rgba(103, 132, 100, 0.4) !important;
+  margin: 40px auto 0 auto !important;
+  width: 100% !important;
+}
+
+/* ========================================================
+   SECTION 6: CIRCULAR BADGE (90px x 90px)
+   ======================================================== */
+.quills-badge-section {
+  padding: 30px 0 !important;
+  text-align: center !important;
+}
+
+.quills-badge-wrap {
+  display: inline-block !important;
+  transition: transform 0.4s ease !important;
+}
+
+.quills-badge-wrap:hover {
+  transform: scale(1.06) rotate(4deg) !important;
+}
+
+.quills-badge-img {
+  width: 90px !important;
+  height: 90px !important;
+  display: block !important;
+  margin: 0 auto !important;
+}
+
+/* ========================================================
+   SECTION 7: OUR BESTSELLERS (PRODUCTS)
+   ======================================================== */
+.quills-bestsellers-section {
+  padding: 30px 0 !important;
+}
+
+.quills-bestsellers-header {
+  text-align: center !important;
+  margin-bottom: 35px !important;
+}
+
+.quills-bestsellers-header .quills-section-title {
+  font-family: 'Revelstoke', sans-serif !important;
+  font-size: 34px !important;
+  line-height: 42px !important;
+  font-weight: 700 !important;
+  letter-spacing: 1.5px !important;
+  text-transform: uppercase !important;
+  color: #678464 !important;
+  text-align: center !important;
+  margin-bottom: 8px !important;
+}
+
+.quills-bestsellers-header .quills-section-subtitle {
+  font-family: 'Clarendon URW Extra Narrow', Georgia, serif !important;
+  font-size: 18px !important;
+  font-style: normal !important;
+  color: #3A3837 !important;
+  text-align: center !important;
+  margin-bottom: 35px !important;
+}
+
+.quills-products-grid {
+  display: grid !important;
+  grid-template-columns: repeat(3, 1fr) !important;
+  gap: 24px !important;
+}
+
+.quills-product-card {
+  background: transparent !important;
+  border: none !important;
+  border-radius: 0 !important;
+  overflow: visible !important;
+  display: flex !important;
+  flex-direction: column !important;
+  transition: none !important;
+}
+
+.quills-product-meta-header {
+  padding: 0 0 16px 0 !important;
+  text-align: center !important;
+  min-height: 116px !important;
+  height: 116px !important;
+}
+
+.quills-product-tag {
+  font-family: 'Revelstoke', sans-serif !important;
+  font-size: 27px !important;
+  line-height: 40.5px !important;
+  font-weight: 700 !important;
+  letter-spacing: 1px !important;
+  margin: 0 0 8px 0 !important;
+  text-transform: uppercase !important;
+}
+
+.quills-product-tag-desc {
+  font-family: 'Clarendon URW Extra Narrow', Georgia, serif !important;
+  font-size: 16px !important;
+  line-height: 24px !important;
+  color: #3A3837 !important;
+  margin: 0 !important;
+}
+
+.quills-product-image-box {
+  position: relative !important;
+  width: 100% !important;
+  aspect-ratio: 1 / 1 !important;
+  background-color: transparent !important;
+  border-radius: 10px !important;
+  overflow: hidden !important;
+}
+
+.quills-product-link {
+  display: block !important;
+  width: 100% !important;
+  height: 100% !important;
+  position: relative !important;
+}
+
+.quills-product-images-wrap {
+  position: relative !important;
+  width: 100% !important;
+  height: 100% !important;
+  border-radius: 10px !important;
+  overflow: hidden !important;
+}
+
+.quills-img-front,
+.quills-img-back {
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  padding: 0 !important;
+  border-radius: 10px !important;
+  transition: opacity 0.4s ease, transform 0.4s ease !important;
+}
+
+.quills-img-front {
+  opacity: 1 !important;
+  z-index: 1 !important;
+}
+
+.quills-img-back {
+  opacity: 0 !important;
+  z-index: 2 !important;
+}
+
+.quills-product-card:hover .quills-img-front {
+  opacity: 0 !important;
+  transform: scale(1.03) !important;
+}
+
+.quills-product-card:hover .quills-img-back {
+  opacity: 1 !important;
+  transform: scale(1.03) !important;
+}
+
+/* Rollover Overlay on Hover */
+.quills-rollover-overlay {
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  background: rgba(20, 20, 20, 0.88) !important;
+  color: #ffffff !important;
+  border-radius: 10px !important;
+  z-index: 5 !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+  transition: opacity 0.3s ease, visibility 0.3s ease !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: flex-start !important;
+  padding: 24px 20px 75px 20px !important;
+  text-align: left !important;
+}
+
+.quills-product-card:hover .quills-rollover-overlay {
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+.quills-rollover-title {
+  font-family: 'Revelstoke', sans-serif !important;
+  font-size: 18px !important;
+  letter-spacing: 1px !important;
+  color: #ffffff !important;
+  margin: 0 0 12px 0 !important;
+  text-transform: uppercase !important;
+  text-decoration: underline !important;
+}
+
+.quills-rollover-tasting {
+  color: #ffffff !important;
+  margin-bottom: 14px !important;
+  font-size: 15px !important;
+  font-family: 'Clarendon URW Extra Narrow', Georgia, serif !important;
+  font-style: italic !important;
+}
+
+.quills-rollover-text p {
+  font-family: 'Clarendon URW Extra Narrow', Georgia, serif !important;
+  font-size: 14px !important;
+  line-height: 1.5 !important;
+  color: #ffffff !important;
+  margin: 0 !important;
+}
+
+.quills-product-info {
+  padding: 14px 0 0 0 !important;
+  text-align: left !important;
+  flex-grow: 1 !important;
+  display: flex !important;
+  flex-direction: column !important;
+}
+
+.quills-product-brand {
+  font-family: 'Clarendon URW Extra Narrow', Georgia, serif !important;
+  font-size: 13.5px !important;
+  color: #717171 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 1px !important;
+  display: block !important;
+  margin-bottom: 4px !important;
+  text-align: left !important;
+}
+
+.quills-product-name {
+  margin: 0 0 6px 0 !important;
+  font-family: 'Clarendon URW Extra Narrow', Georgia, serif !important;
+  font-size: 18px !important;
+  font-weight: 400 !important;
+  text-align: left !important;
+}
+
+.quills-product-name a {
+  color: #3A3837 !important;
+  text-decoration: none !important;
+  transition: color 0.2s !important;
+}
+
+.quills-product-name a:hover {
+  color: #678464 !important;
+}
+
+.quills-rating-row {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: flex-start !important;
+  gap: 6px !important;
+  margin-bottom: 6px !important;
+}
+
+.quills-stars {
+  color: #f5a623 !important;
+  font-size: 14px !important;
+  letter-spacing: 2px !important;
+}
+
+.quills-review-count {
+  font-family: 'Clarendon URW Extra Narrow', serif !important;
+  font-size: 14px !important;
+  color: #3A3837 !important;
+}
+
+.quills-product-price {
+  font-family: 'Barlow Condensed', sans-serif !important;
+  font-size: 18px !important;
+  font-weight: 700 !important;
+  color: #151515 !important;
+  letter-spacing: 0.04em !important;
+  margin: 0 !important;
+  text-align: left !important;
+}
+
+/* ========================================================
+   SECTION 9: FAQ ACCORDION
+   ======================================================== */
+.quills-faq-section {
+  padding: 30px 0 !important;
+}
+
+.quills-faq-header {
+  text-align: center !important;
+  margin-bottom: 35px !important;
+}
+
+.quills-faq-header .quills-section-title {
+  font-family: 'El Hidrant', cursive, serif !important;
+  font-size: 40px !important;
+  line-height: 48px !important;
+  font-weight: 400 !important;
+  font-style: normal !important;
+  color: #3A3837 !important;
+  text-align: center !important;
+  margin-bottom: 30px !important;
+}
+
+.quills-accordion {
+  border-top: 1px solid rgba(58, 56, 55, 0.25) !important;
+}
+
+.quills-accordion-item {
+  border-bottom: 1px solid rgba(58, 56, 55, 0.25) !important;
+}
+
+.quills-accordion-trigger {
+  width: 100% !important;
+  background: none !important;
+  border: none !important;
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  padding: 22px 0 !important;
+  font-family: 'Revelstoke', sans-serif !important;
+  font-size: 22px !important;
+  letter-spacing: 1px !important;
+  color: #3A3837 !important;
+  text-transform: uppercase !important;
+  text-align: left !important;
+  cursor: pointer !important;
+  transition: color 0.2s ease !important;
+}
+
+.quills-accordion-trigger:hover {
+  color: #678464 !important;
+}
+
+.quills-accordion-icon {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 24px !important;
+  height: 24px !important;
+  margin-left: 15px !important;
+  flex-shrink: 0 !important;
+}
+
+.quills-plus-icon .quills-icon-vertical {
+  transition: transform 0.3s ease, opacity 0.3s ease !important;
+  transform-origin: center !important;
+}
+
+.quills-accordion-item.is-open .quills-icon-vertical {
+  transform: rotate(90deg) !important;
+  opacity: 0 !important;
+}
+
+.quills-accordion-panel {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.35s ease-out;
+}
+
+.quills-accordion-content {
+  padding: 0 0 24px 0 !important;
+  font-family: 'Clarendon URW Extra Narrow', Georgia, serif !important;
+  font-size: 18px !important;
+  line-height: 27px !important;
+  color: #3A3837 !important;
+}
+
+.quills-accordion-content p {
+  margin: 0 0 14px 0 !important;
+}
+
+.quills-accordion-content p:last-child {
+  margin-bottom: 0 !important;
+}
+
+.quills-accordion-content a {
+  color: #151515 !important;
+  text-decoration: underline !important;
+  font-weight: 600 !important;
+}
+
+/* ========================================================
+   SECTION 10: THE HOOT (NEWSLETTER)
+   ======================================================== */
+.quills-hoot-section {
+  position: relative !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 80px 20px !important;
+  min-height: 600px !important;
+  overflow: hidden !important;
+  background-color: #22201d !important;
+  width: 100% !important;
+  max-width: 100% !important;
+}
+
+.quills-hoot-bg-left,
+.quills-hoot-bg-right {
+  position: absolute !important;
+  top: 0 !important;
+  bottom: 0 !important;
+  width: 50% !important;
+  background-size: cover !important;
+  background-position: center !important;
+  z-index: 0 !important;
+}
+
+.quills-hoot-bg-left {
+  left: 0 !important;
+}
+
+.quills-hoot-bg-right {
+  right: 0 !important;
+}
+
+.quills-hoot-card,
+.newsletter-card {
+  position: relative !important;
+  z-index: 1 !important;
+  max-width: 560px !important;
+  width: 100% !important;
+  margin: 0 auto !important;
+  box-shadow: none !important;
+  border-radius: 0 !important;
+  overflow: visible !important;
+  background: transparent !important;
+}
+
+.quills-hoot-tab,
+.newsletter-card__tab {
+  border: none !important;
+  background-color: transparent !important;
+  padding: 0 16px !important;
+  text-align: center !important;
+  display: block !important;
+  position: relative !important;
+  margin: 0 !important;
+}
+
+.quills-hoot-tab-head,
+.newsletter-card__tab_head {
+  background-color: #C9BA7A !important;
+  position: relative !important;
+  padding: 10px 0 36px 0 !important;
+  text-align: center !important;
+  border-top-left-radius: 4px !important;
+  border-top-right-radius: 4px !important;
+}
+
+.quills-hoot-heading,
+.newsletter-card__heading {
+  font-family: 'El Hidrant', cursive, serif !important;
+  font-style: italic !important;
+  font-size: 26px !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.1em !important;
+  margin: 0 !important;
+  color: #3A3836 !important;
+  text-transform: uppercase !important;
+}
+
+.quills-hoot-icon-badge,
+.wrapp-icon {
+  display: inline-block !important;
+  background-color: #C9BA7A !important;
+  padding: 15px !important;
+  position: absolute !important;
+  border-radius: 47px !important;
+  bottom: -40px !important;
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+  z-index: 3 !important;
+  width: 80px !important;
+  height: 80px !important;
+  box-sizing: border-box !important;
+}
+
+.quills-hoot-icon,
+.newsletter-card__icon {
+  display: block !important;
+  width: 50px !important;
+  height: 50px !important;
+  margin: auto !important;
+  object-fit: contain !important;
+}
+
+.quills-hoot-body,
+.newsletter-card__body {
+  padding: 70px 20px 30px 20px !important;
+  text-align: left !important;
+  background-color: #ffffff !important;
+  background-image: url('../images/home/hoot-paper-bg.jpg') !important;
+  background-repeat: repeat !important;
+  border-radius: 8px !important;
+  margin-top: 0 !important;
+  position: relative !important;
+  z-index: 1 !important;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.12) !important;
+}
+
+.quills-hoot-text {
+  line-height: 1.45 !important;
+  font-size: 16.5px !important;
+  font-weight: 600 !important;
+  color: #000000 !important;
+  margin-bottom: 24px !important;
+  text-align: left !important;
+}
+
+.quills-hoot-text p {
+  margin: 0 0 1.2em 0 !important;
+  font-family: 'Clarendon URW Extra Narrow', Georgia, serif !important;
+}
+
+.quills-hoot-text p:last-child {
+  margin-bottom: 0 !important;
+}
+
+.quills-highlight-orange {
+  color: #F05239 !important;
+  font-weight: 700 !important;
+}
+
+.quills-hoot-form {
+  display: flex !important;
+  margin-top: 30px !important;
+}
+
+.quills-hoot-input {
+  flex-grow: 1 !important;
+  border: 1px solid #3A3836 !important;
+  border-right: none !important;
+  padding: 12px 16px !important;
+  font-size: 16px !important;
+  outline: none !important;
+  border-radius: 0 !important;
+  background: #ffffff !important;
+  font-family: 'Clarendon URW Extra Narrow', serif !important;
+}
+
+.quills-hoot-input:focus {
+  border-color: #F05239 !important;
+}
+
+.quills-hoot-btn {
+  background-color: #F05239 !important;
+  color: #ffffff !important;
+  border: none !important;
+  min-width: 180px !important;
+  padding: 12px 24px !important;
+  font-family: 'Barlow Condensed', 'Revelstoke', sans-serif !important;
+  font-weight: 700 !important;
+  font-size: 16px !important;
+  letter-spacing: 3px !important;
+  cursor: pointer !important;
+  border-radius: 0 !important;
+  text-transform: uppercase !important;
+  transition: opacity 0.25s ease !important;
+}
+
+.quills-hoot-btn:hover {
+  opacity: 0.85 !important;
+}
+
+/* ========================================================
+   RESPONSIVE BREAKPOINTS
+   ======================================================== */
+@media (max-width: 1024px) {
+  .quills-split-row {
+    gap: 32px !important;
+  }
+  .quills-products-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+  .quills-hero-section {
+    min-height: 650px !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .quills-hero-section {
+    min-height: 580px !important;
+  }
+  .quills-hero-content-wrapper {
+    padding: 40px 20px 60px 20px !important;
+  }
+  .quills-split-row {
+    flex-direction: column !important;
+    gap: 30px !important;
+  }
+  .quills-split-row--reverse {
+    flex-direction: column !important;
+  }
+  .quills-split-media,
+  .quills-split-content {
+    flex: 0 0 100% !important;
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+  .quills-split-media,
+  .quills-split-img {
+    height: 380px !important;
+  }
+  .quills-features-grid {
+    grid-template-columns: 1fr !important;
+    gap: 35px !important;
+  }
+  .quills-products-grid {
+    grid-template-columns: 1fr !important;
+  }
+  .quills-hoot-section::after {
+    display: none !important;
+  }
+  .quills-hoot-bg-left {
+    width: 100% !important;
+  }
+  .quills-hoot-bg-right {
+    display: none !important;
+  }
+  .quills-hoot-form {
+    flex-direction: column !important;
+  }
+  .quills-hoot-input {
+    border-right: 1px solid #3A3836 !important;
+    border-bottom: none !important;
+  }
+  .quills-hoot-btn {
+    width: 100% !important;
+  }
+}
