@@ -57,6 +57,7 @@ function coffee_cafe_corner_scripts() {
 		wp_enqueue_script( 'coffee-cafe-corner-coffee-js', trailingslashit( get_template_directory_uri() ) . 'assets/js/coffee-quills.js', array( 'jquery' ), filemtime( get_template_directory() . '/assets/js/coffee-quills.js' ), true );
 		wp_localize_script( 'coffee-cafe-corner-coffee-js', 'quillsData', array(
 			'ajaxUrl' => admin_url( 'admin-ajax.php' ),
+			'nonce'   => wp_create_nonce( 'quills_nonce' ),
 		) );
 	}
 
@@ -68,6 +69,7 @@ function coffee_cafe_corner_scripts() {
 		wp_enqueue_script( 'coffee-cafe-corner-subscriptions-js', trailingslashit( get_template_directory_uri() ) . 'assets/js/subscriptions.js', array( 'jquery' ), filemtime( get_template_directory() . '/assets/js/subscriptions.js' ), true );
 		wp_localize_script( 'coffee-cafe-corner-subscriptions-js', 'quillsData', array(
 			'ajaxUrl' => admin_url( 'admin-ajax.php' ),
+			'nonce'   => wp_create_nonce( 'quills_nonce' ),
 		) );
 	}
 

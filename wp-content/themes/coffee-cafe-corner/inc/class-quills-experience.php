@@ -42,6 +42,11 @@ class Quills_Coffee_Experience {
         add_action('wp_ajax_quills_remove_cart_item', [__CLASS__, 'ajax_remove_cart_item']);
         add_action('wp_ajax_nopriv_quills_remove_cart_item', [__CLASS__, 'ajax_remove_cart_item']);
 
+        // Custom cart pricing & options session hooks (for subscriptions & variants)
+        add_filter('woocommerce_get_cart_item_from_session', [__CLASS__, 'get_cart_item_from_session'], 20, 2);
+        add_action('woocommerce_before_calculate_totals', [__CLASS__, 'apply_custom_cart_item_prices'], 20, 1);
+        add_filter('woocommerce_get_item_data', [__CLASS__, 'display_cart_item_custom_data'], 10, 2);
+
         add_action('wp_footer', [__CLASS__, 'render_cart_drawer_container'], 100);
 
         // Template loaders
@@ -98,7 +103,7 @@ class Quills_Coffee_Experience {
             'quills-coffee-style',
             get_template_directory_uri() . '/assets/css/quills-coffee.css',
             [],
-            '1.1.4'
+            '1.1.5'
         );
 
         // Quills JS
@@ -106,7 +111,7 @@ class Quills_Coffee_Experience {
             'quills-coffee-script',
             get_template_directory_uri() . '/assets/js/quills-coffee.js',
             ['jquery'],
-            '1.1.4',
+            '1.1.5',
             true
         );
 
@@ -376,6 +381,59 @@ class Quills_Coffee_Experience {
     }
 
     /**
+     * Restore custom cart item data from session
+     */
+    public static function get_cart_item_from_session($cart_item, $values) {
+        if (isset($values['quills_custom_price'])) {
+            $cart_item['quills_custom_price'] = $values['quills_custom_price'];
+        }
+        if (isset($values['quills_options'])) {
+            $cart_item['quills_options'] = $values['quills_options'];
+        }
+        return $cart_item;
+    }
+
+    /**
+     * Recalculate price in cart based on custom options / subscribe discount
+     */
+    public static function apply_custom_cart_item_prices($cart) {
+        if (is_admin() && !defined('DOING_AJAX')) {
+            return;
+        }
+
+        static $calculating = false;
+        if ($calculating) {
+            return;
+        }
+        $calculating = true;
+
+        foreach ($cart->get_cart() as $cart_item_key => $cart_item) {
+            if (isset($cart_item['quills_custom_price']) && is_numeric($cart_item['quills_custom_price'])) {
+                $cart_item['data']->set_price((float)$cart_item['quills_custom_price']);
+            }
+        }
+
+        $calculating = false;
+    }
+
+    /**
+     * Display custom options in cart/checkout
+     */
+    public static function display_cart_item_custom_data($item_data, $cart_item) {
+        if (!empty($cart_item['quills_options']) && is_array($cart_item['quills_options'])) {
+            foreach ($cart_item['quills_options'] as $key => $val) {
+                if (!empty($val)) {
+                    $item_data[] = [
+                        'key'   => $key,
+                        'value' => $val,
+                    ];
+                }
+            }
+        }
+        return $item_data;
+    }
+
+    /**
      * AJAX Add to Cart with Options & Cart Drawer Return
      */
     public static function ajax_add_to_cart() {
@@ -385,19 +443,55 @@ class Quills_Coffee_Experience {
         $size       = isset($_POST['size']) ? sanitize_text_field($_POST['size']) : '';
         $grind      = isset($_POST['grind']) ? sanitize_text_field($_POST['grind']) : '';
         $purchase   = isset($_POST['purchase_type']) ? sanitize_text_field($_POST['purchase_type']) : 'onetime';
+        $frequency  = isset($_POST['frequency']) ? sanitize_text_field($_POST['frequency']) : '';
+
+        $product = wc_get_product($product_id);
+        if (!$product) {
+            wp_send_json_error(['message' => 'Product not found.']);
+        }
+
+        $base_price = (float)$product->get_price();
+        if ($base_price <= 0) {
+            $base_price = 20.00;
+        }
+
+        // Calculate unit price according to Size
+        if ($size === '5lb') {
+            $unit_price = ($base_price == 20.00) ? 105.00 : ($base_price * 5.25);
+        } elseif ($size === '2lb') {
+            $unit_price = ($base_price == 20.00) ? 48.00 : ($base_price * 2.4);
+        } else {
+            $unit_price = $base_price;
+        }
+
+        // Apply 10% Discount for Subscribe
+        if ($purchase === 'subscribe') {
+            $unit_price = round($unit_price * 0.9, 2);
+        }
 
         $item_data = [];
         if (!empty($size)) {
             $item_data['Size'] = $size;
         }
         if (!empty($grind)) {
-            $item_data['Grind'] = $grind;
+            $item_data['Grind Type'] = $grind;
         }
         if ($purchase === 'subscribe') {
-            $item_data['Purchase Type'] = 'Subscribe & Save (10% Off)';
+            $sub_label = 'Subscribe & Save (10% Off)';
+            if (!empty($frequency)) {
+                $sub_label .= ' · ' . $frequency;
+            }
+            $item_data['Purchase Type'] = $sub_label;
+        } else {
+            $item_data['Purchase Type'] = 'One-time Purchase';
         }
 
-        $cart_item_key = WC()->cart->add_to_cart($product_id, $quantity, 0, [], ['quills_options' => $item_data]);
+        $cart_item_data = [
+            'quills_options'      => $item_data,
+            'quills_custom_price' => $unit_price
+        ];
+
+        $cart_item_key = WC()->cart->add_to_cart($product_id, $quantity, 0, [], $cart_item_data);
 
         if ($cart_item_key) {
             WC()->cart->calculate_totals();
@@ -491,14 +585,15 @@ class Quills_Coffee_Experience {
 
         // Query database for Upsell: Crewneck Sweatshirt (Evergreen)
         $upsell_product = null;
-        $upsell_post = get_page_by_path('crewneck-sweatshirt-evergreen', OBJECT, 'product');
-        if ($upsell_post) {
-            $upsell_product = wc_get_product($upsell_post->ID);
-        } else {
-            $other_prods = wc_get_products(['limit' => 1, 'status' => 'publish']);
-            if (!empty($other_prods)) {
-                $upsell_product = $other_prods[0];
-            }
+        $upsell_posts = get_posts([
+            'name'             => 'crewneck-sweatshirt-evergreen',
+            'post_type'        => 'product',
+            'post_status'      => 'publish',
+            'numberposts'      => 1,
+            'suppress_filters' => true
+        ]);
+        if (!empty($upsell_posts)) {
+            $upsell_product = wc_get_product($upsell_posts[0]->ID);
         }
 
         $upsell_data = [
@@ -567,7 +662,7 @@ class Quills_Coffee_Experience {
 
                         $opts = isset($cart_item['quills_options']) ? $cart_item['quills_options'] : [];
                         $size = isset($opts['Size']) ? $opts['Size'] : '';
-                        $grind = isset($opts['Grind']) ? $opts['Grind'] : '';
+                        $grind = !empty($opts['Grind Type']) ? $opts['Grind Type'] : (!empty($opts['Grind']) ? $opts['Grind'] : '');
                         $purchase_type = isset($opts['Purchase Type']) ? $opts['Purchase Type'] : '';
                     ?>
                         <div class="quills-drawer-item" data-key="<?php echo esc_attr($cart_item_key); ?>">

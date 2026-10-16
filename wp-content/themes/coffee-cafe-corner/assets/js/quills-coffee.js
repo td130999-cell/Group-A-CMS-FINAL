@@ -262,6 +262,15 @@
             var size = $('#quills-size-group .quills-pill-btn.active').data('size') || '12oz';
             var grind = $('#quills-grind-group .quills-pill-btn.active').data('grind') || 'Whole Bean';
             var purchaseType = $('input[name="quills_purchase_type"]:checked').val() || 'onetime';
+            var frequency = '';
+            if (purchaseType === 'subscribe') {
+                var $activeFreq = $('.quills-freq-pill.is-selected');
+                if ($activeFreq.length) {
+                    frequency = $activeFreq.text().trim();
+                } else {
+                    frequency = 'Deliver every 2 weeks';
+                }
+            }
 
             $btn.addClass('loading');
 
@@ -275,7 +284,8 @@
                     quantity: qty,
                     size: size,
                     grind: grind,
-                    purchase_type: purchaseType
+                    purchase_type: purchaseType,
+                    frequency: frequency
                 },
                 success: function(resp) {
                     $btn.removeClass('loading');
