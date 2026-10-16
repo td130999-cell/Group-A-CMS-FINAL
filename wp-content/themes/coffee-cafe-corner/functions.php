@@ -53,6 +53,11 @@ function coffee_cafe_corner_scripts() {
 	if ( is_page( 'merch' ) || is_page( 33 ) || is_page( 36 ) || is_page_template( 'templates/page-merch.html' ) ) {
 		wp_enqueue_style( 'coffee-cafe-corner-merch', trailingslashit( get_template_directory_uri() ) . 'assets/css/merch-quills.css', array(), $theme_ver );
 	}
+
+	// Enqueue Quills Gift Cards stylesheet
+	if ( is_page( 'gift-cards' ) || is_page( 37 ) || is_page_template( 'templates/page-gift-cards.html' ) ) {
+		wp_enqueue_style( 'coffee-cafe-corner-gift-cards', trailingslashit( get_template_directory_uri() ) . 'assets/css/gift-cards-quills.css', array(), $theme_ver );
+	}
 }
 add_action( 'wp_enqueue_scripts', 'coffee_cafe_corner_scripts' );
 
