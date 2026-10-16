@@ -86,7 +86,7 @@ class Quills_Coffee_Experience {
             'quills-coffee-style',
             get_template_directory_uri() . '/assets/css/quills-coffee.css',
             [],
-            '1.0.7'
+            '1.0.8'
         );
 
         // Quills JS
@@ -94,7 +94,7 @@ class Quills_Coffee_Experience {
             'quills-coffee-script',
             get_template_directory_uri() . '/assets/js/quills-coffee.js',
             ['jquery'],
-            '1.0.7',
+            '1.0.8',
             true
         );
 

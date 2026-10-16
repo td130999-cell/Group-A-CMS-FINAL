@@ -434,6 +434,307 @@
         });
 
         // ==========================================
+        // 4b. REVIEWS PAGINATION & PAGE SWITCHING
+        // ==========================================
+        var reviewsPagesData = {
+            1: [
+                {
+                    rating: 4,
+                    author: 'Dony Erwin Erwin',
+                    badge: 'standard',
+                    date: '08/02/2024',
+                    title: '',
+                    body: "It's a little on the mild side for me. We switched to Night Owl for next month's delivery. Thanks."
+                },
+                {
+                    rating: 5,
+                    author: 'Donna',
+                    badge: 'shop',
+                    date: '08/02/2024',
+                    title: '',
+                    body: "Amazing so glad we found this place",
+                    subnote: "Review written in Shop App"
+                },
+                {
+                    rating: 5,
+                    author: 'Staci R',
+                    badge: 'standard',
+                    date: '08/01/2024',
+                    title: '',
+                    body: "This is currently our favorite coffee! Looking forward to trying your other blends in the future."
+                },
+                {
+                    rating: 5,
+                    author: 'Sarah B',
+                    badge: 'standard',
+                    date: '07/15/2024',
+                    title: '',
+                    body: "Smooth, balanced, and perfectly roasted. My morning ritual wouldn't be the same without Inkwell."
+                },
+                {
+                    rating: 5,
+                    author: 'James K',
+                    badge: 'shop',
+                    date: '07/02/2024',
+                    title: '',
+                    body: "Great flavor profile, hints of chocolate and sweet stone fruit. Highly recommend.",
+                    subnote: "Review written in Shop App"
+                }
+            ],
+            2: [
+                {
+                    rating: 5,
+                    author: 'Gail S',
+                    badge: 'standard',
+                    date: '06/29/2025',
+                    title: '',
+                    body: "Delicious and does the trick for our morning coffee fix."
+                },
+                {
+                    rating: 5,
+                    author: 'Uisti Delgos',
+                    badge: 'standard',
+                    date: '04/30/2024',
+                    title: '',
+                    body: "Great one"
+                },
+                {
+                    rating: 5,
+                    author: 'Cheryl Stroodain',
+                    badge: 'standard',
+                    date: '03/19/2025',
+                    title: '',
+                    body: "Such a good 'middle of the road' blend. To my mind is neither too bold or too mild. Thanks"
+                },
+                {
+                    rating: 5,
+                    author: 'Anonymous',
+                    badge: 'standard',
+                    date: '12/05/2025',
+                    title: 'Excellent',
+                    body: "Excellent !"
+                },
+                {
+                    rating: 5,
+                    author: 'Robert Alvey',
+                    badge: 'standard',
+                    date: '10/04/2025',
+                    title: 'Bought once and hooked!',
+                    body: "We visited a location in Louisville while there for doctor appointments. It was an amazing coffee, and we were very happy. I purchased the Inkwell whole bean coffee and started using it. I love it!"
+                }
+            ],
+            3: [
+                {
+                    rating: 5,
+                    author: 'Nathan R',
+                    badge: 'standard',
+                    date: '09/18/2024',
+                    title: 'Perfection in a cup',
+                    body: "Inkwell is roasted to perfection, tastes great every time."
+                },
+                {
+                    rating: 5,
+                    author: 'Brianne E',
+                    badge: 'standard',
+                    date: '09/02/2024',
+                    title: '',
+                    body: "One cup is all it took, and we were hooked! Our daily go-to coffee."
+                },
+                {
+                    rating: 5,
+                    author: 'Tracy S',
+                    badge: 'shop',
+                    date: '08/25/2024',
+                    title: 'Exceptional Quality',
+                    body: "Quills has the best coffee and exceptional roaster quality! 5 stars!!!",
+                    subnote: "Review written in Shop App"
+                },
+                {
+                    rating: 5,
+                    author: 'Mark D',
+                    badge: 'standard',
+                    date: '08/14/2024',
+                    title: '',
+                    body: "Super fresh, fast shipping, and unbeatable quality."
+                },
+                {
+                    rating: 5,
+                    author: 'Rachel M',
+                    badge: 'standard',
+                    date: '08/10/2024',
+                    title: '',
+                    body: "Rich aroma and consistent cup every morning."
+                }
+            ],
+            4: [
+                {
+                    rating: 5,
+                    author: 'Carlos M',
+                    badge: 'standard',
+                    date: '07/28/2024',
+                    title: 'Great for Aeropress',
+                    body: "Balanced acidity and full body. Works wonderfully with Aeropress."
+                },
+                {
+                    rating: 5,
+                    author: 'Amanda P',
+                    badge: 'standard',
+                    date: '07/19/2024',
+                    title: '',
+                    body: "The subscription is so convenient and coffee arrives fresh."
+                },
+                {
+                    rating: 5,
+                    author: 'David L',
+                    badge: 'shop',
+                    date: '07/11/2024',
+                    title: 'Best in Louisville',
+                    body: "Best house blend in Kentucky hands down.",
+                    subnote: "Review written in Shop App"
+                },
+                {
+                    rating: 5,
+                    author: 'Kelly W',
+                    badge: 'standard',
+                    date: '06/30/2024',
+                    title: '',
+                    body: "Subtle sweetness and very smooth finish."
+                },
+                {
+                    rating: 5,
+                    author: 'Tim H',
+                    badge: 'standard',
+                    date: '06/22/2024',
+                    title: '',
+                    body: "Consistent quality bag after bag."
+                }
+            ],
+            16: [
+                {
+                    rating: 5,
+                    author: 'John Doe',
+                    badge: 'standard',
+                    date: '01/15/2023',
+                    title: 'Timeless classic',
+                    body: "Been drinking Quills since the beginning, Inkwell is timeless."
+                },
+                {
+                    rating: 5,
+                    author: 'Emily C',
+                    badge: 'standard',
+                    date: '01/08/2023',
+                    title: '',
+                    body: "Fantastic morning blend with milk or black."
+                },
+                {
+                    rating: 5,
+                    author: 'Michael B',
+                    badge: 'standard',
+                    date: '12/28/2022',
+                    title: '',
+                    body: "First time trying specialty coffee and this set the bar high."
+                },
+                {
+                    rating: 5,
+                    author: 'Lisa T',
+                    badge: 'standard',
+                    date: '12/14/2022',
+                    title: '',
+                    body: "A staple in our household."
+                },
+                {
+                    rating: 5,
+                    author: 'Aaron S',
+                    badge: 'standard',
+                    date: '12/02/2022',
+                    title: '',
+                    body: "Delicious chocolatey finish."
+                }
+            ]
+        };
+
+        function renderReviewsPage(pageNum) {
+            var page = parseInt(pageNum, 10) || 1;
+            var reviews = reviewsPagesData[page] || reviewsPagesData[1];
+            var $list = $('#quills-reviews-list');
+            if (!$list.length || !reviews) return;
+
+            var html = '';
+            reviews.forEach(function(item) {
+                var rating = item.rating || 5;
+                var filled = '<span class="star filled">★</span>'.repeat(rating);
+                var empty = '<span class="star empty">★</span>'.repeat(5 - rating);
+                var initial = item.author ? item.author.charAt(0).toUpperCase() : 'U';
+                var badgeLabel = (item.badge === 'shop') ? 'Verified by shop' : 'Verified';
+                var titleHtml = item.title ? '<div class="quills-review-item-headline" style="font-family:\'Besley\',Georgia,serif; font-weight:700; font-size:15px; margin-bottom:6px; color:#1a1a1a;">' + item.title + '</div>' : '';
+                var subnoteHtml = item.subnote ? '<span class="quills-review-subnote">' + item.subnote + '</span>' : '';
+
+                html += `
+                    <div class="quills-review-item-v2" data-rating="${rating}">
+                        <div class="quills-review-item-stars">
+                            ${filled}${empty}
+                        </div>
+                        <div class="quills-review-item-author-row">
+                            <span class="quills-author-avatar-circle">${initial}</span>
+                            <span class="quills-author-name-text">${item.author}</span>
+                            <span class="quills-verified-pill">${badgeLabel}</span>
+                            <span class="quills-review-date-text">${item.date}</span>
+                        </div>
+                        <div class="quills-review-item-text">
+                            ${titleHtml}
+                            ${item.body}
+                            ${subnoteHtml}
+                        </div>
+                    </div>
+                `;
+            });
+
+            $list.css('opacity', '0.3');
+            setTimeout(function() {
+                $list.html(html).css('opacity', '1');
+            }, 100);
+
+            // Update active number styling
+            $('.quills-page-num').removeClass('is-active');
+            $('.quills-page-num[data-page="' + page + '"]').addClass('is-active');
+
+            // Update arrows
+            $('#quills-reviews-prev').prop('disabled', page <= 1);
+            $('#quills-reviews-next').prop('disabled', page >= 16);
+        }
+
+        // Click on page number
+        $(document).on('click', '.quills-page-num', function(e) {
+            e.preventDefault();
+            var targetPage = parseInt($(this).attr('data-page') || $(this).text().trim(), 10);
+            if (targetPage) {
+                renderReviewsPage(targetPage);
+            }
+        });
+
+        // Click on Previous arrow
+        $(document).on('click', '#quills-reviews-prev, .quills-page-prev', function(e) {
+            e.preventDefault();
+            var cur = parseInt($('.quills-page-num.is-active').attr('data-page') || $('.quills-page-num.is-active').text().trim(), 10) || 1;
+            if (cur > 1) {
+                var prevPage = cur - 1;
+                if (cur === 16) prevPage = 4;
+                renderReviewsPage(prevPage);
+            }
+        });
+
+        // Click on Next arrow
+        $(document).on('click', '#quills-reviews-next, .quills-page-next', function(e) {
+            e.preventDefault();
+            var cur = parseInt($('.quills-page-num.is-active').attr('data-page') || $('.quills-page-num.is-active').text().trim(), 10) || 1;
+            if (cur < 16) {
+                var nextPage = cur + 1;
+                if (cur === 4) nextPage = 16;
+                renderReviewsPage(nextPage);
+            }
+        });
+
+        // ==========================================
         // 5. FACETED LIVE FILTERS (Collection Page)
         // ==========================================
         // Toggle Sidebar Filter Groups (+ / -)

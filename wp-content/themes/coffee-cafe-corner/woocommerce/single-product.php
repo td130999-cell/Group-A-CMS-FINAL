@@ -433,7 +433,6 @@ $review_count = (int)get_post_meta($id, '_wc_review_count', true) ?: ($review_st
                 endforeach;
             else:
             ?>
-                <!-- Authentic Fallback Cards matching Image 2 & Quills Coffee -->
                 <div class="quills-review-item-v2" data-rating="4">
                     <div class="quills-review-item-stars">
                         <span class="star filled">★</span><span class="star filled">★</span><span class="star filled">★</span><span class="star filled">★</span><span class="star empty">★</span>
@@ -479,19 +478,50 @@ $review_count = (int)get_post_meta($id, '_wc_review_count', true) ?: ($review_st
                         This is currently our favorite coffee! Looking forward to trying your other blends in the future.
                     </div>
                 </div>
+
+                <div class="quills-review-item-v2" data-rating="5">
+                    <div class="quills-review-item-stars">
+                        <span class="star filled">★</span><span class="star filled">★</span><span class="star filled">★</span><span class="star filled">★</span><span class="star filled">★</span>
+                    </div>
+                    <div class="quills-review-item-author-row">
+                        <span class="quills-author-avatar-circle">S</span>
+                        <span class="quills-author-name-text">Sarah B</span>
+                        <span class="quills-verified-pill">Verified</span>
+                        <span class="quills-review-date-text">07/15/2024</span>
+                    </div>
+                    <div class="quills-review-item-text">
+                        Smooth, balanced, and perfectly roasted. My morning ritual wouldn't be the same without Inkwell.
+                    </div>
+                </div>
+
+                <div class="quills-review-item-v2" data-rating="5">
+                    <div class="quills-review-item-stars">
+                        <span class="star filled">★</span><span class="star filled">★</span><span class="star filled">★</span><span class="star filled">★</span><span class="star filled">★</span>
+                    </div>
+                    <div class="quills-review-item-author-row">
+                        <span class="quills-author-avatar-circle">J</span>
+                        <span class="quills-author-name-text">James K</span>
+                        <span class="quills-verified-pill">Verified by shop</span>
+                        <span class="quills-review-date-text">07/02/2024</span>
+                    </div>
+                    <div class="quills-review-item-text">
+                        Great flavor profile, hints of chocolate and sweet stone fruit. Highly recommend.
+                        <span class="quills-review-subnote">Review written in Shop App</span>
+                    </div>
+                </div>
             <?php endif; ?>
         </div>
 
-        <!-- Customer Reviews Pagination matching Image 2 -->
-        <div class="quills-reviews-pagination">
-            <button type="button" class="quills-page-arrow" disabled>‹</button>
-            <button type="button" class="quills-page-num is-active">1</button>
-            <button type="button" class="quills-page-num">2</button>
-            <button type="button" class="quills-page-num">3</button>
-            <button type="button" class="quills-page-num">4</button>
+        <!-- Customer Reviews Pagination matching Image 2 & Live Quills -->
+        <div class="quills-reviews-pagination" id="quills-reviews-pagination">
+            <button type="button" class="quills-page-arrow quills-page-prev" id="quills-reviews-prev" disabled aria-label="Previous page">‹</button>
+            <button type="button" class="quills-page-num is-active" data-page="1">1</button>
+            <button type="button" class="quills-page-num" data-page="2">2</button>
+            <button type="button" class="quills-page-num" data-page="3">3</button>
+            <button type="button" class="quills-page-num" data-page="4">4</button>
             <span class="quills-page-dots">...</span>
-            <button type="button" class="quills-page-num">16</button>
-            <button type="button" class="quills-page-arrow">›</button>
+            <button type="button" class="quills-page-num" data-page="16">16</button>
+            <button type="button" class="quills-page-arrow quills-page-next" id="quills-reviews-next" aria-label="Next page">›</button>
         </div>
 
     </div>
