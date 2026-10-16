@@ -282,7 +282,7 @@ $img_dir   = $theme_uri . 'assets/images/home/';
                 <span class="quills-stars">★★★★★</span>
                 <span class="quills-review-count">(<?php echo esc_html( (int) $p_reviews ); ?> reviews)</span>
               </div>
-              <div class="quills-product-price">FROM $<?php echo esc_html( number_format( (float) $p_price, 2 ) ); ?></div>
+              <div class="quills-product-price">From $<?php echo esc_html( number_format( (float) $p_price, 2 ) ); ?></div>
             </div>
           </div>
         <?php

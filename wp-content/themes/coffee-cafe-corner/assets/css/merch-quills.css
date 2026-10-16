@@ -320,6 +320,29 @@
   background-color: #cbba6f !important;
 }
 
+.quills-merch-btn-add.is-soldout {
+  cursor: not-allowed !important;
+  opacity: 0.85 !important;
+}
+
+.quills-merch-btn-add.is-soldout:hover {
+  background-color: #DFC98A !important;
+}
+
+/* Sold Out Badge (Top-left corner of card) */
+.quills-merch-badge {
+  position: absolute !important;
+  top: 14px !important;
+  left: 14px !important;
+  font-family: 'Clarendon URW Extra Narrow', Georgia, serif !important;
+  font-size: 15px !important;
+  line-height: 1 !important;
+  color: #151515 !important;
+  background: transparent !important;
+  z-index: 4 !important;
+  pointer-events: none !important;
+}
+
 /* ========================================================
    PRODUCT INFO BELOW IMAGE
    ======================================================== */

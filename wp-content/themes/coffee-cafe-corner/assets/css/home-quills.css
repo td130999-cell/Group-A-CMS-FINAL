@@ -642,12 +642,13 @@ body.home .quills-home-wrapper,
 }
 
 .quills-bestsellers-header .quills-section-title {
-  font-family: 'El Hidrant', cursive, serif !important;
-  font-size: 40px !important;
-  line-height: 48px !important;
-  font-weight: 400 !important;
-  font-style: normal !important;
-  color: #3A3837 !important;
+  font-family: 'Revelstoke', sans-serif !important;
+  font-size: 34px !important;
+  line-height: 42px !important;
+  font-weight: 700 !important;
+  letter-spacing: 1.5px !important;
+  text-transform: uppercase !important;
+  color: #678464 !important;
   text-align: center !important;
   margin-bottom: 8px !important;
 }

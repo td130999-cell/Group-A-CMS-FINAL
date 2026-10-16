@@ -69,6 +69,7 @@ if ( ! empty( $wc_products ) ) {
       'rating_type' => ( $rating > 0 ) ? 'filled' : 'empty',
       'reviews'     => ( $reviews_count > 0 ) ? '(' . $reviews_count . ' reviews)' : '(No reviews)',
       'link'        => get_permalink( $p_id ),
+      'in_stock'    => $product->is_in_stock(),
     );
   }
 }
@@ -123,6 +124,9 @@ $total_products = count( $merch_products );
       <?php foreach ( $merch_products as $product ) : ?>
         <div class="quills-merch-card" data-product-id="<?php echo esc_attr( $product['id'] ); ?>">
           <div class="quills-merch-image-box">
+            <?php if ( ! $product['in_stock'] ) : ?>
+              <div class="quills-merch-badge">Sold out</div>
+            <?php endif; ?>
             <a href="<?php echo esc_url( $product['link'] ); ?>" class="quills-merch-img-link">
               <img src="<?php echo esc_url( $product['img_url'] ); ?>" alt="<?php echo esc_attr( $product['title'] ); ?>" class="quills-merch-img" loading="lazy" />
               <div class="quills-merch-rollover">
@@ -134,12 +138,18 @@ $total_products = count( $merch_products );
               </div>
             </a>
             <div class="quills-merch-quick-add">
-              <form class="quills-merch-quick-add-form" method="post" action="<?php echo esc_url( function_exists( 'wc_get_cart_url' ) ? wc_get_cart_url() : home_url( '/cart/' ) ); ?>" style="width: 100%; margin: 0; padding: 0;">
-                <input type="hidden" name="add-to-cart" value="<?php echo esc_attr( $product['id'] ); ?>" />
-                <button type="submit" class="quills-merch-btn-add" aria-label="<?php echo esc_attr( sprintf( __( 'ADD TO CART %s', 'coffee-cafe-corner' ), $product['title'] ) ); ?>">
-                  <span>ADD TO CART</span>
+              <?php if ( $product['in_stock'] ) : ?>
+                <form class="quills-merch-quick-add-form" method="post" action="<?php echo esc_url( function_exists( 'wc_get_cart_url' ) ? wc_get_cart_url() : home_url( '/cart/' ) ); ?>" style="width: 100%; margin: 0; padding: 0;">
+                  <input type="hidden" name="add-to-cart" value="<?php echo esc_attr( $product['id'] ); ?>" />
+                  <button type="submit" class="quills-merch-btn-add" aria-label="<?php echo esc_attr( sprintf( __( 'ADD TO CART %s', 'coffee-cafe-corner' ), $product['title'] ) ); ?>">
+                    <span>ADD TO CART</span>
+                  </button>
+                </form>
+              <?php else : ?>
+                <button type="button" class="quills-merch-btn-add is-soldout" disabled aria-disabled="true">
+                  <span>SOLD OUT</span>
                 </button>
-              </form>
+              <?php endif; ?>
             </div>
           </div>
           <div class="quills-merch-info">

@@ -109,12 +109,12 @@ class Coffee_Cafe_Corner_Quills_Products_DB {
 			array(
 				'name'          => 'Blacksmith | Espresso Blend',
 				'slug'          => 'blacksmith-espresso',
-				'price'         => '18.50',
+				'price'         => '20.00',
 				'img'           => 'product-blacksmith-front.jpg',
 				'short_desc'    => "Baker's chocolate, blueberries, hazelnut",
 				'desc'          => "The F1 car of our lineup. Our signature espresso that folks enjoy in every latte, cappuccino, and cortado in our cafés.\n\nProcess: Washed & Natural\nOrigins: Colombia, Nicaragua, Ethiopia",
 				'rating'        => 5.0,
-				'reviews_count' => 56,
+				'reviews_count' => 60,
 				'meta'          => array(
 					'_quills_tag'       => 'BLACKSMITH',
 					'_quills_tag_color' => '#000000',
@@ -125,38 +125,38 @@ class Coffee_Cafe_Corner_Quills_Products_DB {
 				),
 			),
 			array(
-				'name'          => 'Inkwell | House Blend',
+				'name'          => 'Inkwell | Signature Blend',
 				'slug'          => 'inkwell-blend',
-				'price'         => '18.00',
+				'price'         => '20.00',
 				'img'           => 'product-inkwell-front.jpg',
-				'short_desc'    => 'Milk chocolate, caramel, apple',
-				'desc'          => "Our house blend that has something for everyone. Designed to be sweet, clean, and endlessly drinkable whether black or with cream.\n\nProcess: Washed & Natural\nOrigins: Colombia, Guatemala",
+				'short_desc'    => 'Graham cracker, cooked cherries, vanilla',
+				'desc'          => "The daily driver. Our classic house blend that's on drip at our cafes from open to close. Loved by regulars for 17 years.\n\nProcess: Washed & Natural\nOrigins: Colombia, Guatemala, Ethiopia",
 				'rating'        => 5.0,
-				'reviews_count' => 42,
+				'reviews_count' => 80,
 				'meta'          => array(
 					'_quills_tag'       => 'INKWELL',
-					'_quills_tag_color' => '#1b3c35',
-					'_quills_tag_desc'  => 'Our house blend that has something for everyone. Designed to be sweet, clean, and endlessly drinkable whether black or with cream.',
-					'_quills_tasting'   => 'Milk chocolate, caramel, apple',
-					'_quills_details'   => "Our House Blend\nProcess: Washed & Natural\nOrigins: Colombia, Guatemala",
+					'_quills_tag_color' => '#f15239',
+					'_quills_tag_desc'  => "The daily driver. Our classic house blend that's on drip at our cafes from open to close. Loved by regulars for 17 years.",
+					'_quills_tasting'   => 'Graham cracker, cooked cherries, vanilla',
+					'_quills_details'   => "Our Signature House Blend\nProcess: Washed & Natural\nOrigins: Colombia, Guatemala, Ethiopia",
 					'_quills_back_img'  => 'product-bag-back.jpg',
 				),
 			),
 			array(
-				'name'          => 'Southern Gothic | Seasonal Blend',
+				'name'          => 'Southern Gothic | Cold Brew Blend',
 				'slug'          => 'southern-gothic',
-				'price'         => '18.50',
+				'price'         => '20.00',
 				'img'           => 'product-southern-gothic-front.jpg',
-				'short_desc'    => 'Stone fruit, honey, citrus',
-				'desc'          => "Our rotating seasonal blend celebrating bright, vibrant coffees with floral sweetness and sparkling acidity.\n\nProcess: Washed\nOrigins: Ethiopia, Honduras",
+				'short_desc'    => 'Chocolate, caramel, well-balanced.',
+				'desc'          => "Our cold brew blend crafted for our customers who prefer their coffee chilled.\n\nProcess: Washed, Natural\nOrigins: Brazil & Colombia",
 				'rating'        => 5.0,
-				'reviews_count' => 38,
+				'reviews_count' => 21,
 				'meta'          => array(
 					'_quills_tag'       => 'SOUTHERN GOTHIC',
-					'_quills_tag_color' => '#d0532b',
-					'_quills_tag_desc'  => 'Our rotating seasonal blend celebrating bright, vibrant coffees with floral sweetness and sparkling acidity.',
-					'_quills_tasting'   => 'Stone fruit, honey, citrus',
-					'_quills_details'   => "Seasonal Blend\nProcess: Washed\nOrigins: Ethiopia, Honduras",
+					'_quills_tag_color' => '#926685',
+					'_quills_tag_desc'  => 'Our cold brew blend crafted for our customers who prefer their coffee chilled.',
+					'_quills_tasting'   => 'Chocolate, caramel, well-balanced.',
+					'_quills_details'   => "Process: Washed, Natural\nOrigins: Brazil & Colombia",
 					'_quills_back_img'  => 'product-bag-back.jpg',
 				),
 			),
@@ -202,7 +202,7 @@ class Coffee_Cafe_Corner_Quills_Products_DB {
 				'img'           => 'merch-owl-tee-pastel-green.jpg',
 				'desc'          => "Garment dyed heavyweight t-shirt in pastel green.\n\n100% US cotton.",
 				'rating'        => 5.0,
-				'reviews_count' => 8,
+				'reviews_count' => 2,
 			),
 			array(
 				'name'          => 'Owl Embroidered Hat',
@@ -239,6 +239,7 @@ class Coffee_Cafe_Corner_Quills_Products_DB {
 				'desc'          => 'Red Ceramic Quills "Postage"',
 				'rating'        => 0,
 				'reviews_count' => 0,
+				'stock_status'  => 'outofstock',
 			),
 			array(
 				'name'          => "Quill's Slow Coffee Hoodie (Charcoal)",
@@ -316,7 +317,7 @@ class Coffee_Cafe_Corner_Quills_Products_DB {
 		$product->set_description( $data['desc'] ?? '' );
 		$product->set_short_description( $data['short_desc'] ?? '' );
 		$product->set_manage_stock( false );
-		$product->set_stock_status( 'instock' );
+		$product->set_stock_status( $data['stock_status'] ?? 'instock' );
 
 		if ( $cat_id ) {
 			$product->set_category_ids( array( $cat_id ) );
