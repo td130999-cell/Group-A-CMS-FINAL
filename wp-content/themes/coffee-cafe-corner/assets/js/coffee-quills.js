@@ -128,7 +128,7 @@
         });
 
         // 6. Quick Add to Cart AJAX
-        $(document).on('click', '.quills-quick-add-btn', function(e) {
+        $(document).on('click', '.quills-coffee-card-add-btn, .quills-quick-add-btn', function(e) {
             e.preventDefault();
             var $btn = $(this);
             var productId = $btn.data('product-id');

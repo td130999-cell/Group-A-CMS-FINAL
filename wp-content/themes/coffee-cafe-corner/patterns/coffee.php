@@ -161,69 +161,44 @@ $total_products = $query->found_posts;
 			if ( $query->have_posts() ) :
 				while ( $query->have_posts() ) :
 					$query->the_post();
-					$product_id    = get_the_ID();
-					$title         = get_the_title();
-					$price_display = get_post_meta( $product_id, '_price_display', true );
-					if ( empty( $price_display ) ) {
-						$price         = get_post_meta( $product_id, '_price', true );
-						$price_display = $price ? '$' . number_format( (float) $price, 2 ) : 'FROM $20.00';
-					}
-					$rating        = (float) get_post_meta( $product_id, '_wc_average_rating', true );
-					$review_count  = (int) get_post_meta( $product_id, '_wc_review_count', true );
-					$image_rel     = get_post_meta( $product_id, '_coffee_image', true );
-					$fallback_rel  = get_post_meta( $product_id, '_coffee_fallback_image', true );
-
-					$image_url = '';
-					if ( ! empty( $image_rel ) && file_exists( get_template_directory() . '/assets/images/' . $image_rel ) ) {
-						$image_url = trailingslashit( get_template_directory_uri() ) . 'assets/images/' . $image_rel;
-					} elseif ( ! empty( $fallback_rel ) && file_exists( ABSPATH . 'wp-content/uploads/' . $fallback_rel ) ) {
-						$image_url = content_url( '/uploads/' . $fallback_rel );
-					} elseif ( has_post_thumbnail( $product_id ) ) {
-						$image_url = get_the_post_thumbnail_url( $product_id, 'medium_large' );
-					} else {
-						$image_url = trailingslashit( get_template_directory_uri() ) . 'assets/images/coffee/inkwell.jpg';
+					$card = Coffee_Cafe_Corner_Coffee_DB::get_product_card_data( get_the_ID() );
+					if ( ! $card ) {
+						continue;
 					}
 					?>
 					<article class="quills-coffee-card">
 						<div class="quills-coffee-card-media">
-							<a href="<?php the_permalink(); ?>" class="quills-coffee-card-link">
-								<img src="<?php echo esc_url( $image_url ); ?>" alt="<?php echo esc_attr( $title ); ?>" class="quills-coffee-card-img" loading="lazy" />
+							<a href="<?php echo esc_url( $card['permalink'] ); ?>" class="quills-coffee-card-link">
+								<img src="<?php echo esc_url( $card['image_url'] ); ?>" alt="<?php echo esc_attr( $card['title'] ); ?>" class="quills-coffee-card-img" loading="lazy" />
 							</a>
-							<div class="quills-coffee-card-overlay">
-								<button type="button" class="quills-quick-add-btn" data-product-id="<?php echo esc_attr( $product_id ); ?>">
+
+							<!-- HOVER OVERLAY: Hidden by default, appears ONLY on hover -->
+							<div class="quills-card-hover-overlay">
+								<a href="<?php echo esc_url( $card['permalink'] ); ?>" class="quills-overlay-text-link">
+									<h4 class="quills-overlay-title"><?php echo esc_html( $card['title'] ); ?></h4>
+									<div class="quills-overlay-divider"></div>
+									<p class="quills-overlay-notes"><?php echo esc_html( $card['tasting_notes'] ); ?></p>
+									<div class="quills-overlay-details">
+										<p class="quills-overlay-desc"><strong><?php echo esc_html( $card['subtitle'] ); ?></strong></p>
+										<p class="quills-overlay-spec"><strong>Process:</strong> <?php echo esc_html( $card['process'] ); ?></p>
+										<p class="quills-overlay-spec"><strong>Origins:</strong> <?php echo esc_html( $card['origins'] ); ?></p>
+									</div>
+								</a>
+								<button type="button" class="quills-coffee-card-add-btn" data-product-id="<?php echo esc_attr( $card['id'] ); ?>">
 									<?php esc_html_e( 'ADD TO CART', 'coffee-cafe-corner' ); ?>
 								</button>
 							</div>
 						</div>
 						<div class="quills-coffee-card-content">
 							<h3 class="quills-coffee-card-title">
-								<a href="<?php the_permalink(); ?>"><?php echo esc_html( $title ); ?></a>
+								<a href="<?php echo esc_url( $card['permalink'] ); ?>"><?php echo esc_html( $card['title'] ); ?></a>
 							</h3>
 							<div class="quills-coffee-card-rating">
-								<span class="quills-stars">
-									<?php
-									$rounded = round( $rating );
-									for ( $i = 1; $i <= 5; $i++ ) {
-										if ( $i <= $rounded && $rating > 0 ) {
-											echo '<span class="quills-star quills-star--filled">★</span>';
-										} else {
-											echo '<span class="quills-star quills-star--empty">☆</span>';
-										}
-									}
-									?>
-								</span>
-								<span class="quills-review-count">
-									<?php
-									if ( $review_count > 0 ) {
-										printf( esc_html__( '(%d reviews)', 'coffee-cafe-corner' ), (int) $review_count );
-									} else {
-										esc_html_e( '(No reviews)', 'coffee-cafe-corner' );
-									}
-									?>
-								</span>
+								<span class="quills-stars-gold">★★★★★</span>
+								<span class="quills-review-count">(<?php echo esc_html( $card['review_count'] ); ?> reviews)</span>
 							</div>
 							<div class="quills-coffee-card-price">
-								<?php echo esc_html( $price_display ); ?>
+								<?php echo esc_html( $card['price_display'] ); ?>
 							</div>
 						</div>
 					</article>

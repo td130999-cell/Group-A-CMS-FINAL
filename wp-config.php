@@ -75,7 +75,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 	define( 'ABSPATH', __DIR__ . '/' );
 }
 
-define( 'DISABLE_WP_CRON', true );
 define( 'WP_HTTP_BLOCK_EXTERNAL', true );
 define( 'WP_ACCESSIBLE_HOSTS', 'localhost,127.0.0.1' );
 

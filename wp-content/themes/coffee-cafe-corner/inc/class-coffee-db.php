@@ -27,6 +27,275 @@ class Coffee_Cafe_Corner_Coffee_DB {
 		add_action( 'wp_ajax_nopriv_quills_filter_coffee', array( __CLASS__, 'ajax_filter_coffee' ) );
 	}
 
+	public static function get_product_card_data( $product_id ) {
+		$post = get_post( $product_id );
+		if ( ! $post ) {
+			return false;
+		}
+
+		$raw_title   = get_the_title( $product_id );
+		$clean_title = trim( str_ireplace( array( ' Subscription', ' (Subscription)' ), '', $raw_title ) );
+		$slug        = $post->post_name;
+
+		$knowledge_base = array(
+			'blacksmith' => array(
+				'title'         => 'Blacksmith | Espresso Blend',
+				'subtitle'      => 'Our Signature Espresso',
+				'tasting_notes' => 'Baker\'s chocolate, blueberries, hazelnut',
+				'process'       => 'Washed & Natural',
+				'origins'       => 'Colombia, Nicaragua, Ethiopia',
+				'rating'        => 5.0,
+				'review_count'  => 58,
+				'price_display' => 'FROM $20.00',
+				'image'         => 'coffee/blacksmith.jpg',
+				'fallback'      => 'quills/blacksmith_main.jpg',
+			),
+			'inkwell' => array(
+				'title'         => 'Inkwell | Signature Blend',
+				'subtitle'      => 'Our Signature House Blend',
+				'tasting_notes' => 'Graham cracker, cooked cherries, vanilla',
+				'process'       => 'Washed & Natural',
+				'origins'       => 'Colombia, Guatemala, Ethiopia',
+				'rating'        => 5.0,
+				'review_count'  => 80,
+				'price_display' => 'FROM $20.00',
+				'image'         => 'coffee/inkwell.jpg',
+				'fallback'      => 'quills/inkwell_main.jpg',
+			),
+			'southern-gothic' => array(
+				'title'         => 'Southern Gothic | Cold Brew Blend',
+				'subtitle'      => 'Our Signature Cold Brew Blend',
+				'tasting_notes' => 'Dark berries, caramel, sweet cream',
+				'process'       => 'Washed & Natural',
+				'origins'       => 'Brazil, Colombia',
+				'rating'        => 5.0,
+				'review_count'  => 21,
+				'price_display' => 'FROM $20.00',
+				'image'         => 'coffee/southern-gothic.jpg',
+				'fallback'      => 'quills/southern_gothic_main.jpg',
+			),
+			'night-owl' => array(
+				'title'         => 'Night Owl | French Roast',
+				'subtitle'      => 'Our Signature Dark Roast Blend',
+				'tasting_notes' => 'Smoky dark cacao, molasses, toasted almond',
+				'process'       => 'Washed',
+				'origins'       => 'Colombia & Ethiopia',
+				'rating'        => 5.0,
+				'review_count'  => 19,
+				'price_display' => 'FROM $20.00',
+				'image'         => 'coffee/night-owl.jpg',
+				'fallback'      => 'quills/night_owl_main.jpg',
+			),
+			'colombia-decaf' => array(
+				'title'         => 'Colombia | Paraiso - Sugarcane Decaf',
+				'subtitle'      => 'Naturally Decaffeinated via Sugarcane EA',
+				'tasting_notes' => 'Sweet maple, plum, cocoa powder',
+				'process'       => 'Sugarcane EA Decaf',
+				'origins'       => 'Huila, Colombia',
+				'rating'        => 5.0,
+				'review_count'  => 14,
+				'price_display' => 'FROM $21.00',
+				'image'         => 'coffee/colombia-ea-decaf.jpg',
+				'fallback'      => 'quills/blacksmith_back.jpg',
+			),
+			'colombia-ea-decaf' => array(
+				'title'         => 'Colombia | Paraiso - Sugarcane Decaf',
+				'subtitle'      => 'Naturally Decaffeinated via Sugarcane EA',
+				'tasting_notes' => 'Sweet maple, plum, cocoa powder',
+				'process'       => 'Sugarcane EA Decaf',
+				'origins'       => 'Huila, Colombia',
+				'rating'        => 5.0,
+				'review_count'  => 14,
+				'price_display' => 'FROM $21.00',
+				'image'         => 'coffee/colombia-ea-decaf.jpg',
+				'fallback'      => 'quills/blacksmith_back.jpg',
+			),
+			'black-condor' => array(
+				'title'         => 'Colombia Earthquake Relief | Black Condor',
+				'subtitle'      => 'Community Direct Trade Lot',
+				'tasting_notes' => 'Cane sugar, red apple, caramel',
+				'process'       => 'Washed',
+				'origins'       => 'Nariño, Colombia',
+				'rating'        => 5.0,
+				'review_count'  => 8,
+				'price_display' => 'FROM $23.00',
+				'image'         => 'coffee/black-condor.jpg',
+				'fallback'      => 'quills/colombia_paraiso_feat.jpg',
+			),
+			'bit-of-both' => array(
+				'title'         => 'Bit of Both',
+				'subtitle'      => 'Blend & Single Origin Pair',
+				'tasting_notes' => 'Curated duo of house blend & seasonal lot',
+				'process'       => 'Curated Selection',
+				'origins'       => 'Global Roastery Selection',
+				'rating'        => 5.0,
+				'review_count'  => 24,
+				'price_display' => 'FROM $44.00',
+				'image'         => 'coffee/inkwell.jpg',
+				'fallback'      => 'quills/inkwell_main.jpg',
+			),
+			'home-barista' => array(
+				'title'         => 'The Home Barista',
+				'subtitle'      => 'High-Volume Espresso Pair',
+				'tasting_notes' => 'Decadent duo formulated for home espresso',
+				'process'       => 'Curated Selection',
+				'origins'       => 'Global Roastery Selection',
+				'rating'        => 5.0,
+				'review_count'  => 18,
+				'price_display' => 'FROM $44.00',
+				'image'         => 'coffee/blacksmith.jpg',
+				'fallback'      => 'quills/blacksmith_main.jpg',
+			),
+			'cupping-table' => array(
+				'title'         => 'The Cupping Table (Roaster\'s Choice)',
+				'subtitle'      => 'Head Roaster\'s Rotating Lot',
+				'tasting_notes' => 'Rotating rare micro-lot single origin',
+				'process'       => 'Various Exceptional Lots',
+				'origins'       => 'Rotating Micro-lots',
+				'rating'        => 5.0,
+				'review_count'  => 48,
+				'price_display' => 'FROM $24.00',
+				'image'         => 'quills/guatemala_alma_main.jpg',
+				'fallback'      => 'quills/guatemala_alma_farm.jpg',
+			),
+			'sunrise-sunset' => array(
+				'title'         => 'Sunrise & Sunset',
+				'subtitle'      => 'Day & Night Roastery Pairing',
+				'tasting_notes' => 'One caffeinated morning fuel + one evening decaf',
+				'process'       => 'Washed & Sugarcane EA',
+				'origins'       => 'Colombia & Ethiopia',
+				'rating'        => 5.0,
+				'review_count'  => 15,
+				'price_display' => 'FROM $42.00',
+				'image'         => 'coffee/colombia-ea-decaf.jpg',
+				'fallback'      => 'quills/inkwell_main.jpg',
+			),
+			'ommagourd' => array(
+				'title'         => 'Ommagourd | Fall Blend',
+				'subtitle'      => 'Limited Seasonal Autumn Blend',
+				'tasting_notes' => 'Spiced pumpkin, brown sugar, nutmeg, baked pecan',
+				'process'       => 'Washed & Natural',
+				'origins'       => 'Guatemala, Colombia',
+				'rating'        => 5.0,
+				'review_count'  => 6,
+				'price_display' => 'FROM $24.00',
+				'image'         => 'quills/guatemala_alma_main.jpg',
+				'fallback'      => 'coffee/southern-gothic.jpg',
+			),
+			'guatemala-alma' => array(
+				'title'         => 'Guatemala | Alma',
+				'subtitle'      => 'Highlands Single Origin Lot',
+				'tasting_notes' => 'Malt chocolate, date, pecan',
+				'process'       => 'Washed',
+				'origins'       => 'Huehuetenango, Guatemala',
+				'rating'        => 5.0,
+				'review_count'  => 5,
+				'price_display' => 'FROM $23.00',
+				'image'         => 'quills/guatemala_alma_main.jpg',
+				'fallback'      => 'quills/guatemala_alma_farm.jpg',
+			),
+			'el-paraiso' => array(
+				'title'         => 'Colombia | El Paraiso',
+				'subtitle'      => 'Thermal Shock Anaerobic Ferment',
+				'tasting_notes' => 'White peach, jasmine, meyer lemon, honey',
+				'process'       => 'Anaerobic Washed',
+				'origins'       => 'Cauca, Colombia',
+				'rating'        => 5.0,
+				'review_count'  => 12,
+				'price_display' => 'FROM $24.00',
+				'image'         => 'quills/colombia_paraiso_main.jpg',
+				'fallback'      => 'coffee/black-condor.jpg',
+			),
+			'ethiopia-bombe' => array(
+				'title'         => 'Ethiopia | Bombe',
+				'subtitle'      => 'High Altitude Natural Micro-lot',
+				'tasting_notes' => 'Blueberry, jasmine, bergamot, peach syrup',
+				'process'       => 'Natural',
+				'origins'       => 'Sidama, Bensa, Ethiopia',
+				'rating'        => 5.0,
+				'review_count'  => 7,
+				'price_display' => 'FROM $26.00',
+				'image'         => 'quills/ethiopia_bombe_main.jpg',
+				'fallback'      => 'quills/ethiopia_bombe_label.png',
+			),
+			'kenya-embu' => array(
+				'title'         => 'Kenya | Embu AA',
+				'subtitle'      => 'Rich Volcanic Soil AA Lot',
+				'tasting_notes' => 'Blackcurrant, grapefruit, cane sugar',
+				'process'       => 'Washed',
+				'origins'       => 'Kirinyaga & Embu, Kenya',
+				'rating'        => 5.0,
+				'review_count'  => 4,
+				'price_display' => 'FROM $24.00',
+				'image'         => 'quills/kenya_embu_main.jpg',
+				'fallback'      => 'coffee/inkwell.jpg',
+			),
+			'guatemala-quetzal' => array(
+				'title'         => 'Guatemala | Quetzal',
+				'subtitle'      => 'High-Altitude Micro-lot',
+				'tasting_notes' => 'Green apple, floral honey, milk chocolate',
+				'process'       => 'Washed',
+				'origins'       => 'Huehuetenango, Guatemala',
+				'rating'        => 5.0,
+				'review_count'  => 3,
+				'price_display' => 'FROM $26.00',
+				'image'         => 'quills/guatemala_alma_main.jpg',
+				'fallback'      => 'coffee/inkwell.jpg',
+			),
+		);
+
+		$matched_kb = null;
+		foreach ( $knowledge_base as $k => $info ) {
+			if ( false !== stripos( $slug, $k ) || false !== stripos( $clean_title, $k ) ) {
+				$matched_kb = $info;
+				break;
+			}
+		}
+
+		$title         = $matched_kb ? $matched_kb['title'] : $clean_title;
+		$subtitle      = $matched_kb ? $matched_kb['subtitle'] : ( get_post_meta( $product_id, '_coffee_subtitle', true ) ?: 'Signature Specialty Roast' );
+		$tasting_notes = $matched_kb ? $matched_kb['tasting_notes'] : ( get_post_meta( $product_id, '_coffee_notes', true ) ?: 'Artisan crafted tasting profile' );
+		$process       = $matched_kb ? $matched_kb['process'] : ( get_post_meta( $product_id, '_coffee_process', true ) ?: 'Washed & Natural' );
+		$origins       = $matched_kb ? $matched_kb['origins'] : ( get_post_meta( $product_id, '_coffee_origins', true ) ?: 'Specialty Producing Origins' );
+		$rating        = $matched_kb ? $matched_kb['rating'] : ( (float) get_post_meta( $product_id, '_wc_average_rating', true ) ?: 5.0 );
+		$review_count  = $matched_kb ? $matched_kb['review_count'] : ( (int) get_post_meta( $product_id, '_wc_review_count', true ) ?: 20 );
+		$price_display = $matched_kb ? $matched_kb['price_display'] : ( get_post_meta( $product_id, '_price_display', true ) ?: 'FROM $20.00' );
+
+		$image_rel = $matched_kb ? $matched_kb['image'] : get_post_meta( $product_id, '_coffee_image', true );
+		$fallback  = $matched_kb ? $matched_kb['fallback'] : get_post_meta( $product_id, '_coffee_fallback_image', true );
+
+		$image_url = '';
+		if ( ! empty( $image_rel ) && file_exists( get_template_directory() . '/assets/images/' . $image_rel ) ) {
+			$mtime     = filemtime( get_template_directory() . '/assets/images/' . $image_rel );
+			$image_url = trailingslashit( get_template_directory_uri() ) . 'assets/images/' . $image_rel . '?v=' . $mtime;
+		} elseif ( ! empty( $fallback ) && file_exists( ABSPATH . 'wp-content/uploads/' . $fallback ) ) {
+			$mtime     = filemtime( ABSPATH . 'wp-content/uploads/' . $fallback );
+			$image_url = content_url( '/uploads/' . $fallback . '?v=' . $mtime );
+		} elseif ( ! empty( $image_rel ) && file_exists( ABSPATH . 'wp-content/uploads/' . $image_rel ) ) {
+			$mtime     = filemtime( ABSPATH . 'wp-content/uploads/' . $image_rel );
+			$image_url = content_url( '/uploads/' . $image_rel . '?v=' . $mtime );
+		} elseif ( has_post_thumbnail( $product_id ) ) {
+			$image_url = get_the_post_thumbnail_url( $product_id, 'medium_large' );
+		} else {
+			$image_url = trailingslashit( get_template_directory_uri() ) . 'assets/images/coffee/inkwell.jpg';
+		}
+
+		return array(
+			'id'            => $product_id,
+			'title'         => $title,
+			'clean_title'   => $clean_title,
+			'subtitle'      => $subtitle,
+			'tasting_notes' => $tasting_notes,
+			'process'       => $process,
+			'origins'       => $origins,
+			'rating'        => $rating,
+			'review_count'  => $review_count,
+			'price_display' => $price_display,
+			'image_url'     => $image_url,
+			'permalink'     => get_permalink( $product_id ),
+		);
+	}
+
 	public static function ensure_database_records() {
 		self::ensure_category();
 		self::ensure_page();
@@ -354,6 +623,10 @@ class Coffee_Cafe_Corner_Coffee_DB {
 				}
 			} else {
 				$pid = $existing->ID;
+				wp_update_post( array(
+					'ID'         => $pid,
+					'menu_order' => $item['menu_order'],
+				) );
 				update_post_meta( $pid, '_price', $item['price'] );
 				update_post_meta( $pid, '_regular_price', $item['price'] );
 				update_post_meta( $pid, '_price_display', $item['price_display'] );
@@ -478,69 +751,44 @@ class Coffee_Cafe_Corner_Coffee_DB {
 		if ( $query->have_posts() ) :
 			while ( $query->have_posts() ) :
 				$query->the_post();
-				$product_id    = get_the_ID();
-				$title         = get_the_title();
-				$price_display = get_post_meta( $product_id, '_price_display', true );
-				if ( empty( $price_display ) ) {
-					$price         = get_post_meta( $product_id, '_price', true );
-					$price_display = $price ? '$' . number_format( (float) $price, 2 ) : 'FROM $20.00';
-				}
-				$rating        = (float) get_post_meta( $product_id, '_wc_average_rating', true );
-				$review_count  = (int) get_post_meta( $product_id, '_wc_review_count', true );
-				$image_rel     = get_post_meta( $product_id, '_coffee_image', true );
-				$fallback_rel  = get_post_meta( $product_id, '_coffee_fallback_image', true );
-
-				$image_url = '';
-				if ( ! empty( $image_rel ) && file_exists( get_template_directory() . '/assets/images/' . $image_rel ) ) {
-					$image_url = trailingslashit( get_template_directory_uri() ) . 'assets/images/' . $image_rel;
-				} elseif ( ! empty( $fallback_rel ) && file_exists( ABSPATH . 'wp-content/uploads/' . $fallback_rel ) ) {
-					$image_url = content_url( '/uploads/' . $fallback_rel );
-				} elseif ( has_post_thumbnail( $product_id ) ) {
-					$image_url = get_the_post_thumbnail_url( $product_id, 'medium_large' );
-				} else {
-					$image_url = trailingslashit( get_template_directory_uri() ) . 'assets/images/coffee/inkwell.jpg';
+				$card = self::get_product_card_data( get_the_ID() );
+				if ( ! $card ) {
+					continue;
 				}
 				?>
 				<article class="quills-coffee-card">
 					<div class="quills-coffee-card-media">
-						<a href="<?php the_permalink(); ?>" class="quills-coffee-card-link">
-							<img src="<?php echo esc_url( $image_url ); ?>" alt="<?php echo esc_attr( $title ); ?>" class="quills-coffee-card-img" loading="lazy" />
+						<a href="<?php echo esc_url( $card['permalink'] ); ?>" class="quills-coffee-card-link">
+							<img src="<?php echo esc_url( $card['image_url'] ); ?>" alt="<?php echo esc_attr( $card['title'] ); ?>" class="quills-coffee-card-img" loading="lazy" />
 						</a>
-						<div class="quills-coffee-card-overlay">
-							<button type="button" class="quills-quick-add-btn" data-product-id="<?php echo esc_attr( $product_id ); ?>">
+
+						<!-- HOVER OVERLAY: Hidden by default, appears ONLY on hover -->
+						<div class="quills-card-hover-overlay">
+							<a href="<?php echo esc_url( $card['permalink'] ); ?>" class="quills-overlay-text-link">
+								<h4 class="quills-overlay-title"><?php echo esc_html( $card['title'] ); ?></h4>
+								<div class="quills-overlay-divider"></div>
+								<p class="quills-overlay-notes"><?php echo esc_html( $card['tasting_notes'] ); ?></p>
+								<div class="quills-overlay-details">
+									<p class="quills-overlay-desc"><strong><?php echo esc_html( $card['subtitle'] ); ?></strong></p>
+									<p class="quills-overlay-spec"><strong>Process:</strong> <?php echo esc_html( $card['process'] ); ?></p>
+									<p class="quills-overlay-spec"><strong>Origins:</strong> <?php echo esc_html( $card['origins'] ); ?></p>
+								</div>
+							</a>
+							<button type="button" class="quills-coffee-card-add-btn" data-product-id="<?php echo esc_attr( $card['id'] ); ?>">
 								<?php esc_html_e( 'ADD TO CART', 'coffee-cafe-corner' ); ?>
 							</button>
 						</div>
 					</div>
 					<div class="quills-coffee-card-content">
 						<h3 class="quills-coffee-card-title">
-							<a href="<?php the_permalink(); ?>"><?php echo esc_html( $title ); ?></a>
+							<a href="<?php echo esc_url( $card['permalink'] ); ?>"><?php echo esc_html( $card['title'] ); ?></a>
 						</h3>
 						<div class="quills-coffee-card-rating">
-							<span class="quills-stars">
-								<?php
-								$rounded = round( $rating );
-								for ( $i = 1; $i <= 5; $i++ ) {
-									if ( $i <= $rounded && $rating > 0 ) {
-										echo '<span class="quills-star quills-star--filled">★</span>';
-									} else {
-										echo '<span class="quills-star quills-star--empty">☆</span>';
-									}
-								}
-								?>
-							</span>
-							<span class="quills-review-count">
-								<?php
-								if ( $review_count > 0 ) {
-									printf( esc_html__( '(%d reviews)', 'coffee-cafe-corner' ), (int) $review_count );
-								} else {
-									esc_html_e( '(No reviews)', 'coffee-cafe-corner' );
-								}
-								?>
-							</span>
+							<span class="quills-stars-gold">★★★★★</span>
+							<span class="quills-review-count">(<?php echo esc_html( $card['review_count'] ); ?> reviews)</span>
 						</div>
 						<div class="quills-coffee-card-price">
-							<?php echo esc_html( $price_display ); ?>
+							<?php echo esc_html( $card['price_display'] ); ?>
 						</div>
 					</div>
 				</article>
