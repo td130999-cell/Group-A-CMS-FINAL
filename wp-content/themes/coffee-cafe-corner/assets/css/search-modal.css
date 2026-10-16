@@ -1,0 +1,584 @@
+/**
+ * Quills Coffee - Live Search Modal & Drawer Stylesheet
+ * Matches https://quillscoffee.com/ search drawer experience
+ *
+ * @package Coffee_Cafe_Corner
+ */
+
+/* =========================================
+   1. Modal Container & Backdrop
+   ========================================= */
+
+.quills-search-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 999999;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    box-sizing: border-box;
+}
+
+.quills-search-modal * {
+    box-sizing: border-box;
+}
+
+.quills-search-modal.is-open {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+}
+
+body.quills-search-active {
+    overflow: hidden !important;
+}
+
+.quills-search-backdrop {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(21, 21, 21, 0.45);
+    backdrop-filter: blur(2px);
+    -webkit-backdrop-filter: blur(2px);
+}
+
+.quills-search-container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    max-height: 100vh;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    background-color: #ece8d7;
+    background-image: url('../images/about/bg-quills.png');
+    background-repeat: repeat;
+    color: #151515;
+    font-family: 'Clarendon URW Extra Narrow', 'Clarendon', Georgia, 'Times New Roman', serif;
+    padding: 30px 40px 60px 40px;
+    transform: translateY(-20px);
+    transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.quills-search-modal.is-open .quills-search-container {
+    transform: translateY(0);
+}
+
+/* Close Button (Top Right) */
+.quills-search-close-btn {
+    position: absolute;
+    top: 25px;
+    right: 35px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #151515;
+    transition: transform 0.2s ease, opacity 0.2s ease;
+    z-index: 10;
+}
+
+.quills-search-close-btn:hover {
+    transform: rotate(90deg) scale(1.1);
+    opacity: 0.75;
+}
+
+.quills-search-close-btn svg {
+    display: block;
+    width: 24px;
+    height: 24px;
+}
+
+/* =========================================
+   2. Search Input Bar
+   ========================================= */
+
+.quills-search-bar-wrap {
+    max-width: 680px;
+    width: 100%;
+    margin: 20px auto 35px auto;
+}
+
+.quills-search-modal-form {
+    width: 100%;
+}
+
+.quills-search-input-box {
+    position: relative;
+    display: flex;
+    align-items: center;
+    width: 100%;
+    height: 52px;
+    background: transparent;
+    border: 1px solid #151515;
+    border-radius: 4px;
+    padding: 0 16px;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.quills-search-input-box:focus-within {
+    border-color: #151515;
+    box-shadow: 0 0 0 1px #151515;
+}
+
+.quills-search-input-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #151515;
+    margin-right: 12px;
+    flex-shrink: 0;
+}
+
+.quills-search-modal-input {
+    flex: 1;
+    width: 100%;
+    height: 100%;
+    background: transparent;
+    border: none;
+    outline: none;
+    font-family: 'Questrial', 'Century Gothic', -apple-system, sans-serif;
+    font-size: 18px;
+    color: #151515;
+    padding: 0;
+    -webkit-appearance: none;
+}
+
+/* Hide native browser search clear button to avoid duplicate 'x' */
+.quills-search-modal-input::-webkit-search-decoration,
+.quills-search-modal-input::-webkit-search-cancel-button,
+.quills-search-modal-input::-webkit-search-results-button,
+.quills-search-modal-input::-webkit-search-results-decoration {
+    -webkit-appearance: none;
+    display: none;
+}
+
+.quills-search-modal-input::placeholder {
+    color: #666;
+    font-size: 17px;
+}
+
+/* Clear button (Inside Search Bar) */
+.quills-search-clear-btn {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 4px;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    color: #151515;
+    margin-left: 8px;
+    flex-shrink: 0;
+    transition: opacity 0.2s ease;
+}
+
+.quills-search-clear-btn.is-visible {
+    display: flex;
+}
+
+.quills-search-clear-btn:hover {
+    opacity: 0.7;
+}
+
+/* =========================================
+   3. Initial View: 4 Category Cards
+   ========================================= */
+
+.quills-search-initial-view {
+    max-width: 1040px;
+    margin: 20px auto 40px auto;
+    transition: opacity 0.2s ease;
+}
+
+.quills-search-categories-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 28px;
+}
+
+.quills-search-cat-card {
+    text-decoration: none;
+    color: #151515;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    group: card;
+}
+
+.quills-search-cat-img-wrap {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    border-radius: 8px;
+    overflow: hidden;
+    background-color: #ded9c7;
+    position: relative;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.quills-search-cat-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1), filter 0.3s ease;
+}
+
+.quills-search-cat-card:hover .quills-search-cat-img {
+    transform: scale(1.05);
+    filter: brightness(0.96);
+}
+
+.quills-search-cat-title {
+    font-family: 'Clarendon URW Extra Narrow', Georgia, serif;
+    font-weight: 700;
+    font-size: 19px;
+    text-transform: capitalize;
+    color: #151515;
+    margin: 14px 0 0 0;
+    text-align: center;
+    letter-spacing: 0.3px;
+    transition: color 0.2s ease;
+}
+
+.quills-search-cat-card:hover .quills-search-cat-title {
+    color: #000;
+    text-decoration: underline;
+    text-underline-offset: 4px;
+}
+
+/* =========================================
+   4. Live Search Results (Two Columns)
+   ========================================= */
+
+.quills-search-live-view {
+    max-width: 1140px;
+    margin: 15px auto 50px auto;
+    position: relative;
+}
+
+.quills-search-loader {
+    display: flex;
+    justify-content: center;
+    padding: 30px 0;
+}
+
+.quills-search-spinner {
+    width: 32px;
+    height: 32px;
+    border: 3px solid rgba(21, 21, 21, 0.15);
+    border-top-color: #151515;
+    border-radius: 50%;
+    animation: quills-spin 0.75s linear infinite;
+}
+
+@keyframes quills-spin {
+    to { transform: rotate(360deg); }
+}
+
+.quills-search-results-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.85fr) minmax(0, 1fr);
+    gap: 50px;
+    align-items: start;
+}
+
+/* Left Column: Products */
+.quills-search-col-products {
+    min-width: 0;
+}
+
+.quills-search-col-heading {
+    font-family: 'Clarendon URW Extra Narrow', Georgia, 'Times New Roman', serif;
+    font-style: italic;
+    font-weight: 400;
+    font-size: 28px;
+    color: #151515;
+    margin: 0 0 24px 0;
+    line-height: 1.2;
+}
+
+.quills-search-products-list {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px 22px;
+}
+
+.quills-search-product-card {
+    background: transparent;
+    border-radius: 4px;
+    transition: transform 0.2s ease;
+}
+
+.quills-search-product-link {
+    display: flex;
+    gap: 16px;
+    text-decoration: none;
+    color: inherit;
+    align-items: flex-start;
+}
+
+.quills-search-product-media {
+    width: 90px;
+    height: 90px;
+    flex-shrink: 0;
+    border-radius: 6px;
+    overflow: hidden;
+    background-color: #ded9c7;
+}
+
+.quills-search-product-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.3s ease;
+}
+
+.quills-search-product-card:hover .quills-search-product-img {
+    transform: scale(1.06);
+}
+
+.quills-search-product-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.quills-search-product-brand {
+    display: block;
+    font-family: 'Questrial', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    color: #737373;
+    text-transform: uppercase;
+    margin-bottom: 3px;
+}
+
+.quills-search-product-title {
+    font-family: 'Clarendon URW Extra Narrow', Georgia, serif;
+    font-size: 16px;
+    font-weight: 600;
+    color: #151515;
+    line-height: 1.3;
+    margin: 0 0 6px 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+}
+
+.quills-search-product-link:hover .quills-search-product-title {
+    text-decoration: underline;
+    text-underline-offset: 2px;
+}
+
+mark.quills-search-highlight {
+    background: transparent;
+    color: #151515;
+    font-weight: 800;
+    text-decoration: underline;
+}
+
+/* Rating Stars */
+.quills-search-product-rating {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    margin-bottom: 4px;
+}
+
+.quills-search-stars {
+    display: inline-flex;
+    letter-spacing: 1px;
+    font-size: 13px;
+    color: #151515;
+}
+
+.quills-search-review-count {
+    font-family: 'Questrial', sans-serif;
+    font-size: 12px;
+    color: #666;
+}
+
+.quills-search-product-price {
+    font-family: 'Questrial', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    color: #151515;
+    text-transform: uppercase;
+}
+
+/* View All Button */
+.quills-search-view-all-wrap {
+    margin-top: 36px;
+}
+
+.quills-search-view-all-btn {
+    display: block;
+    width: 100%;
+    padding: 15px 30px;
+    background-color: #e3d29b;
+    border: 1.5px solid #151515;
+    border-radius: 4px;
+    color: #151515;
+    font-family: 'Clarendon URW Extra Narrow', Georgia, serif;
+    font-weight: 700;
+    font-size: 15px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    text-decoration: none;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.25s ease;
+}
+
+.quills-search-view-all-btn:hover {
+    background-color: #d6c387;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+}
+
+/* No results state */
+.quills-search-no-results {
+    grid-column: 1 / -1;
+    padding: 30px 0;
+    font-family: 'Questrial', sans-serif;
+    font-size: 16px;
+    color: #555;
+}
+
+/* Right Column: Aside */
+.quills-search-col-aside {
+    min-width: 0;
+    padding-left: 10px;
+}
+
+.quills-search-aside-section {
+    margin-bottom: 20px;
+}
+
+.quills-search-aside-title {
+    font-family: 'Clarendon URW Extra Narrow', Georgia, 'Times New Roman', serif;
+    font-style: italic;
+    font-weight: 400;
+    font-size: 22px;
+    color: #151515;
+    margin: 0 0 16px 0;
+    line-height: 1.2;
+}
+
+.quills-search-aside-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.quills-search-aside-item {
+    padding: 0;
+    margin: 0;
+}
+
+.quills-search-aside-link {
+    font-family: 'Questrial', 'Century Gothic', -apple-system, sans-serif;
+    font-size: 15px;
+    color: #151515;
+    text-decoration: none;
+    line-height: 1.4;
+    transition: color 0.2s ease;
+    display: inline-block;
+    cursor: pointer;
+}
+
+.quills-search-aside-link:hover {
+    color: #000;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+}
+
+.quills-search-suggestion-btn {
+    background: transparent;
+    border: none;
+    padding: 0;
+    font-family: 'Questrial', 'Century Gothic', -apple-system, sans-serif;
+    font-size: 15px;
+    color: #151515;
+    cursor: pointer;
+    text-align: left;
+    transition: color 0.2s ease;
+}
+
+.quills-search-suggestion-btn:hover {
+    color: #000;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+}
+
+.quills-search-aside-divider {
+    border: none;
+    border-top: 1px solid #d3ceb9;
+    margin: 22px 0;
+}
+
+/* =========================================
+   5. Responsive Adjustments
+   ========================================= */
+
+@media (max-width: 991px) {
+    .quills-search-results-grid {
+        grid-template-columns: 1fr;
+        gap: 40px;
+    }
+
+    .quills-search-col-aside {
+        padding-left: 0;
+        border-top: 1.5px solid #d3ceb9;
+        padding-top: 30px;
+    }
+
+    .quills-search-categories-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px;
+    }
+}
+
+@media (max-width: 640px) {
+    .quills-search-container {
+        padding: 20px 20px 50px 20px;
+    }
+
+    .quills-search-close-btn {
+        top: 18px;
+        right: 18px;
+    }
+
+    .quills-search-bar-wrap {
+        margin: 40px auto 25px auto;
+    }
+
+    .quills-search-products-list {
+        grid-template-columns: 1fr;
+        gap: 18px;
+    }
+
+    .quills-search-categories-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 16px;
+    }
+
+    .quills-search-cat-title {
+        font-size: 16px;
+    }
+}

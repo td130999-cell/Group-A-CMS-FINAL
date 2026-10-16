@@ -75,6 +75,18 @@ function coffee_cafe_corner_scripts() {
 	if ( file_exists( get_template_directory() . '/assets/css/merch.css' ) ) {
 		wp_enqueue_style( 'coffee-cafe-corner-merch', trailingslashit( get_template_directory_uri() ) . 'assets/css/merch.css', array(), filemtime( get_template_directory() . '/assets/css/merch.css' ) );
 	}
+
+	// Enqueue Quills Search Modal stylesheet and script
+	if ( file_exists( get_template_directory() . '/assets/css/search-modal.css' ) ) {
+		wp_enqueue_style( 'coffee-cafe-corner-search-modal', trailingslashit( get_template_directory_uri() ) . 'assets/css/search-modal.css', array(), filemtime( get_template_directory() . '/assets/css/search-modal.css' ) );
+	}
+	if ( file_exists( get_template_directory() . '/assets/js/search-modal.js' ) ) {
+		wp_enqueue_script( 'coffee-cafe-corner-search-js', trailingslashit( get_template_directory_uri() ) . 'assets/js/search-modal.js', array(), filemtime( get_template_directory() . '/assets/js/search-modal.js' ), true );
+		wp_localize_script( 'coffee-cafe-corner-search-js', 'quillsSearchData', array(
+			'ajaxUrl' => admin_url( 'admin-ajax.php' ),
+			'homeUrl' => home_url( '/' ),
+		) );
+	}
 }
 add_action( 'wp_enqueue_scripts', 'coffee_cafe_corner_scripts' );
 
@@ -499,5 +511,10 @@ require_once get_template_directory() . '/inc/class-subscription-db.php';
  * Merch Database Management
  */
 require_once get_template_directory() . '/inc/class-merch-db.php';
+
+/**
+ * Quills Search Modal & Database Management
+ */
+require_once get_template_directory() . '/inc/class-search-db.php';
 
 
