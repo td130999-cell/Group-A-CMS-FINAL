@@ -83,42 +83,9 @@ $review_stats = Quills_Coffee_Experience::get_review_stats($id);
 </head>
 <body <?php body_class('quills-body quills-single-product-page'); ?>>
 
-<!-- Top Announcement Bar -->
-<div class="quills-announcement-bar">
-    <div class="quills-container">
-        <span>FREE SHIPPING ON ORDERS OVER $50 • FRESH ROASTED COFFEE SHIPPED DIRECT TO YOUR DOOR</span>
-    </div>
-</div>
+<?php get_template_part( 'patterns/header' ); ?>
 
-<!-- Quills Header -->
-<header class="quills-header">
-    <div class="quills-container quills-header__inner">
-        <div class="quills-header__nav-left">
-            <nav class="quills-nav">
-                <a href="<?php echo esc_url(wc_get_page_permalink('shop')); ?>" class="quills-nav-link active">SHOP COFFEE</a>
-                <a href="<?php echo esc_url(wc_get_page_permalink('shop')); ?>?type=Single+Origin" class="quills-nav-link">SINGLE ORIGIN</a>
-                <a href="<?php echo esc_url(wc_get_page_permalink('shop')); ?>?type=Blend" class="quills-nav-link">BLENDS</a>
-                <a href="<?php echo esc_url(wc_get_page_permalink('shop')); ?>?category=subscriptions" class="quills-nav-link">SUBSCRIPTIONS</a>
-            </nav>
-        </div>
-
-        <div class="quills-header__logo">
-            <a href="<?php echo esc_url(home_url('/')); ?>">
-                <img src="<?php echo esc_url(home_url('/wp-content/uploads/quills/quills_logo.png')); ?>" alt="Quills Coffee" class="quills-logo-img">
-            </a>
-        </div>
-
-        <div class="quills-header__actions">
-            <a href="<?php echo esc_url(wc_get_account_endpoint_url('dashboard')); ?>" class="quills-icon-link" title="Account">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-            </a>
-            <a href="<?php echo esc_url(wc_get_cart_url()); ?>" class="quills-cart-toggle" title="Cart">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
-                <span class="quills-cart-count" id="quills-cart-badge"><?php echo WC()->cart ? WC()->cart->get_cart_contents_count() : 0; ?></span>
-            </a>
-        </div>
-    </div>
-</header>
+<div class="quills-coffee-page-wrapper">
 
 <!-- Breadcrumbs (Image 2) -->
 <div class="quills-breadcrumbs-section">
@@ -153,9 +120,9 @@ $review_stats = Quills_Coffee_Experience::get_review_stats($id);
                 <span class="quills-gold-star">★</span>
             </div>
             <blockquote class="quills-sp-quote-text" id="quills-sp-quote-text">
-                "Inkwell is roasted to perfection, tastes great every time."
+                "Inkwell is one of my all time favorites."
             </blockquote>
-            <cite class="quills-sp-quote-author" id="quills-sp-quote-author">— Nathan Rzasa</cite>
+            <cite class="quills-sp-quote-author" id="quills-sp-quote-author">— Jeff S.</cite>
 
             <div class="quills-sp-slider-dots">
                 <span class="quills-sp-dot is-active" data-idx="0"></span>
@@ -335,6 +302,9 @@ $review_stats = Quills_Coffee_Experience::get_review_stats($id);
                                 <div class="quills-perk-item">
                                     <span class="quills-dollar-icon">$</span> <strong>Lowest Price</strong>
                                 </div>
+                                <div class="quills-perk-item">
+                                    <span>Cancel or Update Any Time</span>
+                                </div>
                             </div>
                         </div>
                     </label>
@@ -353,6 +323,11 @@ $review_stats = Quills_Coffee_Experience::get_review_stats($id);
                         <span class="quills-btn-spinner"></span>
                     </button>
                 </div>
+
+                <!-- Buy with Shop Pay Button (Image 1) -->
+                <button type="button" class="quills-btn-shop-pay" id="quills-btn-shop-pay" onclick="window.location.href='<?php echo esc_url(wc_get_checkout_url()); ?>';">
+                    <span>Buy with</span> <span class="quills-shop-brand">shop</span>
+                </button>
 
                 <!-- Toast Notification -->
                 <div class="quills-cart-toast" id="quills-cart-toast">
@@ -560,44 +535,14 @@ $review_stats = Quills_Coffee_Experience::get_review_stats($id);
                     </div>
 
                     <div class="quills-review-item-text">
-                        <?php echo esc_html(trim($c_body)); ?>
+                        <?php echo wp_kses_post(trim($c_body)); ?>
                     </div>
                 </div>
             <?php 
                 endforeach;
             else:
             ?>
-                <!-- Authentic Fallback Cards matching Image 5 -->
-                <div class="quills-review-item-v2" data-rating="5">
-                    <div class="quills-review-item-stars">
-                        <span class="star filled">★</span><span class="star filled">★</span><span class="star filled">★</span><span class="star filled">★</span><span class="star filled">★</span>
-                    </div>
-                    <div class="quills-review-item-author-row">
-                        <span class="quills-author-avatar-circle">S</span>
-                        <span class="quills-author-name-text">Seth Caldwell</span>
-                        <span class="quills-verified-pill">Verified</span>
-                        <span class="quills-review-date-text">09/30/2026</span>
-                    </div>
-                    <div class="quills-review-item-text">
-                        This blend is a great everyday coffee for all preferences.
-                    </div>
-                </div>
-
-                <div class="quills-review-item-v2" data-rating="3">
-                    <div class="quills-review-item-stars">
-                        <span class="star filled">★</span><span class="star filled">★</span><span class="star filled">★</span><span class="star empty">★</span><span class="star empty">★</span>
-                    </div>
-                    <div class="quills-review-item-author-row">
-                        <span class="quills-author-avatar-circle">D</span>
-                        <span class="quills-author-name-text">Deborah Richnak</span>
-                        <span class="quills-verified-pill">Verified</span>
-                        <span class="quills-review-date-text">08/11/2026</span>
-                    </div>
-                    <div class="quills-review-item-text">
-                        I had some hollyhock Quill coffee at a VRBO property and that is why I ordered more. That coffee was not available but wha I ordered had a weird after taste. I would have thought it would be delicious considering it was 50$!
-                    </div>
-                </div>
-
+                <!-- Authentic Fallback Cards matching Image 2 & Quills Coffee -->
                 <div class="quills-review-item-v2" data-rating="4">
                     <div class="quills-review-item-stars">
                         <span class="star filled">★</span><span class="star filled">★</span><span class="star filled">★</span><span class="star filled">★</span><span class="star empty">★</span>
@@ -606,89 +551,76 @@ $review_stats = Quills_Coffee_Experience::get_review_stats($id);
                         <span class="quills-author-avatar-circle">D</span>
                         <span class="quills-author-name-text">Dony Erwin Erwin</span>
                         <span class="quills-verified-pill">Verified</span>
-                        <span class="quills-review-date-text">08/03/2026</span>
+                        <span class="quills-review-date-text">08/02/2024</span>
                     </div>
                     <div class="quills-review-item-text">
                         It's a little on the mild side for me. We switched to Night Owl for next month's delivery. Thanks.
                     </div>
                 </div>
+
+                <div class="quills-review-item-v2" data-rating="5">
+                    <div class="quills-review-item-stars">
+                        <span class="star filled">★</span><span class="star filled">★</span><span class="star filled">★</span><span class="star filled">★</span><span class="star filled">★</span>
+                    </div>
+                    <div class="quills-review-item-author-row">
+                        <span class="quills-author-avatar-circle">D</span>
+                        <span class="quills-author-name-text">Donna</span>
+                        <span class="quills-verified-pill">Verified by shop</span>
+                        <span class="quills-review-date-text">08/02/2024</span>
+                    </div>
+                    <div class="quills-review-item-text">
+                        Amazing so glad we found this place
+                        <span class="quills-review-subnote">Review written in Shop App</span>
+                    </div>
+                </div>
+
+                <div class="quills-review-item-v2" data-rating="5">
+                    <div class="quills-review-item-stars">
+                        <span class="star filled">★</span><span class="star filled">★</span><span class="star filled">★</span><span class="star filled">★</span><span class="star filled">★</span>
+                    </div>
+                    <div class="quills-review-item-author-row">
+                        <span class="quills-author-avatar-circle">S</span>
+                        <span class="quills-author-name-text">Staci R</span>
+                        <span class="quills-verified-pill">Verified</span>
+                        <span class="quills-review-date-text">08/01/2024</span>
+                    </div>
+                    <div class="quills-review-item-text">
+                        This is currently our favorite coffee! Looking forward to trying your other blends in the future.
+                    </div>
+                </div>
             <?php endif; ?>
         </div>
 
+        <!-- Customer Reviews Pagination matching Image 2 -->
+        <div class="quills-reviews-pagination">
+            <button type="button" class="quills-page-arrow" disabled>‹</button>
+            <button type="button" class="quills-page-num is-active">1</button>
+            <button type="button" class="quills-page-num">2</button>
+            <button type="button" class="quills-page-num">3</button>
+            <button type="button" class="quills-page-num">4</button>
+            <span class="quills-page-dots">...</span>
+            <button type="button" class="quills-page-num">16</button>
+            <button type="button" class="quills-page-arrow">›</button>
+        </div>
+
     </div>
 </section>
 
-<!-- Related Coffees Section -->
-<section class="quills-related-coffees-section">
-    <div class="quills-container">
-        <div class="quills-related-heading">
-            <h2>MORE FROM THE ROASTERY</h2>
-            <p>Fresh coffees roasted weekly in Louisville, Kentucky</p>
-        </div>
-
-        <div class="quills-products-grid quills-products-grid--4">
-            <?php 
-            $related = wc_get_products([
-                'exclude' => [$id],
-                'limit'   => 4,
-                'orderby' => 'rand'
-            ]);
-            foreach ($related as $rel_prod):
-                Quills_Coffee_Experience::render_product_card($rel_prod);
-            endforeach;
-            ?>
-        </div>
+<!-- Subscribe to The Hoot Section (Image 2) -->
+<section class="quills-hoot-section" aria-label="<?php esc_attr_e( 'Subscribe to The Hoot', 'coffee-cafe-corner' ); ?>">
+    <div class="quills-container quills-hoot-container">
+        <h2 class="quills-hoot-title"><?php esc_html_e( 'Subscribe to The Hoot', 'coffee-cafe-corner' ); ?></h2>
+        <p class="quills-hoot-sub"><?php esc_html_e( 'A 5-min read every Friday morning. Get access to secret coffees and reader-only merch.', 'coffee-cafe-corner' ); ?></p>
+        <form class="quills-hoot-form" onsubmit="event.preventDefault(); alert('Thank you for subscribing to The Hoot!');">
+            <input type="email" placeholder="<?php esc_attr_e( 'Email', 'coffee-cafe-corner' ); ?>" class="quills-hoot-input" required />
+            <button type="submit" class="quills-hoot-btn"><?php esc_html_e( 'SUBSCRIBE', 'coffee-cafe-corner' ); ?></button>
+        </form>
     </div>
 </section>
 
-<!-- Quills Footer -->
-<footer class="quills-footer">
-    <div class="quills-container quills-footer__inner">
-        <div class="quills-footer__col quills-footer__brand">
-            <img src="<?php echo esc_url(home_url('/wp-content/uploads/quills/quills_logo.png')); ?>" alt="Quills Coffee" class="quills-footer-logo">
-            <p>Specialty coffee roasted with care. Sourced directly from passionate producers across Latin America and East Africa.</p>
-            <div class="quills-social-links">
-                <a href="https://instagram.com/quillscoffee" target="_blank" rel="noopener">Instagram</a>
-                <a href="https://facebook.com/quillscoffee" target="_blank" rel="noopener">Facebook</a>
-            </div>
-        </div>
+</div><!-- /.quills-coffee-page-wrapper -->
 
-        <div class="quills-footer__col">
-            <h4>SHOP COFFEE</h4>
-            <ul>
-                <li><a href="<?php echo esc_url(wc_get_page_permalink('shop')); ?>?type=Single+Origin">Single Origins</a></li>
-                <li><a href="<?php echo esc_url(wc_get_page_permalink('shop')); ?>?type=Blend">Blends</a></li>
-                <li><a href="<?php echo esc_url(wc_get_page_permalink('shop')); ?>?roast=Light">Light Roasts</a></li>
-                <li><a href="<?php echo esc_url(wc_get_page_permalink('shop')); ?>?category=subscriptions">Coffee Subscriptions</a></li>
-            </ul>
-        </div>
-
-        <div class="quills-footer__col">
-            <h4>ABOUT QUILLS</h4>
-            <ul>
-                <li><a href="<?php echo esc_url(home_url('/')); ?>">Our Story</a></li>
-                <li><a href="<?php echo esc_url(home_url('/')); ?>">Locations &amp; Cafes</a></li>
-                <li><a href="<?php echo esc_url(home_url('/')); ?>">Wholesale Program</a></li>
-                <li><a href="<?php echo esc_url(home_url('/')); ?>">Brewing Guides</a></li>
-            </ul>
-        </div>
-
-        <div class="quills-footer__col quills-footer__newsletter">
-            <h4>JOIN THE COFFEE CLUB</h4>
-            <p>Get 10% off your first bag and early access to limited micro-lots.</p>
-            <form class="quills-newsletter-form" onsubmit="event.preventDefault(); alert('Thank you for subscribing to Quills Coffee!');">
-                <input type="email" placeholder="Enter your email" required>
-                <button type="submit">JOIN</button>
-            </form>
-        </div>
-    </div>
-
-    <div class="quills-footer__bottom">
-        <div class="quills-container">
-            <p>&copy; <?php echo date('Y'); ?> Quills Coffee. All rights reserved. Powered by Group A WordPress CMS.</p>
-        </div>
-    </div>
-</footer>
+<?php get_template_part( 'patterns/footer' ); ?>
 
 <?php wp_footer(); ?>
 </body>
