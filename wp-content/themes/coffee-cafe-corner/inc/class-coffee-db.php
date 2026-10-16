@@ -28,9 +28,13 @@ class Coffee_Cafe_Corner_Coffee_DB {
 	}
 
 	public static function ensure_database_records() {
+		if ( get_option( 'ccc_coffee_db_seeded_v3' ) ) {
+			return;
+		}
 		self::ensure_category();
 		self::ensure_page();
 		self::ensure_products();
+		update_option( 'ccc_coffee_db_seeded_v3', 1 );
 	}
 
 	public static function ensure_category() {
@@ -247,10 +251,11 @@ class Coffee_Cafe_Corner_Coffee_DB {
 				'process'       => array( 'Natural', 'Washed' ),
 				'roast'         => array( 'Medium' ),
 				'rating'        => '5.0',
-				'review_count'  => 31,
+				'review_count'  => 21,
 				'image'         => 'quills/southern-gothic.jpg',
 				'fallback'      => 'quills/southern_gothic_main.jpg',
-				'notes'         => 'berries, chocolate, sweet cream',
+				'notes'         => 'Chocolate, caramel, well-balanced',
+				'origins'       => 'Brazil, Colombia',
 				'menu_order'    => 3,
 			),
 			array(
@@ -446,6 +451,9 @@ class Coffee_Cafe_Corner_Coffee_DB {
 					}
 
 					update_post_meta( $product_id, '_coffee_tasting_notes', $item['notes'] );
+					if ( ! empty( $item['origins'] ) ) {
+						update_post_meta( $product_id, '_coffee_origins', $item['origins'] );
+					}
 					update_post_meta( $product_id, '_coffee_image', $item['image'] );
 					update_post_meta( $product_id, '_coffee_fallback_image', $item['fallback'] );
 
@@ -478,6 +486,9 @@ class Coffee_Cafe_Corner_Coffee_DB {
 				}
 
 				update_post_meta( $pid, '_coffee_tasting_notes', $item['notes'] );
+				if ( ! empty( $item['origins'] ) ) {
+					update_post_meta( $pid, '_coffee_origins', $item['origins'] );
+				}
 				update_post_meta( $pid, '_coffee_image', $item['image'] );
 				update_post_meta( $pid, '_coffee_fallback_image', $item['fallback'] );
 				if ( $term_id > 0 ) {

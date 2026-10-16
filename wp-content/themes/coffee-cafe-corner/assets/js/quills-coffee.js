@@ -28,20 +28,59 @@
         // ==========================================
         // 2. PRODUCT OPTIONS (Size & Grind & Price)
         // ==========================================
-        var basePrice = parseFloat($('#quills-btn-add-to-cart').data('base-price')) || 23.00;
+        var basePrice = parseFloat($('#quills-btn-add-to-cart').data('base-price')) || 20.00;
+
+        function getPriceForSize(size) {
+            if (size === '5lb') {
+                return (basePrice === 20.00) ? 105.00 : (basePrice * 5.25);
+            } else if (size === '2lb') {
+                return (basePrice === 20.00) ? 48.00 : (basePrice * 2.4);
+            }
+            return basePrice;
+        }
+
+        function checkAvailability() {
+            var selectedSize = $('#quills-size-group .quills-pill-btn.active').data('size') || '12oz';
+            var $activeGrind = $('#quills-grind-group .quills-pill-btn.active');
+            var selectedGrind = $activeGrind.data('grind') || 'Whole Bean';
+
+            var $addBtn = $('#quills-btn-add-to-cart');
+            var $shopBtn = $('#quills-btn-shop-pay');
+
+            if (selectedSize === '5lb') {
+                if (selectedGrind !== 'Whole Bean') {
+                    // 5lb bags only available as Whole Bean
+                    $activeGrind.addClass('is-unavailable');
+                    $addBtn.addClass('is-unavailable').prop('disabled', true);
+                    $addBtn.find('.quills-btn-text').text('UNAVAILABLE');
+                    $shopBtn.addClass('is-disabled');
+                } else {
+                    $('#quills-grind-group .quills-pill-btn').removeClass('is-unavailable');
+                    $addBtn.removeClass('is-unavailable').prop('disabled', false);
+                    $addBtn.find('.quills-btn-text').text('ADD TO CART');
+                    $shopBtn.removeClass('is-disabled');
+                }
+            } else {
+                $('#quills-grind-group .quills-pill-btn').removeClass('is-unavailable');
+                $addBtn.removeClass('is-unavailable').prop('disabled', false);
+                $addBtn.find('.quills-btn-text').text('ADD TO CART');
+                $shopBtn.removeClass('is-disabled');
+            }
+        }
 
         function updatePrice() {
-            var $activeSize = $('#quills-size-group .quills-pill-btn.active');
-            var multiplier = parseFloat($activeSize.data('multiplier')) || 1.0;
-            var currentPrice = basePrice * multiplier;
+            var selectedSize = $('#quills-size-group .quills-pill-btn.active').data('size') || '12oz';
+            var currentPrice = getPriceForSize(selectedSize);
             var subPrice = currentPrice * 0.9;
 
             var fmtCurrent = '$' + currentPrice.toFixed(2);
             var fmtSub = '$' + subPrice.toFixed(2);
 
             $('#quills-dynamic-price').text(fmtCurrent);
-            $('#quills-onetime-price-label').text(fmtCurrent);
-            $('#quills-subscribe-price-label').text(fmtSub);
+            $('#quills-onetime-price-label').html(fmtCurrent + ' <small>each</small>');
+            $('#quills-subscribe-price-label').html('<del>' + fmtCurrent + '</del> <strong>' + fmtSub + '</strong> <small>each</small>');
+
+            checkAvailability();
         }
 
         // Size Pill Click
@@ -57,6 +96,24 @@
             $('#quills-grind-group .quills-pill-btn').removeClass('active');
             $(this).addClass('active');
             $('#quills-selected-grind-label').text($(this).data('grind'));
+            checkAvailability();
+        });
+
+        // Description Accordion Toggle
+        $('#quills-desc-toggle').on('click', function() {
+            var $wrap = $(this).closest('.quills-desc-accordion-wrapper');
+            var isOpen = $wrap.hasClass('is-open');
+            if (isOpen) {
+                $wrap.removeClass('is-open');
+                $('#quills-desc-content').slideUp(200);
+                $(this).find('.quills-desc-icon').text('+');
+                $(this).attr('aria-expanded', 'false');
+            } else {
+                $wrap.addClass('is-open');
+                $('#quills-desc-content').slideDown(200);
+                $(this).find('.quills-desc-icon').text('—');
+                $(this).attr('aria-expanded', 'true');
+            }
         });
 
         // Purchase Type (Subscription Radio & Drawer)

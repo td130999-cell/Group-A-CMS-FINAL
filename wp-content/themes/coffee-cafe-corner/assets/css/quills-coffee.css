@@ -277,6 +277,70 @@ body.quills-body {
     box-shadow: 0 0 0 1px var(--quills-color-primary);
 }
 
+/* Description Accordion (Image 1 Parity) */
+.quills-desc-accordion-wrapper {
+    margin-top: 36px;
+    border-top: 1px solid #d5cec5;
+    border-bottom: 1px solid #d5cec5;
+}
+
+.quills-desc-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    background: transparent;
+    border: none;
+    padding: 16px 0;
+    cursor: pointer;
+    text-align: left;
+}
+
+.quills-desc-title {
+    font-family: 'Besley', Georgia, serif;
+    font-style: italic;
+    font-size: 20px;
+    font-weight: 500;
+    color: #1a1a1a;
+}
+
+.quills-desc-icon {
+    font-size: 18px;
+    font-weight: 400;
+    color: #1a1a1a;
+    line-height: 1;
+}
+
+.quills-desc-content {
+    padding: 4px 0 24px 0;
+}
+
+.quills-desc-text {
+    font-family: 'Besley', Georgia, serif;
+    font-size: 15.5px;
+    line-height: 1.65;
+    color: #2b2824;
+}
+
+.quills-desc-text p {
+    margin-bottom: 16px;
+}
+
+.quills-desc-text p:last-child {
+    margin-bottom: 0;
+}
+
+.quills-desc-meta-line {
+    margin-top: 16px;
+    font-size: 15px;
+    color: #2b2824;
+}
+
+.quills-desc-meta-line strong {
+    font-weight: 600;
+    color: #1a1a1a;
+}
+
 /* Product Details Column */
 .quills-brand-tag {
     font-family: var(--quills-font-ui);
@@ -289,10 +353,11 @@ body.quills-body {
 }
 
 .quills-product-title {
-    font-family: var(--quills-font-serif);
-    font-size: 38px;
-    font-weight: 700;
-    line-height: 1.15;
+    font-family: 'Besley', Georgia, serif;
+    font-size: 34px;
+    font-weight: 500;
+    font-style: italic;
+    line-height: 1.25;
     color: var(--quills-color-text);
     margin-bottom: 12px;
 }
@@ -315,6 +380,10 @@ body.quills-body {
     color: var(--quills-color-star);
     letter-spacing: 2px;
     font-size: 16px;
+}
+
+.quills-stars.quills-stars-gold {
+    color: #f59e0b !important;
 }
 
 .quills-rating-num {
@@ -448,6 +517,13 @@ body.quills-body {
     background: var(--quills-color-primary);
     border-color: var(--quills-color-primary);
     color: #ffffff;
+}
+
+.quills-pill-btn.is-unavailable {
+    border: 1.5px dashed #222222 !important;
+    background: #ffffff !important;
+    color: #222222 !important;
+    box-shadow: none !important;
 }
 
 /* Subscription Toggle */
@@ -598,6 +674,14 @@ body.quills-body {
     box-shadow: 0 4px 12px rgba(224, 80, 56, 0.25);
 }
 
+.quills-btn-add-cart.is-unavailable {
+    background: #eba498 !important;
+    color: #ffffff !important;
+    cursor: not-allowed !important;
+    transform: none !important;
+    box-shadow: none !important;
+}
+
 /* Buy with Shop Pay Button (Image 1) */
 .quills-btn-shop-pay {
     width: 100%;
@@ -621,6 +705,12 @@ body.quills-body {
 .quills-btn-shop-pay:hover {
     background: #4720dc !important;
     transform: translateY(-1px);
+}
+
+.quills-btn-shop-pay.is-disabled {
+    opacity: 0.55;
+    pointer-events: none;
+    cursor: not-allowed;
 }
 
 .quills-btn-shop-pay .quills-shop-brand {

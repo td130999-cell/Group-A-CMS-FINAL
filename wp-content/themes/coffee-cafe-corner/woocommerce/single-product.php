@@ -72,6 +72,7 @@ foreach ($gallery_ids as $gid) {
 
 // Review stats
 $review_stats = Quills_Coffee_Experience::get_review_stats($id);
+$review_count = (int)get_post_meta($id, '_wc_review_count', true) ?: ($review_stats['total'] ?: 21);
 
 ?><!DOCTYPE html>
 <html <?php language_attributes(); ?>>
@@ -146,83 +147,46 @@ $review_stats = Quills_Coffee_Experience::get_review_stats($id);
     <div class="quills-container">
         <div class="quills-product-layout">
             
-            <!-- Left Column: Primary Image & Vintage Roast Card (Images 3 & 4) -->
+            <!-- Left Column: Primary Image & Description Accordion (Image 1) -->
             <div class="quills-product-gallery">
                 <div class="quills-gallery-stage">
                     <img id="quills-main-image" src="<?php echo esc_url($main_img_url); ?>" alt="<?php echo esc_attr($title); ?>" class="quills-featured-image" loading="eager">
                 </div>
 
-                <!-- Vintage Coffee Roast Label Card (Image 4) -->
-                <div class="quills-vintage-roast-card" aria-label="Roast Label Card">
-                    <div class="quills-roast-card-header">
-                        <h2 class="quills-roast-card-title"><?php echo esc_html($short_title); ?></h2>
-                    </div>
-                    <div class="quills-roast-card-body">
-                        <div class="quills-roast-card-left">
-                            <div class="quills-roast-field">
-                                <span class="quills-roast-field-label">ORIGINS</span>
-                                <span class="quills-roast-field-val"><?php echo esc_html($origins); ?></span>
-                            </div>
-                            <div class="quills-roast-field">
-                                <span class="quills-roast-field-label">FLAVOR NOTES</span>
-                                <span class="quills-roast-field-val is-italic"><?php echo esc_html($tasting_notes); ?></span>
-                            </div>
-                            <div class="quills-roast-field-split">
-                                <div class="quills-roast-field-sub">
-                                    <span class="quills-roast-field-label">BLEND</span>
-                                    <span class="quills-roast-field-val"><?php echo esc_html($type); ?></span>
-                                </div>
-                                <div class="quills-roast-field-sub">
-                                    <span class="quills-roast-field-label">PROCESS</span>
-                                    <span class="quills-roast-field-val"><?php echo esc_html($process); ?></span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="quills-roast-card-right">
-                            <div class="quills-roast-field">
-                                <span class="quills-roast-field-label">ROAST DATE</span>
-                                <span class="quills-roast-field-val is-date">Aug 28 2025</span>
-                            </div>
-                            <div class="quills-roast-field">
-                                <span class="quills-roast-field-label">ROAST</span>
-                                <div class="quills-roast-indicators">
-                                    <label class="quills-roast-dot-item <?php echo strtolower($roast) === 'light' ? 'is-checked' : ''; ?>">
-                                        <span class="quills-roast-circle"></span>
-                                        <span class="quills-roast-label">Light</span>
-                                    </label>
-                                    <label class="quills-roast-dot-item <?php echo (strtolower($roast) === 'medium' || empty($roast)) ? 'is-checked' : ''; ?>">
-                                        <span class="quills-roast-circle"></span>
-                                        <span class="quills-roast-label">Medium</span>
-                                    </label>
-                                    <label class="quills-roast-dot-item <?php echo strtolower($roast) === 'dark' ? 'is-checked' : ''; ?>">
-                                        <span class="quills-roast-circle"></span>
-                                        <span class="quills-roast-label">Dark</span>
-                                    </label>
-                                </div>
-                            </div>
+                <!-- Description Accordion (Image 1 parity) -->
+                <div class="quills-desc-accordion-wrapper is-open">
+                    <button type="button" class="quills-desc-header" id="quills-desc-toggle" aria-expanded="true">
+                        <span class="quills-desc-title">Description</span>
+                        <span class="quills-desc-icon">—</span>
+                    </button>
+                    <div class="quills-desc-content" id="quills-desc-content">
+                        <div class="quills-desc-text">
+                            <?php 
+                            $post_content = get_post_field('post_content', $id);
+                            if (!empty($post_content)) {
+                                echo wpautop(wp_kses_post($post_content));
+                            }
+                            ?>
+                            <?php if (!empty($origins)): ?>
+                                <p class="quills-desc-meta-line"><strong>Current coffees:</strong> <?php echo esc_html($origins); ?></p>
+                            <?php endif; ?>
+                            <?php if (!empty($tasting_notes)): ?>
+                                <p class="quills-desc-meta-line"><strong>We taste:</strong> <?php echo esc_html($tasting_notes); ?>.</p>
+                            <?php endif; ?>
                         </div>
                     </div>
-                    <div class="quills-roast-card-footer">
-                        12 OZ / 340 GM
-                    </div>
-                </div>
-
-                <!-- Extra Context Barista Photo (Image 4 bottom) -->
-                <div class="quills-gallery-lifestyle-box">
-                    <img src="<?php echo esc_url(home_url('/wp-content/themes/coffee-cafe-corner/assets/images/coffee/coffee-hero-barista.jpg')); ?>" alt="Craft Coffee Experience" class="quills-lifestyle-photo" loading="lazy">
                 </div>
             </div>
 
-            <!-- Right Column: Details & Add to Cart (Image 3) -->
+            <!-- Right Column: Details & Add to Cart (Image 1) -->
             <div class="quills-product-details">
                 <h1 class="quills-product-title"><?php echo esc_html($title); ?></h1>
 
                 <!-- Star Rating Badge -->
                 <div class="quills-rating-badge">
                     <a href="#quills-reviews-section" class="quills-rating-link">
-                        <span class="quills-stars">★★★★★</span>
-                        <span class="quills-rating-reviews">80 reviews</span>
+                        <span class="quills-stars quills-stars-gold">★★★★★</span>
+                        <span class="quills-rating-reviews"><?php echo esc_html($review_count); ?> reviews</span>
                     </a>
                 </div>
 
@@ -231,17 +195,17 @@ $review_stats = Quills_Coffee_Experience::get_review_stats($id);
                     <span class="quills-price-current" id="quills-dynamic-price"><?php echo $formatted_price; ?></span>
                 </div>
 
-                <!-- Size Selection Pills (Image 3) -->
+                <!-- Size Selection Pills (Image 1) -->
                 <div class="quills-option-group" id="quills-size-group">
                     <div class="quills-section-label">Size: <span id="quills-selected-size-label">12oz</span></div>
                     <div class="quills-pills-row">
-                        <button type="button" class="quills-pill-btn active" data-size="12oz" data-multiplier="1.0">12oz</button>
-                        <button type="button" class="quills-pill-btn" data-size="5lb" data-multiplier="4.5">5lb</button>
-                        <button type="button" class="quills-pill-btn" data-size="2lb" data-multiplier="2.2">2lb</button>
+                        <button type="button" class="quills-pill-btn active" data-size="12oz">12oz</button>
+                        <button type="button" class="quills-pill-btn" data-size="5lb">5lb</button>
+                        <button type="button" class="quills-pill-btn" data-size="2lb">2lb</button>
                     </div>
                 </div>
 
-                <!-- Grind Type Selection Pills (Image 3) -->
+                <!-- Grind Type Selection Pills (Image 1) -->
                 <div class="quills-option-group" id="quills-grind-group">
                     <div class="quills-section-label">Grind Type: <span id="quills-selected-grind-label">Whole Bean</span></div>
                     <div class="quills-pills-row quills-grind-pills">
@@ -255,7 +219,7 @@ $review_stats = Quills_Coffee_Experience::get_review_stats($id);
                     </div>
                 </div>
 
-                <!-- Purchase Options Box (Image 3) -->
+                <!-- Purchase Options Box (Image 1) -->
                 <div class="quills-subscription-toggle">
                     <!-- Option 1: One-Time Purchase -->
                     <label class="quills-sub-option active" data-type="onetime">
@@ -281,7 +245,7 @@ $review_stats = Quills_Coffee_Experience::get_review_stats($id);
                             </span>
                         </div>
 
-                        <!-- Inside Frequency Selector (Image 3) -->
+                        <!-- Inside Frequency Selector (Image 1) -->
                         <div class="quills-sub-drawer" id="quills-sub-drawer" style="display: none;">
                             <div class="quills-freq-headline">Pick how often we send it</div>
                             <div class="quills-freq-pills-row">
@@ -293,7 +257,7 @@ $review_stats = Quills_Coffee_Experience::get_review_stats($id);
 
                             <div class="quills-sub-perks-box">
                                 <div class="quills-perk-item highlight">
-                                    <strong>FREE bag of <?php echo esc_html($short_title); ?></strong> in your first delivery
+                                    <strong>FREE bag of Inkwell</strong> in your first delivery
                                     <span class="quills-perk-sub">(new subscribers only)</span>
                                 </div>
                                 <div class="quills-perk-item">
@@ -336,79 +300,6 @@ $review_stats = Quills_Coffee_Experience::get_review_stats($id);
                     <a href="<?php echo esc_url(wc_get_cart_url()); ?>" class="quills-toast-view-cart">View Cart →</a>
                 </div>
 
-                <!-- Value Props Icons -->
-                <div class="quills-props-list">
-                    <div class="quills-prop-item">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
-                        <span>Free shipping on all orders over $50</span>
-                    </div>
-                    <div class="quills-prop-item">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg>
-                        <span>Freshly roasted to order within 24-48 hours</span>
-                    </div>
-                    <div class="quills-prop-item">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-                        <span>100% Ethically sourced Specialty Grade Arabica</span>
-                    </div>
-                </div>
-
-                <!-- Quills Accordions -->
-                <div class="quills-accordions">
-                    <div class="quills-accordion-item open">
-                        <button type="button" class="quills-accordion-header">
-                            <span>Coffee Details</span>
-                            <span class="quills-acc-icon">−</span>
-                        </button>
-                        <div class="quills-accordion-content">
-                            <table class="quills-specs-table">
-                                <tbody>
-                                    <tr><th>Origins</th><td><?php echo esc_html($origins); ?></td></tr>
-                                    <tr><th>Flavor Notes</th><td><?php echo esc_html($tasting_notes); ?></td></tr>
-                                    <tr><th>Roast</th><td><?php echo esc_html($roast); ?></td></tr>
-                                    <tr><th>Process</th><td><?php echo esc_html($process); ?></td></tr>
-                                    <tr><th>Type</th><td><?php echo esc_html($type); ?></td></tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-
-                    <div class="quills-accordion-item">
-                        <button type="button" class="quills-accordion-header">
-                            <span>Brewing Guide</span>
-                            <span class="quills-acc-icon">+</span>
-                        </button>
-                        <div class="quills-accordion-content">
-                            <div class="quills-brew-guide-grid">
-                                <div class="quills-brew-card">
-                                    <div class="quills-brew-title">POUR OVER (V60 / KALITA)</div>
-                                    <p><strong>Ratio:</strong> 1:16 (15g coffee : 240g water)</p>
-                                    <p><strong>Grind:</strong> Medium-Fine</p>
-                                    <p><strong>Water Temp:</strong> 93°C (200°F)</p>
-                                    <p><strong>Total Time:</strong> 2:45 – 3:15 min</p>
-                                </div>
-                                <div class="quills-brew-card">
-                                    <div class="quills-brew-title">ESPRESSO (9 BAR)</div>
-                                    <p><strong>Dose:</strong> 18g finely ground coffee</p>
-                                    <p><strong>Yield:</strong> 38g liquid espresso</p>
-                                    <p><strong>Time:</strong> 27 – 30 seconds</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="quills-accordion-item">
-                        <button type="button" class="quills-accordion-header">
-                            <span>The Story</span>
-                            <span class="quills-acc-icon">+</span>
-                        </button>
-                        <div class="quills-accordion-content">
-                            <div class="quills-story-body">
-                                <p><?php echo esc_html($title); ?> is roasted with precision in Louisville, Kentucky. Every bean is sourced directly through long-term relationships with dedicated coffee producers who share our obsession with cup quality and sustainable agriculture.</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
             </div>
 
         </div>
@@ -426,7 +317,7 @@ $review_stats = Quills_Coffee_Experience::get_review_stats($id);
             <div class="quills-reviews-toolbar-v2">
                 <div class="quills-reviews-stats-badge">
                     <span class="quills-reviews-avg">4.9</span>
-                    <span class="quills-reviews-count-label">80 reviews</span>
+                    <span class="quills-reviews-count-label"><?php echo esc_html($review_count); ?> reviews</span>
                     <span class="quills-reviews-trophy" title="Verified Store Rating">🏆</span>
                     <span class="quills-reviews-badge-circle" title="Verified Customer Feedback">✔</span>
                 </div>
