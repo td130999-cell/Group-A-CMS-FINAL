@@ -1,7 +1,7 @@
 /**
  * Quills Coffee - Live Search Modal & Drawer Script
  * Handles trigger events, modal toggling, debounced AJAX live search,
- * clear button, and suggestions interaction.
+ * clear button, and suggestions interaction matching https://quillscoffee.com/
  *
  * @package Coffee_Cafe_Corner
  */
@@ -50,7 +50,7 @@
                         input.select();
                     }
                 }
-            }, 100);
+            }, 80);
         }
         window.quillsOpenSearch = openModal;
 
@@ -59,15 +59,22 @@
             modal.classList.remove('is-open');
             modal.setAttribute('aria-hidden', 'true');
             document.body.classList.remove('quills-search-active');
+
+            // Clean up query string in URL if present
+            if (window.location.search && window.location.search.includes('s=')) {
+                try {
+                    window.history.replaceState({}, document.title, window.location.pathname);
+                } catch(e) {}
+            }
         }
         window.quillsCloseSearch = closeModal;
 
         // Bind header triggers
-        const headerSearchInputs = document.querySelectorAll('.quills-search-input, .quills-search-btn, .quills-search-form');
-        headerSearchInputs.forEach(el => {
+        const headerSearchElements = document.querySelectorAll('.quills-search-input, .quills-search-btn, .quills-search-form');
+        headerSearchElements.forEach(el => {
             el.addEventListener('click', function(e) {
-                // Do not navigate on submit button or input click
                 e.preventDefault();
+                e.stopPropagation();
                 openModal();
             });
             el.addEventListener('focus', function(e) {
@@ -117,7 +124,7 @@
                 if (debounceTimer) clearTimeout(debounceTimer);
                 debounceTimer = setTimeout(() => {
                     performLiveSearch(query);
-                }, 220);
+                }, 200);
             } else {
                 if (clearBtn) clearBtn.classList.remove('is-visible');
                 if (liveView) liveView.style.display = 'none';
@@ -170,24 +177,27 @@
                 productsList.innerHTML = data.products || '';
             }
 
-            // View All button
+            // View All button (compact, left-aligned)
             if (viewAllBtn) {
                 viewAllBtn.textContent = `VIEW ALL FOR "${query.toUpperCase()}"`;
                 viewAllBtn.href = data.view_all_url || `/?s=${encodeURIComponent(query)}`;
-                viewAllBtn.style.display = 'block';
+                viewAllBtn.style.display = 'inline-block';
             }
 
             // Suggestions
             const suggestions = data.suggestions || [];
             if (suggestionsList && sectionSuggestions) {
                 if (suggestions.length > 0) {
-                    suggestionsList.innerHTML = suggestions.map(s => `
-                        <li class="quills-search-aside-item">
-                            <button type="button" class="quills-search-suggestion-btn" data-suggestion="${escapeHtml(s)}">
-                                ${escapeHtml(s)}
-                            </button>
-                        </li>
-                    `).join('');
+                    suggestionsList.innerHTML = suggestions.map(s => {
+                        const highlighted = highlightMatch(s, query);
+                        return `
+                            <li class="quills-search-aside-item">
+                                <button type="button" class="quills-search-suggestion-btn" data-suggestion="${escapeHtml(s)}">
+                                    ${highlighted}
+                                </button>
+                            </li>
+                        `;
+                    }).join('');
                     sectionSuggestions.style.display = 'block';
                     if (divider1) divider1.style.display = 'block';
 
@@ -248,10 +258,34 @@
             }
         }
 
+        function highlightMatch(text, query) {
+            if (!query) return escapeHtml(text);
+            const escaped = escapeHtml(text);
+            const reg = new RegExp(escapeRegex(query), 'gi');
+            return escaped.replace(reg, '<strong class="quills-search-bold">$&</strong>');
+        }
+
+        function escapeRegex(string) {
+            return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        }
+
         function escapeHtml(text) {
             const div = document.createElement('div');
             div.textContent = text;
             return div.innerHTML;
         }
+
+        // Auto-open modal if URL already has ?s=...
+        try {
+            const urlParams = new URLSearchParams(window.location.search);
+            const sQuery = urlParams.get('s');
+            if (sQuery && sQuery.trim().length > 0) {
+                openModal();
+                if (input) {
+                    input.value = sQuery.trim();
+                    handleQueryChange(sQuery.trim());
+                }
+            }
+        } catch(e) {}
     });
 })();

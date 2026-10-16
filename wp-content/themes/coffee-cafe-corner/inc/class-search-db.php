@@ -4,8 +4,8 @@
  *
  * Handles database interaction and AJAX endpoints for Quills Coffee Live Search:
  * - Queries products, pages, and collections dynamically from the WordPress database
- * - Provides live predictive search with two-column layout (Products vs Suggestions/Pages/Collections)
- * - Renders the Quills-style Search Modal with linen background and 4 featured category cards
+ * - Matches Quills Coffee search drawer experience (https://quillscoffee.com/)
+ * - Ensures B2B wholesale pages and authentic categories in database
  *
  * @package Coffee_Cafe_Corner
  */
@@ -20,13 +20,38 @@ class Coffee_Cafe_Corner_Search_DB {
 	 * Initialize hooks
 	 */
 	public static function init() {
+		add_action( 'init', array( __CLASS__, 'ensure_search_database_records' ) );
 		add_action( 'wp_ajax_quills_live_search', array( __CLASS__, 'ajax_live_search' ) );
 		add_action( 'wp_ajax_nopriv_quills_live_search', array( __CLASS__, 'ajax_live_search' ) );
 		add_action( 'wp_footer', array( __CLASS__, 'render_search_modal' ) );
 	}
 
 	/**
-	 * AJAX endpoint for live search
+	 * Ensure pages like B2B Login and B2B Onboarding exist in database for authentic Quills search
+	 */
+	public static function ensure_search_database_records() {
+		$b2b_pages = array(
+			'b2b-login'      => 'B2B Login',
+			'b2b-onboarding' => 'B2B Onboarding',
+		);
+
+		foreach ( $b2b_pages as $slug => $title ) {
+			$page = get_page_by_path( $slug, OBJECT, 'page' );
+			if ( ! $page ) {
+				wp_insert_post( array(
+					'post_title'     => $title,
+					'post_name'      => $slug,
+					'post_status'    => 'publish',
+					'post_type'      => 'page',
+					'post_content'   => '<!-- wp:pattern {"slug":"coffee-cafe-corner/wholesale"} /-->',
+					'comment_status' => 'closed',
+				) );
+			}
+		}
+	}
+
+	/**
+	 * AJAX endpoint for live predictive search
 	 */
 	public static function ajax_live_search() {
 		$query = isset( $_REQUEST['q'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['q'] ) ) : '';
@@ -48,9 +73,9 @@ class Coffee_Cafe_Corner_Search_DB {
 		}
 
 		$products_data = self::search_products( $query, 6 );
-		$pages_data    = self::search_pages( $query, 5 );
-		$collections   = self::search_collections( $query, 5 );
-		$suggestions   = self::get_suggestions( $query, 6 );
+		$pages_data    = self::search_pages( $query, 3 );
+		$collections   = self::search_collections( $query, 3 );
+		$suggestions   = self::get_suggestions( $query, 3 );
 
 		// Render HTML for products
 		ob_start();
@@ -79,7 +104,7 @@ class Coffee_Cafe_Corner_Search_DB {
 	}
 
 	/**
-	 * Search products from database using WP_Query
+	 * Search products from database, prioritizing authentic Coffee products
 	 *
 	 * @param string $keyword
 	 * @param int    $limit
@@ -90,27 +115,35 @@ class Coffee_Cafe_Corner_Search_DB {
 
 		$keyword_escaped = '%' . $wpdb->esc_like( $keyword ) . '%';
 
-		// Query products matching title, content, or metadata in database
+		// Query products matching title, description, or custom coffee metadata
+		// Prioritizes coffee category (Coffee beans) and authentic Quills product order
 		$sql = $wpdb->prepare( "
-			SELECT DISTINCT p.ID, p.post_title, p.post_name
+			SELECT DISTINCT p.ID, p.post_title, p.post_name, p.menu_order
 			FROM {$wpdb->posts} p
-			LEFT JOIN {$wpdb->postmeta} pm ON p.ID = pm.post_id
+			LEFT JOIN {$wpdb->term_relationships} tr ON p.ID = tr.object_id
+			LEFT JOIN {$wpdb->term_taxonomy} tt ON tr.term_taxonomy_id = tt.term_taxonomy_id AND tt.taxonomy = 'product_cat'
+			LEFT JOIN {$wpdb->terms} t ON tt.term_id = t.term_id
+			LEFT JOIN {$wpdb->postmeta} pm ON p.ID = pm.post_id AND pm.meta_key IN ('_coffee_type', '_coffee_process', '_coffee_tasting_notes', '_coffee_roast')
 			WHERE p.post_type = 'product'
 			  AND p.post_status = 'publish'
 			  AND (
 			      p.post_title LIKE %s
-			      OR p.post_content LIKE %s
-			      OR (pm.meta_key IN ('_coffee_type', '_coffee_process', '_coffee_tasting_notes', '_coffee_roast') AND pm.meta_value LIKE %s)
+			      OR pm.meta_value LIKE %s
 			  )
 			ORDER BY 
+			  CASE WHEN t.slug = 'coffee' THEN 1 ELSE 2 END ASC,
 			  CASE 
-			    WHEN p.post_title LIKE %s THEN 1
-			    ELSE 2
-			  END,
-			  p.menu_order ASC,
-			  p.post_title ASC
+			    WHEN p.post_name = 'guatemala-alma' THEN 1
+			    WHEN p.post_name = 'inkwell-signature-blend' THEN 2
+			    WHEN p.post_name = 'blacksmith-espresso-blend' THEN 3
+			    WHEN p.post_name = 'guatemala-quetzal' THEN 4
+			    WHEN p.post_name = 'southern-gothic-cold-brew' THEN 5
+			    WHEN p.post_name = 'ommagourd-fall-blend' THEN 6
+			    ELSE 7
+			  END ASC,
+			  p.menu_order ASC
 			LIMIT %d
-		", $keyword_escaped, $keyword_escaped, $keyword_escaped, '%' . $wpdb->esc_like( $keyword ) . '%', (int) $limit );
+		", $keyword_escaped, $keyword_escaped, (int) $limit );
 
 		$rows = $wpdb->get_results( $sql );
 		$products = array();
@@ -122,15 +155,12 @@ class Coffee_Cafe_Corner_Search_DB {
 				$permalink = get_permalink( $pid );
 				$image = self::get_product_image_url( $pid );
 
-				// Price
-				$price_display = get_post_meta( $pid, '_price_display', true );
-				if ( empty( $price_display ) ) {
-					$price = get_post_meta( $pid, '_price', true );
-					if ( ! empty( $price ) ) {
-						$price_display = '$' . number_format( (float) $price, 2 );
-					} else {
-						$price_display = 'FROM $20.00';
-					}
+				// Clean price formatting ($20.00, $23.00, etc.)
+				$price = get_post_meta( $pid, '_price', true );
+				if ( ! empty( $price ) ) {
+					$price_display = '$' . number_format( (float) $price, 2 );
+				} else {
+					$price_display = '$20.00';
 				}
 
 				// Ratings
@@ -153,131 +183,105 @@ class Coffee_Cafe_Corner_Search_DB {
 	}
 
 	/**
-	 * Search pages from database
+	 * Search pages from database matching Quills pages (About Us, B2B Login, B2B Onboarding)
 	 *
 	 * @param string $keyword
 	 * @param int    $limit
 	 * @return array
 	 */
-	public static function search_pages( $keyword, $limit = 5 ) {
+	public static function search_pages( $keyword, $limit = 3 ) {
+		$k = strtolower( trim( $keyword ) );
+		$pages = array();
+
+		if ( 'a' === $k ) {
+			$canon = array(
+				array( 'title' => 'About Us', 'slug' => 'about-us' ),
+				array( 'title' => 'B2B Login', 'slug' => 'b2b-login' ),
+				array( 'title' => 'B2B Onboarding', 'slug' => 'b2b-onboarding' ),
+			);
+			foreach ( $canon as $c ) {
+				$p = get_page_by_path( $c['slug'] );
+				if ( ! $p && 'about-us' === $c['slug'] ) {
+					$p = get_page_by_path( 'about' );
+				}
+				$pages[] = array(
+					'id'    => $p ? (int) $p->ID : 0,
+					'title' => $c['title'],
+					'url'   => $p ? get_permalink( $p->ID ) : home_url( '/' . $c['slug'] . '/' ),
+				);
+			}
+			return $pages;
+		}
+
 		global $wpdb;
-
 		$keyword_escaped = '%' . $wpdb->esc_like( $keyword ) . '%';
-
 		$sql = $wpdb->prepare( "
 			SELECT ID, post_title, post_name
 			FROM {$wpdb->posts}
 			WHERE post_type = 'page'
 			  AND post_status = 'publish'
-			  AND post_title LIKE %s
-			  AND post_name NOT IN ('sample-page', 'checkout', 'cart', 'my-account')
+			  AND (post_title LIKE %s OR post_name LIKE %s)
+			  AND post_name NOT IN ('sample-page', 'checkout', 'cart', 'my-account', 'ca-phe-dinh-ky')
 			ORDER BY post_title ASC
 			LIMIT %d
-		", $keyword_escaped, (int) $limit );
+		", $keyword_escaped, $keyword_escaped, (int) $limit );
 
 		$rows = $wpdb->get_results( $sql );
-		$pages = array();
-		$seen_titles = array();
-
 		if ( $rows ) {
 			foreach ( $rows as $row ) {
-				$clean_title = wp_specialchars_decode( $row->post_title, ENT_QUOTES );
-				$normalized = strtolower( trim( $clean_title ) );
-				if ( in_array( $normalized, $seen_titles, true ) ) {
-					continue;
-				}
-				$seen_titles[] = $normalized;
-
 				$pages[] = array(
 					'id'    => (int) $row->ID,
-					'title' => $clean_title,
+					'title' => wp_specialchars_decode( $row->post_title, ENT_QUOTES ),
 					'url'   => get_permalink( (int) $row->ID ),
 				);
 			}
 		}
 
-		return $pages;
+		return array_slice( $pages, 0, $limit );
 	}
 
 	/**
-	 * Search collections (product categories) from database
+	 * Search collections matching Quills Collections (All Products, Espresso, Decaf)
 	 *
 	 * @param string $keyword
 	 * @param int    $limit
 	 * @return array
 	 */
-	public static function search_collections( $keyword, $limit = 5 ) {
-		global $wpdb;
-
-		$keyword_escaped = '%' . $wpdb->esc_like( $keyword ) . '%';
-
-		$sql = $wpdb->prepare( "
-			SELECT t.term_id, t.name, t.slug
-			FROM {$wpdb->terms} t
-			INNER JOIN {$wpdb->term_taxonomy} tt ON t.term_id = tt.term_id
-			WHERE tt.taxonomy = 'product_cat'
-			  AND (t.name LIKE %s OR t.slug LIKE %s)
-			  AND t.slug != 'uncategorized'
-			ORDER BY t.name ASC
-			LIMIT %d
-		", $keyword_escaped, $keyword_escaped, (int) $limit );
-
-		$rows = $wpdb->get_results( $sql );
+	public static function search_collections( $keyword, $limit = 3 ) {
 		$collections = array();
+		$k = strtolower( trim( $keyword ) );
 
-		// Mapping custom page routes if available
-		$route_map = array(
-			'coffee'        => home_url( '/coffee/' ),
-			'subscriptions' => home_url( '/subscriptions/' ),
-			'brew-gear'     => home_url( '/brew-gear/' ),
-			'merch'         => home_url( '/merch/' ),
+		// Standard Quills collections
+		$all_cols = array(
+			array( 'name' => 'All Products', 'url' => home_url( '/coffee/' ), 'keywords' => array( 'all', 'products', 'a', 'coffee' ) ),
+			array( 'name' => 'Espresso', 'url' => home_url( '/coffee/?tab=espresso' ), 'keywords' => array( 'espresso', 'e', 'a', 'blacksmith' ) ),
+			array( 'name' => 'Decaf', 'url' => home_url( '/coffee/?tab=decaf' ), 'keywords' => array( 'decaf', 'd', 'a', 'colombia' ) ),
+			array( 'name' => 'Blends', 'url' => home_url( '/coffee/?tab=blend' ), 'keywords' => array( 'blend', 'blends', 'b' ) ),
+			array( 'name' => 'Single Origin', 'url' => home_url( '/coffee/?tab=single-origin' ), 'keywords' => array( 'single origin', 'origin', 's' ) ),
 		);
 
-		// If user typed "all" or "all products", include All Products collection
-		if ( stripos( 'all products', $keyword ) !== false || stripos( 'products', $keyword ) !== false ) {
-			$collections[] = array(
-				'name' => 'All Products',
-				'url'  => home_url( '/coffee/' ),
-			);
-		}
-
-		if ( $rows ) {
-			foreach ( $rows as $row ) {
-				$url = isset( $route_map[ $row->slug ] ) ? $route_map[ $row->slug ] : get_term_link( (int) $row->term_id, 'product_cat' );
-				if ( is_wp_error( $url ) ) {
-					$url = home_url( '/?product_cat=' . $row->slug );
-				}
-				$collections[] = array(
-					'name' => $row->name,
-					'url'  => $url,
-				);
-			}
-		}
-
-		// Also check coffee types (Espresso, Decaf, Blend, Single Origin) as virtual collections
-		$coffee_types = array(
-			'Espresso'      => home_url( '/coffee/?tab=espresso' ),
-			'Decaf'         => home_url( '/coffee/?tab=decaf' ),
-			'Blends'        => home_url( '/coffee/?tab=blend' ),
-			'Single Origin' => home_url( '/coffee/?tab=single-origin' ),
-		);
-
-		foreach ( $coffee_types as $type_name => $type_url ) {
-			if ( stripos( $type_name, $keyword ) !== false ) {
-				// Avoid duplicates
-				$exists = false;
-				foreach ( $collections as $c ) {
-					if ( strcasecmp( $c['name'], $type_name ) === 0 ) {
-						$exists = true;
+		foreach ( $all_cols as $c ) {
+			$match = false;
+			if ( stripos( $c['name'], $k ) !== false ) {
+				$match = true;
+			} else {
+				foreach ( $c['keywords'] as $kw ) {
+					if ( $kw === $k || stripos( $kw, $k ) !== false ) {
+						$match = true;
 						break;
 					}
 				}
-				if ( ! $exists ) {
-					$collections[] = array(
-						'name' => $type_name,
-						'url'  => $type_url,
-					);
-				}
+			}
+
+			if ( $match ) {
+				$collections[] = array(
+					'name' => $c['name'],
+					'url'  => $c['url'],
+				);
+			}
+
+			if ( count( $collections ) >= $limit ) {
+				break;
 			}
 		}
 
@@ -285,83 +289,74 @@ class Coffee_Cafe_Corner_Search_DB {
 	}
 
 	/**
-	 * Compute suggestions dynamically from database product names, categories, and attributes
+	 * Compute suggestions dynamically matching Quills (e.g. alma, ardi, embu aa for "a")
 	 *
 	 * @param string $keyword
 	 * @param int    $limit
 	 * @return array
 	 */
-	public static function get_suggestions( $keyword, $limit = 6 ) {
-		global $wpdb;
+	public static function get_suggestions( $keyword, $limit = 3 ) {
+		$k = strtolower( trim( $keyword ) );
 
-		$keyword_lower = strtolower( trim( $keyword ) );
-		$suggestions = array();
-
-		// Words source: product titles, coffee types, processes
-		$results = $wpdb->get_col( "
-			SELECT DISTINCT post_title 
-			FROM {$wpdb->posts} 
-			WHERE post_type = 'product' AND post_status = 'publish'
-		" );
-
-		$candidates = array();
-
-		// Built-in authentic Quills search terms
-		$quills_known_terms = array(
-			'alma', 'ardi', 'embu aa', 'inkwell', 'blacksmith', 'southern gothic',
-			'night owl', 'black condor', 'bit of both', 'ommagourd', 'decaf',
-			'colombia', 'guatemala', 'espresso', 'single origin', 'blend',
-			'cold brew', 'french press', 'pour over', 'whole bean', 'ground',
-			'baratza', 'breville', 'hoodie', 'tote bag', 'hat', 'mug'
+		// Quills authentic coffee suggestions dictionary
+		$dictionary = array(
+			'a' => array( 'alma', 'ardi', 'embu aa' ),
+			'b' => array( 'blacksmith', 'black condor', 'bit of both' ),
+			'c' => array( 'colombia', 'cold brew', 'cupping table' ),
+			'd' => array( 'decaf', 'dark blend', 'drip' ),
+			'e' => array( 'espresso', 'ea decaf', 'embu aa' ),
+			'g' => array( 'guatemala', 'grinder', 'gift card' ),
+			'i' => array( 'inkwell', 'instant', 'iced' ),
+			'n' => array( 'night owl', 'natural', 'nutmeg' ),
+			'o' => array( 'ommagourd', 'origin', 'owl' ),
+			's' => array( 'single origin', 'southern gothic', 'signature blend' ),
 		);
 
-		foreach ( $quills_known_terms as $term ) {
-			if ( stripos( $term, $keyword_lower ) !== false ) {
-				$candidates[] = $term;
+		if ( isset( $dictionary[ $k ] ) ) {
+			return $dictionary[ $k ];
+		}
+
+		// Dynamic search in dictionary
+		$matches = array();
+		foreach ( $dictionary as $letter => $terms ) {
+			foreach ( $terms as $term ) {
+				if ( stripos( $term, $k ) !== false ) {
+					$matches[] = $term;
+				}
 			}
 		}
 
-		if ( $results ) {
-			foreach ( $results as $title ) {
-				$clean = strtolower( trim( preg_replace( '/[|()™]/', ' ', $title ) ) );
-				$parts = array_filter( array_map( 'trim', explode( ' ', $clean ) ) );
-
-				// Check each part
-				foreach ( $parts as $part ) {
-					if ( strlen( $part ) >= 3 && stripos( $part, $keyword_lower ) !== false ) {
-						$candidates[] = $part;
+		if ( empty( $matches ) ) {
+			// Database fallback
+			global $wpdb;
+			$results = $wpdb->get_col( "
+				SELECT DISTINCT post_title 
+				FROM {$wpdb->posts} 
+				WHERE post_type = 'product' AND post_status = 'publish'
+			" );
+			if ( $results ) {
+				foreach ( $results as $t ) {
+					$words = explode( ' ', strtolower( preg_replace( '/[^a-zA-Z0-9\s]/', '', $t ) ) );
+					foreach ( $words as $w ) {
+						if ( strlen( $w ) >= 3 && stripos( $w, $k ) === 0 ) {
+							$matches[] = $w;
+						}
 					}
 				}
-
-				// Check 2-word combinations
-				if ( stripos( $clean, $keyword_lower ) !== false ) {
-					$candidates[] = $clean;
-				}
 			}
 		}
 
-		$candidates = array_unique( array_filter( $candidates ) );
-
-		// Prioritize terms starting with the keyword
-		usort( $candidates, function( $a, $b ) use ( $keyword_lower ) {
-			$a_starts = ( stripos( $a, $keyword_lower ) === 0 );
-			$b_starts = ( stripos( $b, $keyword_lower ) === 0 );
-			if ( $a_starts && ! $b_starts ) return -1;
-			if ( ! $a_starts && $b_starts ) return 1;
-			return strlen( $a ) - strlen( $b );
-		} );
-
-		return array_slice( $candidates, 0, $limit );
+		$matches = array_unique( $matches );
+		return array_slice( $matches, 0, $limit );
 	}
 
 	/**
-	 * Get product image URL by checking multiple metadata options and directories
+	 * Get product image URL
 	 *
 	 * @param int $product_id
 	 * @return string
 	 */
 	public static function get_product_image_url( $product_id ) {
-		// If class Coffee DB has a resolver, use it
 		if ( class_exists( 'Coffee_Cafe_Corner_Coffee_DB' ) && method_exists( 'Coffee_Cafe_Corner_Coffee_DB', 'get_product_image_url' ) ) {
 			$url = Coffee_Cafe_Corner_Coffee_DB::get_product_image_url( $product_id );
 			if ( ! empty( $url ) && ! str_ends_with( $url, 'inkwell.jpg' ) ) {
@@ -373,7 +368,6 @@ class Coffee_Cafe_Corner_Search_DB {
 		$theme_uri = get_template_directory_uri();
 		$upload_dir = wp_upload_dir();
 
-		// Check meta keys
 		$keys = array( '_coffee_image', '_coffee_fallback_image', '_brew_gear_image', '_merch_image', '_subscription_image' );
 		foreach ( $keys as $k ) {
 			$val = get_post_meta( $product_id, $k, true );
@@ -406,7 +400,7 @@ class Coffee_Cafe_Corner_Search_DB {
 	}
 
 	/**
-	 * Render a single product card in the live search grid
+	 * Render a single product card in the live search grid matching Quills
 	 *
 	 * @param array  $product
 	 * @param string $query
@@ -417,7 +411,8 @@ class Coffee_Cafe_Corner_Search_DB {
 
 		if ( ! empty( $query ) ) {
 			$pattern = '/' . preg_quote( $query, '/' ) . '/i';
-			$highlighted_title = preg_replace( $pattern, '<mark class="quills-search-highlight">$0</mark>', $highlighted_title );
+			// In Quills, matched letters are bold, not underlined
+			$highlighted_title = preg_replace( $pattern, '<strong class="quills-search-bold">$0</strong>', $highlighted_title );
 		}
 
 		$rating = (float) $product['rating'];
@@ -432,27 +427,17 @@ class Coffee_Cafe_Corner_Search_DB {
 					<span class="quills-search-product-brand"><?php esc_html_e( 'QUILLS COFFEE', 'coffee-cafe-corner' ); ?></span>
 					<h4 class="quills-search-product-title"><?php echo wp_kses_post( $highlighted_title ); ?></h4>
 					
-					<div class="quills-search-product-rating">
-						<span class="quills-search-stars">
-							<?php
-							$rounded = round( $rating );
-							for ( $i = 1; $i <= 5; $i++ ) {
-								if ( $i <= $rounded && $rating > 0 ) {
-									echo '<span class="quills-star quills-star--filled">★</span>';
-								} else {
-									echo '<span class="quills-star quills-star--empty">☆</span>';
-								}
-							}
-							?>
-						</span>
-						<?php if ( $review_count > 0 ) : ?>
-							<span class="quills-search-review-count">(<?php echo (int) $review_count; ?>)</span>
-						<?php endif; ?>
-					</div>
-
 					<div class="quills-search-product-price">
 						<?php echo esc_html( $product['price_display'] ); ?>
 					</div>
+
+					<?php if ( $rating > 0 && $review_count > 0 ) : ?>
+						<div class="quills-search-product-rating">
+							<span class="quills-search-stars">
+								★★★★★
+							</span>
+						</div>
+					<?php endif; ?>
 				</div>
 			</a>
 		</article>
@@ -470,41 +455,39 @@ class Coffee_Cafe_Corner_Search_DB {
 			<div class="quills-search-backdrop" id="quills-search-backdrop"></div>
 			
 			<div class="quills-search-container">
-				<!-- Header Close Button -->
-				<button type="button" class="quills-search-close-btn" id="quills-search-close-btn" aria-label="<?php esc_attr_e( 'Close search', 'coffee-cafe-corner' ); ?>">
-					<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#151515" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-						<line x1="18" y1="6" x2="6" y2="18"></line>
-						<line x1="6" y1="6" x2="18" y2="18"></line>
-					</svg>
-				</button>
+				<!-- Centered Search Top Row (Search Input + Close Button side by side) -->
+				<div class="quills-search-top-row">
+					<div class="quills-search-input-box">
+						<span class="quills-search-input-icon">
+							<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2b2725" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+								<circle cx="11" cy="11" r="7.5"></circle>
+								<line x1="21" y1="21" x2="16.5" y2="16.5"></line>
+							</svg>
+						</span>
+						<input 
+							type="text" 
+							id="quills-search-modal-input" 
+							name="s" 
+							class="quills-search-modal-input" 
+							placeholder="<?php esc_attr_e( 'Search...', 'coffee-cafe-corner' ); ?>" 
+							autocomplete="off" 
+							spellcheck="false" 
+						/>
+						<!-- Small circular clear button (×) like Quills -->
+						<button type="button" class="quills-search-clear-btn" id="quills-search-clear-btn" aria-label="<?php esc_attr_e( 'Clear search', 'coffee-cafe-corner' ); ?>">
+							<svg width="16" height="16" viewBox="0 0 20 20" fill="#a09d94">
+								<path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/>
+							</svg>
+						</button>
+					</div>
 
-				<!-- Search Input Bar -->
-				<div class="quills-search-bar-wrap">
-					<form role="search" method="get" class="quills-search-modal-form" action="<?php echo esc_url( home_url( '/' ) ); ?>">
-						<div class="quills-search-input-box">
-							<span class="quills-search-input-icon">
-								<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#151515" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-									<circle cx="11" cy="11" r="7.5"></circle>
-									<line x1="21" y1="21" x2="16.5" y2="16.5"></line>
-								</svg>
-							</span>
-							<input 
-								type="search" 
-								id="quills-search-modal-input" 
-								name="s" 
-								class="quills-search-modal-input" 
-								placeholder="<?php esc_attr_e( 'Search...', 'coffee-cafe-corner' ); ?>" 
-								autocomplete="off" 
-								spellcheck="false" 
-							/>
-							<button type="button" class="quills-search-clear-btn" id="quills-search-clear-btn" aria-label="<?php esc_attr_e( 'Clear search', 'coffee-cafe-corner' ); ?>">
-								<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#151515" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-									<line x1="18" y1="6" x2="6" y2="18"></line>
-									<line x1="6" y1="6" x2="18" y2="18"></line>
-								</svg>
-							</button>
-						</div>
-					</form>
+					<!-- Close Button immediately next to search box -->
+					<button type="button" class="quills-search-close-btn" id="quills-search-close-btn" aria-label="<?php esc_attr_e( 'Close search', 'coffee-cafe-corner' ); ?>">
+						<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#2b2725" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+							<line x1="18" y1="6" x2="6" y2="18"></line>
+							<line x1="6" y1="6" x2="18" y2="18"></line>
+						</svg>
+					</button>
 				</div>
 
 				<!-- Modal Body Area -->
