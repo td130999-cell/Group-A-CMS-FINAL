@@ -3,58 +3,123 @@
  * Title: Subscriptions
  * Slug: coffee-cafe-corner/subscriptions
  * Categories: coffee-cafe-corner, pages
- * Description: Quills Coffee Subscription collection page matching quillscoffee.com/collections/subscriptions.
+ * Description: Quills Coffee Subscriptions collection page matching https://quillscoffee.com/collections/subscriptions
  *
  * @package Coffee_Cafe_Corner
  */
-
-if ( ! class_exists( 'Coffee_Cafe_Corner_Coffee_DB' ) ) {
-	require_once get_template_directory() . '/inc/class-coffee-db.php';
-}
 
 if ( ! class_exists( 'Coffee_Cafe_Corner_Subscription_DB' ) ) {
 	require_once get_template_directory() . '/inc/class-subscription-db.php';
 }
 
-$query = Coffee_Cafe_Corner_Subscription_DB::get_subscription_products_query();
-$total_products = $query->found_posts ? $query->found_posts : 9;
+$sort_by = isset( $_GET['sort_by'] ) ? sanitize_text_field( wp_unslash( $_GET['sort_by'] ) ) : 'featured';
+$query   = Coffee_Cafe_Corner_Subscription_DB::get_subscription_products_query( $sort_by );
+
+$banner_url = content_url( '/uploads/quills/coffeesfreebagbanner2.png' );
+if ( ! file_exists( ABSPATH . 'wp-content/uploads/quills/coffeesfreebagbanner2.png' ) ) {
+	$banner_url = trailingslashit( get_template_directory_uri() ) . 'assets/images/subscriptions-banner.png';
+}
 ?>
 
-<div class="quills-subscriptions-page-wrapper">
-	<div class="quills-subscriptions-container">
+<div class="quills-subscriptions-page">
+	<div class="quills-subscriptions-inner">
 
-		<!-- Breadcrumb -->
-		<nav class="quills-sub-breadcrumb" aria-label="<?php esc_attr_e( 'Breadcrumb', 'coffee-cafe-corner' ); ?>">
+		<!-- 1. Breadcrumbs -->
+		<nav class="quills-sub-breadcrumbs" aria-label="<?php esc_attr_e( 'Breadcrumb', 'coffee-cafe-corner' ); ?>">
 			<a href="<?php echo esc_url( home_url( '/' ) ); ?>" class="quills-sub-breadcrumb-link"><?php esc_html_e( 'Home', 'coffee-cafe-corner' ); ?></a>
-			<span class="quills-sub-breadcrumb-sep">/</span>
-			<span class="quills-sub-breadcrumb-current"><?php esc_html_e( 'Subscriptions', 'coffee-cafe-corner' ); ?></span>
+			<span class="quills-sub-sep">/</span>
+			<span class="quills-sub-current"><?php esc_html_e( 'Subscriptions', 'coffee-cafe-corner' ); ?></span>
 		</nav>
 
-		<!-- Hero Banner Box with Coffee Bags & FREE BAG Badge -->
-		<section class="quills-sub-hero-section" aria-label="<?php esc_attr_e( 'Subscriptions Hero', 'coffee-cafe-corner' ); ?>">
-			<div class="quills-sub-hero-banner">
-				<img 
-					src="<?php echo esc_url( trailingslashit( get_template_directory_uri() ) . 'assets/images/subscription-hero-banner.png' ); ?>" 
-					alt="<?php esc_attr_e( 'Subscriptions - Get a Free Bag', 'coffee-cafe-corner' ); ?>" 
-					class="quills-sub-hero-img" 
-				/>
+		<!-- 2. Hero Banner with Script Title and FREE BAG Badge -->
+		<section class="quills-sub-hero-banner" aria-label="<?php esc_attr_e( 'Subscriptions Banner', 'coffee-cafe-corner' ); ?>">
+			<div class="quills-sub-hero-image-wrap">
+				<img src="<?php echo esc_url( $banner_url ); ?>" alt="<?php esc_attr_e( 'Quills Coffee Subscriptions', 'coffee-cafe-corner' ); ?>" class="quills-sub-hero-bg-img" />
+				<div class="quills-sub-hero-overlay">
+					<h1 class="quills-sub-hero-title"><?php esc_html_e( 'Subscriptions', 'coffee-cafe-corner' ); ?></h1>
+				</div>
 			</div>
-			<h2 class="quills-sub-hero-tagline">
-				<?php esc_html_e( 'Get a free 12oz bag of Inkwell when you subscribe.', 'coffee-cafe-corner' ); ?>
-			</h2>
 		</section>
 
-		<!-- Subscriptions Toolbar: Product Count, Filter, Sort By -->
+		<!-- 3. Rich Text Copy Section -->
+		<section class="quills-sub-intro-section">
+			<h2 class="quills-sub-intro-title">
+				<?php esc_html_e( 'Get a free 12oz bag of Inkwell when you subscribe.', 'coffee-cafe-corner' ); ?>
+			</h2>
+			<p class="quills-sub-intro-desc">
+				<?php esc_html_e( 'Experience freshly-roasted coffee delivered right to your door. Choose between crafted blends or a curated rotation of single-origins from around the world.', 'coffee-cafe-corner' ); ?>
+			</p>
+			<p class="quills-sub-intro-note">
+				<?php esc_html_e( '(Free bag offer valid for new subscribers only.)', 'coffee-cafe-corner' ); ?>
+			</p>
+		</section>
+
+		<!-- Divider -->
+		<hr class="quills-sub-divider" />
+
+		<!-- 4. Top Testimonial Slider -->
+		<section class="quills-sub-testimonial-slider" id="quills-top-testimonial-slider" aria-label="<?php esc_attr_e( 'Customer Reviews', 'coffee-cafe-corner' ); ?>">
+			<div class="quills-sub-track-container">
+				<!-- Navigation Arrows (Hidden by default, visible on hover) -->
+				<button type="button" class="quills-sub-nav-btn quills-sub-nav-prev is-disabled" aria-label="<?php esc_attr_e( 'Previous review', 'coffee-cafe-corner' ); ?>">
+					<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="15 18 9 12 15 6"></polyline></svg>
+				</button>
+				<button type="button" class="quills-sub-nav-btn quills-sub-nav-next" aria-label="<?php esc_attr_e( 'Next review', 'coffee-cafe-corner' ); ?>">
+					<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"></polyline></svg>
+				</button>
+
+				<div class="quills-sub-slider-track">
+				<!-- Slide 1 -->
+				<div class="quills-sub-slide is-active" data-index="0">
+					<div class="quills-sub-stars">★★★★★</div>
+					<blockquote class="quills-sub-quote">
+						"The smell alone makes you want to rip open the bag and drink it right away. This coffee is THE BEST."
+					</blockquote>
+					<div class="quills-sub-author">— C. Diller</div>
+				</div>
+
+				<!-- Slide 2 -->
+				<div class="quills-sub-slide" data-index="1">
+					<div class="quills-sub-stars">★★★★★</div>
+					<blockquote class="quills-sub-quote">
+						"One cup is all it took, and we were hooked! Now we order online to have our favorite cup on a daily basis."
+					</blockquote>
+					<div class="quills-sub-author">— Brianne E.</div>
+				</div>
+
+				<!-- Slide 3 -->
+				<div class="quills-sub-slide" data-index="2">
+					<div class="quills-sub-stars">★★★★★</div>
+					<blockquote class="quills-sub-quote">
+						"Quills has the best coffee and great customer service! 5 stars!!! We love getting to try a variety of different roasts!"
+					</blockquote>
+					<div class="quills-sub-author">— Kelly Davis</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- Pagination Dots -->
+			<div class="quills-sub-dots" role="tablist">
+				<button type="button" class="quills-sub-dot is-active" data-slide="0" aria-label="<?php esc_attr_e( 'Slide 1', 'coffee-cafe-corner' ); ?>"></button>
+				<button type="button" class="quills-sub-dot" data-slide="1" aria-label="<?php esc_attr_e( 'Slide 2', 'coffee-cafe-corner' ); ?>"></button>
+				<button type="button" class="quills-sub-dot" data-slide="2" aria-label="<?php esc_attr_e( 'Slide 3', 'coffee-cafe-corner' ); ?>"></button>
+			</div>
+		</section>
+
+		<!-- Divider -->
+		<hr class="quills-sub-divider" />
+
+		<!-- 5. Collection Toolbar (Count, Filter, Sort) -->
 		<div class="quills-sub-toolbar">
 			<div class="quills-sub-toolbar-left">
-				<span class="quills-sub-products-count" id="quills-sub-products-count">
-					<?php printf( esc_html__( '%d products', 'coffee-cafe-corner' ), (int) $total_products ); ?>
+				<span class="quills-sub-product-count" id="quills-sub-count">
+					<?php printf( esc_html__( '%d products', 'coffee-cafe-corner' ), $query->found_posts ); ?>
 				</span>
 			</div>
 
 			<div class="quills-sub-toolbar-right">
-				<button type="button" class="quills-sub-filter-btn" id="quills-sub-filter-btn" aria-label="Filter">
-					<svg class="quills-filter-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+				<button type="button" class="quills-sub-filter-trigger" id="quills-sub-filter-btn" aria-expanded="false" aria-controls="quills-sub-filter-drawer">
+					<svg class="quills-filter-icon" width="16" height="16" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
 						<line x1="4" y1="21" x2="4" y2="14"></line>
 						<line x1="4" y1="10" x2="4" y2="3"></line>
 						<line x1="12" y1="21" x2="12" y2="12"></line>
@@ -68,75 +133,129 @@ $total_products = $query->found_posts ? $query->found_posts : 9;
 					<span><?php esc_html_e( 'Filter', 'coffee-cafe-corner' ); ?></span>
 				</button>
 
-				<div class="quills-sub-sort-wrapper">
+				<div class="quills-sub-sort-control">
 					<label for="quills-sub-sort-select" class="quills-sub-sort-label"><?php esc_html_e( 'Sort by:', 'coffee-cafe-corner' ); ?></label>
-					<div class="quills-sub-sort-box">
-						<select id="quills-sub-sort-select" class="quills-sub-sort-select">
-							<option value="featured"><?php esc_html_e( 'Featured', 'coffee-cafe-corner' ); ?></option>
-							<option value="best-selling"><?php esc_html_e( 'Best selling', 'coffee-cafe-corner' ); ?></option>
-							<option value="title-ascending"><?php esc_html_e( 'Alphabetically, A-Z', 'coffee-cafe-corner' ); ?></option>
-							<option value="title-descending"><?php esc_html_e( 'Alphabetically, Z-A', 'coffee-cafe-corner' ); ?></option>
-							<option value="price-ascending"><?php esc_html_e( 'Price, low to high', 'coffee-cafe-corner' ); ?></option>
-							<option value="price-descending"><?php esc_html_e( 'Price, high to low', 'coffee-cafe-corner' ); ?></option>
-							<option value="created-descending"><?php esc_html_e( 'Date, new to old', 'coffee-cafe-corner' ); ?></option>
+					<div class="quills-sub-select-wrapper">
+						<select id="quills-sub-sort-select" class="quills-sub-sort-dropdown">
+							<option value="featured" <?php selected( $sort_by, 'featured' ); ?>><?php esc_html_e( 'Featured', 'coffee-cafe-corner' ); ?></option>
+							<option value="best-selling" <?php selected( $sort_by, 'best-selling' ); ?>><?php esc_html_e( 'Best selling', 'coffee-cafe-corner' ); ?></option>
+							<option value="title-ascending" <?php selected( $sort_by, 'title-ascending' ); ?>><?php esc_html_e( 'Alphabetically, A-Z', 'coffee-cafe-corner' ); ?></option>
+							<option value="title-descending" <?php selected( $sort_by, 'title-descending' ); ?>><?php esc_html_e( 'Alphabetically, Z-A', 'coffee-cafe-corner' ); ?></option>
+							<option value="price-ascending" <?php selected( $sort_by, 'price-ascending' ); ?>><?php esc_html_e( 'Price, low to high', 'coffee-cafe-corner' ); ?></option>
+							<option value="price-descending" <?php selected( $sort_by, 'price-descending' ); ?>><?php esc_html_e( 'Price, high to low', 'coffee-cafe-corner' ); ?></option>
+							<option value="created-descending" <?php selected( $sort_by, 'created-descending' ); ?>><?php esc_html_e( 'Date, new to old', 'coffee-cafe-corner' ); ?></option>
+							<option value="created-ascending" <?php selected( $sort_by, 'created-ascending' ); ?>><?php esc_html_e( 'Date, old to new', 'coffee-cafe-corner' ); ?></option>
 						</select>
-						<span class="quills-sort-arrow">▾</span>
 					</div>
 				</div>
 			</div>
 		</div>
 
-		<!-- Subscription Products Grid (3 columns) -->
-		<div class="quills-sub-grid" id="quills-sub-grid">
+		<!-- Filter Drawer / Modal -->
+		<div class="quills-sub-filter-drawer" id="quills-sub-filter-drawer" aria-hidden="true">
+			<div class="quills-sub-filter-drawer-header">
+				<h3 class="quills-sub-filter-drawer-title"><?php esc_html_e( 'Filter products', 'coffee-cafe-corner' ); ?></h3>
+				<button type="button" class="quills-sub-filter-close-btn" id="quills-sub-filter-close" aria-label="<?php esc_attr_e( 'Close filters', 'coffee-cafe-corner' ); ?>">✕</button>
+			</div>
+			<div class="quills-sub-filter-drawer-body">
+				<div class="quills-sub-filter-group">
+					<h4 class="quills-sub-filter-heading"><?php esc_html_e( 'Availability', 'coffee-cafe-corner' ); ?></h4>
+					<label class="quills-sub-filter-checkbox">
+						<input type="checkbox" name="filter_in_stock" checked />
+						<span><?php esc_html_e( 'In stock (9)', 'coffee-cafe-corner' ); ?></span>
+					</label>
+				</div>
+				<div class="quills-sub-filter-group">
+					<h4 class="quills-sub-filter-heading"><?php esc_html_e( 'Product type', 'coffee-cafe-corner' ); ?></h4>
+					<label class="quills-sub-filter-checkbox">
+						<input type="checkbox" name="filter_type_blend" checked />
+						<span><?php esc_html_e( 'Blend (6)', 'coffee-cafe-corner' ); ?></span>
+					</label>
+					<label class="quills-sub-filter-checkbox">
+						<input type="checkbox" name="filter_type_single" checked />
+						<span><?php esc_html_e( 'Single Origin (2)', 'coffee-cafe-corner' ); ?></span>
+					</label>
+					<label class="quills-sub-filter-checkbox">
+						<input type="checkbox" name="filter_type_decaf" checked />
+						<span><?php esc_html_e( 'Decaf (1)', 'coffee-cafe-corner' ); ?></span>
+					</label>
+				</div>
+			</div>
+		</div>
+		<div class="quills-sub-filter-backdrop" id="quills-sub-filter-backdrop"></div>
+
+		<!-- 6. 3-Column Product Grid -->
+		<div class="quills-sub-grid" id="quills-sub-product-grid">
 			<?php
 			if ( $query->have_posts() ) :
 				while ( $query->have_posts() ) :
 					$query->the_post();
-					$card = Coffee_Cafe_Corner_Coffee_DB::get_product_card_data( get_the_ID() );
-					if ( ! $card ) {
-						continue;
-					}
-					?>
-					<article class="quills-sub-card" data-product-id="<?php echo esc_attr( $card['id'] ); ?>">
-						<div class="quills-sub-card-media">
-							<a href="<?php echo esc_url( $card['permalink'] ); ?>" class="quills-sub-card-link">
-								<img src="<?php echo esc_url( $card['image_url'] ); ?>" alt="<?php echo esc_attr( $card['title'] ); ?>" class="quills-sub-card-img" loading="lazy" />
-							</a>
-
-							<!-- HOVER OVERLAY: Hidden by default, appears ONLY on hover (Matching Image 2) -->
-							<div class="quills-card-hover-overlay">
-								<a href="<?php echo esc_url( $card['permalink'] ); ?>" class="quills-overlay-text-link">
-									<h4 class="quills-overlay-title"><?php echo esc_html( $card['title'] ); ?></h4>
-									<div class="quills-overlay-divider"></div>
-									<p class="quills-overlay-notes"><?php echo esc_html( $card['tasting_notes'] ); ?></p>
-									<div class="quills-overlay-details">
-										<p class="quills-overlay-desc"><strong><?php echo esc_html( $card['subtitle'] ); ?></strong></p>
-										<p class="quills-overlay-spec"><strong>Process:</strong> <?php echo esc_html( $card['process'] ); ?></p>
-										<p class="quills-overlay-spec"><strong>Origins:</strong> <?php echo esc_html( $card['origins'] ); ?></p>
-									</div>
-								</a>
-							</div>
-						</div>
-
-						<div class="quills-sub-card-content">
-							<h3 class="quills-sub-card-title">
-								<a href="<?php echo esc_url( $card['permalink'] ); ?>"><?php echo esc_html( $card['title'] ); ?></a>
-							</h3>
-							<div class="quills-sub-card-rating">
-								<span class="quills-stars-gold">★★★★★</span>
-								<span class="quills-review-count">(<?php echo esc_html( $card['review_count'] ); ?> reviews)</span>
-							</div>
-							<div class="quills-sub-card-price">
-								<?php echo esc_html( $card['price_display'] ); ?>
-							</div>
-						</div>
-					</article>
-					<?php
+					Coffee_Cafe_Corner_Subscription_DB::render_product_card( get_the_ID() );
 				endwhile;
 				wp_reset_postdata();
-			endif;
-			?>
+			else :
+				?>
+				<div class="quills-no-products">
+					<p><?php esc_html_e( 'No subscription products found.', 'coffee-cafe-corner' ); ?></p>
+				</div>
+			<?php endif; ?>
 		</div>
+
+		<!-- Divider -->
+		<hr class="quills-sub-divider quills-sub-divider--bottom" />
+
+		<!-- 7. Bottom Testimonial Section -->
+		<section class="quills-sub-bottom-testimonials" id="quills-bottom-testimonial-slider" aria-label="<?php esc_attr_e( 'More Customer Reviews', 'coffee-cafe-corner' ); ?>">
+			<h2 class="quills-sub-bottom-heading">
+				<?php esc_html_e( 'More kind words from customers', 'coffee-cafe-corner' ); ?>
+			</h2>
+
+			<div class="quills-sub-track-container">
+				<!-- Navigation Arrows (Hidden by default, visible on hover) -->
+				<button type="button" class="quills-sub-nav-btn quills-sub-nav-prev is-disabled" aria-label="<?php esc_attr_e( 'Previous review', 'coffee-cafe-corner' ); ?>">
+					<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="15 18 9 12 15 6"></polyline></svg>
+				</button>
+				<button type="button" class="quills-sub-nav-btn quills-sub-nav-next" aria-label="<?php esc_attr_e( 'Next review', 'coffee-cafe-corner' ); ?>">
+					<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"></polyline></svg>
+				</button>
+
+				<div class="quills-sub-bottom-track">
+					<!-- Slide 1 -->
+					<div class="quills-sub-bottom-slide is-active" data-index="0">
+						<div class="quills-sub-stars">★★★★★</div>
+						<blockquote class="quills-sub-quote">
+							"This is probably the best coffee I've ever had."
+						</blockquote>
+						<div class="quills-sub-author">— Jamie W.</div>
+					</div>
+
+					<!-- Slide 2 -->
+					<div class="quills-sub-bottom-slide" data-index="1">
+						<div class="quills-sub-stars">★★★★★</div>
+						<blockquote class="quills-sub-quote">
+							"It’s our favorite coffee!! We entertain frequently and everyone seems to enjoy this coffee."
+						</blockquote>
+						<div class="quills-sub-author">— Lisa Peters</div>
+					</div>
+
+					<!-- Slide 3 -->
+					<div class="quills-sub-bottom-slide" data-index="2">
+						<div class="quills-sub-stars">★★★★★</div>
+						<blockquote class="quills-sub-quote">
+							"Mega delicious! Just sent some to my sister in California to try to get her hooked."
+						</blockquote>
+						<div class="quills-sub-author">— Sarah R.</div>
+					</div>
+				</div>
+			</div>
+
+			<!-- Pagination Dots -->
+			<div class="quills-sub-dots" role="tablist">
+				<button type="button" class="quills-sub-bottom-dot is-active" data-slide="0" aria-label="<?php esc_attr_e( 'Slide 1', 'coffee-cafe-corner' ); ?>"></button>
+				<button type="button" class="quills-sub-bottom-dot" data-slide="1" aria-label="<?php esc_attr_e( 'Slide 2', 'coffee-cafe-corner' ); ?>"></button>
+				<button type="button" class="quills-sub-bottom-dot" data-slide="2" aria-label="<?php esc_attr_e( 'Slide 3', 'coffee-cafe-corner' ); ?>"></button>
+			</div>
+		</section>
 
 	</div>
 </div>
