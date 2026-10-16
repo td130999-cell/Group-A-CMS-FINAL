@@ -269,8 +269,14 @@
                         $btn.text(originalText).prop('disabled', false);
                     }, 1800);
                     if (res && res.success) {
-                        if ($('#quills-cart-badge').length) {
-                            $('#quills-cart-badge').text(res.data.cart_count);
+                        if ($('#quills-cart-badge, .quills-cart-badge').length) {
+                            $('#quills-cart-badge, .quills-cart-badge').text(res.data.cart_count);
+                        }
+                        if (res.data && res.data.drawer_html) {
+                            $('#quills-cart-drawer-content').html(res.data.drawer_html);
+                            $('#quills-cart-overlay').addClass('is-active').attr('aria-hidden', 'false');
+                            $('#quills-cart-drawer').addClass('is-active').attr('aria-hidden', 'false');
+                            $('body').addClass('quills-drawer-open');
                         }
                     }
                 },

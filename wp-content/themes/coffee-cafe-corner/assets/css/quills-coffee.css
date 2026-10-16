@@ -2906,3 +2906,572 @@ body.quills-single-product-page {
 .quills-single-product-page .quills-breadcrumbs-section {
     background: transparent !important;
 }
+
+/* ==========================================================================
+   QUILLS SLIDE-IN CART DRAWER (OFF-CANVAS MINI-CART) - MATCHING QUILLSCOFFEE.COM
+   ========================================================================== */
+body.quills-drawer-open {
+    overflow: hidden !important;
+    touch-action: none;
+}
+
+/* Dim Backdrop Overlay */
+.quills-cart-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(18, 16, 14, 0.45);
+    backdrop-filter: blur(2px);
+    -webkit-backdrop-filter: blur(2px);
+    z-index: 99998;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.35s cubic-bezier(0.25, 1, 0.5, 1), visibility 0.35s ease;
+    pointer-events: none;
+}
+
+.quills-cart-overlay.is-active {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+}
+
+/* Cart Drawer Panel */
+.quills-cart-drawer {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 440px;
+    max-width: 92vw;
+    height: 100vh;
+    height: 100dvh;
+    background: #faf7f2;
+    z-index: 99999;
+    box-shadow: -6px 0 30px rgba(0, 0, 0, 0.16);
+    transform: translateX(100%);
+    transition: transform 0.38s cubic-bezier(0.25, 1, 0.5, 1);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    color: #1e1e1e;
+    font-family: var(--quills-font-body, -apple-system, BlinkMacSystemFont, sans-serif);
+}
+
+.quills-cart-drawer.is-active {
+    transform: translateX(0);
+}
+
+.quills-cart-drawer-content {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    width: 100%;
+    position: relative;
+}
+
+/* Header */
+.quills-drawer-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 22px 24px;
+    border-bottom: 1px solid #ebe4d8;
+    background: #faf7f2;
+    flex-shrink: 0;
+}
+
+.quills-drawer-title {
+    margin: 0;
+    font-family: var(--quills-font-display, "Playfair Display", Georgia, serif) !important;
+    font-size: 23px !important;
+    font-weight: 500 !important;
+    font-style: italic !important;
+    color: #1c1c1c;
+    letter-spacing: -0.01em;
+}
+
+.quills-drawer-close {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 19px;
+    line-height: 1;
+    color: #555;
+    transition: background-color 0.18s ease, color 0.18s ease, transform 0.18s ease;
+    padding: 0;
+}
+
+.quills-drawer-close:hover {
+    background: rgba(0, 0, 0, 0.07);
+    color: #000;
+    transform: rotate(90deg);
+}
+
+/* Empty State */
+.quills-drawer-empty-body {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 24px;
+    text-align: center;
+}
+
+.quills-drawer-empty-text {
+    font-size: 16px;
+    color: #555;
+    margin-bottom: 24px;
+}
+
+.quills-drawer-btn-continue {
+    background: #e05038;
+    color: #ffffff !important;
+    font-family: var(--quills-font-ui, 'Trade Gothic Next Condensed', sans-serif);
+    font-size: 14.5px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    padding: 13px 28px;
+    border-radius: 3px;
+    text-decoration: none;
+    transition: background-color 0.2s ease, transform 0.15s ease;
+    display: inline-block;
+}
+
+.quills-drawer-btn-continue:hover {
+    background: #c8412b;
+    transform: translateY(-1px);
+}
+
+/* Scroll Area */
+.quills-drawer-scroll-area {
+    flex: 1;
+    overflow-y: auto;
+    padding: 16px 24px;
+    -webkit-overflow-scrolling: touch;
+}
+
+.quills-drawer-scroll-area::-webkit-scrollbar {
+    width: 5px;
+}
+
+.quills-drawer-scroll-area::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.quills-drawer-scroll-area::-webkit-scrollbar-thumb {
+    background: #d8d0c5;
+    border-radius: 4px;
+}
+
+/* Items List */
+.quills-drawer-items-list {
+    display: flex;
+    flex-direction: column;
+}
+
+.quills-drawer-item {
+    display: flex;
+    gap: 16px;
+    padding: 18px 0;
+    border-bottom: 1px solid #ebe4d8;
+    position: relative;
+    transition: opacity 0.2s ease;
+}
+
+.quills-drawer-item.is-updating {
+    opacity: 0.45;
+    pointer-events: none;
+}
+
+.quills-drawer-item-img-wrap {
+    width: 78px;
+    height: 78px;
+    flex-shrink: 0;
+    background: #ffffff;
+    border: 1px solid #e5dfd4;
+    border-radius: 4px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4px;
+}
+
+.quills-drawer-item-img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+}
+
+.quills-drawer-item-details {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.quills-drawer-item-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 10px;
+    margin-bottom: 4px;
+}
+
+.quills-drawer-item-title {
+    margin: 0;
+    font-family: var(--quills-font-ui, 'Trade Gothic Next Condensed', sans-serif) !important;
+    font-size: 15px !important;
+    font-weight: 700 !important;
+    color: #1a1a1a;
+    line-height: 1.25;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    flex: 1;
+}
+
+.quills-drawer-item-price {
+    font-family: var(--quills-font-ui, 'Trade Gothic Next Condensed', sans-serif);
+    font-size: 15px;
+    font-weight: 700;
+    color: #1a1a1a;
+    white-space: nowrap;
+}
+
+.quills-drawer-item-meta {
+    margin-bottom: 10px;
+}
+
+.quills-drawer-meta-line {
+    font-size: 12.5px;
+    color: #686158;
+    line-height: 1.45;
+}
+
+.quills-drawer-meta-sub {
+    color: #3b5a41;
+    font-weight: 600;
+    margin-top: 2px;
+}
+
+/* Stepper and Remove Controls */
+.quills-drawer-item-controls {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: auto;
+}
+
+.quills-drawer-stepper {
+    display: inline-flex;
+    align-items: center;
+    background: #ffffff;
+    border: 1px solid #d4cdc5;
+    border-radius: 3px;
+    height: 32px;
+    user-select: none;
+}
+
+.quills-drawer-step-btn {
+    background: transparent;
+    border: none;
+    width: 28px;
+    height: 100%;
+    cursor: pointer;
+    color: #333;
+    font-size: 16px;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.15s ease, color 0.15s ease;
+    padding: 0;
+}
+
+.quills-drawer-step-btn:hover {
+    background: #f0ebe3;
+    color: #000;
+}
+
+.quills-drawer-step-btn:disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+}
+
+.quills-drawer-qty-val {
+    min-width: 24px;
+    text-align: center;
+    font-family: var(--quills-font-ui, 'Trade Gothic Next Condensed', sans-serif);
+    font-size: 14px;
+    font-weight: 700;
+    color: #1e1e1e;
+    padding: 0 4px;
+}
+
+.quills-drawer-remove-btn {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    color: #8c8277;
+    padding: 6px 8px;
+    border-radius: 3px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: color 0.15s ease, background-color 0.15s ease;
+}
+
+.quills-drawer-remove-btn:hover {
+    color: #e05038;
+    background: rgba(224, 80, 56, 0.08);
+}
+
+/* Upsell Section (People often add) */
+.quills-drawer-upsell-section {
+    margin-top: 22px;
+    padding-top: 16px;
+    border-top: 1px solid #ebe4d8;
+}
+
+.quills-drawer-upsell-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+    user-select: none;
+    padding: 4px 0;
+}
+
+.quills-drawer-upsell-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: #2b2b2b;
+    letter-spacing: 0.02em;
+}
+
+.quills-drawer-upsell-arrow {
+    font-size: 13px;
+    color: #777;
+    transition: transform 0.25s ease;
+}
+
+.quills-drawer-upsell-section.collapsed .quills-drawer-upsell-arrow {
+    transform: rotate(-90deg);
+}
+
+.quills-drawer-upsell-section.collapsed .quills-drawer-upsell-box {
+    display: none;
+}
+
+.quills-drawer-upsell-box {
+    margin-top: 12px;
+}
+
+.quills-drawer-upsell-card {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: #ffffff;
+    border: 1px solid #e5dfd4;
+    border-radius: 4px;
+    padding: 10px 14px;
+    transition: border-color 0.15s ease;
+}
+
+.quills-drawer-upsell-card:hover {
+    border-color: #d1c8bb;
+}
+
+.quills-drawer-upsell-thumb {
+    width: 48px;
+    height: 48px;
+    object-fit: cover;
+    border-radius: 3px;
+    background: #f7f5f0;
+    flex-shrink: 0;
+}
+
+.quills-drawer-upsell-meta {
+    flex: 1;
+    min-width: 0;
+}
+
+.quills-drawer-upsell-name {
+    font-size: 13px;
+    font-weight: 600;
+    color: #1a1a1a;
+    line-height: 1.3;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.quills-drawer-upsell-price-tag {
+    font-size: 12.5px;
+    font-weight: 700;
+    color: #666;
+    margin-top: 2px;
+}
+
+.quills-drawer-upsell-add-btn {
+    width: 32px;
+    height: 32px;
+    border: 1px solid #d4cdc5;
+    border-radius: 50%;
+    background: #ffffff;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: #333;
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+    padding: 0;
+}
+
+.quills-drawer-upsell-add-btn:hover {
+    background: #e05038;
+    border-color: #e05038;
+    color: #ffffff;
+    transform: scale(1.05);
+}
+
+.quills-drawer-upsell-add-btn.loading {
+    opacity: 0.6;
+    pointer-events: none;
+}
+
+/* Footer Section */
+.quills-drawer-footer {
+    background: #faf7f2;
+    padding: 18px 24px 22px;
+    border-top: 1px solid #ebe4d8;
+    flex-shrink: 0;
+}
+
+.quills-drawer-note-wrapper {
+    margin-bottom: 12px;
+}
+
+.quills-drawer-note-toggle {
+    background: transparent;
+    border: none;
+    padding: 0;
+    font-size: 13px;
+    color: #555;
+    text-decoration: underline;
+    cursor: pointer;
+    font-family: inherit;
+    transition: color 0.15s ease;
+}
+
+.quills-drawer-note-toggle:hover {
+    color: #000;
+}
+
+.quills-drawer-note-textarea-wrap {
+    margin-top: 8px;
+}
+
+#quills-order-note-input {
+    width: 100%;
+    padding: 8px 12px;
+    font-size: 13px;
+    border: 1px solid #d4cdc5;
+    border-radius: 4px;
+    background: #ffffff;
+    outline: none;
+    font-family: inherit;
+    resize: vertical;
+    box-sizing: border-box;
+}
+
+#quills-order-note-input:focus {
+    border-color: #e05038;
+}
+
+.quills-drawer-subtotal-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 4px;
+}
+
+.quills-drawer-subtotal-label {
+    font-family: var(--quills-font-ui, 'Trade Gothic Next Condensed', sans-serif);
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    color: #4a453f;
+    text-transform: uppercase;
+}
+
+.quills-drawer-subtotal-amount {
+    font-family: var(--quills-font-ui, 'Trade Gothic Next Condensed', sans-serif);
+    font-size: 16.5px;
+    font-weight: 800;
+    color: #1a1a1a;
+    letter-spacing: 0.04em;
+}
+
+.quills-drawer-tax-notice {
+    font-size: 12px;
+    color: #7a7269;
+    margin-bottom: 14px;
+    line-height: 1.4;
+}
+
+.quills-drawer-checkout-btn {
+    width: 100%;
+    height: 48px;
+    background: #e05038;
+    color: #ffffff !important;
+    font-family: var(--quills-font-ui, 'Trade Gothic Next Condensed', sans-serif);
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    border: none;
+    border-radius: 3px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    cursor: pointer;
+    box-shadow: 0 3px 10px rgba(224, 80, 56, 0.22);
+    transition: background-color 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease;
+    box-sizing: border-box;
+}
+
+.quills-drawer-checkout-btn:hover {
+    background: #c8412b;
+    transform: translateY(-1px);
+    box-shadow: 0 5px 14px rgba(224, 80, 56, 0.32);
+}
+
+/* Responsive adjustment for small screens */
+@media (max-width: 480px) {
+    .quills-cart-drawer {
+        width: 100vw;
+        max-width: 100vw;
+    }
+    .quills-drawer-header,
+    .quills-drawer-scroll-area,
+    .quills-drawer-footer {
+        padding-left: 18px;
+        padding-right: 18px;
+    }
+}

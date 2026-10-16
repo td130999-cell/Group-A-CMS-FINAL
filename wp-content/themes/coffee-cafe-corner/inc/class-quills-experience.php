@@ -32,6 +32,18 @@ class Quills_Coffee_Experience {
         add_action('wp_ajax_quills_add_to_cart', [__CLASS__, 'ajax_add_to_cart']);
         add_action('wp_ajax_nopriv_quills_add_to_cart', [__CLASS__, 'ajax_add_to_cart']);
 
+        // Cart Drawer endpoints
+        add_action('wp_ajax_quills_get_cart_drawer', [__CLASS__, 'ajax_get_cart_drawer']);
+        add_action('wp_ajax_nopriv_quills_get_cart_drawer', [__CLASS__, 'ajax_get_cart_drawer']);
+
+        add_action('wp_ajax_quills_update_cart_qty', [__CLASS__, 'ajax_update_cart_qty']);
+        add_action('wp_ajax_nopriv_quills_update_cart_qty', [__CLASS__, 'ajax_update_cart_qty']);
+
+        add_action('wp_ajax_quills_remove_cart_item', [__CLASS__, 'ajax_remove_cart_item']);
+        add_action('wp_ajax_nopriv_quills_remove_cart_item', [__CLASS__, 'ajax_remove_cart_item']);
+
+        add_action('wp_footer', [__CLASS__, 'render_cart_drawer_container'], 100);
+
         // Template loaders
         add_filter('template_include', [__CLASS__, 'override_templates'], 99);
     }
@@ -86,7 +98,7 @@ class Quills_Coffee_Experience {
             'quills-coffee-style',
             get_template_directory_uri() . '/assets/css/quills-coffee.css',
             [],
-            '1.1.1'
+            '1.1.4'
         );
 
         // Quills JS
@@ -94,7 +106,7 @@ class Quills_Coffee_Experience {
             'quills-coffee-script',
             get_template_directory_uri() . '/assets/js/quills-coffee.js',
             ['jquery'],
-            '1.1.1',
+            '1.1.4',
             true
         );
 
@@ -364,33 +376,308 @@ class Quills_Coffee_Experience {
     }
 
     /**
-     * AJAX Add to Cart with Options
+     * AJAX Add to Cart with Options & Cart Drawer Return
      */
     public static function ajax_add_to_cart() {
         check_ajax_referer('quills_nonce', 'nonce');
         $product_id = isset($_POST['product_id']) ? absint($_POST['product_id']) : 0;
         $quantity   = isset($_POST['quantity']) ? max(1, absint($_POST['quantity'])) : 1;
-        $size       = isset($_POST['size']) ? sanitize_text_field($_POST['size']) : '12oz';
-        $grind      = isset($_POST['grind']) ? sanitize_text_field($_POST['grind']) : 'Whole Bean';
+        $size       = isset($_POST['size']) ? sanitize_text_field($_POST['size']) : '';
+        $grind      = isset($_POST['grind']) ? sanitize_text_field($_POST['grind']) : '';
         $purchase   = isset($_POST['purchase_type']) ? sanitize_text_field($_POST['purchase_type']) : 'onetime';
 
-        $item_data = [
-            'Size'          => $size,
-            'Grind'         => $grind,
-            'Purchase Type' => ($purchase === 'subscribe') ? 'Subscribe & Save (10% Off)' : 'One-time Purchase'
-        ];
+        $item_data = [];
+        if (!empty($size)) {
+            $item_data['Size'] = $size;
+        }
+        if (!empty($grind)) {
+            $item_data['Grind'] = $grind;
+        }
+        if ($purchase === 'subscribe') {
+            $item_data['Purchase Type'] = 'Subscribe & Save (10% Off)';
+        }
 
         $cart_item_key = WC()->cart->add_to_cart($product_id, $quantity, 0, [], ['quills_options' => $item_data]);
 
         if ($cart_item_key) {
+            WC()->cart->calculate_totals();
             wp_send_json_success([
-                'cart_count' => WC()->cart->get_cart_contents_count(),
-                'cart_total' => WC()->cart->get_cart_total(),
-                'message'    => 'Added to cart successfully!'
+                'cart_count'  => WC()->cart->get_cart_contents_count(),
+                'cart_total'  => WC()->cart->get_cart_total(),
+                'drawer_html' => self::render_cart_drawer_html(),
+                'message'     => 'Added to cart successfully!'
             ]);
         } else {
             wp_send_json_error(['message' => 'Could not add to cart.']);
         }
+    }
+
+    /**
+     * AJAX Get Cart Drawer HTML from Database
+     */
+    public static function ajax_get_cart_drawer() {
+        check_ajax_referer('quills_nonce', 'nonce');
+        $count = (function_exists('WC') && WC()->cart) ? WC()->cart->get_cart_contents_count() : 0;
+        $total = (function_exists('WC') && WC()->cart) ? WC()->cart->get_cart_total() : '$0.00';
+
+        wp_send_json_success([
+            'cart_count'  => $count,
+            'cart_total'  => $total,
+            'drawer_html' => self::render_cart_drawer_html()
+        ]);
+    }
+
+    /**
+     * AJAX Update Cart Item Quantity
+     */
+    public static function ajax_update_cart_qty() {
+        check_ajax_referer('quills_nonce', 'nonce');
+        $cart_item_key = isset($_POST['cart_item_key']) ? sanitize_text_field($_POST['cart_item_key']) : '';
+        $quantity      = isset($_POST['quantity']) ? (int)$_POST['quantity'] : 1;
+
+        if ($cart_item_key && function_exists('WC') && WC()->cart) {
+            if ($quantity <= 0) {
+                WC()->cart->remove_cart_item($cart_item_key);
+            } else {
+                WC()->cart->set_quantity($cart_item_key, $quantity, true);
+            }
+            WC()->cart->calculate_totals();
+
+            wp_send_json_success([
+                'cart_count'  => WC()->cart->get_cart_contents_count(),
+                'cart_total'  => WC()->cart->get_cart_total(),
+                'drawer_html' => self::render_cart_drawer_html(),
+                'message'     => 'Cart updated successfully!'
+            ]);
+        }
+
+        wp_send_json_error(['message' => 'Invalid cart item.']);
+    }
+
+    /**
+     * AJAX Remove Cart Item
+     */
+    public static function ajax_remove_cart_item() {
+        check_ajax_referer('quills_nonce', 'nonce');
+        $cart_item_key = isset($_POST['cart_item_key']) ? sanitize_text_field($_POST['cart_item_key']) : '';
+
+        if ($cart_item_key && function_exists('WC') && WC()->cart) {
+            WC()->cart->remove_cart_item($cart_item_key);
+            WC()->cart->calculate_totals();
+
+            wp_send_json_success([
+                'cart_count'  => WC()->cart->get_cart_contents_count(),
+                'cart_total'  => WC()->cart->get_cart_total(),
+                'drawer_html' => self::render_cart_drawer_html(),
+                'message'     => 'Item removed from cart.'
+            ]);
+        }
+
+        wp_send_json_error(['message' => 'Could not remove item.']);
+    }
+
+    /**
+     * Render Cart Drawer HTML from Database (matching Image 3 & quillscoffee.com)
+     */
+    public static function render_cart_drawer_html() {
+        if (!function_exists('WC') || !WC()->cart) {
+            return '<div class="quills-drawer-empty-body"><p class="quills-drawer-empty-text">Your cart is currently empty.</p></div>';
+        }
+
+        $cart  = WC()->cart;
+        $items = $cart->get_cart();
+        $count = $cart->get_cart_contents_count();
+        $subtotal = $cart->get_cart_contents_total();
+
+        // Query database for Upsell: Crewneck Sweatshirt (Evergreen)
+        $upsell_product = null;
+        $upsell_post = get_page_by_path('crewneck-sweatshirt-evergreen', OBJECT, 'product');
+        if ($upsell_post) {
+            $upsell_product = wc_get_product($upsell_post->ID);
+        } else {
+            $other_prods = wc_get_products(['limit' => 1, 'status' => 'publish']);
+            if (!empty($other_prods)) {
+                $upsell_product = $other_prods[0];
+            }
+        }
+
+        $upsell_data = [
+            'id'    => $upsell_product ? $upsell_product->get_id() : 0,
+            'title' => $upsell_product ? $upsell_product->get_name() : 'Crewneck Sweatshirt (Evergreen)',
+            'price' => $upsell_product ? wc_price($upsell_product->get_price()) : '$45.00',
+            'img'   => ''
+        ];
+        if ($upsell_product) {
+            $img_id = $upsell_product->get_image_id();
+            if ($img_id) {
+                $upsell_data['img'] = wp_get_attachment_image_url($img_id, 'medium');
+            }
+            if (!$upsell_data['img']) {
+                $meta_img = get_post_meta($upsell_product->get_id(), '_merch_image', true);
+                if ($meta_img) {
+                    $upsell_data['img'] = get_template_directory_uri() . '/assets/images/' . ltrim($meta_img, '/');
+                }
+            }
+        }
+        if (!$upsell_data['img']) {
+            $upsell_data['img'] = get_template_directory_uri() . '/assets/images/merch/crewneck-sweatshirt-evergreen.png';
+        }
+
+        ob_start();
+        ?>
+        <!-- Header -->
+        <div class="quills-drawer-header">
+            <h2 class="quills-drawer-title">Your cart <em>(<?php echo esc_html($count); ?>)</em></h2>
+            <button type="button" class="quills-drawer-close" id="quills-drawer-close" aria-label="Close cart">✕</button>
+        </div>
+
+        <?php if ($count === 0 || empty($items)): ?>
+            <div class="quills-drawer-empty-body">
+                <p class="quills-drawer-empty-text">Your cart is currently empty.</p>
+                <a href="<?php echo esc_url(home_url('/coffee/')); ?>" class="quills-drawer-btn-continue">CONTINUE SHOPPING</a>
+            </div>
+        <?php else: ?>
+            <div class="quills-drawer-scroll-area">
+                <!-- Items list directly from WC Database -->
+                <div class="quills-drawer-items-list">
+                    <?php 
+                    foreach ($items as $cart_item_key => $cart_item):
+                        $product = $cart_item['data'];
+                        if (!$product || !$product->exists()) continue;
+
+                        $product_id = $cart_item['product_id'];
+                        $title      = $product->get_name();
+                        $qty        = $cart_item['quantity'];
+                        $line_total = wc_price($cart_item['line_total']);
+
+                        // Image directly from DB
+                        $img_url = wp_get_attachment_image_url($product->get_image_id(), 'thumbnail');
+                        if (!$img_url && class_exists('Coffee_Cafe_Corner_Coffee_DB')) {
+                            $img_url = Coffee_Cafe_Corner_Coffee_DB::get_product_image_url($product_id);
+                        }
+                        if (!$img_url) {
+                            $meta_img = get_post_meta($product_id, '_merch_image', true);
+                            if ($meta_img) {
+                                $img_url = get_template_directory_uri() . '/assets/images/' . ltrim($meta_img, '/');
+                            }
+                        }
+                        if (!$img_url) {
+                            $img_url = wc_placeholder_img_src();
+                        }
+
+                        $opts = isset($cart_item['quills_options']) ? $cart_item['quills_options'] : [];
+                        $size = isset($opts['Size']) ? $opts['Size'] : '';
+                        $grind = isset($opts['Grind']) ? $opts['Grind'] : '';
+                        $purchase_type = isset($opts['Purchase Type']) ? $opts['Purchase Type'] : '';
+                    ?>
+                        <div class="quills-drawer-item" data-key="<?php echo esc_attr($cart_item_key); ?>">
+                            <div class="quills-drawer-item-img-wrap">
+                                <img src="<?php echo esc_url($img_url); ?>" alt="<?php echo esc_attr($title); ?>" class="quills-drawer-item-img">
+                            </div>
+
+                            <div class="quills-drawer-item-details">
+                                <div class="quills-drawer-item-top">
+                                    <h3 class="quills-drawer-item-title"><?php echo esc_html($title); ?></h3>
+                                    <span class="quills-drawer-item-price"><?php echo $line_total; ?></span>
+                                </div>
+
+                                <div class="quills-drawer-item-meta">
+                                    <?php if ($size): ?>
+                                        <div class="quills-drawer-meta-line">Size: <?php echo esc_html($size); ?></div>
+                                    <?php endif; ?>
+                                    <?php if ($grind): ?>
+                                        <div class="quills-drawer-meta-line">Grind Type: <?php echo esc_html($grind); ?></div>
+                                    <?php endif; ?>
+                                    <?php if ($purchase_type && strpos($purchase_type, 'Subscribe') !== false): ?>
+                                        <div class="quills-drawer-meta-line quills-drawer-meta-sub"><?php echo esc_html($purchase_type); ?></div>
+                                    <?php endif; ?>
+                                </div>
+
+                                <div class="quills-drawer-item-controls">
+                                    <div class="quills-drawer-stepper">
+                                        <button type="button" class="quills-drawer-step-btn quills-drawer-minus" data-key="<?php echo esc_attr($cart_item_key); ?>" data-qty="<?php echo $qty - 1; ?>" aria-label="Decrease quantity">−</button>
+                                        <span class="quills-drawer-qty-val"><?php echo (int)$qty; ?></span>
+                                        <button type="button" class="quills-drawer-step-btn quills-drawer-plus" data-key="<?php echo esc_attr($cart_item_key); ?>" data-qty="<?php echo $qty + 1; ?>" aria-label="Increase quantity">+</button>
+                                    </div>
+
+                                    <button type="button" class="quills-drawer-remove-btn" data-key="<?php echo esc_attr($cart_item_key); ?>" aria-label="Remove item" title="Remove item">
+                                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                                            <polyline points="3 6 5 6 21 6"></polyline>
+                                            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                                            <line x1="10" y1="11" x2="10" y2="17"></line>
+                                            <line x1="14" y1="11" x2="14" y2="17"></line>
+                                        </svg>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    <?php endforeach; ?>
+                </div>
+
+                <!-- Upsell Section: People often add -->
+                <div class="quills-drawer-upsell-section">
+                    <div class="quills-drawer-upsell-header" id="quills-upsell-toggle">
+                        <span class="quills-drawer-upsell-title">People often add:</span>
+                        <span class="quills-drawer-upsell-arrow">⌵</span>
+                    </div>
+
+                    <div class="quills-drawer-upsell-box" id="quills-upsell-box">
+                        <div class="quills-drawer-upsell-card">
+                            <img src="<?php echo esc_url($upsell_data['img']); ?>" alt="<?php echo esc_attr($upsell_data['title']); ?>" class="quills-drawer-upsell-thumb">
+                            <div class="quills-drawer-upsell-meta">
+                                <div class="quills-drawer-upsell-name"><?php echo esc_html($upsell_data['title']); ?></div>
+                                <div class="quills-drawer-upsell-price-tag"><?php echo $upsell_data['price']; ?></div>
+                            </div>
+                            <button type="button" class="quills-drawer-upsell-add-btn" data-product-id="<?php echo esc_attr($upsell_data['id']); ?>" title="Quick add to cart">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+                                    <line x1="3" y1="6" x2="21" y2="6"></line>
+                                    <path d="M16 10a4 4 0 0 1-8 0"></path>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Footer Section -->
+            <div class="quills-drawer-footer">
+                <div class="quills-drawer-note-wrapper">
+                    <button type="button" class="quills-drawer-note-toggle" id="quills-note-toggle">Add order note</button>
+                    <div class="quills-drawer-note-textarea-wrap" id="quills-note-textarea-wrap" style="display: none;">
+                        <textarea id="quills-order-note-input" rows="2" placeholder="Special instructions for seller..."></textarea>
+                    </div>
+                </div>
+
+                <div class="quills-drawer-subtotal-row">
+                    <span class="quills-drawer-subtotal-label">SUBTOTAL</span>
+                    <span class="quills-drawer-subtotal-amount">$<?php echo esc_html(number_format($subtotal, 2)); ?> USD</span>
+                </div>
+
+                <div class="quills-drawer-tax-notice">Taxes and shipping calculated at checkout</div>
+
+                <a href="<?php echo esc_url(wc_get_checkout_url()); ?>" class="quills-drawer-checkout-btn">
+                    CHECK OUT
+                </a>
+            </div>
+        <?php endif; ?>
+        <?php
+        return ob_get_clean();
+    }
+
+    /**
+     * Render Outer Cart Drawer Container in wp_footer
+     */
+    public static function render_cart_drawer_container() {
+        ?>
+        <!-- Quills Slide-in Cart Drawer Overlay & Container (matching quillscoffee.com) -->
+        <div class="quills-cart-overlay" id="quills-cart-overlay" aria-hidden="true"></div>
+        <div class="quills-cart-drawer" id="quills-cart-drawer" role="dialog" aria-modal="true" aria-label="Shopping Cart">
+            <div class="quills-cart-drawer-content" id="quills-cart-drawer-content">
+                <?php echo self::render_cart_drawer_html(); ?>
+            </div>
+        </div>
+        <?php
     }
 
     /**
