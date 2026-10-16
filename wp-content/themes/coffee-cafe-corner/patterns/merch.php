@@ -159,9 +159,6 @@ $merch_products = [
             <option value="created-ascending">Date, old to new</option>
             <option value="created-descending">Date, new to old</option>
           </select>
-          <svg class="quills-merch-sort-chevron" width="10" height="6" viewBox="0 0 10 6" fill="none" stroke="#3A3837" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-            <polyline points="1 1 5 5 9 1"></polyline>
-          </svg>
         </div>
       </div>
     </div>
@@ -184,7 +181,7 @@ $merch_products = [
               </div>
             </a>
             <div class="quills-merch-quick-add">
-              <button type="button" class="quills-merch-btn-add" aria-label="ADD TO CART">
+              <button type="button" class="quills-merch-btn-add" aria-label="ADD TO CART" onclick="var b=document.querySelector('.quills-cart-badge');if(b){b.textContent=parseInt(b.textContent||0)+1;}">
                 <span>ADD TO CART</span>
               </button>
             </div>
@@ -194,11 +191,13 @@ $merch_products = [
               <a href="<?php echo esc_url( $product['link'] ); ?>"><?php echo esc_html( $product['title'] ); ?></a>
             </h3>
             <div class="quills-merch-rating-row">
-              <?php if ( $product['rating_type'] === 'filled' ) : ?>
-                <span class="quills-merch-stars quills-merch-stars--filled">★★★★★</span>
-              <?php else : ?>
-                <span class="quills-merch-stars quills-merch-stars--empty">☆☆☆☆☆</span>
-              <?php endif; ?>
+              <div class="quills-merch-stars-wrap">
+                <?php for ( $i = 0; $i < 5; $i++ ) : ?>
+                  <svg class="quills-merch-star-svg <?php echo ( $product['rating_type'] === 'filled' ) ? 'is-filled' : 'is-empty'; ?>" width="13" height="13" viewBox="0 0 24 24" fill="<?php echo ( $product['rating_type'] === 'filled' ) ? '#f59e0b' : 'none'; ?>" stroke="#f59e0b" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                  </svg>
+                <?php endfor; ?>
+              </div>
               <span class="quills-merch-reviews"><?php echo esc_html( $product['reviews'] ); ?></span>
             </div>
             <div class="quills-merch-price"><?php echo esc_html( $product['price'] ); ?></div>
@@ -210,3 +209,4 @@ $merch_products = [
 
 </div>
 <!-- /wp:html -->
+
