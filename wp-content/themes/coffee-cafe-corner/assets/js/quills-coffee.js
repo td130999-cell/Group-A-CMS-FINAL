@@ -116,27 +116,27 @@
             }
         });
 
-        // Purchase Type (Subscription Radio & Drawer)
-        $('.quills-sub-option').on('click', function() {
+        // Purchase Type (Cards Selection - Drawer always visible like live Quills site)
+        $('.quills-sub-option').on('click', function(e) {
             var $opt = $(this);
             var $radio = $opt.find('input[type="radio"]');
             $radio.prop('checked', true);
             $('.quills-sub-option').removeClass('active');
             $opt.addClass('active');
-
-            if ($radio.val() === 'subscribe') {
-                $('#quills-sub-drawer').slideDown(200);
-            } else {
-                $('#quills-sub-drawer').slideUp(200);
-            }
         });
 
-        // Frequency Pill Click
+        // Frequency Pill Click (also activates Subscribe option)
         $('.quills-freq-pill').on('click', function(e) {
             e.preventDefault();
             e.stopPropagation();
             $('.quills-freq-pill').removeClass('is-selected');
             $(this).addClass('is-selected');
+
+            // Automatically switch active selection to Subscribe
+            var $subOpt = $('.quills-sub-option[data-type="subscribe"]');
+            $subOpt.find('input[type="radio"]').prop('checked', true);
+            $('.quills-sub-option').removeClass('active');
+            $subOpt.addClass('active');
         });
 
         // Top Testimonial Slider (Image 2)
@@ -170,19 +170,35 @@
             setSpQuote(idx);
         });
 
-        // Quantity Stepper
-        $('#quills-qty-minus').on('click', function() {
+        // Quantity Stepper (Starts at 1, '+' jumps to 2, 3, etc., '-' decrements to min 1)
+        var $qtyInput = $('#quills-qty-input');
+        if ($qtyInput.length && (!$qtyInput.val() || parseInt($qtyInput.val(), 10) < 1)) {
+            $qtyInput.val(1);
+        }
+
+        $(document).on('click', '#quills-qty-minus', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
             var $input = $('#quills-qty-input');
-            var val = parseInt($input.val(), 10) || 1;
-            if (val > 1) {
-                $input.val(val - 1);
+            var val = parseInt($input.val(), 10);
+            if (isNaN(val) || val <= 1) {
+                val = 1;
+            } else {
+                val = val - 1;
             }
+            $input.val(val).trigger('change');
         });
 
-        $('#quills-qty-plus').on('click', function() {
+        $(document).on('click', '#quills-qty-plus', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
             var $input = $('#quills-qty-input');
-            var val = parseInt($input.val(), 10) || 1;
-            $input.val(val + 1);
+            var val = parseInt($input.val(), 10);
+            if (isNaN(val) || val < 1) {
+                val = 1;
+            }
+            val = val + 1;
+            $input.val(val).trigger('change');
         });
 
         // Add to Cart via AJAX

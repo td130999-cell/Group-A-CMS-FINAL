@@ -197,6 +197,7 @@
     .quills-sub-intro-title {
         font-size: 22px;
     }
+
     .quills-sub-intro-desc {
         font-size: 17px;
     }
@@ -302,12 +303,15 @@
     .quills-sub-track-container {
         padding: 0 25px;
     }
+
     .quills-sub-track-container .quills-sub-nav-prev {
         left: -10px;
     }
+
     .quills-sub-track-container .quills-sub-nav-next {
         right: -10px;
     }
+
     .quills-sub-bottom-heading {
         font-size: 28px !important;
     }
@@ -549,7 +553,8 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background: #00000087; /* Exact Quills Coffee overlay */
+    background: #00000087;
+    /* Exact Quills Coffee overlay */
     padding: 24px 20px;
     color: #ffffff;
     box-sizing: border-box;
@@ -634,6 +639,7 @@
 /* Product Info below Media */
 .quills-product-info {
     padding-top: 14px;
+    background-color: #f3eddc;
 }
 
 .quills-product-title {

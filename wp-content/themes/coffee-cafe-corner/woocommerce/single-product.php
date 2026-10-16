@@ -246,7 +246,7 @@ $review_count = (int)get_post_meta($id, '_wc_review_count', true) ?: ($review_st
                         </div>
 
                         <!-- Inside Frequency Selector (Image 1) -->
-                        <div class="quills-sub-drawer" id="quills-sub-drawer" style="display: none;">
+                        <div class="quills-sub-drawer" id="quills-sub-drawer">
                             <div class="quills-freq-headline">Pick how often we send it</div>
                             <div class="quills-freq-pills-row">
                                 <button type="button" class="quills-freq-pill" data-freq="1">Deliver every 1 week</button>
@@ -256,18 +256,18 @@ $review_count = (int)get_post_meta($id, '_wc_review_count', true) ?: ($review_st
                             </div>
 
                             <div class="quills-sub-perks-box">
-                                <div class="quills-perk-item highlight">
-                                    <strong>FREE bag of Inkwell</strong> in your first delivery
-                                    <span class="quills-perk-sub">(new subscribers only)</span>
+                                <div class="quills-perk-row">
+                                    <div class="quills-perk-title"><strong>FREE bag of Inkwell</strong> in your first delivery</div>
+                                    <div class="quills-perk-sub">(new subscribers only)</div>
                                 </div>
-                                <div class="quills-perk-item">
-                                    <strong>10% OFF</strong> Recurring
+                                <div class="quills-perk-row">
+                                    <div class="quills-perk-title"><strong>10% OFF</strong> Recurring</div>
                                 </div>
-                                <div class="quills-perk-item">
-                                    <span class="quills-dollar-icon">$</span> <strong>Lowest Price</strong>
+                                <div class="quills-perk-row">
+                                    <div class="quills-perk-title"><span class="quills-dollar-icon">$</span> <strong>Lowest Price</strong></div>
                                 </div>
-                                <div class="quills-perk-item">
-                                    <span>Cancel or Update Any Time</span>
+                                <div class="quills-perk-row">
+                                    <div class="quills-perk-title"><strong>Cancel or Update</strong> Any Time</div>
                                 </div>
                             </div>
                         </div>
@@ -277,9 +277,9 @@ $review_count = (int)get_post_meta($id, '_wc_review_count', true) ?: ($review_st
                 <!-- Quantity & Add to Cart -->
                 <div class="quills-add-cart-row">
                     <div class="quills-qty-stepper">
-                        <button type="button" class="quills-qty-btn" id="quills-qty-minus">−</button>
-                        <input type="number" id="quills-qty-input" value="1" min="1" max="99" readonly>
-                        <button type="button" class="quills-qty-btn" id="quills-qty-plus">+</button>
+                        <button type="button" class="quills-qty-btn" id="quills-qty-minus" aria-label="Decrease quantity">−</button>
+                        <input type="text" id="quills-qty-input" value="1" readonly inputmode="numeric">
+                        <button type="button" class="quills-qty-btn" id="quills-qty-plus" aria-label="Increase quantity">+</button>
                     </div>
 
                     <button type="button" class="quills-btn-add-cart" id="quills-btn-add-to-cart" data-product-id="<?php echo esc_attr($id); ?>" data-base-price="<?php echo esc_attr($price); ?>">
