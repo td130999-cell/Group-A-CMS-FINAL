@@ -93,16 +93,41 @@
 
   <!-- Bottom Row: Centered Navigation Menu -->
   <nav class="quills-header-bottom" id="quills-nav-menu" aria-label="<?php esc_attr_e( 'Primary Navigation', 'coffee-cafe-corner' ); ?>">
-    <ul class="quills-nav-list">
-      <li class="quills-nav-item"><a href="<?php echo esc_url( home_url('/shop/') ); ?>" class="quills-nav-link">COFFEE</a></li>
-      <li class="quills-nav-item"><a href="<?php echo esc_url( home_url('/subscriptions/') ); ?>" class="quills-nav-link">SUBSCRIPTIONS</a></li>
-      <li class="quills-nav-item"><a href="<?php echo esc_url( home_url('/brew-gear/') ); ?>" class="quills-nav-link">BREW GEAR</a></li>
-      <li class="quills-nav-item"><a href="<?php echo esc_url( home_url('/wholesale/') ); ?>" class="quills-nav-link">WHOLESALE</a></li>
-      <li class="quills-nav-item"><a href="<?php echo esc_url( home_url('/merch/') ); ?>" class="quills-nav-link">MERCH</a></li>
-      <li class="quills-nav-item"><a href="<?php echo esc_url( home_url('/gift-cards/') ); ?>" class="quills-nav-link">GIFT CARDS</a></li>
-      <li class="quills-nav-item"><a href="<?php echo esc_url( home_url('/visit/') ); ?>" class="quills-nav-link">VISIT</a></li>
-      <li class="quills-nav-item"><a href="<?php echo esc_url( home_url('/about/') ); ?>" class="quills-nav-link">ABOUT</a></li>
-    </ul>
+    <?php
+    if ( has_nav_menu( 'primary' ) ) {
+      wp_nav_menu( array(
+        'theme_location' => 'primary',
+        'container'      => false,
+        'menu_class'     => 'quills-nav-list',
+        'fallback_cb'    => false,
+        'depth'          => 2,
+      ) );
+    } else {
+      $primary_menu = wp_get_nav_menu_object( 'Primary Navigation' );
+      if ( $primary_menu ) {
+        wp_nav_menu( array(
+          'menu'        => $primary_menu->term_id,
+          'container'   => false,
+          'menu_class'  => 'quills-nav-list',
+          'fallback_cb' => false,
+          'depth'       => 2,
+        ) );
+      } else {
+        ?>
+        <ul class="quills-nav-list">
+          <li class="quills-nav-item"><a href="<?php echo esc_url( home_url('/shop/') ); ?>" class="quills-nav-link">COFFEE</a></li>
+          <li class="quills-nav-item"><a href="<?php echo esc_url( home_url('/subscriptions/') ); ?>" class="quills-nav-link">SUBSCRIPTIONS</a></li>
+          <li class="quills-nav-item"><a href="<?php echo esc_url( home_url('/brew-gear/') ); ?>" class="quills-nav-link">BREW GEAR</a></li>
+          <li class="quills-nav-item"><a href="<?php echo esc_url( home_url('/wholesale/') ); ?>" class="quills-nav-link">WHOLESALE</a></li>
+          <li class="quills-nav-item"><a href="<?php echo esc_url( home_url('/merch/') ); ?>" class="quills-nav-link">MERCH</a></li>
+          <li class="quills-nav-item"><a href="<?php echo esc_url( home_url('/gift-cards/') ); ?>" class="quills-nav-link">GIFT CARDS</a></li>
+          <li class="quills-nav-item"><a href="<?php echo esc_url( home_url('/visit/') ); ?>" class="quills-nav-link">VISIT</a></li>
+          <li class="quills-nav-item"><a href="<?php echo esc_url( home_url('/about/') ); ?>" class="quills-nav-link">ABOUT</a></li>
+        </ul>
+        <?php
+      }
+    }
+    ?>
   </nav>
 </div>
 <!-- /wp:html -->
