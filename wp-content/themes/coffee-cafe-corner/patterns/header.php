@@ -14,14 +14,14 @@
       
       <!-- Left: Inline Search Box -->
       <div class="quills-header-left">
-        <form role="search" method="get" class="quills-search-form" action="<?php echo esc_url( home_url( '/' ) ); ?>">
-          <button type="submit" class="quills-search-btn" aria-label="<?php esc_attr_e( 'Search', 'coffee-cafe-corner' ); ?>">
+        <form role="search" method="get" class="quills-search-form" action="<?php echo esc_url( home_url( '/' ) ); ?>" onsubmit="if(window.quillsOpenSearch){window.quillsOpenSearch();return false;}">
+          <button type="submit" class="quills-search-btn" aria-label="<?php esc_attr_e( 'Search', 'coffee-cafe-corner' ); ?>" onclick="if(window.quillsOpenSearch){window.quillsOpenSearch();return false;}">
             <svg class="quills-icon quills-icon--search" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#151515" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <circle cx="11" cy="11" r="7.5"></circle>
               <line x1="21" y1="21" x2="16.5" y2="16.5"></line>
             </svg>
           </button>
-          <input type="search" class="quills-search-input" placeholder="Search..." value="<?php echo get_search_query(); ?>" name="s" autocomplete="off" />
+          <input type="search" class="quills-search-input" placeholder="Search..." value="<?php echo get_search_query(); ?>" name="s" autocomplete="off" onclick="if(window.quillsOpenSearch){window.quillsOpenSearch();return false;}" onfocus="if(window.quillsOpenSearch){window.quillsOpenSearch();return false;}" />
         </form>
       </div>
 
