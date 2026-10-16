@@ -256,35 +256,42 @@ class Coffee_Cafe_Corner_Subscription_DB {
 					'post_type'      => 'product',
 					'comment_status' => 'open',
 				) );
+
+				if ( ! empty( $product_id ) && ! is_wp_error( $product_id ) ) {
+					update_post_meta( $product_id, '_price', $item['price'] );
+					update_post_meta( $product_id, '_regular_price', $item['price'] );
+					update_post_meta( $product_id, '_price_display', $item['price_display'] );
+					update_post_meta( $product_id, '_stock_status', 'instock' );
+					update_post_meta( $product_id, '_visibility', 'visible' );
+					update_post_meta( $product_id, '_wc_average_rating', $item['rating'] );
+					update_post_meta( $product_id, '_wc_review_count', $item['review_count'] );
+
+					update_post_meta( $product_id, '_subscription_order', $item['order'] );
+					update_post_meta( $product_id, '_coffee_tasting_notes', $item['notes'] );
+					update_post_meta( $product_id, '_coffee_origins', $item['origins'] );
+					update_post_meta( $product_id, '_coffee_image', $item['image'] );
+					update_post_meta( $product_id, '_coffee_fallback_image', $item['fallback'] );
+					update_post_meta( $product_id, '_subscription_rollover_html', $item['rollover_html'] );
+					update_post_meta( $product_id, '_is_subscription_product', 'yes' );
+
+					// Assign to Subscriptions category (append = true so Coffee category is preserved)
+					wp_set_object_terms( $product_id, array( $term_id ), self::TAXONOMY, true );
+					wp_set_object_terms( $product_id, 'simple', 'product_type', false );
+				}
 			} else {
 				$product_id = $existing->ID;
-				wp_update_post( array(
-					'ID'         => $product_id,
-					'post_title' => $item['title'],
-				) );
-			}
-
-			if ( ! empty( $product_id ) && ! is_wp_error( $product_id ) ) {
-				update_post_meta( $product_id, '_price', $item['price'] );
-				update_post_meta( $product_id, '_regular_price', $item['price'] );
-				update_post_meta( $product_id, '_price_display', $item['price_display'] );
-				update_post_meta( $product_id, '_stock_status', 'instock' );
-				update_post_meta( $product_id, '_visibility', 'visible' );
-				update_post_meta( $product_id, '_wc_average_rating', $item['rating'] );
-				update_post_meta( $product_id, '_wc_review_count', $item['review_count'] );
-
-				update_post_meta( $product_id, '_subscription_order', $item['order'] );
-				update_post_meta( $product_id, '_coffee_tasting_notes', $item['notes'] );
-				update_post_meta( $product_id, '_coffee_process', $item['process'] );
-				update_post_meta( $product_id, '_coffee_origins', $item['origins'] );
-				update_post_meta( $product_id, '_coffee_image', $item['image'] );
-				update_post_meta( $product_id, '_coffee_fallback_image', $item['fallback'] );
-				update_post_meta( $product_id, '_subscription_rollover_html', $item['rollover_html'] );
-				update_post_meta( $product_id, '_is_subscription_product', 'yes' );
-
-				// Assign to Subscriptions category (append = true so Coffee category is preserved)
-				wp_set_object_terms( $product_id, array( $term_id ), self::TAXONOMY, true );
-				wp_set_object_terms( $product_id, 'simple', 'product_type', false );
+				if ( ! get_post_meta( $product_id, '_is_subscription_product', true ) ) {
+					update_post_meta( $product_id, '_is_subscription_product', 'yes' );
+				}
+				if ( ! get_post_meta( $product_id, '_coffee_image', true ) && ! empty( $item['image'] ) ) {
+					update_post_meta( $product_id, '_coffee_image', $item['image'] );
+				}
+				if ( ! get_post_meta( $product_id, '_coffee_fallback_image', true ) && ! empty( $item['fallback'] ) ) {
+					update_post_meta( $product_id, '_coffee_fallback_image', $item['fallback'] );
+				}
+				if ( $term_id > 0 && ! has_term( $term_id, self::TAXONOMY, $product_id ) ) {
+					wp_set_object_terms( $product_id, array( $term_id ), self::TAXONOMY, true );
+				}
 			}
 		}
 
