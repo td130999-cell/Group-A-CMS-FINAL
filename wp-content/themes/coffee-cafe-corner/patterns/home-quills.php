@@ -213,124 +213,82 @@ $img_dir   = $theme_uri . 'assets/images/home/';
       </div>
 
       <div class="quills-products-grid">
+        <?php
+        $bestsellers = class_exists( 'Coffee_Cafe_Corner_Quills_Products_DB' )
+          ? Coffee_Cafe_Corner_Quills_Products_DB::get_home_bestsellers()
+          : array();
 
-        <!-- Product 1: BLACKSMITH -->
-        <div class="quills-product-card">
-          <div class="quills-product-meta-header">
-            <h2 class="quills-product-tag" style="color: #000000;">BLACKSMITH</h2>
-            <p class="quills-product-tag-desc">The F1 car of our lineup. Our signature espresso that folks enjoy in every latte, cappuccino, and cortado in our cafés.</p>
-          </div>
-          <div class="quills-product-image-box">
-            <a href="<?php echo esc_url( home_url( '/product/blacksmith-espresso/' ) ); ?>" class="quills-product-link">
-              <div class="quills-product-images-wrap">
-                <img src="<?php echo esc_url( $img_dir . 'product-blacksmith-front.jpg' ); ?>" alt="Blacksmith Espresso Blend Front" class="quills-img-front" loading="lazy" />
-                <img src="<?php echo esc_url( $img_dir . 'product-bag-back.jpg' ); ?>" alt="Blacksmith Espresso Blend Back" class="quills-img-back" loading="lazy" />
-              </div>
-              <div class="quills-rollover-overlay">
-                <div class="quills-rollover-content">
-                  <h4 class="quills-rollover-title">Blacksmith | Espresso Blend</h4>
-                  <div class="quills-rollover-text">
-                    <p class="quills-rollover-tasting"><em><strong>Baker's chocolate, blueberries, hazelnut</strong></em></p>
-                    <p><strong>Our Signature Espresso</strong><br><strong>Process: </strong>Washed &amp; Natural<br><strong>Origins: </strong>Colombia, Nicaragua, Ethiopia</p>
+        if ( ! empty( $bestsellers ) ) :
+          foreach ( $bestsellers as $bestseller ) :
+            $p_id       = $bestseller->get_id();
+            $p_name     = $bestseller->get_name();
+            $p_link     = get_permalink( $p_id );
+            $p_price    = $bestseller->get_price();
+            $p_rating   = $bestseller->get_average_rating();
+            $p_reviews  = $bestseller->get_review_count();
+
+            $tag        = get_post_meta( $p_id, '_quills_tag', true ) ?: strtoupper( $bestseller->get_slug() );
+            $tag_color  = get_post_meta( $p_id, '_quills_tag_color', true ) ?: '#000000';
+            $tag_desc   = get_post_meta( $p_id, '_quills_tag_desc', true ) ?: $bestseller->get_short_description();
+            $tasting    = get_post_meta( $p_id, '_quills_tasting', true );
+            $details    = get_post_meta( $p_id, '_quills_details', true );
+            $back_img   = get_post_meta( $p_id, '_quills_back_img', true ) ?: 'product-bag-back.jpg';
+
+            $image_id   = $bestseller->get_image_id();
+            $front_img_url = $image_id ? wp_get_attachment_image_url( $image_id, 'full' ) : '';
+            if ( ! $front_img_url ) {
+              $front_img_url = $img_dir . 'product-' . $bestseller->get_slug() . '-front.jpg';
+            }
+            $back_img_url = $img_dir . $back_img;
+        ?>
+          <div class="quills-product-card" data-product-id="<?php echo esc_attr( $p_id ); ?>">
+            <div class="quills-product-meta-header">
+              <h2 class="quills-product-tag" style="color: <?php echo esc_attr( $tag_color ); ?>;"><?php echo esc_html( $tag ); ?></h2>
+              <p class="quills-product-tag-desc"><?php echo esc_html( $tag_desc ); ?></p>
+            </div>
+            <div class="quills-product-image-box">
+              <a href="<?php echo esc_url( $p_link ); ?>" class="quills-product-link">
+                <div class="quills-product-images-wrap">
+                  <img src="<?php echo esc_url( $front_img_url ); ?>" alt="<?php echo esc_attr( $p_name ); ?> Front" class="quills-img-front" loading="lazy" />
+                  <img src="<?php echo esc_url( $back_img_url ); ?>" alt="<?php echo esc_attr( $p_name ); ?> Back" class="quills-img-back" loading="lazy" />
+                </div>
+                <div class="quills-rollover-overlay">
+                  <div class="quills-rollover-content">
+                    <h4 class="quills-rollover-title"><?php echo esc_html( $p_name ); ?></h4>
+                    <div class="quills-rollover-text">
+                      <?php if ( ! empty( $tasting ) ) : ?>
+                        <p class="quills-rollover-tasting"><em><strong><?php echo esc_html( $tasting ); ?></strong></em></p>
+                      <?php endif; ?>
+                      <?php if ( ! empty( $details ) ) : ?>
+                        <p><?php echo nl2br( esc_html( $details ) ); ?></p>
+                      <?php endif; ?>
+                    </div>
                   </div>
                 </div>
+              </a>
+              <div class="quills-product-quick-add">
+                <form class="quills-quick-add-form" method="post" action="<?php echo esc_url( function_exists( 'wc_get_cart_url' ) ? wc_get_cart_url() : home_url( '/cart/' ) ); ?>" style="width: 100%;">
+                  <input type="hidden" name="add-to-cart" value="<?php echo esc_attr( $p_id ); ?>" />
+                  <button type="submit" class="quills-btn quills-btn--add-to-cart" aria-label="<?php echo esc_attr( sprintf( __( 'ADD TO CART %s', 'coffee-cafe-corner' ), $p_name ) ); ?>">
+                    <span>ADD TO CART</span>
+                  </button>
+                </form>
               </div>
-            </a>
-            <div class="quills-product-quick-add">
-              <button type="button" class="quills-btn quills-btn--add-to-cart" aria-label="ADD TO CART">
-                <span>ADD TO CART</span>
-              </button>
             </div>
-          </div>
-          <div class="quills-product-info">
-            <span class="quills-product-brand">QUILLSCOFFEE</span>
-            <h3 class="quills-product-name"><a href="<?php echo esc_url( home_url( '/product/blacksmith-espresso/' ) ); ?>">Blacksmith | Espresso Blend</a></h3>
-            <div class="quills-rating-row">
-              <span class="quills-stars">★★★★★</span>
-              <span class="quills-review-count">(56 reviews)</span>
-            </div>
-            <div class="quills-product-price">FROM $20.00</div>
-          </div>
-        </div>
-
-        <!-- Product 2: INKWELL -->
-        <div class="quills-product-card">
-          <div class="quills-product-meta-header">
-            <h2 class="quills-product-tag" style="color: #f15239;">INKWELL</h2>
-            <p class="quills-product-tag-desc">The daily driver. Our classic house blend that's on drip at our cafes from open to close. Loved by regulars for 17 years.</p>
-          </div>
-          <div class="quills-product-image-box">
-            <a href="<?php echo esc_url( home_url( '/product/inkwell-house-blend/' ) ); ?>" class="quills-product-link">
-              <div class="quills-product-images-wrap">
-                <img src="<?php echo esc_url( $img_dir . 'product-inkwell-front.jpg' ); ?>" alt="Inkwell Signature Blend Front" class="quills-img-front" loading="lazy" />
-                <img src="<?php echo esc_url( $img_dir . 'product-bag-back.jpg' ); ?>" alt="Inkwell Signature Blend Back" class="quills-img-back" loading="lazy" />
+            <div class="quills-product-info">
+              <span class="quills-product-brand">QUILLSCOFFEE</span>
+              <h3 class="quills-product-name"><a href="<?php echo esc_url( $p_link ); ?>"><?php echo esc_html( $p_name ); ?></a></h3>
+              <div class="quills-rating-row">
+                <span class="quills-stars">★★★★★</span>
+                <span class="quills-review-count">(<?php echo esc_html( (int) $p_reviews ); ?> reviews)</span>
               </div>
-              <div class="quills-rollover-overlay">
-                <div class="quills-rollover-content">
-                  <h4 class="quills-rollover-title">Inkwell | Signature Blend</h4>
-                  <div class="quills-rollover-text">
-                    <p class="quills-rollover-tasting"><em><strong>Graham cracker, cooked cherries, vanilla</strong></em></p>
-                    <p><strong>Our Signature House Blend</strong><br><strong>Process: </strong>Washed &amp; Natural<br><strong>Origins: </strong>Colombia, Guatemala, Ethiopia</p>
-                  </div>
-                </div>
-              </div>
-            </a>
-            <div class="quills-product-quick-add">
-              <button type="button" class="quills-btn quills-btn--add-to-cart" aria-label="ADD TO CART">
-                <span>ADD TO CART</span>
-              </button>
+              <div class="quills-product-price">FROM $<?php echo esc_html( number_format( (float) $p_price, 2 ) ); ?></div>
             </div>
           </div>
-          <div class="quills-product-info">
-            <span class="quills-product-brand">QUILLSCOFFEE</span>
-            <h3 class="quills-product-name"><a href="<?php echo esc_url( home_url( '/product/inkwell-house-blend/' ) ); ?>">Inkwell | Signature Blend</a></h3>
-            <div class="quills-rating-row">
-              <span class="quills-stars">★★★★★</span>
-              <span class="quills-review-count">(80 reviews)</span>
-            </div>
-            <div class="quills-product-price">FROM $20.00</div>
-          </div>
-        </div>
-
-        <!-- Product 3: SOUTHERN GOTHIC -->
-        <div class="quills-product-card">
-          <div class="quills-product-meta-header">
-            <h2 class="quills-product-tag" style="color: #926685;">SOUTHERN GOTHIC</h2>
-            <p class="quills-product-tag-desc">Our cold brew blend crafted for our customers who prefer their coffee chilled.</p>
-          </div>
-          <div class="quills-product-image-box">
-            <a href="<?php echo esc_url( home_url( '/product/southern-gothic-12oz/' ) ); ?>" class="quills-product-link">
-              <div class="quills-product-images-wrap">
-                <img src="<?php echo esc_url( $img_dir . 'product-southern-gothic-front.jpg' ); ?>" alt="Southern Gothic Cold Brew Blend Front" class="quills-img-front" loading="lazy" />
-                <img src="<?php echo esc_url( $img_dir . 'product-bag-back.jpg' ); ?>" alt="Southern Gothic Cold Brew Blend Back" class="quills-img-back" loading="lazy" />
-              </div>
-              <div class="quills-rollover-overlay">
-                <div class="quills-rollover-content">
-                  <h4 class="quills-rollover-title">Southern Gothic | Cold Brew Blend</h4>
-                  <div class="quills-rollover-text">
-                    <p class="quills-rollover-tasting"><em><strong>Dark chocolate, sweet orange, subtle sweetness</strong></em></p>
-                    <p><strong>Our Signature Cold Brew Blend</strong><br><strong>Process: </strong>Washed &amp; Natural<br><strong>Origins: </strong>Colombia, Honduras</p>
-                  </div>
-                </div>
-              </div>
-            </a>
-            <div class="quills-product-quick-add">
-              <button type="button" class="quills-btn quills-btn--add-to-cart" aria-label="ADD TO CART">
-                <span>ADD TO CART</span>
-              </button>
-            </div>
-          </div>
-          <div class="quills-product-info">
-            <span class="quills-product-brand">QUILLSCOFFEE</span>
-            <h3 class="quills-product-name"><a href="<?php echo esc_url( home_url( '/product/southern-gothic-12oz/' ) ); ?>">Southern Gothic | Cold Brew Blend</a></h3>
-            <div class="quills-rating-row">
-              <span class="quills-stars">★★★★★</span>
-              <span class="quills-review-count">(20 reviews)</span>
-            </div>
-            <div class="quills-product-price">FROM $20.00</div>
-          </div>
-        </div>
-
+        <?php
+          endforeach;
+        endif;
+        ?>
       </div>
       <hr class="quills-section-divider" />
     </div>

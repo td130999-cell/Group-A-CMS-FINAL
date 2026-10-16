@@ -468,4 +468,10 @@ require_once get_template_directory() . '/inc/class-brew-gear-db.php';
  * Wholesale Page Database Management
  */
 require_once get_template_directory() . '/inc/class-wholesale-db.php';
+
+/**
+ * Quills Products (Home Bestsellers, Merch, Gift Cards) Database Management
+ */
+require_once get_template_directory() . '/inc/class-quills-products-db.php';
+
 

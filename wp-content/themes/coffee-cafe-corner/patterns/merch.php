@@ -8,116 +8,72 @@
 
 $img_dir = get_template_directory_uri() . '/assets/images/merch/';
 
-$merch_products = [
-  [
-    'title'       => 'Crewneck Sweatshirt (Evergreen)',
-    'desc'        => "Midweight Quills fleece sweatshirt in evergreen color.\n\nCotton/polyester blend.",
-    'img'         => 'merch-crewneck-evergreen.jpg',
-    'price'       => '$45.00',
-    'rating_type' => 'empty',
-    'reviews'     => '(No reviews)',
-    'link'        => home_url( '/product/quills-coffee-leaves-crewneck-sweatshirt/' )
-  ],
-  [
-    'title'       => 'Crewneck Sweatshirt (Sandstone)',
-    'desc'        => "Midweight Quills fleece sweatshirt in sandstone color.\n\nCotton/polyester blend.",
-    'img'         => 'merch-crewneck-sandstone.jpg',
-    'price'       => '$45.00',
-    'rating_type' => 'empty',
-    'reviews'     => '(No reviews)',
-    'link'        => home_url( '/product/quills-coffee-leaves-crewneck-sweatshirt-copy/' )
-  ],
-  [
-    'title'       => 'Owl Ringer Tee',
-    'desc'        => "Retro ringer tee in ivory with dark green bands.\n\n100% cotton.",
-    'img'         => 'merch-owl-ringer-tee.jpg',
-    'price'       => '$23.00',
-    'rating_type' => 'empty',
-    'reviews'     => '(No reviews)',
-    'link'        => home_url( '/product/quills-kentucky-owl-ringer-tee/' )
-  ],
-  [
-    'title'       => 'Owl Tee in Pastel Green',
-    'desc'        => "Garment dyed heavyweight t-shirt in pastel green.\n\n100% US cotton.",
-    'img'         => 'merch-owl-tee-pastel-green.jpg',
-    'price'       => '$26.00',
-    'rating_type' => 'filled',
-    'reviews'     => '(8 reviews)',
-    'link'        => home_url( '/product/quills-kentucky-owl-ringer-tee-copy/' )
-  ],
-  [
-    'title'       => 'Owl Embroidered Hat',
-    'desc'        => "Unstructured snapback in green with gold embroidered owl logo.\n\n100% cotton.",
-    'img'         => 'merch-owl-embroidered-hat.jpg',
-    'price'       => '$27.00',
-    'rating_type' => 'filled',
-    'reviews'     => '(1 reviews)',
-    'link'        => home_url( '/product/quills-owl-embroidered-hat/' )
-  ],
-  [
-    'title'       => 'Two-tone Embroidered Hat',
-    'desc'        => "Five-panel two-tone cap with embroidered Quills Coffee.\n\n100% cotton.",
-    'img'         => 'merch-twotone-embroidered-hat.jpg',
-    'price'       => '$27.00',
-    'rating_type' => 'empty',
-    'reviews'     => '(No reviews)',
-    'link'        => home_url( '/product/quills-owl-embroidered-hat-copy/' )
-  ],
-  [
-    'title'       => 'Quills Speckled Coffee Mug',
-    'desc'        => "12 oz ceramic mug in speckled ivory, with Quills logo and Steve the owl.",
-    'img'         => 'merch-speckled-coffee-mug.jpg',
-    'price'       => '$19.00',
-    'rating_type' => 'empty',
-    'reviews'     => '(No reviews)',
-    'link'        => home_url( '/product/quills-coffee-mug/' )
-  ],
-  [
-    'title'       => 'Quills Coffee Postage Mug',
-    'desc'        => 'Red Ceramic Quills "Postage"',
-    'img'         => 'merch-coffee-postage-mug.jpg',
-    'price'       => '$19.00',
-    'rating_type' => 'empty',
-    'reviews'     => '(No reviews)',
-    'link'        => home_url( '/product/quills-coffee-mug-copy/' )
-  ],
-  [
-    'title'       => "Quill's Slow Coffee Hoodie (Charcoal)",
-    'desc'        => 'QUILLS COFFEE MIDWEIGHT HOODED SWEATSHIRT "SLOW COFFEE"-CHARCOAL',
-    'img'         => 'merch-slow-coffee-hoodie-charcoal.jpg',
-    'price'       => '$48.00',
-    'rating_type' => 'empty',
-    'reviews'     => '(No reviews)',
-    'link'        => home_url( '/product/quills-slow-coffee-hoodie-charcoal/' )
-  ],
-  [
-    'title'       => "Quill's Slow Coffee Hoodie (Saddle)",
-    'desc'        => 'QUILLS COFFEE MIDWEIGHT HOODED SWEATSHIRT "SLOW COFFEE"-SADDLE',
-    'img'         => 'merch-slow-coffee-hoodie-saddle.jpg',
-    'price'       => '$48.00',
-    'rating_type' => 'empty',
-    'reviews'     => '(No reviews)',
-    'link'        => home_url( '/product/quills-slow-coffee-hoodie-charcoal-copy/' )
-  ],
-  [
-    'title'       => "Quill's Postage Tote Bag",
-    'desc'        => 'QUILLS COFFEE 15"W X 16"H TOTE BAG "POSTAGE"',
-    'img'         => 'merch-postage-tote-bag.jpg',
-    'price'       => '$18.00',
-    'rating_type' => 'empty',
-    'reviews'     => '(No reviews)',
-    'link'        => home_url( '/product/quills-postage-tote-bag/' )
-  ],
-  [
-    'title'       => "Quill's Patch Hat (Petrol Blue)",
-    'desc'        => "Five-panel two-tone cap with embroidered Quills Coffee.\n\n100% cotton.",
-    'img'         => 'merch-patch-hat-petrol-blue.jpg',
-    'price'       => '$27.00',
-    'rating_type' => 'empty',
-    'reviews'     => '(No reviews)',
-    'link'        => home_url( '/product/two-tone-embroidered-hat-copy/' )
-  ]
-];
+$allowed_sorts = array(
+  'featured'           => 'Featured',
+  'best-selling'       => 'Best selling',
+  'title-ascending'    => 'Alphabetically, A-Z',
+  'title-descending'   => 'Alphabetically, Z-A',
+  'price-ascending'    => 'Price, low to high',
+  'price-descending'   => 'Price, high to low',
+  'created-ascending'  => 'Date, old to new',
+  'created-descending' => 'Date, new to old',
+);
+
+$current_sort = isset( $_GET['sort_by'] ) ? sanitize_text_field( wp_unslash( $_GET['sort_by'] ) ) : 'featured';
+if ( ! array_key_exists( $current_sort, $allowed_sorts ) ) {
+  $current_sort = 'featured';
+}
+
+$slug_to_img_fallback = array(
+  'quills-coffee-leaves-crewneck-sweatshirt'      => 'merch-crewneck-evergreen.jpg',
+  'quills-coffee-leaves-crewneck-sweatshirt-copy' => 'merch-crewneck-sandstone.jpg',
+  'quills-kentucky-owl-ringer-tee'               => 'merch-owl-ringer-tee.jpg',
+  'quills-kentucky-owl-ringer-tee-copy'          => 'merch-owl-tee-pastel-green.jpg',
+  'quills-owl-embroidered-hat'                   => 'merch-owl-embroidered-hat.jpg',
+  'quills-owl-embroidered-hat-copy'              => 'merch-twotone-embroidered-hat.jpg',
+  'quills-coffee-mug'                            => 'merch-speckled-coffee-mug.jpg',
+  'quills-coffee-mug-copy'                       => 'merch-coffee-postage-mug.jpg',
+  'quills-slow-coffee-hoodie-charcoal'           => 'merch-slow-coffee-hoodie-charcoal.jpg',
+  'quills-slow-coffee-hoodie-charcoal-copy'      => 'merch-slow-coffee-hoodie-saddle.jpg',
+  'quills-postage-tote-bag'                      => 'merch-postage-tote-bag.jpg',
+  'two-tone-embroidered-hat-copy'                => 'merch-patch-hat-petrol-blue.jpg',
+);
+
+$wc_products = class_exists( 'Coffee_Cafe_Corner_Quills_Products_DB' )
+  ? Coffee_Cafe_Corner_Quills_Products_DB::get_merch_products( $current_sort )
+  : array();
+
+$merch_products = array();
+
+if ( ! empty( $wc_products ) ) {
+  foreach ( $wc_products as $product ) {
+    $p_id          = $product->get_id();
+    $p_slug        = $product->get_slug();
+    $rating        = (float) $product->get_average_rating();
+    $reviews_count = (int) $product->get_review_count();
+
+    $thumb_id = $product->get_image_id();
+    $img_url  = $thumb_id ? wp_get_attachment_image_url( $thumb_id, 'full' ) : '';
+    if ( ! $img_url && isset( $slug_to_img_fallback[ $p_slug ] ) ) {
+      $img_url = $img_dir . $slug_to_img_fallback[ $p_slug ];
+    } elseif ( ! $img_url ) {
+      $img_url = $img_dir . 'merch-crewneck-evergreen.jpg';
+    }
+
+    $merch_products[] = array(
+      'id'          => $p_id,
+      'title'       => $product->get_name(),
+      'desc'        => $product->get_description() ?: $product->get_short_description(),
+      'img_url'     => $img_url,
+      'price'       => '$' . number_format( (float) $product->get_price(), 2 ),
+      'rating_type' => ( $rating > 0 ) ? 'filled' : 'empty',
+      'reviews'     => ( $reviews_count > 0 ) ? '(' . $reviews_count . ' reviews)' : '(No reviews)',
+      'link'        => get_permalink( $p_id ),
+    );
+  }
+}
+
+$total_products = count( $merch_products );
 ?>
 
 <!-- wp:html -->
@@ -145,19 +101,16 @@ $merch_products = [
   <!-- Toolbar: Product Count & Sort -->
   <div class="quills-merch-container">
     <div class="quills-merch-toolbar">
-      <div class="quills-merch-count">12 products</div>
+      <div class="quills-merch-count"><?php echo esc_html( $total_products ); ?> products</div>
       <div class="quills-merch-sort">
         <label for="quills-sort-select" class="quills-merch-sort-label">Sort by:</label>
         <div class="quills-merch-sort-wrap">
-          <select id="quills-sort-select" class="quills-merch-sort-select">
-            <option value="featured" selected>Featured</option>
-            <option value="best-selling">Best selling</option>
-            <option value="title-ascending">Alphabetically, A-Z</option>
-            <option value="title-descending">Alphabetically, Z-A</option>
-            <option value="price-ascending">Price, low to high</option>
-            <option value="price-descending">Price, high to low</option>
-            <option value="created-ascending">Date, old to new</option>
-            <option value="created-descending">Date, new to old</option>
+          <select id="quills-sort-select" class="quills-merch-sort-select" onchange="window.location.search = '?sort_by=' + encodeURIComponent(this.value);">
+            <?php foreach ( $allowed_sorts as $key => $label ) : ?>
+              <option value="<?php echo esc_attr( $key ); ?>" <?php selected( $current_sort, $key ); ?>>
+                <?php echo esc_html( $label ); ?>
+              </option>
+            <?php endforeach; ?>
           </select>
         </div>
       </div>
@@ -168,10 +121,10 @@ $merch_products = [
   <div class="quills-merch-container">
     <div class="quills-merch-grid">
       <?php foreach ( $merch_products as $product ) : ?>
-        <div class="quills-merch-card">
+        <div class="quills-merch-card" data-product-id="<?php echo esc_attr( $product['id'] ); ?>">
           <div class="quills-merch-image-box">
             <a href="<?php echo esc_url( $product['link'] ); ?>" class="quills-merch-img-link">
-              <img src="<?php echo esc_url( $img_dir . $product['img'] ); ?>" alt="<?php echo esc_attr( $product['title'] ); ?>" class="quills-merch-img" loading="lazy" />
+              <img src="<?php echo esc_url( $product['img_url'] ); ?>" alt="<?php echo esc_attr( $product['title'] ); ?>" class="quills-merch-img" loading="lazy" />
               <div class="quills-merch-rollover">
                 <h4 class="quills-merch-rollover-title"><?php echo esc_html( $product['title'] ); ?></h4>
                 <div class="quills-merch-rollover-line"></div>
@@ -181,9 +134,12 @@ $merch_products = [
               </div>
             </a>
             <div class="quills-merch-quick-add">
-              <button type="button" class="quills-merch-btn-add" aria-label="ADD TO CART" onclick="var b=document.querySelector('.quills-cart-badge');if(b){b.textContent=parseInt(b.textContent||0)+1;}">
-                <span>ADD TO CART</span>
-              </button>
+              <form class="quills-merch-quick-add-form" method="post" action="<?php echo esc_url( function_exists( 'wc_get_cart_url' ) ? wc_get_cart_url() : home_url( '/cart/' ) ); ?>" style="width: 100%; margin: 0; padding: 0;">
+                <input type="hidden" name="add-to-cart" value="<?php echo esc_attr( $product['id'] ); ?>" />
+                <button type="submit" class="quills-merch-btn-add" aria-label="<?php echo esc_attr( sprintf( __( 'ADD TO CART %s', 'coffee-cafe-corner' ), $product['title'] ) ); ?>">
+                  <span>ADD TO CART</span>
+                </button>
+              </form>
             </div>
           </div>
           <div class="quills-merch-info">
@@ -209,4 +165,3 @@ $merch_products = [
 
 </div>
 <!-- /wp:html -->
-

@@ -7,7 +7,16 @@
  */
 
 $img_dir = get_template_directory_uri() . '/assets/images/gift-cards/';
-$online_gift_card_url = home_url( '/product/gift-card/' );
+
+$gift_card_prod = class_exists( 'Coffee_Cafe_Corner_Quills_Products_DB' )
+  ? Coffee_Cafe_Corner_Quills_Products_DB::get_gift_card_product()
+  : null;
+
+$online_gift_card_url = $gift_card_prod ? get_permalink( $gift_card_prod->get_id() ) : home_url( '/product/gift-card/' );
+$online_gift_card_img = ( $gift_card_prod && $gift_card_prod->get_image_id() )
+  ? ( wp_get_attachment_image_url( $gift_card_prod->get_image_id(), 'full' ) ?: ( $img_dir . 'online-gift-card.png' ) )
+  : ( $img_dir . 'online-gift-card.png' );
+
 $cafe_gift_card_url   = 'https://app.squareup.com/gift/YYF6MF7Z4KF6C/order';
 ?>
 
@@ -31,7 +40,7 @@ $cafe_gift_card_url   = 'https://app.squareup.com/gift/YYF6MF7Z4KF6C/order';
       <article class="quills-giftcard-card">
         <div class="quills-giftcard-img-box">
           <a href="<?php echo esc_url( $online_gift_card_url ); ?>" aria-label="Online Store Gift Card - Quills Coffee">
-            <img src="<?php echo esc_url( $img_dir . 'online-gift-card.png' ); ?>" alt="Online Store Gift Card - Quills Coffee" class="quills-giftcard-img" loading="lazy" />
+            <img src="<?php echo esc_url( $online_gift_card_img ); ?>" alt="Online Store Gift Card - Quills Coffee" class="quills-giftcard-img" loading="lazy" />
           </a>
         </div>
         <div class="quills-giftcard-body">
