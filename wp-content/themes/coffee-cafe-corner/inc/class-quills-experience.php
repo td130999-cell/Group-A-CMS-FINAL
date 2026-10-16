@@ -14,6 +14,11 @@ class Quills_Coffee_Experience {
         add_action('after_setup_theme', [__CLASS__, 'setup_woocommerce']);
         add_action('wp_enqueue_scripts', [__CLASS__, 'enqueue_assets'], 20);
         
+        // Rewrite rules for product pages
+        add_action('init', [__CLASS__, 'register_rewrites']);
+        add_filter('query_vars', [__CLASS__, 'register_query_vars']);
+        add_filter('request', [__CLASS__, 'map_product_request']);
+
         // AJAX endpoints
         add_action('wp_ajax_quills_filter_products', [__CLASS__, 'ajax_filter_products']);
         add_action('wp_ajax_nopriv_quills_filter_products', [__CLASS__, 'ajax_filter_products']);
@@ -29,6 +34,35 @@ class Quills_Coffee_Experience {
 
         // Template loaders
         add_filter('template_include', [__CLASS__, 'override_templates'], 99);
+    }
+
+    public static function register_rewrites() {
+        add_rewrite_rule('^product/([^/]+)/?$', 'index.php?product=$matches[1]', 'top');
+        add_rewrite_rule('^collections/coffee/products/([^/]+)/?$', 'index.php?product=$matches[1]', 'top');
+        add_rewrite_rule('^products/([^/]+)/?$', 'index.php?product=$matches[1]', 'top');
+
+        if (!get_option('quills_experience_rewrites_flushed_v3')) {
+            flush_rewrite_rules(false);
+            update_option('quills_experience_rewrites_flushed_v3', 1);
+        }
+    }
+
+    public static function register_query_vars($vars) {
+        $vars[] = 'product';
+        return $vars;
+    }
+
+    public static function map_product_request($query_vars) {
+        if (!empty($query_vars['product'])) {
+            $slug = sanitize_title($query_vars['product']);
+            if ($slug === 'inkwell-house-blend') {
+                $slug = 'inkwell-signature-blend';
+            }
+            $query_vars['post_type'] = 'product';
+            $query_vars['name']      = $slug;
+            $query_vars['product']   = $slug;
+        }
+        return $query_vars;
     }
 
     public static function setup_woocommerce() {
@@ -52,7 +86,7 @@ class Quills_Coffee_Experience {
             'quills-coffee-style',
             get_template_directory_uri() . '/assets/css/quills-coffee.css',
             [],
-            '1.0.4'
+            '1.0.5'
         );
 
         // Quills JS
@@ -60,7 +94,7 @@ class Quills_Coffee_Experience {
             'quills-coffee-script',
             get_template_directory_uri() . '/assets/js/quills-coffee.js',
             ['jquery'],
-            '1.0.4',
+            '1.0.5',
             true
         );
 
@@ -74,7 +108,7 @@ class Quills_Coffee_Experience {
     }
 
     public static function override_templates($template) {
-        if (is_product()) {
+        if (is_product() || is_singular('product') || !empty(get_query_var('product'))) {
             $custom = get_template_directory() . '/woocommerce/single-product.php';
             if (file_exists($custom)) {
                 return $custom;

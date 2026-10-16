@@ -517,4 +517,9 @@ require_once get_template_directory() . '/inc/class-merch-db.php';
  */
 require_once get_template_directory() . '/inc/class-search-db.php';
 
+/**
+ * Quills Coffee Experience (Single Product, Reviews, Add to Cart)
+ */
+require_once get_template_directory() . '/inc/class-quills-experience.php';
+
 

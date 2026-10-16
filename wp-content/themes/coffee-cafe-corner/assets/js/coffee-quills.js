@@ -233,6 +233,57 @@
             fetchFilteredCoffee();
         });
 
+        // 6b. Coffee Card Hover Behavior
+        $(document).on('mouseenter', '.quills-coffee-card', function() {
+            $(this).addClass('is-hovered');
+        }).on('mouseleave', '.quills-coffee-card', function() {
+            $(this).removeClass('is-hovered');
+        });
+
+        // 7. Hover Card Add to Cart Action
+        $(document).on('click', '.quills-hover-add-cart', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            var $btn = $(this);
+            var productId = $btn.data('product-id');
+            var permalink = $btn.data('permalink');
+            var originalText = $btn.text();
+
+            $btn.text('ADDING...').prop('disabled', true);
+
+            $.ajax({
+                url: (typeof quillsData !== 'undefined' && quillsData.ajaxUrl) ? quillsData.ajaxUrl : '/wp-admin/admin-ajax.php',
+                type: 'POST',
+                data: {
+                    action: 'quills_add_to_cart',
+                    nonce: (typeof quillsData !== 'undefined' && quillsData.nonce) ? quillsData.nonce : '',
+                    product_id: productId,
+                    quantity: 1,
+                    size: '12oz',
+                    grind: 'Whole Bean',
+                    purchase_type: 'onetime'
+                },
+                success: function(res) {
+                    $btn.text('ADDED ✓');
+                    setTimeout(function() {
+                        $btn.text(originalText).prop('disabled', false);
+                    }, 1800);
+                    if (res && res.success) {
+                        if ($('#quills-cart-badge').length) {
+                            $('#quills-cart-badge').text(res.data.cart_count);
+                        }
+                    }
+                },
+                error: function() {
+                    if (permalink) {
+                        window.location.href = permalink;
+                    } else {
+                        $btn.text(originalText).prop('disabled', false);
+                    }
+                }
+            });
+        });
+
         // AJAX Fetch Function
         function fetchFilteredCoffee() {
             var $productGrid = $('#quills-coffee-grid');

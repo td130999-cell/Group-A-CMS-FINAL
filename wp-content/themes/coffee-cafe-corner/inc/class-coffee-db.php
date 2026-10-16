@@ -613,56 +613,7 @@ class Coffee_Cafe_Corner_Coffee_DB {
 		if ( $query->have_posts() ) :
 			while ( $query->have_posts() ) :
 				$query->the_post();
-				$product_id    = get_the_ID();
-				$title         = get_the_title();
-				$price_display = get_post_meta( $product_id, '_price_display', true );
-				if ( empty( $price_display ) ) {
-					$price         = get_post_meta( $product_id, '_price', true );
-					$price_display = $price ? '$' . number_format( (float) $price, 2 ) : 'FROM $20.00';
-				}
-				$rating        = (float) get_post_meta( $product_id, '_wc_average_rating', true );
-				$review_count  = (int) get_post_meta( $product_id, '_wc_review_count', true );
-				$image_url     = self::get_product_image_url( $product_id );
-				?>
-				<article class="quills-coffee-card">
-					<div class="quills-coffee-card-media">
-						<a href="<?php the_permalink(); ?>" class="quills-coffee-card-link">
-							<img src="<?php echo esc_url( $image_url ); ?>" alt="<?php echo esc_attr( $title ); ?>" class="quills-coffee-card-img" loading="lazy" />
-						</a>
-					</div>
-					<div class="quills-coffee-card-content">
-						<h3 class="quills-coffee-card-title">
-							<a href="<?php the_permalink(); ?>"><?php echo esc_html( $title ); ?></a>
-						</h3>
-						<div class="quills-coffee-card-rating">
-							<span class="quills-stars">
-								<?php
-								$rounded = round( $rating );
-								for ( $i = 1; $i <= 5; $i++ ) {
-									if ( $i <= $rounded && $rating > 0 ) {
-										echo '<span class="quills-star quills-star--filled">★</span>';
-									} else {
-										echo '<span class="quills-star quills-star--empty">☆</span>';
-									}
-								}
-								?>
-							</span>
-							<span class="quills-review-count">
-								<?php
-								if ( $review_count > 0 ) {
-									printf( esc_html__( '(%d reviews)', 'coffee-cafe-corner' ), (int) $review_count );
-								} else {
-									esc_html_e( '(No reviews)', 'coffee-cafe-corner' );
-								}
-								?>
-							</span>
-						</div>
-						<div class="quills-coffee-card-price">
-							<?php echo esc_html( $price_display ); ?>
-						</div>
-					</div>
-				</article>
-				<?php
+				self::render_coffee_card( get_the_ID() );
 			endwhile;
 			wp_reset_postdata();
 		else :
@@ -678,6 +629,114 @@ class Coffee_Cafe_Corner_Coffee_DB {
 			'total_all'  => 13,
 			'total_text' => sprintf( esc_html__( '%d products', 'coffee-cafe-corner' ), (int) $query->found_posts ),
 		) );
+	}
+
+	/**
+	 * Render Single Coffee Card with Hover Tasting Details matching Image 1
+	 */
+	public static function render_coffee_card( $product_id ) {
+		$title         = get_the_title( $product_id );
+		$permalink     = get_permalink( $product_id );
+		$price_display = get_post_meta( $product_id, '_price_display', true );
+		if ( empty( $price_display ) ) {
+			$price         = get_post_meta( $product_id, '_price', true );
+			$price_display = $price ? '$' . number_format( (float) $price, 2 ) : 'FROM $20.00';
+		}
+		$rating        = (float) get_post_meta( $product_id, '_wc_average_rating', true );
+		$review_count  = (int) get_post_meta( $product_id, '_wc_review_count', true );
+		$image_url     = self::get_product_image_url( $product_id );
+
+		$tasting_notes = get_post_meta( $product_id, '_coffee_tasting_notes', true );
+		$origins       = get_post_meta( $product_id, '_coffee_origins', true );
+		$rollover_html = get_post_meta( $product_id, '_subscription_rollover_html', true );
+		if ( empty( $rollover_html ) ) {
+			$rollover_html = get_post_meta( $product_id, '_coffee_rollover_html', true );
+		}
+
+		$processes = get_post_meta( $product_id, '_coffee_process' );
+		if ( empty( $processes ) ) {
+			$single_proc = get_post_meta( $product_id, '_coffee_process', true );
+			$processes   = $single_proc ? array( $single_proc ) : array();
+		}
+		$process_str = implode( ' & ', array_filter( array_unique( (array) $processes ) ) );
+		?>
+		<article class="quills-coffee-card" data-product-id="<?php echo esc_attr( $product_id ); ?>">
+			<div class="quills-coffee-card-media">
+				<a href="<?php echo esc_url( $permalink ); ?>" class="quills-coffee-card-link" aria-label="<?php echo esc_attr( $title ); ?>">
+					<img src="<?php echo esc_url( $image_url ); ?>" alt="<?php echo esc_attr( $title ); ?>" class="quills-coffee-card-img" loading="lazy" />
+				</a>
+
+				<!-- Hover Tasting Details Card matching Image 1 & Quills Coffee -->
+				<div class="rollover_inner">
+					<div class="rollover_wrapper">
+						<div class="rollover_top">
+							<span class="collection_name"></span>
+							<h4 class="prod_title"><?php echo esc_html( $title ); ?></h4>
+						</div>
+						<div class="rollover_content">
+							<div class="rte">
+								<div class="metafield-rich_text_field">
+									<?php
+									if ( ! empty( $rollover_html ) ) {
+										echo wp_kses_post( $rollover_html );
+									} else {
+										?>
+										<p><em><strong><?php echo esc_html( $tasting_notes ); ?></strong></em></p>
+										<?php if ( ! empty( $process_str ) ) : ?>
+											<p><strong><?php esc_html_e( 'Process:', 'coffee-cafe-corner' ); ?></strong> <?php echo esc_html( $process_str ); ?></p>
+										<?php endif; ?>
+										<?php if ( ! empty( $origins ) ) : ?>
+											<p><strong><?php esc_html_e( 'Origins:', 'coffee-cafe-corner' ); ?></strong> <?php echo esc_html( $origins ); ?></p>
+										<?php endif; ?>
+										<?php
+									}
+									?>
+								</div>
+							</div>
+							<p class="rollover_short"></p>
+						</div>
+						<div class="rollover_bottom">
+							<button type="button" class="quills-hover-add-cart" data-product-id="<?php echo esc_attr( $product_id ); ?>" data-permalink="<?php echo esc_url( $permalink ); ?>">
+								<?php esc_html_e( 'ADD TO CART', 'coffee-cafe-corner' ); ?>
+							</button>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="quills-coffee-card-content">
+				<h3 class="quills-coffee-card-title">
+					<a href="<?php echo esc_url( $permalink ); ?>"><?php echo esc_html( $title ); ?></a>
+				</h3>
+				<div class="quills-coffee-card-rating">
+					<span class="quills-stars" aria-label="<?php echo esc_attr( $rating . ' out of 5 stars' ); ?>">
+						<?php
+						$rounded = round( $rating );
+						for ( $i = 1; $i <= 5; $i++ ) {
+							if ( $i <= $rounded && $rating > 0 ) {
+								echo '<span class="quills-star quills-star--filled">★</span>';
+							} else {
+								echo '<span class="quills-star quills-star--empty">☆</span>';
+							}
+						}
+						?>
+					</span>
+					<span class="quills-review-count">
+						<?php
+						if ( $review_count > 0 ) {
+							printf( esc_html__( '(%d reviews)', 'coffee-cafe-corner' ), (int) $review_count );
+						} else {
+							esc_html_e( '(No reviews)', 'coffee-cafe-corner' );
+						}
+						?>
+					</span>
+				</div>
+				<div class="quills-coffee-card-price">
+					<?php echo esc_html( $price_display ); ?>
+				</div>
+			</div>
+		</article>
+		<?php
 	}
 }
 

@@ -1821,3 +1821,681 @@ body.quills-body {
         grid-template-columns: 1fr;
     }
 }
+
+/* ========================================================
+   QUILLS COFFEE ENHANCED SINGLE PRODUCT & REVIEWS (IMAGES 2-5)
+   ======================================================== */
+
+body.quills-single-product-page {
+    background-color: #faf7f2;
+}
+
+.quills-separator-line {
+    width: 100%;
+    height: 1px;
+    background-color: #e2ded7;
+    margin: 18px 0;
+}
+
+/* Top Testimonial Slider (Image 2) */
+.quills-sp-quote-slider-section {
+    padding: 16px 0;
+    text-align: center;
+}
+
+.quills-sp-quote-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.quills-sp-slider-arrow {
+    background: transparent;
+    border: none;
+    font-size: 32px;
+    line-height: 1;
+    color: #888;
+    cursor: pointer;
+    padding: 0 16px;
+    transition: color 0.2s ease;
+    user-select: none;
+}
+
+.quills-sp-slider-arrow:hover {
+    color: #1a1a1a;
+}
+
+.quills-sp-quote-content {
+    flex: 1;
+    text-align: center;
+    padding: 0 20px;
+}
+
+.quills-sp-quote-stars {
+    color: #e59819;
+    font-size: 16px;
+    letter-spacing: 2px;
+    margin-bottom: 8px;
+}
+
+.quills-sp-quote-text {
+    font-family: 'Besley', Georgia, serif;
+    font-size: 18px;
+    font-style: italic;
+    color: #1a1a1a;
+    line-height: 1.4;
+    margin: 0 0 8px 0;
+}
+
+.quills-sp-quote-author {
+    font-size: 13.5px;
+    font-style: normal;
+    color: #666;
+    display: block;
+    margin-bottom: 12px;
+}
+
+.quills-sp-slider-dots {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.quills-sp-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background-color: #d1ccbf;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.quills-sp-dot.is-active {
+    background-color: #1a1a1a;
+}
+
+/* Vintage Coffee Roast Label Card (Image 4) */
+.quills-vintage-roast-card {
+    background-color: #faf6ee;
+    border: 2px solid #dc482d;
+    border-radius: 4px;
+    overflow: hidden;
+    margin-top: 24px;
+    box-shadow: 0 4px 12px rgba(220, 72, 45, 0.08);
+}
+
+.quills-roast-card-header {
+    background-color: #dc482d;
+    color: #ffffff;
+    padding: 10px 16px;
+    text-align: center;
+}
+
+.quills-roast-card-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 34px;
+    font-weight: 800;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: #ffffff;
+    margin: 0;
+    line-height: 1;
+}
+
+.quills-roast-card-body {
+    display: grid;
+    grid-template-columns: 1.45fr 1fr;
+    border: 1px solid #dc482d;
+    margin: 10px;
+    background-color: #faf6ee;
+}
+
+.quills-roast-card-left {
+    border-right: 1px solid #dc482d;
+}
+
+.quills-roast-field {
+    padding: 8px 12px;
+    border-bottom: 1px solid #dc482d;
+}
+
+.quills-roast-field:last-child {
+    border-bottom: none;
+}
+
+.quills-roast-field-label {
+    display: block;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    color: #333;
+    margin-bottom: 2px;
+}
+
+.quills-roast-field-val {
+    font-family: 'Besley', Georgia, serif;
+    font-size: 13.5px;
+    color: #1a1a1a;
+    line-height: 1.35;
+}
+
+.quills-roast-field-val.is-italic {
+    font-style: italic;
+    font-weight: 600;
+}
+
+.quills-roast-field-val.is-date {
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 16px;
+    font-weight: 700;
+    color: #dc482d;
+}
+
+.quills-roast-field-split {
+    display: flex;
+}
+
+.quills-roast-field-sub {
+    flex: 1;
+    padding: 8px 12px;
+}
+
+.quills-roast-field-sub:first-child {
+    border-right: 1px solid #dc482d;
+}
+
+.quills-roast-indicators {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin-top: 4px;
+}
+
+.quills-roast-dot-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: 'Besley', Georgia, serif;
+    font-style: italic;
+    font-size: 13.5px;
+    color: #1a1a1a;
+    cursor: default;
+}
+
+.quills-roast-circle {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    border: 1.5px solid #dc482d;
+    display: inline-block;
+    box-sizing: border-box;
+}
+
+.quills-roast-dot-item.is-checked .quills-roast-circle {
+    background-color: #dc482d;
+}
+
+.quills-roast-card-footer {
+    background-color: #dc482d;
+    color: #ffffff;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-align: center;
+    padding: 6px 12px;
+}
+
+.quills-gallery-lifestyle-box {
+    margin-top: 16px;
+    border-radius: 6px;
+    overflow: hidden;
+    max-height: 260px;
+}
+
+.quills-lifestyle-photo {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+/* Variant & Purchase Box Enhancements (Image 3) */
+.quills-product-details .quills-product-title {
+    font-family: 'Besley', Georgia, serif;
+    font-size: 32px;
+    font-weight: 700;
+    font-style: italic;
+    color: #1a1a1a;
+    line-height: 1.25;
+    margin: 0 0 10px 0;
+}
+
+.quills-product-details .quills-rating-badge {
+    margin-bottom: 14px;
+}
+
+.quills-product-details .quills-rating-badge .quills-stars {
+    color: #e59819;
+    font-size: 16px;
+    letter-spacing: 2px;
+}
+
+.quills-product-details .quills-rating-reviews {
+    font-family: 'Inter', sans-serif;
+    font-size: 13.5px;
+    color: #555;
+    margin-left: 6px;
+}
+
+.quills-product-details .quills-price-box {
+    margin-bottom: 20px;
+}
+
+.quills-product-details .quills-price-current {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 26px;
+    font-weight: 700;
+    color: #1a1a1a;
+}
+
+.quills-option-group {
+    margin-bottom: 18px;
+}
+
+.quills-option-group .quills-section-label {
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    color: #222;
+    margin-bottom: 8px;
+}
+
+.quills-pills-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.quills-pill-btn {
+    padding: 7px 14px;
+    background-color: transparent;
+    border: 1px solid #c8c4bc;
+    border-radius: 4px;
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    color: #222;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.quills-pill-btn:hover {
+    border-color: #1a1a1a;
+}
+
+.quills-pill-btn.active {
+    border-color: #1a1a1a;
+    border-width: 1.5px;
+    font-weight: 700;
+    color: #1a1a1a;
+    background-color: transparent;
+}
+
+/* Subscription Toggle Accordion (Image 3) */
+.quills-subscription-toggle {
+    border: 1px solid #dedad2;
+    border-radius: 6px;
+    overflow: hidden;
+    margin: 24px 0 20px 0;
+    background-color: #ffffff;
+}
+
+.quills-sub-option {
+    display: block;
+    padding: 14px 18px;
+    border-bottom: 1px solid #dedad2;
+    cursor: pointer;
+    transition: background-color 0.15s ease;
+}
+
+.quills-sub-option:last-child {
+    border-bottom: none;
+}
+
+.quills-sub-option.active {
+    background-color: #fbf9f5;
+}
+
+.quills-sub-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.quills-radio-custom {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    border: 1.5px solid #888;
+    margin-right: 12px;
+    position: relative;
+    flex-shrink: 0;
+}
+
+.quills-sub-option.active .quills-radio-custom {
+    border-color: #1a1a1a;
+}
+
+.quills-sub-option.active .quills-radio-custom::after {
+    content: '';
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background-color: #1a1a1a;
+}
+
+.quills-sub-title-wrap {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-grow: 1;
+}
+
+.quills-sub-title {
+    font-family: 'Besley', Georgia, serif;
+    font-size: 15px;
+    font-weight: 700;
+    color: #1a1a1a;
+}
+
+.quills-badge-save-v2 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    color: #2e7d32;
+    background-color: #eaf5ea;
+    padding: 2px 8px;
+    border-radius: 4px;
+}
+
+.quills-sub-price {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    color: #1a1a1a;
+}
+
+.quills-sub-price small {
+    font-size: 12px;
+    font-weight: 400;
+    color: #666;
+}
+
+.quills-sub-price del {
+    color: #888;
+    font-weight: 500;
+    margin-right: 4px;
+}
+
+.quills-sub-drawer {
+    padding-top: 14px;
+    margin-top: 12px;
+    border-top: 1px dashed #dcd6cb;
+}
+
+.quills-freq-headline {
+    font-family: 'Inter', sans-serif;
+    font-size: 12.5px;
+    font-weight: 600;
+    color: #555;
+    margin-bottom: 8px;
+}
+
+.quills-freq-pills-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 12px;
+}
+
+.quills-freq-pill {
+    padding: 6px 12px;
+    background-color: #ffffff;
+    border: 1px solid #c8c4bc;
+    border-radius: 4px;
+    font-family: 'Inter', sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    color: #333;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.quills-freq-pill.is-selected {
+    background-color: #1a1a1a;
+    border-color: #1a1a1a;
+    color: #ffffff;
+    font-weight: 600;
+}
+
+.quills-sub-perks-box {
+    background-color: #ffffff;
+    border: 1px solid #e8e4dc;
+    border-radius: 4px;
+    padding: 10px 14px;
+}
+
+.quills-perk-item {
+    font-family: 'Inter', sans-serif;
+    font-size: 12.5px;
+    color: #333;
+    margin-bottom: 4px;
+    line-height: 1.4;
+}
+
+.quills-perk-item:last-child {
+    margin-bottom: 0;
+}
+
+.quills-perk-item .sub-note {
+    font-size: 11px;
+    color: #777;
+}
+
+.quills-dollar-icon {
+    display: inline-block;
+    font-weight: 700;
+}
+
+/* Customer Reviews Section (Image 5) */
+.quills-reviews-section-v2 {
+    padding: 50px 0 80px 0;
+    border-top: 1px solid #e2ded7;
+    background-color: #faf7f2;
+}
+
+.quills-reviews-header-v2 {
+    margin-bottom: 24px;
+}
+
+.quills-reviews-title-v2 {
+    font-family: 'Besley', Georgia, serif;
+    font-size: 22px;
+    font-weight: 700;
+    color: #1a1a1a;
+    margin: 0 0 16px 0;
+}
+
+.quills-reviews-toolbar-v2 {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 16px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid #e2ded7;
+}
+
+.quills-reviews-stats-badge {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: 'Inter', sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    color: #1a1a1a;
+}
+
+.quills-reviews-stats-badge .quills-reviews-avg {
+    font-size: 18px;
+    font-weight: 800;
+}
+
+.quills-reviews-stats-badge .quills-reviews-count-label {
+    font-size: 14px;
+    font-weight: 500;
+    color: #555;
+}
+
+.quills-reviews-trophy,
+.quills-reviews-badge-circle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    font-size: 12px;
+    border: 1px solid #c8c4bc;
+}
+
+.quills-reviews-actions-right {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.quills-btn-write-review-v2 {
+    background-color: #4a6750;
+    color: #ffffff;
+    border: none;
+    border-radius: 4px;
+    padding: 9px 20px;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.quills-btn-write-review-v2:hover {
+    background-color: #3b5440;
+}
+
+.quills-review-icon-btn {
+    background: transparent;
+    border: 1px solid #1a1a1a;
+    border-radius: 4px;
+    width: 36px;
+    height: 36px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: #1a1a1a;
+    transition: background-color 0.15s ease;
+}
+
+.quills-review-icon-btn:hover {
+    background-color: #eae6dd;
+}
+
+.quills-reviews-list-v2 {
+    display: flex;
+    flex-direction: column;
+}
+
+.quills-review-item-v2 {
+    padding: 22px 0;
+    border-bottom: 1px solid #e4dfd7;
+}
+
+.quills-review-item-v2:last-child {
+    border-bottom: none;
+}
+
+.quills-review-item-stars {
+    color: #4a6750;
+    font-size: 18px;
+    letter-spacing: 2px;
+    margin-bottom: 8px;
+}
+
+.quills-review-item-stars .filled {
+    color: #4a6750;
+}
+
+.quills-review-item-stars .empty {
+    color: #d8d3c8;
+}
+
+.quills-review-item-author-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: 'Inter', sans-serif;
+    font-size: 13.5px;
+    margin-bottom: 10px;
+}
+
+.quills-author-avatar-circle {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background-color: #e4dfd7;
+    color: #1a1a1a;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 11px;
+}
+
+.quills-author-name-text {
+    font-weight: 700;
+    color: #1a1a1a;
+}
+
+.quills-verified-pill {
+    border: 1px solid #1a1a1a;
+    border-radius: 12px;
+    padding: 1px 7px;
+    font-size: 10.5px;
+    font-weight: 600;
+    color: #1a1a1a;
+    line-height: 1.2;
+}
+
+.quills-review-date-text {
+    color: #777;
+    font-size: 12px;
+}
+
+.quills-review-item-text {
+    font-family: 'Besley', Georgia, serif;
+    font-size: 14.5px;
+    line-height: 1.55;
+    color: #1a1a1a;
+}

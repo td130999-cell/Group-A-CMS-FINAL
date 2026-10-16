@@ -326,56 +326,7 @@ $total_selected = count( $url_processes ) + count( $url_roasts ) + count( $url_t
 					if ( $query->have_posts() ) :
 						while ( $query->have_posts() ) :
 							$query->the_post();
-							$product_id    = get_the_ID();
-							$title         = get_the_title();
-							$price_display = get_post_meta( $product_id, '_price_display', true );
-							if ( empty( $price_display ) ) {
-								$price         = get_post_meta( $product_id, '_price', true );
-								$price_display = $price ? '$' . number_format( (float) $price, 2 ) : 'FROM $20.00';
-							}
-							$rating        = (float) get_post_meta( $product_id, '_wc_average_rating', true );
-							$review_count  = (int) get_post_meta( $product_id, '_wc_review_count', true );
-							$image_url     = Coffee_Cafe_Corner_Coffee_DB::get_product_image_url( $product_id );
-							?>
-							<article class="quills-coffee-card">
-								<div class="quills-coffee-card-media">
-									<a href="<?php the_permalink(); ?>" class="quills-coffee-card-link">
-										<img src="<?php echo esc_url( $image_url ); ?>" alt="<?php echo esc_attr( $title ); ?>" class="quills-coffee-card-img" loading="lazy" />
-									</a>
-								</div>
-								<div class="quills-coffee-card-content">
-									<h3 class="quills-coffee-card-title">
-										<a href="<?php the_permalink(); ?>"><?php echo esc_html( $title ); ?></a>
-									</h3>
-									<div class="quills-coffee-card-rating">
-										<span class="quills-stars">
-											<?php
-											$rounded = round( $rating );
-											for ( $i = 1; $i <= 5; $i++ ) {
-												if ( $i <= $rounded && $rating > 0 ) {
-													echo '<span class="quills-star quills-star--filled">★</span>';
-												} else {
-													echo '<span class="quills-star quills-star--empty">☆</span>';
-												}
-											}
-											?>
-										</span>
-										<span class="quills-review-count">
-											<?php
-											if ( $review_count > 0 ) {
-												printf( esc_html__( '(%d reviews)', 'coffee-cafe-corner' ), (int) $review_count );
-											} else {
-												esc_html_e( '(No reviews)', 'coffee-cafe-corner' );
-											}
-											?>
-										</span>
-									</div>
-									<div class="quills-coffee-card-price">
-										<?php echo esc_html( $price_display ); ?>
-									</div>
-								</div>
-							</article>
-							<?php
+							Coffee_Cafe_Corner_Coffee_DB::render_coffee_card( get_the_ID() );
 						endwhile;
 						wp_reset_postdata();
 					else :

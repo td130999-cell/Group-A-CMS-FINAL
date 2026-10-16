@@ -59,10 +59,58 @@
             $('#quills-selected-grind-label').text($(this).data('grind'));
         });
 
-        // Purchase Type (Subscription Radio)
-        $('input[name="quills_purchase_type"]').on('change', function() {
+        // Purchase Type (Subscription Radio & Drawer)
+        $('.quills-sub-option').on('click', function() {
+            var $opt = $(this);
+            var $radio = $opt.find('input[type="radio"]');
+            $radio.prop('checked', true);
             $('.quills-sub-option').removeClass('active');
-            $(this).closest('.quills-sub-option').addClass('active');
+            $opt.addClass('active');
+
+            if ($radio.val() === 'subscribe') {
+                $('#quills-sub-drawer').slideDown(200);
+            } else {
+                $('#quills-sub-drawer').slideUp(200);
+            }
+        });
+
+        // Frequency Pill Click
+        $('.quills-freq-pill').on('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            $('.quills-freq-pill').removeClass('is-selected');
+            $(this).addClass('is-selected');
+        });
+
+        // Top Testimonial Slider (Image 2)
+        var spQuotes = [
+            { text: '"Inkwell is roasted to perfection, tastes great every time."', author: '— Nathan Rzasa' },
+            { text: '"One cup is all it took, and we were hooked! Our daily go-to coffee."', author: '— Brianne E.' },
+            { text: '"Quills has the best coffee and exceptional roaster quality! 5 stars!!!"', author: '— Tracy S.' }
+        ];
+        var curSpQuote = 0;
+
+        function setSpQuote(idx) {
+            curSpQuote = (idx + spQuotes.length) % spQuotes.length;
+            var q = spQuotes[curSpQuote];
+            $('#quills-sp-quote-text').fadeOut(120, function() {
+                $(this).text(q.text).fadeIn(120);
+            });
+            $('#quills-sp-quote-author').fadeOut(120, function() {
+                $(this).text(q.author).fadeIn(120);
+            });
+            $('.quills-sp-dot').removeClass('is-active').eq(curSpQuote).addClass('is-active');
+        }
+
+        $('#quills-sp-prev').on('click', function() {
+            setSpQuote(curSpQuote - 1);
+        });
+        $('#quills-sp-next').on('click', function() {
+            setSpQuote(curSpQuote + 1);
+        });
+        $('.quills-sp-dot').on('click', function() {
+            var idx = parseInt($(this).data('idx'), 10) || 0;
+            setSpQuote(idx);
         });
 
         // Quantity Stepper
@@ -212,29 +260,22 @@
                         var author = $('#quills-review-author').val() || 'Customer';
                         var title = $('#quills-review-title').val() || '';
                         var content = $('#quills-review-content').val() || '';
-                        var brew = $('#quills-review-brew').val() || 'Pour Over';
-
+                        var initial = author.charAt(0).toUpperCase() || 'C';
+                        var filledStars = '<span class="star filled">★</span>'.repeat(rating);
+                        var emptyStars = '<span class="star empty">★</span>'.repeat(5 - rating);
                         var newCardHtml = `
-                            <div class="quills-review-card" data-rating="${rating}" data-helpful="1" style="border-left: 4px solid #2e7d32;">
-                                <div class="quills-review-card__header">
-                                    <div class="quills-author-box">
-                                        <span class="quills-author-name">${author}</span>
-                                        <span class="quills-verified-badge">
-                                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-                                            Verified Buyer
-                                        </span>
-                                    </div>
-                                    <div class="quills-review-date">Just now</div>
+                            <div class="quills-review-item-v2" data-rating="${rating}" style="background-color: #f7f3ea; padding: 16px; border-radius: 6px;">
+                                <div class="quills-review-item-stars">
+                                    ${filledStars}${emptyStars}
                                 </div>
-                                <div class="quills-review-card__meta">
-                                    <div class="quills-stars quills-stars--card">${starsStr}</div>
-                                    <span class="quills-brew-pill">Brewed with: ${brew}</span>
+                                <div class="quills-review-item-author-row">
+                                    <span class="quills-author-avatar-circle">${initial}</span>
+                                    <span class="quills-author-name-text">${author}</span>
+                                    <span class="quills-verified-pill">Verified</span>
+                                    <span class="quills-review-date-text">Just now</span>
                                 </div>
-                                <h4 class="quills-review-item-title">${title}</h4>
-                                <div class="quills-review-item-body"><p>${content}</p></div>
-                                <div class="quills-review-card__footer">
-                                    <span class="quills-helpful-label">Was this review helpful?</span>
-                                    <button type="button" class="quills-btn-vote">👍 <span class="vote-count">1</span></button>
+                                <div class="quills-review-item-text">
+                                    ${content}
                                 </div>
                             </div>
                         `;

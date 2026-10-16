@@ -644,6 +644,130 @@
     transform: scale(1.03);
 }
 
+/* Hover Tasting Details Card (Rollover) matching Image 1 & Quills Coffee */
+.quills-coffee-card-media .rollover_inner {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(18, 18, 18, 0.86); /* Dark semi-transparent matching Image 1 */
+    padding: 22px 18px 16px 18px;
+    color: #ffffff;
+    box-sizing: border-box;
+    border-radius: 12px;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.2s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.2s ease;
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+}
+
+.quills-coffee-card:hover .rollover_inner,
+.quills-coffee-card.is-hovered .rollover_inner,
+.quills-coffee-card-media:hover .rollover_inner {
+    opacity: 1;
+    visibility: visible;
+}
+
+.quills-coffee-card-media .rollover_wrapper {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    width: 100%;
+}
+
+.quills-coffee-card-media .rollover_top {
+    display: block;
+    border-bottom: 1.5px solid #ffffff;
+    padding-bottom: 8px;
+    margin-bottom: 12px;
+}
+
+.quills-coffee-card-media .rollover_top .collection_name {
+    display: none;
+}
+
+.quills-coffee-card-media .rollover_top .prod_title {
+    font-family: 'Besley', 'Clarendon URW Extra Narrow', Georgia, serif;
+    font-weight: 700;
+    font-style: italic;
+    font-size: 17.5px;
+    color: #ffffff;
+    display: block;
+    margin: 0;
+    line-height: 1.25;
+    letter-spacing: 0.2px;
+}
+
+.quills-coffee-card-media .rollover_content {
+    flex: 1 1 auto;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255,255,255,0.3) transparent;
+    padding-right: 2px;
+}
+
+.quills-coffee-card-media .rollover_content p {
+    margin: 0 0 8px 0;
+    font-size: 14px;
+    line-height: 1.4;
+    font-family: 'Inter', -apple-system, sans-serif;
+    color: #ffffff;
+}
+
+.quills-coffee-card-media .rollover_content p em,
+.quills-coffee-card-media .rollover_content p em strong {
+    font-family: 'Inter', -apple-system, sans-serif;
+    font-style: italic;
+    font-weight: 600;
+    color: #ffffff;
+    display: block;
+    margin-bottom: 10px;
+    font-size: 14px;
+    line-height: 1.35;
+}
+
+.quills-coffee-card-media .rollover_content strong {
+    font-weight: 700;
+    color: #ffffff;
+}
+
+.quills-coffee-card-media .rollover_bottom {
+    margin-top: auto;
+    padding-top: 10px;
+}
+
+.quills-coffee-card-media .quills-hover-add-cart {
+    width: 100%;
+    height: 44px;
+    background-color: #d6c38a;
+    color: #1a1a1a;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+}
+
+.quills-coffee-card-media .quills-hover-add-cart:hover {
+    background-color: #ceb775;
+    transform: translateY(-1px);
+}
+
+.quills-coffee-card-media .quills-hover-add-cart:active {
+    transform: translateY(0);
+}
+
 .quills-coffee-card-content {
     display: flex;
     flex-direction: column;
