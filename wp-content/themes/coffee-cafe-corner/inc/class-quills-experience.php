@@ -107,7 +107,7 @@ class Quills_Coffee_Experience {
             'quills-coffee-style',
             get_template_directory_uri() . '/assets/css/quills-coffee.css',
             [],
-            '1.1.5'
+            '1.1.6'
         );
 
         // Quills JS
