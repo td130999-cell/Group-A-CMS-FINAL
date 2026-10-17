@@ -79,23 +79,36 @@ $gallery_urls = Coffee_Cafe_Corner_Coffee_DB::get_product_gallery_urls($id);
 
 $all_images = array_unique(array_filter(array_merge([$main_img_url], $gallery_urls)));
 
-// Database review comments (real reviews from wp_comments)
-$db_comments = get_comments([
-    'post_id' => $id,
-    'status'  => 'approve',
-    'type'    => 'review',
-    'orderby' => 'comment_date',
-    'order'   => 'DESC'
-]);
-$review_count = !empty($db_comments) ? count($db_comments) : 0;
-$average_rating = '0.0';
-if ($review_count > 0) {
-    $total_stars = 0;
-    foreach ($db_comments as $comm) {
-        $c_r = (int)get_comment_meta($comm->comment_ID, 'rating', true) ?: 5;
-        $total_stars += $c_r;
+// Database review comments (real reviews from wp_comments with transient caching)
+$reviews_cache_key = 'quills_sp_reviews_' . $id;
+$cached_reviews    = get_transient( $reviews_cache_key );
+if ( false !== $cached_reviews && is_array( $cached_reviews ) ) {
+    $db_comments    = $cached_reviews['comments'];
+    $review_count   = $cached_reviews['count'];
+    $average_rating = $cached_reviews['avg'];
+} else {
+    $db_comments = get_comments([
+        'post_id' => $id,
+        'status'  => 'approve',
+        'type'    => 'review',
+        'orderby' => 'comment_date',
+        'order'   => 'DESC'
+    ]);
+    $review_count = !empty($db_comments) ? count($db_comments) : 0;
+    $average_rating = '0.0';
+    if ($review_count > 0) {
+        $total_stars = 0;
+        foreach ($db_comments as $comm) {
+            $c_r = (int)get_comment_meta($comm->comment_ID, 'rating', true) ?: 5;
+            $total_stars += $c_r;
+        }
+        $average_rating = number_format(round($total_stars / $review_count, 1), 1, '.', '');
     }
-    $average_rating = number_format(round($total_stars / $review_count, 1), 1, '.', '');
+    set_transient( $reviews_cache_key, [
+        'comments' => $db_comments,
+        'count'    => $review_count,
+        'avg'      => $average_rating
+    ], 12 * HOUR_IN_SECONDS );
 }
 
 ?><!DOCTYPE html>

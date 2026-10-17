@@ -865,6 +865,21 @@ class Coffee_Cafe_Corner_Coffee_DB {
         return new WP_Query( $args );
     }
     public static function render_coffee_card( $product_id ) {
+        static $mem_cache = array();
+        if ( isset( $mem_cache[ $product_id ] ) ) {
+            echo $mem_cache[ $product_id ];
+            return;
+        }
+
+        $cache_key = 'quills_card_html_' . $product_id;
+        $cached    = get_transient( $cache_key );
+        if ( false !== $cached && ! empty( $cached ) ) {
+            $mem_cache[ $product_id ] = $cached;
+            echo $cached;
+            return;
+        }
+
+        ob_start();
         $product = function_exists( 'wc_get_product' ) ? wc_get_product( $product_id ) : null;
         if ( ! $product ) {
             $post = get_post( $product_id );
@@ -955,6 +970,10 @@ class Coffee_Cafe_Corner_Coffee_DB {
             </div>
         </article>
         <?php
+        $card_html = ob_get_clean();
+        set_transient( $cache_key, $card_html, 12 * HOUR_IN_SECONDS );
+        $mem_cache[ $product_id ] = $card_html;
+        echo $card_html;
     }
 
 
