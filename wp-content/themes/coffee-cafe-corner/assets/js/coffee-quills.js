@@ -252,8 +252,8 @@
         }
 
         // 7a. Hover Card Navigation: Clicking anywhere outside ADD TO CART navigates to single product detail page
-        $(document).on('click', '.rollover_inner', function(e) {
-            if ($(e.target).closest('.quills-hover-add-cart').length) {
+        $(document).off('click.quillsRollover', '.rollover_inner').on('click.quillsRollover', '.rollover_inner', function(e) {
+            if ($(e.target).closest('.quills-hover-add-cart, .rollover_bottom').length) {
                 return; // Handled by 7b
             }
             var permalink = $(this).data('permalink') || $(this).closest('.quills-coffee-card').find('.quills-coffee-card-link').attr('href');
@@ -263,7 +263,21 @@
         });
 
         // 7b. Open Quick Shop Drawer (Image 2)
+        function ensureQuickShopContainers() {
+            if ($('#quills-quick-shop-overlay').length === 0) {
+                $('body').append('<div class="quills-quick-shop-overlay" id="quills-quick-shop-overlay" aria-hidden="true"></div>');
+            }
+            if ($('#quills-quick-shop-drawer').length === 0) {
+                $('body').append(
+                    '<div class="quills-quick-shop-drawer" id="quills-quick-shop-drawer" role="dialog" aria-modal="true" aria-hidden="true">' +
+                        '<div class="quills-quick-shop-content" id="quills-quick-shop-content"></div>' +
+                    '</div>'
+                );
+            }
+        }
+
         function openQuickShopDrawer(productId) {
+            ensureQuickShopContainers();
             var $drawer = $('#quills-quick-shop-drawer');
             var $overlay = $('#quills-quick-shop-overlay');
             var $content = $('#quills-quick-shop-content');
@@ -310,17 +324,22 @@
         }
 
         // Trigger Quick Shop Drawer on card button click
-        $(document).on('click', '.quills-hover-add-cart', function(e) {
+        $(document).off('click.quillsQS', '.quills-hover-add-cart').on('click.quillsQS', '.quills-hover-add-cart', function(e) {
             e.preventDefault();
             e.stopPropagation();
+            e.stopImmediatePropagation();
             var productId = $(this).data('product-id');
+            if (!productId) {
+                productId = $(this).closest('.quills-coffee-card').data('product-id');
+            }
             if (productId) {
                 openQuickShopDrawer(productId);
             }
+            return false;
         });
 
         // Close Quick Shop Drawer Handlers
-        $(document).on('click', '#quills-qs-close, #quills-quick-shop-overlay', function(e) {
+        $(document).off('click.quillsQSClose', '#quills-qs-close, #quills-quick-shop-overlay').on('click.quillsQSClose', '#quills-qs-close, #quills-quick-shop-overlay', function(e) {
             e.preventDefault();
             closeQuickShopDrawer();
         });

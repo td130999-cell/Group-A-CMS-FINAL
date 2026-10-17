@@ -562,7 +562,7 @@
     opacity: 0;
     visibility: hidden;
     transition: opacity 0.15s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.15s ease;
-    pointer-events: none;
+    pointer-events: auto;
     z-index: 10;
 }
 
