@@ -37,15 +37,20 @@ class Coffee_Cafe_Corner_Brew_Gear_DB {
 	public static function init() {
 		add_action( 'init', array( __CLASS__, 'ensure_database_records' ) );
 		add_action( 'customize_register', array( __CLASS__, 'register_customizer_settings' ) );
+		add_action( 'customize_save_after', array( __CLASS__, 'sync_customizer_products' ) );
 	}
 
 	/**
 	 * Ensure Category, Products, and Page exist in the WordPress database
 	 */
 	public static function ensure_database_records() {
+		if ( get_option( 'coffee_cafe_corner_brew_gear_seeded' ) ) {
+			return;
+		}
 		self::ensure_category();
 		self::ensure_page();
 		self::ensure_products();
+		update_option( 'coffee_cafe_corner_brew_gear_seeded', 1 );
 	}
 
 	/**
@@ -265,15 +270,37 @@ class Coffee_Cafe_Corner_Brew_Gear_DB {
 	}
 
 	/**
-	 * Get product image URL (from post meta, thumbnail, or theme assets)
+	 * Get product image URL (from Customizer, post meta, thumbnail, or theme assets)
 	 *
 	 * @param int $product_id
 	 * @return string Image URL
 	 */
 	public static function get_product_image_url( $product_id ) {
+		// 0. Check Customizer options first
+		$slug = get_post_field( 'post_name', $product_id );
+		if ( strpos( $slug, 'baratza' ) !== false ) {
+			$opt = get_option( 'brew_gear_product_1_image' );
+			if ( ! empty( $opt ) ) {
+				return $opt;
+			}
+		} elseif ( strpos( $slug, 'bambino' ) !== false ) {
+			$opt = get_option( 'brew_gear_product_2_image' );
+			if ( ! empty( $opt ) ) {
+				return $opt;
+			}
+		} elseif ( strpos( $slug, 'luxe' ) !== false ) {
+			$opt = get_option( 'brew_gear_product_3_image' );
+			if ( ! empty( $opt ) ) {
+				return $opt;
+			}
+		}
+
 		// 1. Check custom theme meta
 		$custom_image = get_post_meta( $product_id, '_brew_gear_image', true );
 		if ( ! empty( $custom_image ) ) {
+			if ( filter_var( $custom_image, FILTER_VALIDATE_URL ) ) {
+				return $custom_image;
+			}
 			$theme_file = get_template_directory() . '/assets/images/brew-gear/' . $custom_image;
 			if ( file_exists( $theme_file ) ) {
 				return get_template_directory_uri() . '/assets/images/brew-gear/' . $custom_image;
@@ -289,7 +316,6 @@ class Coffee_Cafe_Corner_Brew_Gear_DB {
 		}
 
 		// 3. Fallback based on slug
-		$slug = get_post_field( 'post_name', $product_id );
 		if ( strpos( $slug, 'baratza' ) !== false ) {
 			return get_template_directory_uri() . '/assets/images/brew-gear/baratza-encore-grinder.png';
 		}
@@ -304,7 +330,7 @@ class Coffee_Cafe_Corner_Brew_Gear_DB {
 	}
 
 	/**
-	 * Register Customizer Settings for database-backed banner management
+	 * Register Customizer Settings for database-backed banner, label, and product management
 	 *
 	 * @param WP_Customize_Manager $wp_customize
 	 */
@@ -312,21 +338,213 @@ class Coffee_Cafe_Corner_Brew_Gear_DB {
 		$wp_customize->add_section( 'coffee_cafe_corner_brew_gear_section', array(
 			'title'       => esc_html__( 'Brew Gear Collection Settings', 'coffee-cafe-corner' ),
 			'priority'    => 125,
-			'description' => esc_html__( 'Manage Brew Gear collection banner title, description, and settings saved in database.', 'coffee-cafe-corner' ),
+			'description' => esc_html__( 'Manage Brew Gear banner, labels, and products saved in database.', 'coffee-cafe-corner' ),
 		) );
 
+		// 1. Banner Title
 		$wp_customize->add_setting( 'brew_gear_banner_title', array(
 			'default'           => 'Brew Gear',
 			'sanitize_callback' => 'sanitize_text_field',
 			'type'              => 'option',
 		) );
-
 		$wp_customize->add_control( 'brew_gear_banner_title', array(
 			'label'    => esc_html__( 'Banner Title', 'coffee-cafe-corner' ),
 			'section'  => 'coffee_cafe_corner_brew_gear_section',
 			'settings' => 'brew_gear_banner_title',
 			'type'     => 'text',
 		) );
+
+		// 2. Banner Image
+		$wp_customize->add_setting( 'brew_gear_banner_image', array(
+			'default'           => '',
+			'sanitize_callback' => 'esc_url_raw',
+			'type'              => 'option',
+		) );
+		$wp_customize->add_control( new WP_Customize_Image_Control( $wp_customize, 'brew_gear_banner_image', array(
+			'label'    => esc_html__( 'Banner Background Image', 'coffee-cafe-corner' ),
+			'section'  => 'coffee_cafe_corner_brew_gear_section',
+			'settings' => 'brew_gear_banner_image',
+		) ) );
+
+		// 3. Sort By Label
+		$wp_customize->add_setting( 'brew_gear_sort_label', array(
+			'default'           => 'Sort by:',
+			'sanitize_callback' => 'sanitize_text_field',
+			'type'              => 'option',
+		) );
+		$wp_customize->add_control( 'brew_gear_sort_label', array(
+			'label'    => esc_html__( 'Sort By Label', 'coffee-cafe-corner' ),
+			'section'  => 'coffee_cafe_corner_brew_gear_section',
+			'settings' => 'brew_gear_sort_label',
+			'type'     => 'text',
+		) );
+
+		// 4. Add To Cart Button Text
+		$wp_customize->add_setting( 'brew_gear_add_to_cart_text', array(
+			'default'           => 'ADD TO CART',
+			'sanitize_callback' => 'sanitize_text_field',
+			'type'              => 'option',
+		) );
+		$wp_customize->add_control( 'brew_gear_add_to_cart_text', array(
+			'label'    => esc_html__( 'Add to Cart Button Text', 'coffee-cafe-corner' ),
+			'section'  => 'coffee_cafe_corner_brew_gear_section',
+			'settings' => 'brew_gear_add_to_cart_text',
+			'type'     => 'text',
+		) );
+
+		// 5. Product 1 (Baratza Encore Grinder)
+		$wp_customize->add_setting( 'brew_gear_product_1_title', array(
+			'default'           => 'Baratza Encore Grinder',
+			'sanitize_callback' => 'sanitize_text_field',
+			'type'              => 'option',
+		) );
+		$wp_customize->add_control( 'brew_gear_product_1_title', array(
+			'label'       => esc_html__( 'Product 1 Title', 'coffee-cafe-corner' ),
+			'section'     => 'coffee_cafe_corner_brew_gear_section',
+			'settings'    => 'brew_gear_product_1_title',
+			'type'        => 'text',
+		) );
+
+		$wp_customize->add_setting( 'brew_gear_product_1_price', array(
+			'default'           => '149.00',
+			'sanitize_callback' => 'sanitize_text_field',
+			'type'              => 'option',
+		) );
+		$wp_customize->add_control( 'brew_gear_product_1_price', array(
+			'label'    => esc_html__( 'Product 1 Price ($)', 'coffee-cafe-corner' ),
+			'section'  => 'coffee_cafe_corner_brew_gear_section',
+			'settings' => 'brew_gear_product_1_price',
+			'type'     => 'text',
+		) );
+
+		$wp_customize->add_setting( 'brew_gear_product_1_image', array(
+			'default'           => '',
+			'sanitize_callback' => 'esc_url_raw',
+			'type'              => 'option',
+		) );
+		$wp_customize->add_control( new WP_Customize_Image_Control( $wp_customize, 'brew_gear_product_1_image', array(
+			'label'    => esc_html__( 'Product 1 Image', 'coffee-cafe-corner' ),
+			'section'  => 'coffee_cafe_corner_brew_gear_section',
+			'settings' => 'brew_gear_product_1_image',
+		) ) );
+
+		// 6. Product 2 (Breville Bambino Espresso Machine)
+		$wp_customize->add_setting( 'brew_gear_product_2_title', array(
+			'default'           => 'Breville Bambino Espresso Machine',
+			'sanitize_callback' => 'sanitize_text_field',
+			'type'              => 'option',
+		) );
+		$wp_customize->add_control( 'brew_gear_product_2_title', array(
+			'label'       => esc_html__( 'Product 2 Title', 'coffee-cafe-corner' ),
+			'section'     => 'coffee_cafe_corner_brew_gear_section',
+			'settings'    => 'brew_gear_product_2_title',
+			'type'        => 'text',
+		) );
+
+		$wp_customize->add_setting( 'brew_gear_product_2_price', array(
+			'default'           => '299.00',
+			'sanitize_callback' => 'sanitize_text_field',
+			'type'              => 'option',
+		) );
+		$wp_customize->add_control( 'brew_gear_product_2_price', array(
+			'label'    => esc_html__( 'Product 2 Price ($)', 'coffee-cafe-corner' ),
+			'section'  => 'coffee_cafe_corner_brew_gear_section',
+			'settings' => 'brew_gear_product_2_price',
+			'type'     => 'text',
+		) );
+
+		$wp_customize->add_setting( 'brew_gear_product_2_image', array(
+			'default'           => '',
+			'sanitize_callback' => 'esc_url_raw',
+			'type'              => 'option',
+		) );
+		$wp_customize->add_control( new WP_Customize_Image_Control( $wp_customize, 'brew_gear_product_2_image', array(
+			'label'    => esc_html__( 'Product 2 Image', 'coffee-cafe-corner' ),
+			'section'  => 'coffee_cafe_corner_brew_gear_section',
+			'settings' => 'brew_gear_product_2_image',
+		) ) );
+
+		// 7. Product 3 (Breville Luxe Brewer™ Thermal)
+		$wp_customize->add_setting( 'brew_gear_product_3_title', array(
+			'default'           => 'Breville Luxe Brewer™ Thermal',
+			'sanitize_callback' => 'sanitize_text_field',
+			'type'              => 'option',
+		) );
+		$wp_customize->add_control( 'brew_gear_product_3_title', array(
+			'label'       => esc_html__( 'Product 3 Title', 'coffee-cafe-corner' ),
+			'section'     => 'coffee_cafe_corner_brew_gear_section',
+			'settings'    => 'brew_gear_product_3_title',
+			'type'        => 'text',
+		) );
+
+		$wp_customize->add_setting( 'brew_gear_product_3_price', array(
+			'default'           => '349.00',
+			'sanitize_callback' => 'sanitize_text_field',
+			'type'              => 'option',
+		) );
+		$wp_customize->add_control( 'brew_gear_product_3_price', array(
+			'label'    => esc_html__( 'Product 3 Price ($)', 'coffee-cafe-corner' ),
+			'section'  => 'coffee_cafe_corner_brew_gear_section',
+			'settings' => 'brew_gear_product_3_price',
+			'type'     => 'text',
+		) );
+
+		$wp_customize->add_setting( 'brew_gear_product_3_image', array(
+			'default'           => '',
+			'sanitize_callback' => 'esc_url_raw',
+			'type'              => 'option',
+		) );
+		$wp_customize->add_control( new WP_Customize_Image_Control( $wp_customize, 'brew_gear_product_3_image', array(
+			'label'    => esc_html__( 'Product 3 Image', 'coffee-cafe-corner' ),
+			'section'  => 'coffee_cafe_corner_brew_gear_section',
+			'settings' => 'brew_gear_product_3_image',
+		) ) );
+	}
+
+	/**
+	 * Sync Customizer product changes to WooCommerce database posts & postmeta
+	 */
+	public static function sync_customizer_products() {
+		$items = array(
+			array(
+				'slug'  => 'baratza-encore-grinder',
+				'title' => get_option( 'brew_gear_product_1_title' ),
+				'price' => get_option( 'brew_gear_product_1_price' ),
+				'image' => get_option( 'brew_gear_product_1_image' ),
+			),
+			array(
+				'slug'  => 'breville-bambino-espresso-machine',
+				'title' => get_option( 'brew_gear_product_2_title' ),
+				'price' => get_option( 'brew_gear_product_2_price' ),
+				'image' => get_option( 'brew_gear_product_2_image' ),
+			),
+			array(
+				'slug'  => 'breville-luxe-brewer-thermal',
+				'title' => get_option( 'brew_gear_product_3_title' ),
+				'price' => get_option( 'brew_gear_product_3_price' ),
+				'image' => get_option( 'brew_gear_product_3_image' ),
+			),
+		);
+
+		foreach ( $items as $item ) {
+			$post = get_page_by_path( $item['slug'], OBJECT, 'product' );
+			if ( $post ) {
+				$pid = $post->ID;
+				if ( ! empty( $item['title'] ) && $item['title'] !== $post->post_title ) {
+					wp_update_post( array(
+						'ID'         => $pid,
+						'post_title' => $item['title'],
+					) );
+				}
+				if ( ! empty( $item['price'] ) ) {
+					update_post_meta( $pid, '_price', $item['price'] );
+					update_post_meta( $pid, '_regular_price', $item['price'] );
+				}
+				if ( ! empty( $item['image'] ) ) {
+					update_post_meta( $pid, '_brew_gear_image', $item['image'] );
+				}
+			}
+		}
 	}
 }
 

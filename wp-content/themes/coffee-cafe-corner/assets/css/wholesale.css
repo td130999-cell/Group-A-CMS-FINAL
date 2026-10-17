@@ -170,13 +170,255 @@ body.page-template-page-wholesale,
     box-sizing: border-box;
     margin: 16px 0 60px;
     padding: 0 16px;
-    min-height: 550px;
+    min-height: 380px;
 }
 
 .quills-wholesale-typeform-section [data-tf-live] {
     width: 100%;
     min-height: 550px;
     border: none;
+}
+
+/* ----------------------------------------------------
+   8. Direct Sample Request Card & Interactive Form
+   ---------------------------------------------------- */
+.quills-direct-sample-card {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 20px 0;
+}
+
+.quills-sample-cover {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 40px 16px;
+    box-sizing: border-box;
+}
+
+.quills-sample-title {
+    font-family: 'Clarendon URW Extra Narrow', Georgia, serif;
+    font-weight: 700;
+    font-size: clamp(26px, 2.6vw, 34px);
+    line-height: 1.25;
+    color: #3A3837;
+    margin: 0 0 8px;
+    text-align: center;
+}
+
+.quills-sample-subtitle {
+    font-family: 'Clarendon URW Extra Narrow', Georgia, serif;
+    font-weight: 400;
+    font-size: clamp(15px, 1.2vw, 17px);
+    line-height: 1.4;
+    color: #55524D;
+    margin: 0 0 24px;
+    text-align: center;
+}
+
+.quills-sample-start-btn {
+    background-color: #E25B45;
+    color: #FFFFFF;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    padding: 11px 26px;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(226, 91, 69, 0.28);
+    transition: background-color 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease;
+}
+
+.quills-sample-start-btn:hover {
+    background-color: #C94935;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(226, 91, 69, 0.36);
+}
+
+.quills-sample-start-btn:active {
+    transform: translateY(0);
+}
+
+.quills-sample-time-note {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    font-family: 'Clarendon URW Extra Narrow', Georgia, serif;
+    font-size: 13.5px;
+    color: #736D65;
+    margin-top: 12px;
+}
+
+.quills-sample-clock-icon {
+    stroke: #736D65;
+}
+
+/* Form Wrap (Revealed on click) */
+.quills-sample-form-wrap {
+    max-width: 720px;
+    margin: 0 auto;
+    background: rgba(255, 255, 255, 0.72);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    border-radius: 12px;
+    padding: 32px 28px;
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.05);
+    box-sizing: border-box;
+    animation: quillsFadeIn 0.3s ease-out;
+}
+
+@keyframes quillsFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.quills-sample-form-header {
+    text-align: center;
+    margin-bottom: 24px;
+}
+
+.quills-sample-form-title {
+    font-family: 'Clarendon URW Extra Narrow', Georgia, serif;
+    font-weight: 700;
+    font-size: 26px;
+    color: #3A3837;
+    margin: 0 0 6px;
+}
+
+.quills-sample-form-subtitle {
+    font-family: 'Clarendon URW Extra Narrow', Georgia, serif;
+    font-size: 15px;
+    color: #55524D;
+    margin: 0;
+}
+
+.quills-sample-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+.quills-form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.quills-form-group.full-width {
+    grid-column: 1 / -1;
+}
+
+.quills-form-group label {
+    font-family: 'Clarendon URW Extra Narrow', Georgia, serif;
+    font-size: 14px;
+    font-weight: 700;
+    color: #3A3837;
+    margin-bottom: 6px;
+}
+
+.quills-form-group input,
+.quills-form-group select,
+.quills-form-group textarea {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    font-size: 14.5px;
+    padding: 10px 12px;
+    background: #FFFFFF;
+    border: 1px solid #D4CEBE;
+    border-radius: 6px;
+    color: #262626;
+    outline: none;
+    box-sizing: border-box;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.quills-form-group input:focus,
+.quills-form-group select:focus,
+.quills-form-group textarea:focus {
+    border-color: #3A3837;
+    box-shadow: 0 0 0 3px rgba(58, 56, 55, 0.12);
+}
+
+.quills-form-actions {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 14px;
+}
+
+.quills-form-back-btn {
+    background: transparent;
+    border: 1px solid #D4CEBE;
+    color: #55524D;
+    padding: 10px 20px;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.quills-form-back-btn:hover {
+    background: rgba(0, 0, 0, 0.04);
+    color: #262626;
+}
+
+.quills-sample-submit-btn {
+    background-color: #E25B45;
+    color: #FFFFFF;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    padding: 11px 26px;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(226, 91, 69, 0.25);
+    transition: background-color 0.2s ease, transform 0.15s ease;
+}
+
+.quills-sample-submit-btn:hover {
+    background-color: #C94935;
+    transform: translateY(-1px);
+}
+
+.quills-sample-submit-btn:disabled {
+    opacity: 0.65;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.quills-form-feedback {
+    margin-top: 16px;
+    display: none;
+    padding: 14px 18px;
+    border-radius: 6px;
+    font-size: 14.5px;
+    line-height: 1.45;
+    text-align: center;
+}
+
+.quills-form-feedback.success {
+    display: block;
+    background: #E8F5E9;
+    border: 1px solid #C8E6C9;
+    color: #2E7D32;
+}
+
+.quills-form-feedback.error {
+    display: block;
+    background: #FFEBEE;
+    border: 1px solid #FFCDD2;
+    color: #C62828;
 }
 
 /* ----------------------------------------------------

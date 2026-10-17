@@ -47,6 +47,12 @@ define( 'FS_METHOD', 'direct' );
 define( 'DISABLE_WP_CRON', true );
 
 /**
+ * Disable automatic updater checks in local Docker development to eliminate slow external HTTP calls.
+ */
+define( 'AUTOMATIC_UPDATER_DISABLED', true );
+define( 'WP_AUTO_UPDATE_CORE', false );
+
+/**
  * Handle reverse proxies and SSL termination.
  */
 if ( isset( $_SERVER['HTTP_X_FORWARDED_PROTO'] ) && $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https' ) {

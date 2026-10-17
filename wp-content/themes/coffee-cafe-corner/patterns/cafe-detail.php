@@ -33,10 +33,10 @@ if ( isset( $aliases[ $view ] ) ) {
 $theme_url = trailingslashit( get_template_directory_uri() );
 $img_dir   = $theme_url . 'assets/images/visit/';
 
-// 4. Fetch Cafe Details from Database (wp_postmeta or wp_options)
-$all_cafe_details = get_post_meta( $page_id, '_quills_cafe_details', true );
+// 4. Fetch Cafe Details from Database (wp_options or wp_postmeta)
+$all_cafe_details = get_option( 'quills_cafe_details' );
 if ( empty( $all_cafe_details ) || ! is_array( $all_cafe_details ) ) {
-    $all_cafe_details = get_option( 'quills_cafe_details', array() );
+    $all_cafe_details = get_post_meta( $page_id, '_quills_cafe_details', true );
 }
 
 // Fallback data if database not yet initialized

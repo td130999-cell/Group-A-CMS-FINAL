@@ -77,6 +77,10 @@ class Coffee_Cafe_Corner_Wholesale_DB {
 	 * @return int Page ID
 	 */
 	public static function ensure_database_records() {
+		if ( get_option( 'coffee_cafe_corner_wholesale_seeded' ) ) {
+			return 0;
+		}
+
 		$page = get_page_by_path( self::PAGE_SLUG );
 
 		$defaults = array(
@@ -91,6 +95,13 @@ class Coffee_Cafe_Corner_Wholesale_DB {
 			'_wholesale_video_poster'    => 'michael-video-poster.jpg',
 			'_wholesale_video_subtitle'  => 'and we would love to help you elevate your coffee game.',
 			'_wholesale_typeform_id'     => '01KTS8WAR0STGANR36ZWT3PJAP',
+			'_wholesale_form_mode'          => 'direct',
+			'_wholesale_form_title'         => 'Request your samples',
+			'_wholesale_form_subtitle'      => 'Tell us a little about you and your business',
+			'_wholesale_form_button_text'   => 'Get started',
+			'_wholesale_form_time_estimate' => 'Takes 1 minute',
+			'_wholesale_form_submit_label'  => 'Send Sample Request',
+			'_wholesale_form_success_message' => 'Thank you! Michael will review your details and reach out soon with sample box arrangements.',
 		);
 
 		if ( ! $page ) {
@@ -109,6 +120,7 @@ class Coffee_Cafe_Corner_Wholesale_DB {
 					update_post_meta( $page_id, $meta_key, $meta_val );
 				}
 				self::ensure_navigation_records();
+				update_option( 'coffee_cafe_corner_wholesale_seeded', 1 );
 				return $page_id;
 			}
 		} else {
@@ -127,9 +139,11 @@ class Coffee_Cafe_Corner_Wholesale_DB {
 			}
 
 			self::ensure_navigation_records();
+			update_option( 'coffee_cafe_corner_wholesale_seeded', 1 );
 			return $page->ID;
 		}
 
+		update_option( 'coffee_cafe_corner_wholesale_seeded', 1 );
 		return 0;
 	}
 
@@ -190,37 +204,58 @@ class Coffee_Cafe_Corner_Wholesale_DB {
 		$page = get_page_by_path( self::PAGE_SLUG );
 		$page_id = $page ? $page->ID : 0;
 
-		$hero_title = $page_id ? get_post_meta( $page_id, '_wholesale_hero_title', true ) : '';
+		$hero_title = get_theme_mod( 'wholesale_hero_title' );
+		if ( empty( $hero_title ) && $page_id ) {
+			$hero_title = get_post_meta( $page_id, '_wholesale_hero_title', true );
+		}
 		if ( empty( $hero_title ) ) {
 			$hero_title = 'Wholesale Coffee Roasting';
 		}
 
-		$intro_heading = $page_id ? get_post_meta( $page_id, '_wholesale_intro_heading', true ) : '';
+		$intro_heading = get_theme_mod( 'wholesale_intro_heading' );
+		if ( empty( $intro_heading ) && $page_id ) {
+			$intro_heading = get_post_meta( $page_id, '_wholesale_intro_heading', true );
+		}
 		if ( empty( $intro_heading ) ) {
 			$intro_heading = "Hey there! I'm Michael.";
 		}
 
-		$intro_lead = $page_id ? get_post_meta( $page_id, '_wholesale_intro_lead', true ) : '';
+		$intro_lead = get_theme_mod( 'wholesale_intro_lead' );
+		if ( empty( $intro_lead ) && $page_id ) {
+			$intro_lead = get_post_meta( $page_id, '_wholesale_intro_lead', true );
+		}
 		if ( empty( $intro_lead ) ) {
 			$intro_lead = 'We want to help you build a cafe people love coming back to.';
 		}
 
-		$p1 = $page_id ? get_post_meta( $page_id, '_wholesale_paragraph_1', true ) : '';
+		$p1 = get_theme_mod( 'wholesale_paragraph_1' );
+		if ( empty( $p1 ) && $page_id ) {
+			$p1 = get_post_meta( $page_id, '_wholesale_paragraph_1', true );
+		}
 		if ( empty( $p1 ) ) {
 			$p1 = 'After 19 years and seven cafes of our own, we know what a new owner needs from a coffee partner.';
 		}
 
-		$p2 = $page_id ? get_post_meta( $page_id, '_wholesale_paragraph_2', true ) : '';
+		$p2 = get_theme_mod( 'wholesale_paragraph_2' );
+		if ( empty( $p2 ) && $page_id ) {
+			$p2 = get_post_meta( $page_id, '_wholesale_paragraph_2', true );
+		}
 		if ( empty( $p2 ) ) {
 			$p2 = 'You get coffee we serve in our own cafes, recipes and training for your baristas, and my personal cell for when you need a hand.';
 		}
 
-		$p3 = $page_id ? get_post_meta( $page_id, '_wholesale_paragraph_3', true ) : '';
+		$p3 = get_theme_mod( 'wholesale_paragraph_3' );
+		if ( empty( $p3 ) && $page_id ) {
+			$p3 = get_post_meta( $page_id, '_wholesale_paragraph_3', true );
+		}
 		if ( empty( $p3 ) ) {
 			$p3 = 'Answer a few questions below to get your samples. I\'ll reach out to talk through your coffee program and arrange a free sample box.';
 		}
 
-		$video_id = $page_id ? get_post_meta( $page_id, '_wholesale_video_id', true ) : '';
+		$video_id = get_theme_mod( 'wholesale_video_id' );
+		if ( empty( $video_id ) && $page_id ) {
+			$video_id = get_post_meta( $page_id, '_wholesale_video_id', true );
+		}
 		if ( empty( $video_id ) ) {
 			$video_id = 'zihbfybcjm';
 		}
@@ -230,12 +265,18 @@ class Coffee_Cafe_Corner_Wholesale_DB {
 			$video_poster = 'michael-video-poster.jpg';
 		}
 
-		$video_subtitle = $page_id ? get_post_meta( $page_id, '_wholesale_video_subtitle', true ) : '';
+		$video_subtitle = get_theme_mod( 'wholesale_video_subtitle' );
+		if ( empty( $video_subtitle ) && $page_id ) {
+			$video_subtitle = get_post_meta( $page_id, '_wholesale_video_subtitle', true );
+		}
 		if ( empty( $video_subtitle ) ) {
 			$video_subtitle = 'and we would love to help you elevate your coffee game.';
 		}
 
-		$typeform_id = $page_id ? get_post_meta( $page_id, '_wholesale_typeform_id', true ) : '';
+		$typeform_id = get_theme_mod( 'wholesale_typeform_id' );
+		if ( empty( $typeform_id ) && $page_id ) {
+			$typeform_id = get_post_meta( $page_id, '_wholesale_typeform_id', true );
+		}
 		if ( empty( $typeform_id ) ) {
 			$typeform_id = '01KTS8WAR0STGANR36ZWT3PJAP';
 		}
@@ -243,16 +284,79 @@ class Coffee_Cafe_Corner_Wholesale_DB {
 		$theme_uri = get_template_directory_uri();
 		$poster_url = $theme_uri . '/assets/images/wholesale/' . $video_poster;
 
+		$form_mode = get_theme_mod( 'wholesale_form_mode' );
+		if ( empty( $form_mode ) && $page_id ) {
+			$form_mode = get_post_meta( $page_id, '_wholesale_form_mode', true );
+		}
+		if ( empty( $form_mode ) ) {
+			$form_mode = 'direct';
+		}
+
+		$form_title = get_theme_mod( 'wholesale_form_title' );
+		if ( empty( $form_title ) && $page_id ) {
+			$form_title = get_post_meta( $page_id, '_wholesale_form_title', true );
+		}
+		if ( empty( $form_title ) ) {
+			$form_title = 'Request your samples';
+		}
+
+		$form_subtitle = get_theme_mod( 'wholesale_form_subtitle' );
+		if ( empty( $form_subtitle ) && $page_id ) {
+			$form_subtitle = get_post_meta( $page_id, '_wholesale_form_subtitle', true );
+		}
+		if ( empty( $form_subtitle ) ) {
+			$form_subtitle = 'Tell us a little about you and your business';
+		}
+
+		$form_button_text = get_theme_mod( 'wholesale_form_button_text' );
+		if ( empty( $form_button_text ) && $page_id ) {
+			$form_button_text = get_post_meta( $page_id, '_wholesale_form_button_text', true );
+		}
+		if ( empty( $form_button_text ) ) {
+			$form_button_text = 'Get started';
+		}
+
+		$form_time_estimate = get_theme_mod( 'wholesale_form_time_estimate' );
+		if ( empty( $form_time_estimate ) && $page_id ) {
+			$form_time_estimate = get_post_meta( $page_id, '_wholesale_form_time_estimate', true );
+		}
+		if ( empty( $form_time_estimate ) ) {
+			$form_time_estimate = 'Takes 1 minute';
+		}
+
+		$form_submit_label = get_theme_mod( 'wholesale_form_submit_label' );
+		if ( empty( $form_submit_label ) && $page_id ) {
+			$form_submit_label = get_post_meta( $page_id, '_wholesale_form_submit_label', true );
+		}
+		if ( empty( $form_submit_label ) ) {
+			$form_submit_label = 'Send Sample Request';
+		}
+
+		$form_success_message = get_theme_mod( 'wholesale_form_success_message' );
+		if ( empty( $form_success_message ) && $page_id ) {
+			$form_success_message = get_post_meta( $page_id, '_wholesale_form_success_message', true );
+		}
+		if ( empty( $form_success_message ) ) {
+			$form_success_message = 'Thank you! Michael will review your details and reach out soon with sample box arrangements.';
+		}
+
 		return array(
-			'page_id'        => $page_id,
-			'hero_title'     => $hero_title,
-			'intro_heading'  => $intro_heading,
-			'intro_lead'     => $intro_lead,
-			'paragraphs'     => array( $p1, $p2, $p3 ),
-			'video_id'       => $video_id,
-			'video_poster'   => $poster_url,
-			'video_subtitle' => $video_subtitle,
-			'typeform_id'    => $typeform_id,
+			'page_id'              => $page_id,
+			'hero_title'           => $hero_title,
+			'intro_heading'        => $intro_heading,
+			'intro_lead'           => $intro_lead,
+			'paragraphs'           => array( $p1, $p2, $p3 ),
+			'video_id'             => $video_id,
+			'video_poster'         => $poster_url,
+			'video_subtitle'       => $video_subtitle,
+			'typeform_id'          => $typeform_id,
+			'form_mode'            => $form_mode,
+			'form_title'           => $form_title,
+			'form_subtitle'        => $form_subtitle,
+			'form_button_text'     => $form_button_text,
+			'form_time_estimate'   => $form_time_estimate,
+			'form_submit_label'    => $form_submit_label,
+			'form_success_message' => $form_success_message,
 		);
 	}
 
@@ -291,8 +395,13 @@ class Coffee_Cafe_Corner_Wholesale_DB {
 			update_post_meta( $inquiry_id, '_inquiry_timeline', $timeline );
 			update_post_meta( $inquiry_id, '_inquiry_date', current_time( 'mysql' ) );
 
+			$success_msg = get_theme_mod( 'wholesale_form_success_message' );
+			if ( empty( $success_msg ) ) {
+				$success_msg = 'Thank you! Michael will review your details and reach out soon with sample box arrangements.';
+			}
+
 			wp_send_json_success( array(
-				'message' => 'Thank you! Michael will review your details and reach out soon with sample box arrangements.',
+				'message' => $success_msg,
 			) );
 		} else {
 			wp_send_json_error( array( 'message' => 'Unable to save inquiry. Please try again.' ) );
@@ -308,32 +417,91 @@ class Coffee_Cafe_Corner_Wholesale_DB {
 		$wp_customize->add_section( 'wholesale_settings_section', array(
 			'title'       => __( 'Wholesale Page Settings', 'coffee-cafe-corner' ),
 			'priority'    => 35,
-			'description' => __( 'Customize the content and video on the Wholesale page.', 'coffee-cafe-corner' ),
+			'description' => __( 'Customize the content, video, and sample request form on the Wholesale page.', 'coffee-cafe-corner' ),
 		) );
 
 		$fields = array(
-			'wholesale_hero_title'     => array(
+			'wholesale_hero_title'           => array(
 				'label'   => __( 'Hero Title', 'coffee-cafe-corner' ),
 				'default' => 'Wholesale Coffee Roasting',
 				'type'    => 'text',
 			),
-			'wholesale_intro_heading'  => array(
+			'wholesale_intro_heading'        => array(
 				'label'   => __( 'Intro Heading', 'coffee-cafe-corner' ),
 				'default' => 'Hey there! I’m Michael.',
 				'type'    => 'text',
 			),
-			'wholesale_intro_lead'     => array(
+			'wholesale_intro_lead'           => array(
 				'label'   => __( 'Lead Paragraph (Bold)', 'coffee-cafe-corner' ),
 				'default' => 'We want to help you build a cafe people love coming back to.',
 				'type'    => 'textarea',
 			),
-			'wholesale_video_subtitle' => array(
+			'wholesale_paragraph_1'          => array(
+				'label'   => __( 'Paragraph 1', 'coffee-cafe-corner' ),
+				'default' => 'After 19 years and seven cafes of our own, we know what a new owner needs from a coffee partner.',
+				'type'    => 'textarea',
+			),
+			'wholesale_paragraph_2'          => array(
+				'label'   => __( 'Paragraph 2', 'coffee-cafe-corner' ),
+				'default' => 'You get coffee we serve in our own cafes, recipes and training for your baristas, and my personal cell for when you need a hand.',
+				'type'    => 'textarea',
+			),
+			'wholesale_paragraph_3'          => array(
+				'label'   => __( 'Paragraph 3', 'coffee-cafe-corner' ),
+				'default' => 'Answer a few questions below to get your samples. I\'ll reach out to talk through your coffee program and arrange a free sample box.',
+				'type'    => 'textarea',
+			),
+			'wholesale_video_id'             => array(
+				'label'   => __( 'Wistia Video ID', 'coffee-cafe-corner' ),
+				'default' => 'zihbfybcjm',
+				'type'    => 'text',
+			),
+			'wholesale_video_subtitle'       => array(
 				'label'   => __( 'Video Subtitle Pill Text', 'coffee-cafe-corner' ),
 				'default' => 'and we would love to help you elevate your coffee game.',
 				'type'    => 'text',
 			),
-			'wholesale_typeform_id'    => array(
-				'label'   => __( 'Typeform Form ID', 'coffee-cafe-corner' ),
+			'wholesale_form_mode'            => array(
+				'label'   => __( 'Sample Form Mode', 'coffee-cafe-corner' ),
+				'default' => 'direct',
+				'type'    => 'select',
+				'choices' => array(
+					'direct'   => __( 'Direct Interactive Form (Customizable & Saves to DB)', 'coffee-cafe-corner' ),
+					'typeform' => __( 'Typeform Embed (External Widget)', 'coffee-cafe-corner' ),
+				),
+			),
+			'wholesale_form_title'           => array(
+				'label'   => __( 'Form Title / Heading', 'coffee-cafe-corner' ),
+				'default' => 'Request your samples',
+				'type'    => 'text',
+			),
+			'wholesale_form_subtitle'        => array(
+				'label'   => __( 'Form Subtitle / Description', 'coffee-cafe-corner' ),
+				'default' => 'Tell us a little about you and your business',
+				'type'    => 'text',
+			),
+			'wholesale_form_button_text'     => array(
+				'label'   => __( 'Start Button Text', 'coffee-cafe-corner' ),
+				'default' => 'Get started',
+				'type'    => 'text',
+			),
+			'wholesale_form_time_estimate'   => array(
+				'label'   => __( 'Time Estimate / Note', 'coffee-cafe-corner' ),
+				'default' => 'Takes 1 minute',
+				'type'    => 'text',
+			),
+			'wholesale_form_submit_label'    => array(
+				'label'   => __( 'Submit Button Text', 'coffee-cafe-corner' ),
+				'default' => 'Send Sample Request',
+				'type'    => 'text',
+			),
+			'wholesale_form_success_message' => array(
+				'label'   => __( 'Success Feedback Message', 'coffee-cafe-corner' ),
+				'default' => 'Thank you! Michael will review your details and reach out soon with sample box arrangements.',
+				'type'    => 'textarea',
+			),
+			'wholesale_typeform_id'          => array(
+				'label'   => __( 'Typeform Form ID (When Typeform mode selected)', 'coffee-cafe-corner' ),
 				'default' => '01KTS8WAR0STGANR36ZWT3PJAP',
 				'type'    => 'text',
 			),
@@ -345,11 +513,17 @@ class Coffee_Cafe_Corner_Wholesale_DB {
 				'sanitize_callback' => 'sanitize_text_field',
 			) );
 
-			$wp_customize->add_control( $id, array(
+			$control_args = array(
 				'label'   => $config['label'],
 				'section' => 'wholesale_settings_section',
 				'type'    => $config['type'],
-			) );
+			);
+
+			if ( isset( $config['choices'] ) ) {
+				$control_args['choices'] = $config['choices'];
+			}
+
+			$wp_customize->add_control( $id, $control_args );
 		}
 	}
 }
