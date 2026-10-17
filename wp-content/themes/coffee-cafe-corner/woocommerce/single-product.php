@@ -87,8 +87,16 @@ $db_comments = get_comments([
     'orderby' => 'comment_date',
     'order'   => 'DESC'
 ]);
-$review_count = !empty($db_comments) ? count($db_comments) : ((int)get_post_meta($id, '_wc_review_count', true) ?: 0);
-$average_rating = get_post_meta($id, '_wc_average_rating', true) ?: ($review_count > 0 ? '5.0' : '0.0');
+$review_count = !empty($db_comments) ? count($db_comments) : 0;
+$average_rating = '0.0';
+if ($review_count > 0) {
+    $total_stars = 0;
+    foreach ($db_comments as $comm) {
+        $c_r = (int)get_comment_meta($comm->comment_ID, 'rating', true) ?: 5;
+        $total_stars += $c_r;
+    }
+    $average_rating = number_format(round($total_stars / $review_count, 1), 1, '.', '');
+}
 
 ?><!DOCTYPE html>
 <html <?php language_attributes(); ?>>
@@ -121,6 +129,7 @@ $average_rating = get_post_meta($id, '_wc_average_rating', true) ?: ($review_cou
     <div class="quills-separator-line"></div>
 </div>
 
+<?php if ($review_count > 0): ?>
 <!-- Top Testimonial Quote Slider (Image 2) -->
 <section class="quills-sp-quote-slider-section" aria-label="<?php esc_attr_e( 'Customer Quote', 'coffee-cafe-corner' ); ?>">
     <div class="quills-container quills-sp-quote-container">
@@ -171,6 +180,7 @@ $average_rating = get_post_meta($id, '_wc_average_rating', true) ?: ($review_cou
 <div class="quills-container">
     <div class="quills-separator-line"></div>
 </div>
+<?php endif; ?>
 
 <!-- Main Product View (Images 3 & 4) -->
 <main class="quills-product-main">
@@ -219,8 +229,13 @@ $average_rating = get_post_meta($id, '_wc_average_rating', true) ?: ($review_cou
                 <!-- Star Rating Badge -->
                 <div class="quills-rating-badge">
                     <a href="#quills-reviews-section" class="quills-rating-link">
-                        <span class="quills-stars quills-stars-gold">★★★★★</span>
-                        <span class="quills-rating-reviews"><?php echo esc_html($review_count); ?> reviews</span>
+                        <?php if ($review_count > 0): ?>
+                            <span class="quills-stars quills-stars-gold">★★★★★</span>
+                            <span class="quills-rating-reviews"><?php echo esc_html($review_count); ?> reviews</span>
+                        <?php else: ?>
+                            <span class="quills-stars quills-stars-empty">☆☆☆☆☆</span>
+                            <span class="quills-rating-reviews">No reviews</span>
+                        <?php endif; ?>
                     </a>
                 </div>
 
@@ -344,219 +359,209 @@ $average_rating = get_post_meta($id, '_wc_average_rating', true) ?: ($review_cou
 <section class="quills-reviews-section-v2" id="quills-reviews-section">
     <div class="quills-container">
         
-        <!-- Header Row (Image 5) -->
-        <div class="quills-reviews-header-v2">
-            <h2 class="quills-reviews-title-v2">Customer Reviews</h2>
-            
-            <div class="quills-reviews-toolbar-v2">
-                <div class="quills-reviews-stats-badge">
-                    <span class="quills-reviews-avg"><?php echo esc_html($average_rating); ?></span>
-                    <span class="quills-reviews-count-label"><?php echo esc_html($review_count); ?> reviews</span>
-                    <span class="quills-reviews-trophy" title="Verified Store Rating">🏆</span>
-                    <span class="quills-reviews-badge-circle" title="Verified Customer Feedback">✔</span>
-                </div>
+        <?php if ($review_count > 0): ?>
+            <!-- Header Row (Image 5) -->
+            <div class="quills-reviews-header-v2">
+                <h2 class="quills-reviews-title-v2">Customer Reviews</h2>
+                
+                <div class="quills-reviews-toolbar-v2">
+                    <div class="quills-reviews-stats-badge">
+                        <span class="quills-reviews-avg"><?php echo esc_html($average_rating); ?></span>
+                        <span class="quills-reviews-count-label"><?php echo esc_html($review_count); ?> reviews</span>
+                        <span class="quills-reviews-trophy" title="Verified Store Rating">🏆</span>
+                        <span class="quills-reviews-badge-circle" title="Verified Customer Feedback">✔</span>
+                    </div>
 
-                <div class="quills-reviews-actions-right">
-                    <button type="button" class="quills-btn-write-review-v2" id="quills-toggle-review-form">
-                        WRITE A REVIEW
-                    </button>
-                    <button type="button" class="quills-review-icon-btn" id="quills-review-filter-btn" title="Filter reviews">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg>
-                    </button>
-                    <button type="button" class="quills-review-icon-btn" id="quills-review-sort-btn" title="Sort reviews">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg>
-                    </button>
+                    <div class="quills-reviews-actions-right">
+                        <button type="button" class="quills-btn-write-review-v2" id="quills-toggle-review-form">
+                            WRITE A REVIEW
+                        </button>
+                        <button type="button" class="quills-review-icon-btn" id="quills-review-filter-btn" title="Filter reviews">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg>
+                        </button>
+                        <button type="button" class="quills-review-icon-btn" id="quills-review-sort-btn" title="Sort reviews">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg>
+                        </button>
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <!-- Write a Review Inline Form -->
-        <div class="quills-review-form-wrapper" id="quills-review-form-container" style="display: none;">
-            <form id="quills-submit-review-form" class="quills-review-form">
-                <input type="hidden" name="product_id" value="<?php echo esc_attr($id); ?>">
-                <input type="hidden" name="rating" id="quills-input-rating" value="5">
+            <!-- Write a Review Inline Form -->
+            <div class="quills-review-form-wrapper" id="quills-review-form-container" style="display: none;">
+                <form id="quills-submit-review-form" class="quills-review-form">
+                    <input type="hidden" name="product_id" value="<?php echo esc_attr($id); ?>">
+                    <input type="hidden" name="rating" id="quills-input-rating" value="5">
 
-                <h3 class="quills-form-heading">Write a Review</h3>
-                <p class="quills-form-subheading">Share your thoughts on <?php echo esc_html($title); ?> with fellow coffee enthusiasts!</p>
+                    <h3 class="quills-form-heading">Write a Review</h3>
+                    <p class="quills-form-subheading">Share your thoughts on <?php echo esc_html($title); ?> with fellow coffee enthusiasts!</p>
 
-                <!-- Interactive Star Selector -->
-                <div class="quills-form-row">
-                    <label>Rating</label>
-                    <div class="quills-star-picker" id="quills-star-picker">
-                        <span class="quills-star-item active" data-val="1">★</span>
-                        <span class="quills-star-item active" data-val="2">★</span>
-                        <span class="quills-star-item active" data-val="3">★</span>
-                        <span class="quills-star-item active" data-val="4">★</span>
-                        <span class="quills-star-item active" data-val="5">★</span>
-                        <span class="quills-star-rating-text" id="quills-rating-text">5 / 5 (Outstanding)</span>
-                    </div>
-                </div>
-
-                <div class="quills-form-row">
-                    <label for="quills-review-title">Review Title</label>
-                    <input type="text" id="quills-review-title" name="title" placeholder="Give your review a title" required>
-                </div>
-
-                <div class="quills-form-row">
-                    <label for="quills-review-content">Review Body</label>
-                    <textarea id="quills-review-content" name="content" rows="4" placeholder="Write your comments here..." required></textarea>
-                </div>
-
-                <div class="quills-form-grid-2">
+                    <!-- Interactive Star Selector -->
                     <div class="quills-form-row">
-                        <label for="quills-review-author">Name (displayed publicly)</label>
-                        <input type="text" id="quills-review-author" name="author" placeholder="Enter your name" required>
+                        <label>Rating</label>
+                        <div class="quills-star-picker" id="quills-star-picker">
+                            <span class="quills-star-item active" data-val="1">★</span>
+                            <span class="quills-star-item active" data-val="2">★</span>
+                            <span class="quills-star-item active" data-val="3">★</span>
+                            <span class="quills-star-item active" data-val="4">★</span>
+                            <span class="quills-star-item active" data-val="5">★</span>
+                            <span class="quills-star-rating-text" id="quills-rating-text">5 / 5 (Outstanding)</span>
+                        </div>
                     </div>
 
                     <div class="quills-form-row">
-                        <label for="quills-review-email">Email Address (private)</label>
-                        <input type="email" id="quills-review-email" name="email" placeholder="Enter your email" required>
+                        <label for="quills-review-title">Review Title</label>
+                        <input type="text" id="quills-review-title" name="title" placeholder="Give your review a title" required>
                     </div>
-                </div>
 
-                <div class="quills-form-actions">
-                    <button type="button" class="quills-btn-cancel-review" id="quills-cancel-review-btn">Cancel</button>
-                    <button type="submit" class="quills-btn-submit-review" id="quills-submit-review-btn">
-                        <span>Submit Review</span>
-                    </button>
-                </div>
+                    <div class="quills-form-row">
+                        <label for="quills-review-content">Review Body</label>
+                        <textarea id="quills-review-content" name="content" rows="4" placeholder="Write your comments here..." required></textarea>
+                    </div>
 
-                <div class="quills-form-feedback" id="quills-review-feedback"></div>
-            </form>
-        </div>
+                    <div class="quills-form-grid-2">
+                        <div class="quills-form-row">
+                            <label for="quills-review-author">Name (displayed publicly)</label>
+                            <input type="text" id="quills-review-author" name="author" placeholder="Enter your name" required>
+                        </div>
 
-        <!-- Reviews List (Image 5) -->
-        <div class="quills-reviews-list-v2" id="quills-reviews-list">
-            <?php 
-            $db_comments = get_comments([
-                'post_id' => $id,
-                'status'  => 'approve',
-                'type'    => 'review',
-                'orderby' => 'comment_date',
-                'order'   => 'DESC'
-            ]);
+                        <div class="quills-form-row">
+                            <label for="quills-review-email">Email Address (private)</label>
+                            <input type="email" id="quills-review-email" name="email" placeholder="Enter your email" required>
+                        </div>
+                    </div>
 
-            if (!empty($db_comments)):
+                    <div class="quills-form-actions">
+                        <button type="button" class="quills-btn-cancel-review" id="quills-cancel-review-btn">Cancel</button>
+                        <button type="submit" class="quills-btn-submit-review" id="quills-submit-review-btn">
+                            <span>Submit Review</span>
+                        </button>
+                    </div>
+
+                    <div class="quills-form-feedback" id="quills-review-feedback"></div>
+                </form>
+            </div>
+
+            <!-- Reviews List -->
+            <div class="quills-reviews-list-v2" id="quills-reviews-list">
+                <?php 
                 foreach ($db_comments as $comm):
                     $c_rating = (int)get_comment_meta($comm->comment_ID, 'rating', true) ?: 5;
                     $c_date   = date('m/d/Y', strtotime($comm->comment_date));
                     $initial  = strtoupper(substr($comm->comment_author, 0, 1));
                     $c_body   = preg_replace('/^<strong>.*?<\/strong>\s*/s', '', $comm->comment_content);
-            ?>
-                <div class="quills-review-item-v2" data-rating="<?php echo esc_attr($c_rating); ?>">
-                    <div class="quills-review-item-stars">
-                        <?php 
-                        for ($i = 1; $i <= 5; $i++) {
-                            echo '<span class="star ' . ($i <= $c_rating ? 'filled' : 'empty') . '">★</span>';
-                        }
-                        ?>
-                    </div>
+                ?>
+                    <div class="quills-review-item-v2" data-rating="<?php echo esc_attr($c_rating); ?>">
+                        <div class="quills-review-item-stars">
+                            <?php 
+                            for ($i = 1; $i <= 5; $i++) {
+                                echo '<span class="star ' . ($i <= $c_rating ? 'filled' : 'empty') . '">★</span>';
+                            }
+                            ?>
+                        </div>
 
-                    <div class="quills-review-item-author-row">
-                        <span class="quills-author-avatar-circle"><?php echo esc_html($initial); ?></span>
-                        <span class="quills-author-name-text"><?php echo esc_html($comm->comment_author); ?></span>
-                        <span class="quills-verified-pill">Verified</span>
-                        <span class="quills-review-date-text"><?php echo esc_html($c_date); ?></span>
-                    </div>
+                        <div class="quills-review-item-author-row">
+                            <span class="quills-author-avatar-circle"><?php echo esc_html($initial); ?></span>
+                            <span class="quills-author-name-text"><?php echo esc_html($comm->comment_author); ?></span>
+                            <span class="quills-verified-pill">Verified</span>
+                            <span class="quills-review-date-text"><?php echo esc_html($c_date); ?></span>
+                        </div>
 
-                    <div class="quills-review-item-text">
-                        <?php echo wp_kses_post(trim($c_body)); ?>
+                        <div class="quills-review-item-text">
+                            <?php echo wp_kses_post(trim($c_body)); ?>
+                        </div>
                     </div>
-                </div>
-            <?php 
-                endforeach;
-            else:
-            ?>
-                <div class="quills-review-item-v2" data-rating="4">
-                    <div class="quills-review-item-stars">
-                        <span class="star filled">★</span><span class="star filled">★</span><span class="star filled">★</span><span class="star filled">★</span><span class="star empty">★</span>
-                    </div>
-                    <div class="quills-review-item-author-row">
-                        <span class="quills-author-avatar-circle">D</span>
-                        <span class="quills-author-name-text">Dony Erwin Erwin</span>
-                        <span class="quills-verified-pill">Verified</span>
-                        <span class="quills-review-date-text">08/02/2024</span>
-                    </div>
-                    <div class="quills-review-item-text">
-                        It's a little on the mild side for me. We switched to Night Owl for next month's delivery. Thanks.
-                    </div>
-                </div>
+                <?php endforeach; ?>
+            </div>
 
-                <div class="quills-review-item-v2" data-rating="5">
-                    <div class="quills-review-item-stars">
-                        <span class="star filled">★</span><span class="star filled">★</span><span class="star filled">★</span><span class="star filled">★</span><span class="star filled">★</span>
-                    </div>
-                    <div class="quills-review-item-author-row">
-                        <span class="quills-author-avatar-circle">D</span>
-                        <span class="quills-author-name-text">Donna</span>
-                        <span class="quills-verified-pill">Verified by shop</span>
-                        <span class="quills-review-date-text">08/02/2024</span>
-                    </div>
-                    <div class="quills-review-item-text">
-                        Amazing so glad we found this place
-                        <span class="quills-review-subnote">Review written in Shop App</span>
-                    </div>
-                </div>
-
-                <div class="quills-review-item-v2" data-rating="5">
-                    <div class="quills-review-item-stars">
-                        <span class="star filled">★</span><span class="star filled">★</span><span class="star filled">★</span><span class="star filled">★</span><span class="star filled">★</span>
-                    </div>
-                    <div class="quills-review-item-author-row">
-                        <span class="quills-author-avatar-circle">S</span>
-                        <span class="quills-author-name-text">Staci R</span>
-                        <span class="quills-verified-pill">Verified</span>
-                        <span class="quills-review-date-text">08/01/2024</span>
-                    </div>
-                    <div class="quills-review-item-text">
-                        This is currently our favorite coffee! Looking forward to trying your other blends in the future.
-                    </div>
-                </div>
-
-                <div class="quills-review-item-v2" data-rating="5">
-                    <div class="quills-review-item-stars">
-                        <span class="star filled">★</span><span class="star filled">★</span><span class="star filled">★</span><span class="star filled">★</span><span class="star filled">★</span>
-                    </div>
-                    <div class="quills-review-item-author-row">
-                        <span class="quills-author-avatar-circle">S</span>
-                        <span class="quills-author-name-text">Sarah B</span>
-                        <span class="quills-verified-pill">Verified</span>
-                        <span class="quills-review-date-text">07/15/2024</span>
-                    </div>
-                    <div class="quills-review-item-text">
-                        Smooth, balanced, and perfectly roasted. My morning ritual wouldn't be the same without Inkwell.
-                    </div>
-                </div>
-
-                <div class="quills-review-item-v2" data-rating="5">
-                    <div class="quills-review-item-stars">
-                        <span class="star filled">★</span><span class="star filled">★</span><span class="star filled">★</span><span class="star filled">★</span><span class="star filled">★</span>
-                    </div>
-                    <div class="quills-review-item-author-row">
-                        <span class="quills-author-avatar-circle">J</span>
-                        <span class="quills-author-name-text">James K</span>
-                        <span class="quills-verified-pill">Verified by shop</span>
-                        <span class="quills-review-date-text">07/02/2024</span>
-                    </div>
-                    <div class="quills-review-item-text">
-                        Great flavor profile, hints of chocolate and sweet stone fruit. Highly recommend.
-                        <span class="quills-review-subnote">Review written in Shop App</span>
-                    </div>
+            <!-- Customer Reviews Pagination -->
+            <?php if ($review_count > 5): ?>
+                <div class="quills-reviews-pagination" id="quills-reviews-pagination">
+                    <button type="button" class="quills-page-arrow quills-page-prev" id="quills-reviews-prev" disabled aria-label="Previous page">‹</button>
+                    <button type="button" class="quills-page-num is-active" data-page="1">1</button>
+                    <?php 
+                    $total_pages = ceil($review_count / 5);
+                    for ($p = 2; $p <= min(4, $total_pages); $p++): 
+                    ?>
+                        <button type="button" class="quills-page-num" data-page="<?php echo $p; ?>"><?php echo $p; ?></button>
+                    <?php endfor; ?>
+                    <?php if ($total_pages > 4): ?>
+                        <span class="quills-page-dots">...</span>
+                        <button type="button" class="quills-page-num" data-page="<?php echo $total_pages; ?>"><?php echo $total_pages; ?></button>
+                    <?php endif; ?>
+                    <button type="button" class="quills-page-arrow quills-page-next" id="quills-reviews-next" aria-label="Next page">›</button>
                 </div>
             <?php endif; ?>
-        </div>
 
-        <!-- Customer Reviews Pagination matching Image 2 & Live Quills -->
-        <div class="quills-reviews-pagination" id="quills-reviews-pagination">
-            <button type="button" class="quills-page-arrow quills-page-prev" id="quills-reviews-prev" disabled aria-label="Previous page">‹</button>
-            <button type="button" class="quills-page-num is-active" data-page="1">1</button>
-            <button type="button" class="quills-page-num" data-page="2">2</button>
-            <button type="button" class="quills-page-num" data-page="3">3</button>
-            <button type="button" class="quills-page-num" data-page="4">4</button>
-            <span class="quills-page-dots">...</span>
-            <button type="button" class="quills-page-num" data-page="16">16</button>
-            <button type="button" class="quills-page-arrow quills-page-next" id="quills-reviews-next" aria-label="Next page">›</button>
-        </div>
+        <?php else: ?>
+            <!-- Empty State for Products with 0 Reviews (Matching Image 2 & Quills Coffee) -->
+            <div class="quills-reviews-empty-container">
+                <div class="quills-reviews-empty-header">
+                    <h2 class="quills-reviews-title-v2">Customer Reviews</h2>
+                </div>
+
+                <!-- Write a Review Inline Form (for empty state) -->
+                <div class="quills-review-form-wrapper" id="quills-review-form-container" style="display: none;">
+                    <form id="quills-submit-review-form" class="quills-review-form">
+                        <input type="hidden" name="product_id" value="<?php echo esc_attr($id); ?>">
+                        <input type="hidden" name="rating" id="quills-input-rating" value="5">
+
+                        <h3 class="quills-form-heading">Write a Review</h3>
+                        <p class="quills-form-subheading">Share your thoughts on <?php echo esc_html($title); ?> with fellow coffee enthusiasts!</p>
+
+                        <!-- Interactive Star Selector -->
+                        <div class="quills-form-row">
+                            <label>Rating</label>
+                            <div class="quills-star-picker" id="quills-star-picker">
+                                <span class="quills-star-item active" data-val="1">★</span>
+                                <span class="quills-star-item active" data-val="2">★</span>
+                                <span class="quills-star-item active" data-val="3">★</span>
+                                <span class="quills-star-item active" data-val="4">★</span>
+                                <span class="quills-star-item active" data-val="5">★</span>
+                                <span class="quills-star-rating-text" id="quills-rating-text">5 / 5 (Outstanding)</span>
+                            </div>
+                        </div>
+
+                        <div class="quills-form-row">
+                            <label for="quills-review-title">Review Title</label>
+                            <input type="text" id="quills-review-title" name="title" placeholder="Give your review a title" required>
+                        </div>
+
+                        <div class="quills-form-row">
+                            <label for="quills-review-content">Review Body</label>
+                            <textarea id="quills-review-content" name="content" rows="4" placeholder="Write your comments here..." required></textarea>
+                        </div>
+
+                        <div class="quills-form-grid-2">
+                            <div class="quills-form-row">
+                                <label for="quills-review-author">Name (displayed publicly)</label>
+                                <input type="text" id="quills-review-author" name="author" placeholder="Enter your name" required>
+                            </div>
+
+                            <div class="quills-form-row">
+                                <label for="quills-review-email">Email Address (private)</label>
+                                <input type="email" id="quills-review-email" name="email" placeholder="Enter your email" required>
+                            </div>
+                        </div>
+
+                        <div class="quills-form-actions">
+                            <button type="button" class="quills-btn-cancel-review" id="quills-cancel-review-btn">Cancel</button>
+                            <button type="submit" class="quills-btn-submit-review" id="quills-submit-review-btn">
+                                <span>Submit Review</span>
+                            </button>
+                        </div>
+
+                        <div class="quills-form-feedback" id="quills-review-feedback"></div>
+                    </form>
+                </div>
+
+                <div class="quills-reviews-empty-body">
+                    <p class="quills-reviews-empty-msg">You're early! Be the first to write a review</p>
+                    <button type="button" class="quills-btn-write-review-v2" id="quills-toggle-review-form-empty">
+                        WRITE A REVIEW
+                    </button>
+                </div>
+            </div>
+        <?php endif; ?>
 
     </div>
 </section>

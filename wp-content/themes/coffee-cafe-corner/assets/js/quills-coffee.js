@@ -429,7 +429,7 @@
         // 4. REVIEWS SYSTEM (Judge.me Parity)
         // ==========================================
         // Toggle Write Review Form
-        $('#quills-toggle-review-form, #quills-cancel-review-btn').on('click', function() {
+        $(document).on('click', '#quills-toggle-review-form, #quills-toggle-review-form-empty, #quills-cancel-review-btn', function() {
             $('#quills-review-form-container').slideToggle(300);
         });
 
