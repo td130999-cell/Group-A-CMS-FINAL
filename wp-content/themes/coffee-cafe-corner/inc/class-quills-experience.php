@@ -477,13 +477,12 @@ class Quills_Coffee_Experience {
             $item_data['Grind Type'] = $grind;
         }
         if ($purchase === 'subscribe') {
-            $sub_label = 'Subscribe & Save (10% Off)';
-            if (!empty($frequency)) {
-                $sub_label .= ' · ' . $frequency;
-            }
-            $item_data['Purchase Type'] = $sub_label;
+            $freq_text = !empty($frequency) ? $frequency : 'Deliver every 2 weeks';
+            $item_data['Purchase Type'] = $freq_text;
+            $item_data['is_subscription'] = true;
         } else {
             $item_data['Purchase Type'] = 'One-time Purchase';
+            $item_data['is_subscription'] = false;
         }
 
         $cart_item_data = [
@@ -683,8 +682,16 @@ class Quills_Coffee_Experience {
                                     <?php if ($grind): ?>
                                         <div class="quills-drawer-meta-line">Grind Type: <?php echo esc_html($grind); ?></div>
                                     <?php endif; ?>
-                                    <?php if ($purchase_type && strpos($purchase_type, 'Subscribe') !== false): ?>
-                                        <div class="quills-drawer-meta-line quills-drawer-meta-sub"><?php echo esc_html($purchase_type); ?></div>
+                                    <?php 
+                                    if ($purchase_type && $purchase_type !== 'One-time Purchase'): 
+                                        $display_freq = $purchase_type;
+                                        if (preg_match('/(Deliver every\s+\d+\s+weeks?)/i', $display_freq, $m)) {
+                                            $display_freq = $m[1];
+                                        } elseif (strpos($display_freq, 'Subscribe') !== false) {
+                                            $display_freq = 'Deliver every 2 weeks';
+                                        }
+                                    ?>
+                                        <div class="quills-drawer-meta-line quills-drawer-meta-sub"><?php echo esc_html($display_freq); ?></div>
                                     <?php endif; ?>
                                 </div>
 

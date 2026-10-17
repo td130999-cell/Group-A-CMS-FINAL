@@ -201,15 +201,23 @@ body.quills-body {
 
 /* Gallery */
 .quills-product-gallery {
-    position: sticky;
-    top: 96px;
+    position: relative;
+    width: 100%;
 }
 
+.quills-gallery-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+.quills-gallery-item,
 .quills-gallery-stage {
     position: relative;
     background-color: transparent !important;
     border: none !important;
-    border-radius: 0 !important;
+    border-radius: 4px;
     box-shadow: none !important;
     overflow: hidden;
     display: flex;
@@ -223,12 +231,18 @@ body.quills-body {
     height: auto !important;
     max-height: none !important;
     object-fit: cover !important;
-    border-radius: 0;
+    border-radius: 4px;
     transition: transform 0.4s ease;
 }
 
+.quills-gallery-item:hover .quills-featured-image,
 .quills-gallery-stage:hover .quills-featured-image {
     transform: scale(1.02);
+}
+
+.quills-product-details {
+    position: sticky;
+    top: 96px;
 }
 
 .quills-gallery-badge {
@@ -3162,8 +3176,8 @@ body.quills-drawer-open {
 }
 
 .quills-drawer-meta-sub {
-    color: #3b5a41;
-    font-weight: 600;
+    color: #686158;
+    font-weight: 400;
     margin-top: 2px;
 }
 

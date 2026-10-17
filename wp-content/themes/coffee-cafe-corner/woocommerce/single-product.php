@@ -15,6 +15,21 @@ if (!$product && function_exists('wc_get_product')) {
         $slug = get_query_var('product') ?: get_query_var('name');
         if ($slug) {
             $p_obj = get_page_by_path($slug, OBJECT, 'product');
+            if (!$p_obj) {
+                $alt_slugs = [
+                    'southern-gothic-12oz' => 'southern-gothic-cold-brew',
+                    'inkwell-house-blend'  => 'inkwell-signature-blend',
+                    'blacksmith-espresso'  => 'blacksmith-espresso-blend',
+                    'night-owl'            => 'night-owl-dark-blend',
+                    'colombia-black-condor'=> 'colombia-earthquake-relief-black-condor',
+                    'ommagourd'            => 'ommagourd-fall-blend',
+                    'guatemala-alma-2'     => 'guatemala-alma',
+                    'colombia-el-paraiso-3'=> 'colombia-el-paraiso',
+                ];
+                if (isset($alt_slugs[$slug])) {
+                    $p_obj = get_page_by_path($alt_slugs[$slug], OBJECT, 'product');
+                }
+            }
             if ($p_obj) {
                 $pid = $p_obj->ID;
             }
@@ -58,21 +73,22 @@ $type          = get_post_meta($id, '_coffee_type', true) ?: (get_post_meta($id,
 $origins       = get_post_meta($id, '_coffee_origins', true) ?: (get_post_meta($id, '_quills_country', true) ?: 'Colombia, Guatemala, & Ethiopia');
 $short_title   = strtoupper(trim(explode('|', $title)[0]));
 
-// Images
+// Images from Database
 $main_img_url = Coffee_Cafe_Corner_Coffee_DB::get_product_image_url($id);
+$gallery_urls = Coffee_Cafe_Corner_Coffee_DB::get_product_gallery_urls($id);
 
-$all_images = [$main_img_url];
-$gallery_ids = $product->get_gallery_image_ids();
-foreach ($gallery_ids as $gid) {
-    $gurl = wp_get_attachment_image_url($gid, 'full');
-    if ($gurl && !in_array($gurl, $all_images)) {
-        $all_images[] = $gurl;
-    }
-}
+$all_images = array_unique(array_filter(array_merge([$main_img_url], $gallery_urls)));
 
-// Review stats
-$review_stats = Quills_Coffee_Experience::get_review_stats($id);
-$review_count = (int)get_post_meta($id, '_wc_review_count', true) ?: ($review_stats['total'] ?: 21);
+// Database review comments (real reviews from wp_comments)
+$db_comments = get_comments([
+    'post_id' => $id,
+    'status'  => 'approve',
+    'type'    => 'review',
+    'orderby' => 'comment_date',
+    'order'   => 'DESC'
+]);
+$review_count = !empty($db_comments) ? count($db_comments) : ((int)get_post_meta($id, '_wc_review_count', true) ?: 0);
+$average_rating = get_post_meta($id, '_wc_average_rating', true) ?: ($review_count > 0 ? '5.0' : '0.0');
 
 ?><!DOCTYPE html>
 <html <?php language_attributes(); ?>>
@@ -120,10 +136,24 @@ $review_count = (int)get_post_meta($id, '_wc_review_count', true) ?: ($review_st
                 <span class="quills-gold-star">★</span>
                 <span class="quills-gold-star">★</span>
             </div>
+            <?php 
+            $top_quote_text = 'Delicious ' . esc_html($title) . ' - freshly roasted to perfection with rich balance and aroma.';
+            $top_quote_author = '— Quills Customer';
+            if (!empty($db_comments)) {
+                foreach ($db_comments as $tc) {
+                    $tc_rating = (int)get_comment_meta($tc->comment_ID, 'rating', true) ?: 5;
+                    if ($tc_rating >= 4 && strlen($tc->comment_content) > 10) {
+                        $top_quote_text = wp_strip_all_tags($tc->comment_content);
+                        $top_quote_author = '— ' . esc_html($tc->comment_author);
+                        break;
+                    }
+                }
+            }
+            ?>
             <blockquote class="quills-sp-quote-text" id="quills-sp-quote-text">
-                "Inkwell is one of my all time favorites."
+                "<?php echo esc_html($top_quote_text); ?>"
             </blockquote>
-            <cite class="quills-sp-quote-author" id="quills-sp-quote-author">— Jeff S.</cite>
+            <cite class="quills-sp-quote-author" id="quills-sp-quote-author"><?php echo esc_html($top_quote_author); ?></cite>
 
             <div class="quills-sp-slider-dots">
                 <span class="quills-sp-dot is-active" data-idx="0"></span>
@@ -147,13 +177,17 @@ $review_count = (int)get_post_meta($id, '_wc_review_count', true) ?: ($review_st
     <div class="quills-container">
         <div class="quills-product-layout">
             
-            <!-- Left Column: Primary Image & Description Accordion (Image 1) -->
+            <!-- Left Column: Primary Image, Gallery Stack & Description Accordion (Images 3 & 4) -->
             <div class="quills-product-gallery">
-                <div class="quills-gallery-stage">
-                    <img id="quills-main-image" src="<?php echo esc_url($main_img_url); ?>" alt="<?php echo esc_attr($title); ?>" class="quills-featured-image" loading="eager">
+                <div class="quills-gallery-stack">
+                    <?php foreach ($all_images as $idx => $img_src): ?>
+                        <div class="quills-gallery-item <?php echo $idx === 0 ? 'quills-gallery-item-main' : ''; ?>">
+                            <img src="<?php echo esc_url($img_src); ?>" alt="<?php echo esc_attr($title . ' image ' . ($idx + 1)); ?>" class="quills-featured-image" loading="<?php echo $idx === 0 ? 'eager' : 'lazy'; ?>">
+                        </div>
+                    <?php endforeach; ?>
                 </div>
 
-                <!-- Description Accordion (Image 1 parity) -->
+                <!-- Description Accordion (Image 3 parity) -->
                 <div class="quills-desc-accordion-wrapper is-open">
                     <button type="button" class="quills-desc-header" id="quills-desc-toggle" aria-expanded="true">
                         <span class="quills-desc-title">Description</span>
@@ -167,10 +201,10 @@ $review_count = (int)get_post_meta($id, '_wc_review_count', true) ?: ($review_st
                                 echo wpautop(wp_kses_post($post_content));
                             }
                             ?>
-                            <?php if (!empty($origins)): ?>
+                            <?php if (!empty($origins) && strpos($post_content, $origins) === false): ?>
                                 <p class="quills-desc-meta-line"><strong>Current coffees:</strong> <?php echo esc_html($origins); ?></p>
                             <?php endif; ?>
-                            <?php if (!empty($tasting_notes)): ?>
+                            <?php if (!empty($tasting_notes) && strpos($post_content, $tasting_notes) === false): ?>
                                 <p class="quills-desc-meta-line"><strong>We taste:</strong> <?php echo esc_html($tasting_notes); ?>.</p>
                             <?php endif; ?>
                         </div>
@@ -316,7 +350,7 @@ $review_count = (int)get_post_meta($id, '_wc_review_count', true) ?: ($review_st
             
             <div class="quills-reviews-toolbar-v2">
                 <div class="quills-reviews-stats-badge">
-                    <span class="quills-reviews-avg">4.9</span>
+                    <span class="quills-reviews-avg"><?php echo esc_html($average_rating); ?></span>
                     <span class="quills-reviews-count-label"><?php echo esc_html($review_count); ?> reviews</span>
                     <span class="quills-reviews-trophy" title="Verified Store Rating">🏆</span>
                     <span class="quills-reviews-badge-circle" title="Verified Customer Feedback">✔</span>

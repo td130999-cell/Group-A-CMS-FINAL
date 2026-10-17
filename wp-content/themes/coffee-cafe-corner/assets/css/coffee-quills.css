@@ -635,6 +635,9 @@
 .quills-coffee-card-img {
     width: 100%;
     height: 100%;
+    max-width: 100%;
+    max-height: 100%;
+    aspect-ratio: 1 / 1;
     object-fit: cover;
     display: block;
     transition: transform 0.4s ease;
@@ -814,7 +817,7 @@ h3.quills-coffee-card-title {
 }
 
 .quills-star--empty {
-    color: #d8d4c5;
+    color: #e09935;
 }
 
 .quills-review-count {
