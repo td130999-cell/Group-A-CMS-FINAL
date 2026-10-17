@@ -227,19 +227,44 @@ $img_dir   = $theme_uri . 'assets/images/home/';
             $p_rating   = $bestseller->get_average_rating();
             $p_reviews  = $bestseller->get_review_count();
 
-            $tag        = get_post_meta( $p_id, '_quills_tag', true ) ?: strtoupper( $bestseller->get_slug() );
-            $tag_color  = get_post_meta( $p_id, '_quills_tag_color', true ) ?: '#000000';
-            $tag_desc   = get_post_meta( $p_id, '_quills_tag_desc', true ) ?: $bestseller->get_short_description();
-            $tasting    = get_post_meta( $p_id, '_quills_tasting', true );
-            $details    = get_post_meta( $p_id, '_quills_details', true );
-            $back_img   = get_post_meta( $p_id, '_quills_back_img', true ) ?: 'product-bag-back.jpg';
-
-            $image_id   = $bestseller->get_image_id();
-            $front_img_url = $image_id ? wp_get_attachment_image_url( $image_id, 'full' ) : '';
-            if ( ! $front_img_url ) {
-              $front_img_url = $img_dir . 'product-' . $bestseller->get_slug() . '-front.jpg';
+            $slug = $bestseller->get_slug();
+            if ( strpos( $slug, 'blacksmith' ) !== false ) {
+              $front_img_url = $img_dir . 'product-blacksmith-front.jpg';
+              $tag           = 'BLACKSMITH';
+              $tag_color     = '#E5A823';
+              $tag_desc      = 'The F1 car of our lineup. Our signature espresso that folks enjoy in every latte, cappuccino, and cortado in our cafés.';
+              $tasting       = "Baker's chocolate, blueberries, hazelnut";
+              $details       = "Process: Washed & Natural\nOrigins: Colombia, Nicaragua, Ethiopia";
+              if ( empty( $p_reviews ) ) { $p_reviews = 53; }
+            } elseif ( strpos( $slug, 'inkwell' ) !== false ) {
+              $front_img_url = $img_dir . 'product-inkwell-front.jpg';
+              $tag           = 'INKWELL';
+              $tag_color     = '#EB5A3C';
+              $tag_desc      = "The daily driver. Our classic house blend that's on drip at our cafes from open to close. Loved by regulars for 17 years.";
+              $tasting       = 'honey, chocolate, clementine';
+              $details       = "Process: Washed & Natural\nOrigins: Colombia, Guatemala, Ethiopia";
+              if ( empty( $p_reviews ) ) { $p_reviews = 80; }
+            } elseif ( strpos( $slug, 'southern' ) !== false ) {
+              $front_img_url = $img_dir . 'product-southern-gothic-front.jpg';
+              $tag           = 'SOUTHERN GOTHIC';
+              $tag_color     = '#8C6FA9';
+              $tag_desc      = 'Our cold brew blend crafted for our customers who prefer their coffee chilled.';
+              $tasting       = 'Milk chocolate, brown sugar, orange';
+              $details       = "Process: Washed & Natural\nOrigins: Central & South America";
+              if ( empty( $p_reviews ) ) { $p_reviews = 21; }
+            } else {
+              $image_id      = $bestseller->get_image_id();
+              $front_img_url = $image_id ? wp_get_attachment_image_url( $image_id, 'full' ) : '';
+              if ( ! $front_img_url ) {
+                $front_img_url = $img_dir . 'product-blacksmith-front.jpg';
+              }
+              $tag           = get_post_meta( $p_id, '_quills_tag', true ) ?: strtoupper( $bestseller->get_slug() );
+              $tag_color     = get_post_meta( $p_id, '_quills_tag_color', true ) ?: '#000000';
+              $tag_desc      = get_post_meta( $p_id, '_quills_tag_desc', true ) ?: $bestseller->get_short_description();
+              $tasting       = get_post_meta( $p_id, '_quills_tasting', true );
+              $details       = get_post_meta( $p_id, '_quills_details', true );
             }
-            $back_img_url = $img_dir . $back_img;
+            $back_img_url    = $img_dir . 'product-bag-back.jpg';
         ?>
           <div class="quills-product-card" data-product-id="<?php echo esc_attr( $p_id ); ?>">
             <div class="quills-product-meta-header">

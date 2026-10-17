@@ -402,13 +402,43 @@ class Coffee_Cafe_Corner_Quills_Products_DB {
 			return array();
 		}
 
-		return wc_get_products( array(
-			'category' => array( 'coffee' ),
-			'status'   => 'publish',
-			'limit'    => 3,
-			'orderby'  => 'date',
-			'order'    => 'ASC',
-		) );
+		$bestseller_slug_groups = array(
+			array( 'blacksmith-espresso', 'blacksmith-espresso-blend' ),
+			array( 'inkwell-blend', 'inkwell-signature-blend' ),
+			array( 'southern-gothic', 'southern-gothic-cold-brew' ),
+		);
+
+		$products = array();
+		foreach ( $bestseller_slug_groups as $slugs ) {
+			foreach ( $slugs as $slug ) {
+				$prod_post = get_page_by_path( $slug, OBJECT, 'product' );
+				if ( $prod_post && function_exists( 'wc_get_product' ) ) {
+					$wc_prod = wc_get_product( $prod_post->ID );
+					if ( $wc_prod && $wc_prod->is_visible() ) {
+						$products[] = $wc_prod;
+						break;
+					}
+				}
+			}
+		}
+
+		if ( count( $products ) < 3 ) {
+			$fallback = wc_get_products( array(
+				'category' => array( 'coffee' ),
+				'status'   => 'publish',
+				'limit'    => 3,
+			) );
+			foreach ( $fallback as $p ) {
+				if ( ! in_array( $p, $products, true ) ) {
+					$products[] = $p;
+				}
+				if ( count( $products ) >= 3 ) {
+					break;
+				}
+			}
+		}
+
+		return $products;
 	}
 
 	/**
@@ -427,6 +457,56 @@ class Coffee_Cafe_Corner_Quills_Products_DB {
 			'status'   => 'publish',
 			'limit'    => 12,
 		);
+
+		if ( 'featured' === $sort || empty( $sort ) ) {
+			$ordered_slugs = array(
+				array( 'crewneck-sweatshirt-evergreen', 'quills-coffee-leaves-crewneck-sweatshirt' ),
+				array( 'crewneck-sweatshirt-sandstone', 'quills-coffee-leaves-crewneck-sweatshirt-copy' ),
+				array( 'owl-ringer-tee', 'quills-kentucky-owl-ringer-tee' ),
+				array( 'owl-tee-in-pastel-green', 'quills-kentucky-owl-ringer-tee-copy' ),
+				array( 'owl-embroidered-hat', 'quills-owl-embroidered-hat' ),
+				array( 'two-tone-embroidered-hat', 'quills-owl-embroidered-hat-copy' ),
+				array( 'quills-speckled-coffee-mug', 'quills-coffee-mug' ),
+				array( 'quills-coffee-postage-mug', 'quills-coffee-mug-copy' ),
+				array( 'quills-slow-coffee-hoodie-charcoal' ),
+				array( 'quills-slow-coffee-hoodie-saddle', 'quills-slow-coffee-hoodie-charcoal-copy' ),
+				array( 'quills-postage-tote-bag' ),
+				array( 'quills-patch-hat-petrol-blue', 'two-tone-embroidered-hat-copy' ),
+			);
+
+			$ordered_products = array();
+			$used_ids = array();
+
+			foreach ( $ordered_slugs as $slug_group ) {
+				foreach ( $slug_group as $slug ) {
+					$post = get_page_by_path( $slug, OBJECT, 'product' );
+					if ( $post && ! in_array( $post->ID, $used_ids, true ) ) {
+						$wc_p = wc_get_product( $post->ID );
+						if ( $wc_p && $wc_p->is_visible() ) {
+							$ordered_products[] = $wc_p;
+							$used_ids[] = $post->ID;
+							break;
+						}
+					}
+				}
+			}
+
+			if ( count( $ordered_products ) >= 12 ) {
+				return $ordered_products;
+			}
+
+			$fallback = wc_get_products( $args );
+			foreach ( $fallback as $p ) {
+				if ( ! in_array( $p->get_id(), $used_ids, true ) ) {
+					$ordered_products[] = $p;
+					$used_ids[] = $p->get_id();
+				}
+				if ( count( $ordered_products ) >= 12 ) {
+					break;
+				}
+			}
+			return $ordered_products;
+		}
 
 		switch ( $sort ) {
 			case 'price-ascending':

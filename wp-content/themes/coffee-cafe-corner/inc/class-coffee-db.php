@@ -886,13 +886,17 @@ class Coffee_Cafe_Corner_Coffee_DB {
             if ( ! $post ) return;
             $title         = $post->post_title;
             $permalink     = get_permalink( $product_id );
-            $price_display = get_post_meta( $product_id, '_price_display', true ) ?: '$20.00';
+            $raw_meta      = get_post_meta( $product_id, '_price_display', true );
+            $price_display = ! empty( $raw_meta ) ? wp_strip_all_tags( $raw_meta ) : '$20.00';
         } else {
             $title         = $product->get_name();
             $permalink     = get_permalink( $product_id );
-            $price_display = get_post_meta( $product_id, '_price_display', true );
-            if ( empty( $price_display ) ) {
-                $price_display = wc_price( $product->get_price() );
+            $raw_meta      = get_post_meta( $product_id, '_price_display', true );
+            if ( ! empty( $raw_meta ) ) {
+                $price_display = wp_strip_all_tags( $raw_meta );
+            } else {
+                $price_val = (float) $product->get_price();
+                $price_display = ( $price_val > 0 ) ? ( 'FROM $' . number_format( $price_val, 2 ) ) : 'FROM $20.00';
             }
         }
 
