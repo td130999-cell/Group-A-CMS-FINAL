@@ -669,12 +669,6 @@
     pointer-events: auto !important;
 }
 
-.quills-coffee-card:hover .quills-coffee-card-link,
-.quills-coffee-card.is-hovered .quills-coffee-card-link,
-.quills-coffee-card-media:hover .quills-coffee-card-link {
-    pointer-events: none !important;
-}
-
 .quills-coffee-card:hover .rollover_inner,
 .quills-coffee-card.is-hovered .rollover_inner,
 .quills-coffee-card-media:hover .rollover_inner {
@@ -688,6 +682,22 @@
     flex-direction: column;
     height: 100%;
     width: 100%;
+}
+
+.quills-coffee-card-media .rollover_link_overlay {
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 auto;
+    text-decoration: none !important;
+    color: #ffffff !important;
+    cursor: pointer;
+    overflow: hidden;
+}
+
+.quills-coffee-card-media .rollover_link_overlay:hover,
+.quills-coffee-card-media .rollover_link_overlay:focus {
+    text-decoration: none !important;
+    color: #ffffff !important;
 }
 
 .quills-coffee-card-media .rollover_top {

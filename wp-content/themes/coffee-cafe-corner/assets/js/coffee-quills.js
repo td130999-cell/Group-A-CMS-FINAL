@@ -256,7 +256,7 @@
             if ($(e.target).closest('.quills-hover-add-cart, .rollover_bottom').length) {
                 return; // Handled by 7b
             }
-            var permalink = $(this).data('permalink') || $(this).closest('.quills-coffee-card').find('.quills-coffee-card-link').attr('href');
+            var permalink = $(this).data('permalink') || $(this).find('.rollover_link_overlay').attr('href') || $(this).closest('.quills-coffee-card').find('.quills-coffee-card-link').attr('href');
             if (permalink) {
                 window.location.href = permalink;
             }

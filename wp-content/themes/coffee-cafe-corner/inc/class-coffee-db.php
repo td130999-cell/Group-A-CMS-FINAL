@@ -215,13 +215,14 @@ class Coffee_Cafe_Corner_Coffee_DB {
                 'slug'          => 'inkwell-signature-blend',
                 'handle'        => 'inkwell-house-blend',
                 'title'         => 'Inkwell | Signature Blend',
+                'subtitle'      => 'Our Signature House Blend',
                 'price'         => '20.00',
                 'price_display' => 'FROM $20.00',
                 'type'          => array( 'blend' ),
-                'process'       => array( 'Washed' ),
+                'process'       => array( 'Washed & Natural' ),
                 'roast'         => array( 'Medium' ),
-                'origins'       => 'Colombia, Guatemala, and Ethiopia',
-                'notes'         => 'honey, chocolate, clementine',
+                'origins'       => 'Colombia, Guatemala, Ethiopia',
+                'notes'         => 'Graham cracker, cooked cherries, vanilla',
                 'menu_order'    => 1,
                 'content'       => '<p><span style="font-weight: 400;">Inkwell has quickly become a favorite for many of our customers. This house blend has something for everyone, but it’s not just a simple crowd-pleaser. This blend represents everything we are proud to showcase in our coffees: care in production, intentional sourcing, and a roaster’s unique touch, all balanced in a complex, delicate dance. It’s proof that blending doesn’t mean watering down quality.  </span></p>
 <p><span style="font-weight: 400;">Current Coffees: Colombia, Guatemala, and Ethiopia</span></p>
@@ -269,13 +270,14 @@ class Coffee_Cafe_Corner_Coffee_DB {
                 'slug'          => 'blacksmith-espresso-blend',
                 'handle'        => 'blacksmith-espresso',
                 'title'         => 'Blacksmith | Espresso Blend',
+                'subtitle'      => 'Our Signature Espresso',
                 'price'         => '20.00',
                 'price_display' => 'FROM $20.00',
                 'type'          => array( 'espresso', 'blend' ),
-                'process'       => array( 'Natural', 'Washed' ),
+                'process'       => array( 'Washed & Natural' ),
                 'roast'         => array( 'Medium' ),
-                'origins'       => 'Colombia, Nicaragua, and Ethiopia',
-                'notes'         => 'dark chocolate, caramelized sugar, candied orange',
+                'origins'       => 'Colombia, Nicaragua, Ethiopia',
+                'notes'         => "Baker's chocolate, blueberries, hazelnut",
                 'menu_order'    => 2,
                 'content'       => '<h3><strong>Blacksmith is our flagship espresso for a reason.</strong></h3>
 <p>Over 5,000,000 shots pulled across all seven of our cafes and still the most popular coffee in our subscription lineup. It’s the espresso we rely on every single day.</p>
@@ -331,13 +333,14 @@ class Coffee_Cafe_Corner_Coffee_DB {
                 'slug'          => 'southern-gothic-cold-brew',
                 'handle'        => 'southern-gothic-12oz',
                 'title'         => 'Southern Gothic | Cold Brew Blend',
+                'subtitle'      => '',
                 'price'         => '20.00',
                 'price_display' => 'FROM $20.00',
                 'type'          => array( 'blend' ),
-                'process'       => array( 'Natural', 'Washed' ),
+                'process'       => array( 'Washed, Natural' ),
                 'roast'         => array( 'Medium' ),
-                'origins'       => 'Brazil, Colombia',
-                'notes'         => 'Chocolate, caramel, well-balanced',
+                'origins'       => 'Brazil & Colombia',
+                'notes'         => 'Chocolate, caramel, well-balanced.',
                 'menu_order'    => 3,
                 'content'       => '<p> </p>
 <p data-mce-fragment="1">It’s literary. It’s Southern. It’s dark. But we’re not talking about Flannery O’Connor, William Faulkner or Cormac McCarthy. Southern Gothic is warm, comfort coffee at its best. We chose to start offering this as our in-house cold brew because it’s a great, darker-roasted, low-acid blend. Think heavier body, rich full chocolates and caramels. The kind of coffee anybody can enjoy.</p>
@@ -701,6 +704,9 @@ class Coffee_Cafe_Corner_Coffee_DB {
                 }
 
                 update_post_meta( $product_id, '_coffee_tasting_notes', $item['notes'] );
+                if ( isset( $item['subtitle'] ) ) {
+                    update_post_meta( $product_id, '_coffee_subtitle', sanitize_text_field( $item['subtitle'] ) );
+                }
                 update_post_meta( $product_id, '_coffee_origins', $item['origins'] );
                 update_post_meta( $product_id, '_coffee_image', $item['image'] );
                 update_post_meta( $product_id, '_coffee_gallery', $item['gallery'] );
@@ -760,6 +766,7 @@ class Coffee_Cafe_Corner_Coffee_DB {
             'post_type'      => 'product',
             'post_status'    => 'publish',
             'posts_per_page' => 50,
+            'post__not_in'   => array( 88, 90, 92 ),
             'tax_query'      => array(
                 array(
                     'taxonomy' => self::TAXONOMY,
@@ -909,6 +916,7 @@ class Coffee_Cafe_Corner_Coffee_DB {
         $rating_round  = $avg_rating > 0 ? (int) round( $avg_rating ) : ( $review_count > 0 ? 5 : 0 );
 
         $tasting_notes = get_post_meta( $product_id, '_coffee_tasting_notes', true );
+        $subtitle      = get_post_meta( $product_id, '_coffee_subtitle', true );
         $process_raw   = get_post_meta( $product_id, '_coffee_process', true );
         if ( is_array( $process_raw ) ) {
             $process_str = implode( ' & ', $process_raw );
@@ -916,6 +924,33 @@ class Coffee_Cafe_Corner_Coffee_DB {
             $process_str = (string) $process_raw;
         }
         $origins       = get_post_meta( $product_id, '_coffee_origins', true );
+
+        $product_slug    = get_post_field( 'post_name', $product_id );
+        $raw_custom_desc = '';
+
+        // Standardized brand tasting notes and subtitles matching live Quills Coffee
+        if ( strpos( $title, 'Inkwell' ) !== false || strpos( $product_slug, 'inkwell' ) !== false ) {
+            $subtitle      = 'Our Signature House Blend';
+            $tasting_notes = 'Graham cracker, cooked cherries, vanilla';
+            $process_str   = 'Washed & Natural';
+            $origins       = 'Colombia, Guatemala, Ethiopia';
+        } elseif ( strpos( $title, 'Blacksmith' ) !== false || strpos( $product_slug, 'blacksmith' ) !== false ) {
+            $subtitle      = 'Our Signature Espresso';
+            $tasting_notes = "Baker's chocolate, blueberries, hazelnut";
+            $process_str   = 'Washed & Natural';
+            $origins       = 'Colombia, Nicaragua, Ethiopia';
+        } elseif ( strpos( $title, 'Southern Gothic' ) !== false || strpos( $product_slug, 'southern-gothic' ) !== false ) {
+            $subtitle      = '';
+            $tasting_notes = 'Chocolate, caramel, well-balanced.';
+            $process_str   = 'Washed, Natural';
+            $origins       = 'Brazil & Colombia';
+        } elseif ( strpos( $title, 'Bit of Both' ) !== false || strpos( $product_slug, 'bit-of-both' ) !== false ) {
+            $raw_custom_desc = 'Our house blend Inkwell and the current seasonal coffee.';
+        } elseif ( strpos( $title, 'The Home Barista' ) !== false || strpos( $product_slug, 'home-barista' ) !== false ) {
+            $raw_custom_desc = 'Our signature Blacksmith espresso and our seasonal espresso.';
+        } elseif ( strpos( $title, 'Sunrise' ) !== false || strpos( $product_slug, 'sunrise' ) !== false ) {
+            $raw_custom_desc = 'Our signature house blend Inkwell and Decaf de Caña.';
+        }
         ?>
         <article class="quills-coffee-card" data-product-id="<?php echo esc_attr( $product_id ); ?>">
             <div class="quills-coffee-card-media">
@@ -924,26 +959,34 @@ class Coffee_Cafe_Corner_Coffee_DB {
                 </a>
                 <div class="rollover_inner" data-permalink="<?php echo esc_url( $permalink ); ?>">
                     <div class="rollover_wrapper">
-                        <div class="rollover_top">
-                            <span class="collection_name"></span>
-                            <h4 class="prod_title"><?php echo esc_html( $title ); ?></h4>
-                        </div>
-                        <div class="rollover_content">
-                            <div class="rte">
-                                <div class="metafield-rich_text_field">
-                                    <?php if ( ! empty( $tasting_notes ) ) : ?>
-                                        <p><em><strong><?php echo esc_html( $tasting_notes ); ?></strong></em></p>
-                                    <?php endif; ?>
-                                    <?php if ( ! empty( $process_str ) ) : ?>
-                                        <p><strong>Process:</strong> <?php echo esc_html( $process_str ); ?></p>
-                                    <?php endif; ?>
-                                    <?php if ( ! empty( $origins ) ) : ?>
-                                        <p><strong>Origins:</strong> <?php echo esc_html( $origins ); ?></p>
-                                    <?php endif; ?>
-                                </div>
+                        <a href="<?php echo esc_url( $permalink ); ?>" class="rollover_link_overlay" aria-label="<?php echo esc_attr( $title ); ?>">
+                            <div class="rollover_top">
+                                <span class="collection_name"></span>
+                                <h4 class="prod_title"><?php echo esc_html( $title ); ?></h4>
                             </div>
-                            <p class="rollover_short"></p>
-                        </div>
+                            <div class="rollover_content">
+                                <div class="rte">
+                                    <div class="metafield-rich_text_field">
+                                        <?php if ( ! empty( $raw_custom_desc ) ) : ?>
+                                            <p><?php echo esc_html( $raw_custom_desc ); ?></p>
+                                        <?php elseif ( ! empty( $tasting_notes ) ) : ?>
+                                            <p><em><strong><?php echo esc_html( $tasting_notes ); ?><br /><br /></strong></em>
+                                            <?php if ( ! empty( $subtitle ) ) : ?>
+                                                <strong><?php echo esc_html( $subtitle ); ?><br /></strong>
+                                            <?php endif; ?>
+                                            <?php if ( ! empty( $process_str ) ) : ?>
+                                                <strong>Process: </strong><?php echo esc_html( $process_str ); ?><br />
+                                            <?php endif; ?>
+                                            <?php if ( ! empty( $origins ) ) : ?>
+                                                <strong>Origins: </strong><?php echo esc_html( $origins ); ?>
+                                            <?php endif; ?>
+                                            </p>
+                                        <?php endif; ?>
+                                    </div>
+                                </div>
+                                <p class="rollover_short"></p>
+                            </div>
+                        </a>
                         <div class="rollover_bottom">
                             <button type="button" class="quills-hover-add-cart" data-product-id="<?php echo esc_attr( $product_id ); ?>" data-permalink="<?php echo esc_url( $permalink ); ?>" aria-label="Add <?php echo esc_attr( $title ); ?> to cart">ADD TO CART</button>
                         </div>

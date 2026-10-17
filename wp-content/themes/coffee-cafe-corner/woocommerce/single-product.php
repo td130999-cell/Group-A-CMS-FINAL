@@ -88,11 +88,11 @@ if ( false !== $cached_reviews && is_array( $cached_reviews ) ) {
     $average_rating = $cached_reviews['avg'];
 } else {
     $db_comments = get_comments([
-        'post_id' => $id,
-        'status'  => 'approve',
-        'type'    => 'review',
-        'orderby' => 'comment_date',
-        'order'   => 'DESC'
+        'post_id'  => $id,
+        'status'   => 'approve',
+        'type__in' => array( 'review', '', 'comment' ),
+        'orderby'  => 'comment_date',
+        'order'    => 'DESC'
     ]);
     $review_count = !empty($db_comments) ? count($db_comments) : 0;
     $average_rating = '0.0';

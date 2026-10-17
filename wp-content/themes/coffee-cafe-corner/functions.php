@@ -43,11 +43,11 @@ function coffee_cafe_corner_scripts() {
 		) );
 	}
 
-	// Enqueue Quills Home stylesheet and script
-	if ( file_exists( get_template_directory() . '/assets/css/home-quills.css' ) ) {
+	// Enqueue Quills Home stylesheet and script (only on front page to prevent CSS collisions)
+	if ( ( is_front_page() || is_home() ) && file_exists( get_template_directory() . '/assets/css/home-quills.css' ) ) {
 		wp_enqueue_style( 'coffee-cafe-corner-home', trailingslashit( get_template_directory_uri() ) . 'assets/css/home-quills.css', array(), filemtime( get_template_directory() . '/assets/css/home-quills.css' ) );
 	}
-	if ( file_exists( get_template_directory() . '/assets/js/home-quills.js' ) ) {
+	if ( ( is_front_page() || is_home() ) && file_exists( get_template_directory() . '/assets/js/home-quills.js' ) ) {
 		wp_enqueue_script( 'coffee-cafe-corner-home-js', trailingslashit( get_template_directory_uri() ) . 'assets/js/home-quills.js', array(), filemtime( get_template_directory() . '/assets/js/home-quills.js' ), true );
 	}
 
@@ -552,6 +552,21 @@ if ( class_exists( 'Coffee_Cafe_Corner_Cafe_Locations_DB' ) ) {
  * Quills Products (Home Bestsellers, Merch, Gift Cards) Database Management
  */
 require_once get_template_directory() . '/inc/class-quills-products-db.php';
+
+/**
+ * Permanently disable WooCommerce Coming Soon / Site Visibility mode
+ * Ensures single product pages, shop, and customer reviews are always accessible
+ */
+add_filter( 'woocommerce_coming_soon_exclude', '__return_true', 999 );
+add_action( 'init', function() {
+	if ( get_option( 'woocommerce_coming_soon' ) === 'yes' ) {
+		update_option( 'woocommerce_coming_soon', 'no' );
+	}
+	if ( get_option( 'woocommerce_store_pages_only' ) === 'yes' ) {
+		update_option( 'woocommerce_store_pages_only', 'no' );
+	}
+}, 1 );
+
 
 
 
