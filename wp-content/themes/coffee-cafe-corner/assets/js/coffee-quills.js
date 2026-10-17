@@ -240,16 +240,174 @@
             $(this).removeClass('is-hovered');
         });
 
-        // 7. Hover Card Add to Cart Action
+        // Helper to update Cart Badge across header
+        function setQuillsCartCount(count) {
+            count = parseInt(count, 10) || 0;
+            var $badges = $('#quills-cart-badge, .quills-cart-badge');
+            if (count > 0) {
+                $badges.text(count).removeClass('is-empty').show();
+            } else {
+                $badges.text('0').addClass('is-empty').hide();
+            }
+        }
+
+        // 7a. Hover Card Navigation: Clicking anywhere outside ADD TO CART navigates to single product detail page
+        $(document).on('click', '.rollover_inner', function(e) {
+            if ($(e.target).closest('.quills-hover-add-cart').length) {
+                return; // Handled by 7b
+            }
+            var permalink = $(this).data('permalink') || $(this).closest('.quills-coffee-card').find('.quills-coffee-card-link').attr('href');
+            if (permalink) {
+                window.location.href = permalink;
+            }
+        });
+
+        // 7b. Open Quick Shop Drawer (Image 2)
+        function openQuickShopDrawer(productId) {
+            var $drawer = $('#quills-quick-shop-drawer');
+            var $overlay = $('#quills-quick-shop-overlay');
+            var $content = $('#quills-quick-shop-content');
+
+            $overlay.addClass('is-active').attr('aria-hidden', 'false');
+            $drawer.addClass('is-active').attr('aria-hidden', 'false');
+            $('body').addClass('quills-drawer-open');
+
+            // Loading skeleton
+            $content.html(
+                '<div class="quills-qs-loading-skeleton">' +
+                    '<div class="quills-qs-spinner"></div>' +
+                    '<p>Loading product options...</p>' +
+                '</div>'
+            );
+
+            $.ajax({
+                url: (typeof quillsData !== 'undefined' && quillsData.ajaxUrl) ? quillsData.ajaxUrl : '/wp-admin/admin-ajax.php',
+                type: 'POST',
+                data: {
+                    action: 'quills_get_quick_shop_drawer',
+                    nonce: (typeof quillsData !== 'undefined' && quillsData.nonce) ? quillsData.nonce : '',
+                    product_id: productId
+                },
+                success: function(resp) {
+                    if (resp && resp.success && resp.data && resp.data.html) {
+                        $content.html(resp.data.html);
+                    } else {
+                        $content.html('<div class="quills-qs-loading-skeleton"><p>Could not load product options.</p></div>');
+                    }
+                },
+                error: function() {
+                    $content.html('<div class="quills-qs-loading-skeleton"><p>Error loading product details.</p></div>');
+                }
+            });
+        }
+
+        function closeQuickShopDrawer() {
+            $('#quills-quick-shop-overlay').removeClass('is-active').attr('aria-hidden', 'true');
+            $('#quills-quick-shop-drawer').removeClass('is-active').attr('aria-hidden', 'true');
+            if (!$('#quills-cart-drawer').hasClass('is-active')) {
+                $('body').removeClass('quills-drawer-open');
+            }
+        }
+
+        // Trigger Quick Shop Drawer on card button click
         $(document).on('click', '.quills-hover-add-cart', function(e) {
             e.preventDefault();
             e.stopPropagation();
-            var $btn = $(this);
-            var productId = $btn.data('product-id');
-            var permalink = $btn.data('permalink');
-            var originalText = $btn.text();
+            var productId = $(this).data('product-id');
+            if (productId) {
+                openQuickShopDrawer(productId);
+            }
+        });
 
-            $btn.text('ADDING...').prop('disabled', true);
+        // Close Quick Shop Drawer Handlers
+        $(document).on('click', '#quills-qs-close, #quills-quick-shop-overlay', function(e) {
+            e.preventDefault();
+            closeQuickShopDrawer();
+        });
+
+        $(document).on('keydown', function(e) {
+            if ((e.key === 'Escape' || e.keyCode === 27) && $('#quills-quick-shop-drawer').hasClass('is-active')) {
+                closeQuickShopDrawer();
+            }
+        });
+
+        // Quick Shop: Size selection & dynamic price
+        $(document).on('click', '.quills-qs-size-pill', function(e) {
+            e.preventDefault();
+            var $wrapper = $(this).closest('.quills-qs-wrapper');
+            $wrapper.find('.quills-qs-size-pill').removeClass('active');
+            $(this).addClass('active');
+
+            var selectedSize = $(this).data('size') || '12oz';
+            $wrapper.find('#quills-qs-selected-size').text(selectedSize);
+
+            var $addBtn = $wrapper.find('#quills-qs-btn-add');
+            var basePrice = parseFloat($addBtn.data('base-price')) || 20.00;
+            var currentPrice = basePrice;
+
+            if (selectedSize === '5lb') {
+                currentPrice = (basePrice === 20.00) ? 105.00 : (basePrice * 5.25);
+            } else if (selectedSize === '2lb') {
+                currentPrice = (basePrice === 20.00) ? 48.00 : (basePrice * 2.4);
+            }
+
+            $wrapper.find('#quills-qs-price').html('$' + currentPrice.toFixed(2));
+
+            // 5lb bags are whole bean only
+            var $activeGrind = $wrapper.find('.quills-qs-grind-pill.active');
+            if (selectedSize === '5lb') {
+                if ($activeGrind.data('grind') !== 'Whole Bean') {
+                    $wrapper.find('.quills-qs-grind-pill').removeClass('active');
+                    $wrapper.find('.quills-qs-grind-pill[data-grind="Whole Bean"]').addClass('active');
+                    $wrapper.find('#quills-qs-selected-grind').text('Whole Bean');
+                }
+            }
+        });
+
+        // Quick Shop: Grind Type selection
+        $(document).on('click', '.quills-qs-grind-pill', function(e) {
+            e.preventDefault();
+            var $wrapper = $(this).closest('.quills-qs-wrapper');
+            var selectedSize = $wrapper.find('.quills-qs-size-pill.active').data('size') || '12oz';
+
+            if (selectedSize === '5lb' && $(this).data('grind') !== 'Whole Bean') {
+                alert('5lb bags are only available as Whole Bean.');
+                return;
+            }
+
+            $wrapper.find('.quills-qs-grind-pill').removeClass('active');
+            $(this).addClass('active');
+            $wrapper.find('#quills-qs-selected-grind').text($(this).data('grind'));
+        });
+
+        // Quick Shop: Quantity Stepper
+        $(document).on('click', '#quills-qs-qty-minus', function(e) {
+            e.preventDefault();
+            var $input = $(this).siblings('#quills-qs-qty-input');
+            var val = parseInt($input.val(), 10) || 1;
+            if (val > 1) {
+                $input.val(val - 1);
+            }
+        });
+
+        $(document).on('click', '#quills-qs-qty-plus', function(e) {
+            e.preventDefault();
+            var $input = $(this).siblings('#quills-qs-qty-input');
+            var val = parseInt($input.val(), 10) || 1;
+            $input.val(val + 1);
+        });
+
+        // Quick Shop: Add to Cart Action
+        $(document).on('click', '#quills-qs-btn-add', function(e) {
+            e.preventDefault();
+            var $btn = $(this);
+            var $wrapper = $btn.closest('.quills-qs-wrapper');
+            var productId = $btn.data('product-id');
+            var size = $wrapper.find('.quills-qs-size-pill.active').data('size') || '12oz';
+            var grind = $wrapper.find('.quills-qs-grind-pill.active').data('grind') || 'Whole Bean';
+            var quantity = parseInt($wrapper.find('#quills-qs-qty-input').val(), 10) || 1;
+
+            $btn.prop('disabled', true).find('.quills-qs-btn-text').text('ADDING...');
 
             $.ajax({
                 url: (typeof quillsData !== 'undefined' && quillsData.ajaxUrl) ? quillsData.ajaxUrl : '/wp-admin/admin-ajax.php',
@@ -258,34 +416,62 @@
                     action: 'quills_add_to_cart',
                     nonce: (typeof quillsData !== 'undefined' && quillsData.nonce) ? quillsData.nonce : '',
                     product_id: productId,
-                    quantity: 1,
-                    size: '12oz',
-                    grind: 'Whole Bean',
+                    quantity: quantity,
+                    size: size,
+                    grind: grind,
                     purchase_type: 'onetime'
                 },
                 success: function(res) {
-                    $btn.text('ADDED ✓');
+                    $btn.find('.quills-qs-btn-text').text('ADDED ✓');
                     setTimeout(function() {
-                        $btn.text(originalText).prop('disabled', false);
-                    }, 1800);
-                    if (res && res.success) {
-                        if ($('#quills-cart-badge, .quills-cart-badge').length) {
-                            $('#quills-cart-badge, .quills-cart-badge').text(res.data.cart_count);
+                        $btn.prop('disabled', false).find('.quills-qs-btn-text').text('ADD TO CART');
+                        closeQuickShopDrawer();
+                        if (res && res.success) {
+                            setQuillsCartCount(res.data.cart_count);
+                            if (res.data && res.data.drawer_html) {
+                                $('#quills-cart-drawer-content').html(res.data.drawer_html);
+                                $('#quills-cart-overlay').addClass('is-active').attr('aria-hidden', 'false');
+                                $('#quills-cart-drawer').addClass('is-active').attr('aria-hidden', 'false');
+                                $('body').addClass('quills-drawer-open');
+                            }
                         }
-                        if (res.data && res.data.drawer_html) {
-                            $('#quills-cart-drawer-content').html(res.data.drawer_html);
-                            $('#quills-cart-overlay').addClass('is-active').attr('aria-hidden', 'false');
-                            $('#quills-cart-drawer').addClass('is-active').attr('aria-hidden', 'false');
-                            $('body').addClass('quills-drawer-open');
-                        }
-                    }
+                    }, 400);
                 },
                 error: function() {
-                    if (permalink) {
-                        window.location.href = permalink;
-                    } else {
-                        $btn.text(originalText).prop('disabled', false);
-                    }
+                    $btn.prop('disabled', false).find('.quills-qs-btn-text').text('ADD TO CART');
+                    alert('Error adding to cart. Please try again.');
+                }
+            });
+        });
+
+        // Quick Shop: Buy with Shop Pay
+        $(document).on('click', '#quills-qs-btn-shop', function(e) {
+            e.preventDefault();
+            var $btn = $(this);
+            var $wrapper = $btn.closest('.quills-qs-wrapper');
+            var productId = $btn.data('product-id');
+            var checkoutUrl = $btn.data('checkout-url') || '/checkout/';
+            var size = $wrapper.find('.quills-qs-size-pill.active').data('size') || '12oz';
+            var grind = $wrapper.find('.quills-qs-grind-pill.active').data('grind') || 'Whole Bean';
+            var quantity = parseInt($wrapper.find('#quills-qs-qty-input').val(), 10) || 1;
+
+            $.ajax({
+                url: (typeof quillsData !== 'undefined' && quillsData.ajaxUrl) ? quillsData.ajaxUrl : '/wp-admin/admin-ajax.php',
+                type: 'POST',
+                data: {
+                    action: 'quills_add_to_cart',
+                    nonce: (typeof quillsData !== 'undefined' && quillsData.nonce) ? quillsData.nonce : '',
+                    product_id: productId,
+                    quantity: quantity,
+                    size: size,
+                    grind: grind,
+                    purchase_type: 'onetime'
+                },
+                success: function() {
+                    window.location.href = checkoutUrl;
+                },
+                error: function() {
+                    window.location.href = checkoutUrl;
                 }
             });
         });

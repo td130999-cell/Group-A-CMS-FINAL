@@ -36,6 +36,10 @@ class Quills_Coffee_Experience {
         add_action('wp_ajax_quills_get_cart_drawer', [__CLASS__, 'ajax_get_cart_drawer']);
         add_action('wp_ajax_nopriv_quills_get_cart_drawer', [__CLASS__, 'ajax_get_cart_drawer']);
 
+        // Quick Shop Drawer endpoints (Image 2)
+        add_action('wp_ajax_quills_get_quick_shop_drawer', [__CLASS__, 'ajax_get_quick_shop_drawer']);
+        add_action('wp_ajax_nopriv_quills_get_quick_shop_drawer', [__CLASS__, 'ajax_get_quick_shop_drawer']);
+
         add_action('wp_ajax_quills_update_cart_qty', [__CLASS__, 'ajax_update_cart_qty']);
         add_action('wp_ajax_nopriv_quills_update_cart_qty', [__CLASS__, 'ajax_update_cart_qty']);
 
@@ -521,6 +525,156 @@ class Quills_Coffee_Experience {
     }
 
     /**
+     * AJAX Get Quick Shop Drawer HTML from Database (Image 2)
+     */
+    public static function ajax_get_quick_shop_drawer() {
+        if (isset($_POST['nonce'])) {
+            check_ajax_referer('quills_nonce', 'nonce', false);
+        }
+        $product_id = isset($_POST['product_id']) ? absint($_POST['product_id']) : 0;
+        $product = function_exists('wc_get_product') ? wc_get_product($product_id) : null;
+        if (!$product) {
+            $post = get_post($product_id);
+            if (!$post) {
+                wp_send_json_error(['message' => 'Product not found.']);
+            }
+            $title = $post->post_title;
+            $permalink = get_permalink($product_id);
+            $base_price = (float) get_post_meta($product_id, '_price', true) ?: 20.00;
+        } else {
+            $title = $product->get_name();
+            $permalink = get_permalink($product_id);
+            $base_price = (float)$product->get_price();
+            if ($base_price <= 0) $base_price = 20.00;
+        }
+
+        $formatted_price = function_exists('wc_price') ? wc_price($base_price) : '$' . number_format($base_price, 2);
+
+        // Images from Database
+        if (!class_exists('Coffee_Cafe_Corner_Coffee_DB')) {
+            require_once get_template_directory() . '/inc/class-coffee-db.php';
+        }
+        $img_url = Coffee_Cafe_Corner_Coffee_DB::get_product_image_url($product_id);
+
+        // Database Reviews
+        $comments = get_comments([
+            'post_id' => $product_id,
+            'status'  => 'approve',
+            'type'    => 'review'
+        ]);
+        $review_count = (int) get_post_meta($product_id, '_wc_review_count', true);
+        if ($review_count === 0 && !empty($comments)) {
+            $review_count = count($comments);
+        }
+        $avg_rating = (float) get_post_meta($product_id, '_wc_average_rating', true);
+        if ($avg_rating <= 0 && $review_count > 0) {
+            $sum = 0;
+            foreach ($comments as $c) {
+                $sum += (int) get_comment_meta($c->comment_ID, 'rating', true) ?: 5;
+            }
+            $avg_rating = round($sum / $review_count, 1);
+        }
+        $rating_round = $avg_rating > 0 ? (int) round($avg_rating) : ($review_count > 0 ? 5 : 0);
+
+        // Sizes configuration
+        $is_bundle = ($base_price >= 40.00);
+        $sizes = $is_bundle ? ['Two 12oz Bags'] : ['12oz', '5lb', '2lb'];
+
+        $grinds = [
+            'Whole Bean',
+            'Automatic Drip',
+            'Espresso',
+            'Aeropress',
+            'Pour Over',
+            'Chemex',
+            'French Press / Cold Brew'
+        ];
+
+        ob_start();
+        ?>
+        <div class="quills-qs-wrapper" data-product-id="<?php echo esc_attr($product_id); ?>">
+            <button type="button" class="quills-qs-close" id="quills-qs-close" aria-label="Close Quick Shop">✕</button>
+
+            <div class="quills-qs-media">
+                <img src="<?php echo esc_url($img_url); ?>" alt="<?php echo esc_attr($title); ?>" class="quills-qs-img" />
+            </div>
+
+            <div class="quills-qs-info">
+                <h3 class="quills-qs-title"><?php echo esc_html($title); ?></h3>
+                
+                <div class="quills-qs-price" id="quills-qs-price"><?php echo $formatted_price; ?></div>
+
+                <div class="quills-qs-rating">
+                    <span class="quills-qs-stars">
+                        <?php for ($i = 1; $i <= 5; $i++): ?>
+                            <span class="star <?php echo ($review_count > 0 && $i <= $rating_round) ? 'filled' : 'empty'; ?>">★</span>
+                        <?php endfor; ?>
+                    </span>
+                    <span class="quills-qs-review-count">
+                        <?php echo ($review_count > 0) ? '(' . esc_html($review_count) . ' reviews)' : '(No reviews)'; ?>
+                    </span>
+                </div>
+
+                <!-- Size Selector -->
+                <div class="quills-qs-option-group" id="quills-qs-size-group">
+                    <div class="quills-qs-option-label">Size: <span id="quills-qs-selected-size"><?php echo esc_html($sizes[0]); ?></span></div>
+                    <div class="quills-qs-pills-row">
+                        <?php foreach ($sizes as $idx => $s): ?>
+                            <button type="button" class="quills-qs-pill quills-qs-size-pill <?php echo ($idx === 0) ? 'active' : ''; ?>" data-size="<?php echo esc_attr($s); ?>">
+                                <?php echo esc_html($s); ?>
+                            </button>
+                        <?php endforeach; ?>
+                    </div>
+                </div>
+
+                <!-- Grind Type Selector -->
+                <div class="quills-qs-option-group" id="quills-qs-grind-group">
+                    <div class="quills-qs-option-label">Grind Type: <span id="quills-qs-selected-grind">Whole Bean</span></div>
+                    <div class="quills-qs-pills-row quills-qs-grind-pills">
+                        <?php foreach ($grinds as $idx => $g): ?>
+                            <button type="button" class="quills-qs-pill quills-qs-grind-pill <?php echo ($idx === 0) ? 'active' : ''; ?>" data-grind="<?php echo esc_attr($g); ?>">
+                                <?php echo esc_html($g); ?>
+                            </button>
+                        <?php endforeach; ?>
+                    </div>
+                </div>
+
+                <!-- Add to Cart Action Row -->
+                <div class="quills-qs-actions-row">
+                    <div class="quills-qs-qty-stepper">
+                        <button type="button" class="quills-qs-qty-btn" id="quills-qs-qty-minus" aria-label="Decrease quantity">—</button>
+                        <input type="number" class="quills-qs-qty-input" id="quills-qs-qty-input" value="1" min="1" readonly />
+                        <button type="button" class="quills-qs-qty-btn" id="quills-qs-qty-plus" aria-label="Increase quantity">+</button>
+                    </div>
+
+                    <button type="button" class="quills-qs-btn-add" id="quills-qs-btn-add" data-product-id="<?php echo esc_attr($product_id); ?>" data-base-price="<?php echo esc_attr($base_price); ?>">
+                        <span class="quills-qs-btn-text">ADD TO CART</span>
+                    </button>
+                </div>
+
+                <!-- Buy with Shop Pay -->
+                <button type="button" class="quills-qs-btn-shop" id="quills-qs-btn-shop" data-product-id="<?php echo esc_attr($product_id); ?>" data-checkout-url="<?php echo esc_url(function_exists('wc_get_checkout_url') ? wc_get_checkout_url() : home_url('/checkout/')); ?>">
+                    <span>Buy with</span> <span class="quills-shop-brand">shop</span>
+                </button>
+
+                <!-- View all details -->
+                <div class="quills-qs-details-link-wrap">
+                    <a href="<?php echo esc_url($permalink); ?>" class="quills-qs-details-link">View all details</a>
+                </div>
+            </div>
+        </div>
+        <?php
+        $html = ob_get_clean();
+
+        wp_send_json_success([
+            'html'       => $html,
+            'product_id' => $product_id,
+            'title'      => $title,
+            'base_price' => $base_price
+        ]);
+    }
+
+    /**
      * AJAX Update Cart Item Quantity
      */
     public static function ajax_update_cart_qty() {
@@ -778,6 +932,12 @@ class Quills_Coffee_Experience {
             <div class="quills-cart-drawer-content" id="quills-cart-drawer-content">
                 <?php echo self::render_cart_drawer_html(); ?>
             </div>
+        </div>
+
+        <!-- Quills Quick Shop Drawer Overlay & Container (matching Image 2 & quillscoffee.com) -->
+        <div class="quills-quick-shop-overlay" id="quills-quick-shop-overlay" aria-hidden="true"></div>
+        <div class="quills-quick-shop-drawer" id="quills-quick-shop-drawer" role="dialog" aria-modal="true" aria-hidden="true">
+            <div class="quills-quick-shop-content" id="quills-quick-shop-content"></div>
         </div>
         <?php
     }

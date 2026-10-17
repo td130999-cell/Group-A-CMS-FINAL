@@ -903,7 +903,7 @@ class Coffee_Cafe_Corner_Coffee_DB {
                 <a href="<?php echo esc_url( $permalink ); ?>" class="quills-coffee-card-link" aria-label="<?php echo esc_attr( $title ); ?>">
                     <img src="<?php echo esc_url( $img_url ); ?>" alt="<?php echo esc_attr( $title ); ?>" class="quills-coffee-card-img" loading="lazy" />
                 </a>
-                <div class="rollover_inner">
+                <div class="rollover_inner" data-permalink="<?php echo esc_url( $permalink ); ?>">
                     <div class="rollover_wrapper">
                         <div class="rollover_top">
                             <span class="collection_name"></span>
@@ -926,7 +926,7 @@ class Coffee_Cafe_Corner_Coffee_DB {
                             <p class="rollover_short"></p>
                         </div>
                         <div class="rollover_bottom">
-                            <a href="<?php echo esc_url( $permalink ); ?>" class="quills-hover-add-cart" data-product-id="<?php echo esc_attr( $product_id ); ?>" data-permalink="<?php echo esc_url( $permalink ); ?>">VIEW DETAILS</a>
+                            <button type="button" class="quills-hover-add-cart" data-product-id="<?php echo esc_attr( $product_id ); ?>" data-permalink="<?php echo esc_url( $permalink ); ?>" aria-label="Add <?php echo esc_attr( $title ); ?> to cart">ADD TO CART</button>
                         </div>
                     </div>
                 </div>

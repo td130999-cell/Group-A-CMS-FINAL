@@ -216,6 +216,16 @@
             $('body').removeClass('quills-drawer-open');
         }
 
+        function updateHeaderCartBadge(count) {
+            count = parseInt(count, 10) || 0;
+            var $badge = $('.quills-cart-badge, #quills-cart-badge');
+            if (count > 0) {
+                $badge.text(count).removeClass('is-empty').show();
+            } else {
+                $badge.text('0').addClass('is-empty').hide();
+            }
+        }
+
         function refreshCartDrawer() {
             if (typeof quillsData === 'undefined' || !quillsData.ajaxUrl) return;
             $.ajax({
@@ -228,7 +238,7 @@
                 success: function(resp) {
                     if (resp.success && resp.data && resp.data.html) {
                         $('#quills-cart-drawer-content').html(resp.data.html);
-                        $('.quills-cart-badge, #quills-cart-badge').text(resp.data.cart_count);
+                        updateHeaderCartBadge(resp.data.cart_count);
                     }
                 }
             });
@@ -290,7 +300,7 @@
                 success: function(resp) {
                     $btn.removeClass('loading');
                     if (resp.success) {
-                        $('.quills-cart-badge, #quills-cart-badge').text(resp.data.cart_count);
+                        updateHeaderCartBadge(resp.data.cart_count);
                         if (resp.data.drawer_html) {
                             $('#quills-cart-drawer-content').html(resp.data.drawer_html);
                         }
@@ -327,7 +337,7 @@
                 success: function(resp) {
                     if (resp.success) {
                         $('#quills-cart-drawer-content').html(resp.data.drawer_html);
-                        $('.quills-cart-badge, #quills-cart-badge').text(resp.data.cart_count);
+                        updateHeaderCartBadge(resp.data.cart_count);
                     } else {
                         $item.removeClass('is-updating');
                     }
@@ -357,7 +367,7 @@
                 success: function(resp) {
                     if (resp.success) {
                         $('#quills-cart-drawer-content').html(resp.data.drawer_html);
-                        $('.quills-cart-badge, #quills-cart-badge').text(resp.data.cart_count);
+                        updateHeaderCartBadge(resp.data.cart_count);
                     } else {
                         $item.removeClass('is-updating');
                     }
@@ -391,7 +401,7 @@
                     $btn.removeClass('loading');
                     if (resp.success) {
                         $('#quills-cart-drawer-content').html(resp.data.drawer_html);
-                        $('.quills-cart-badge, #quills-cart-badge').text(resp.data.cart_count);
+                        updateHeaderCartBadge(resp.data.cart_count);
                     }
                 },
                 error: function() {

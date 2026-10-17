@@ -60,16 +60,13 @@
                 <path fill="#151515" d="m1.87025,4a0.87,0.87 0 1 0 0,1.741l1.6,0a0.863,0.863 0 0 1 0.854,0.707l0.173,0.907l1.871,9.827a3.782,3.782 0 0 0 3.706,3.065l10.864,0a3.781,3.781 0 0 0 3.706,-3.065l1.871,-9.827a0.87,0.87 0 0 0 -0.854,-1.034l-19.59,0l-0.037,-0.2a2.62,2.62 0 0 0 -2.565,-2.121l-1.599,0zm4.53,4.062l18.2,0l-1.675,8.794a2.022,2.022 0 0 1 -2,1.65l-10.851,0a2.023,2.023 0 0 1 -2,-1.65l0,0l-1.674,-8.794zm5.041,13.345a1.741,1.741 0 1 0 1.741,1.741a1.741,1.741 0 0 0 -1.738,-1.741l-0.003,0zm8.123,0a1.741,1.741 0 1 0 1.741,1.741a1.741,1.741 0 0 0 -1.738,-1.741l-0.003,0z" />
               </g>
             </svg>
-            <span class="quills-cart-badge"><?php 
-              $cart_count = 1;
+            <?php 
+              $cart_count = 0;
               if ( function_exists('WC') && WC()->cart ) {
-                $wc_count = WC()->cart->get_cart_contents_count();
-                if ( $wc_count > 0 ) {
-                  $cart_count = $wc_count;
-                }
+                $cart_count = (int) WC()->cart->get_cart_contents_count();
               }
-              echo esc_html( $cart_count );
-            ?></span>
+            ?>
+            <span class="quills-cart-badge<?php echo ($cart_count === 0) ? ' is-empty' : ''; ?>" id="quills-cart-badge" <?php echo ($cart_count === 0) ? 'style="display:none;"' : ''; ?>><?php echo esc_html( $cart_count ); ?></span>
           </div>
         </a>
 
