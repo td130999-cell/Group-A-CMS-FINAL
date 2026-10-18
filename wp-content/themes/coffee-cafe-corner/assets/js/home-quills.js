@@ -53,6 +53,24 @@
         this.classList.toggle('is-touched');
       }, { passive: true });
     });
+
+    // Quick Shop Drawer trigger for Bestsellers on Homepage
+    document.addEventListener('click', function (e) {
+      const addBtn = e.target.closest('.quills-btn--add-to-cart, .quills-hover-add-cart');
+      if (!addBtn) return;
+      e.preventDefault();
+      e.stopPropagation();
+      let productId = addBtn.getAttribute('data-product-id');
+      if (!productId) {
+        const card = addBtn.closest('.quills-product-card');
+        if (card) {
+          productId = card.getAttribute('data-product-id');
+        }
+      }
+      if (productId && typeof window.openQuickShopDrawer === 'function') {
+        window.openQuickShopDrawer(productId);
+      }
+    });
   });
 })();
 

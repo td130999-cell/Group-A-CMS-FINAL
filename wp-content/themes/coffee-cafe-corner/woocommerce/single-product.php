@@ -8,6 +8,19 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
+$alt_slugs = [
+    'blacksmith-espresso'  => 'blacksmith-espresso-blend',
+    'inkwell-blend'        => 'inkwell-signature-blend',
+    'inkwell-house-blend'  => 'inkwell-signature-blend',
+    'southern-gothic'      => 'southern-gothic-cold-brew',
+    'southern-gothic-12oz' => 'southern-gothic-cold-brew',
+    'night-owl'            => 'night-owl-dark-blend',
+    'colombia-black-condor'=> 'colombia-earthquake-relief-black-condor',
+    'ommagourd'            => 'ommagourd-fall-blend',
+    'guatemala-alma-2'     => 'guatemala-alma',
+    'colombia-el-paraiso-3'=> 'colombia-el-paraiso',
+];
+
 global $product;
 if (!$product && function_exists('wc_get_product')) {
     $pid = get_the_ID();
@@ -15,20 +28,8 @@ if (!$product && function_exists('wc_get_product')) {
         $slug = get_query_var('product') ?: get_query_var('name');
         if ($slug) {
             $p_obj = get_page_by_path($slug, OBJECT, 'product');
-            if (!$p_obj) {
-                $alt_slugs = [
-                    'southern-gothic-12oz' => 'southern-gothic-cold-brew',
-                    'inkwell-house-blend'  => 'inkwell-signature-blend',
-                    'blacksmith-espresso'  => 'blacksmith-espresso-blend',
-                    'night-owl'            => 'night-owl-dark-blend',
-                    'colombia-black-condor'=> 'colombia-earthquake-relief-black-condor',
-                    'ommagourd'            => 'ommagourd-fall-blend',
-                    'guatemala-alma-2'     => 'guatemala-alma',
-                    'colombia-el-paraiso-3'=> 'colombia-el-paraiso',
-                ];
-                if (isset($alt_slugs[$slug])) {
-                    $p_obj = get_page_by_path($alt_slugs[$slug], OBJECT, 'product');
-                }
+            if (!$p_obj && isset($alt_slugs[$slug])) {
+                $p_obj = get_page_by_path($alt_slugs[$slug], OBJECT, 'product');
             }
             if ($p_obj) {
                 $pid = $p_obj->ID;
@@ -37,6 +38,16 @@ if (!$product && function_exists('wc_get_product')) {
     }
     if ($pid) {
         $product = wc_get_product($pid);
+    }
+}
+
+if ($product && is_object($product)) {
+    $current_slug = $product->get_slug();
+    if (isset($alt_slugs[$current_slug])) {
+        $master_post = get_page_by_path($alt_slugs[$current_slug], OBJECT, 'product');
+        if ($master_post) {
+            $product = wc_get_product($master_post->ID);
+        }
     }
 }
 

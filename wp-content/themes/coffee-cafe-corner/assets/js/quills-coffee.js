@@ -1079,14 +1079,14 @@
             }
         }
 
-        // Trigger Quick Shop Drawer on card button click
-        $(document).off('click.quillsQS', '.quills-hover-add-cart').on('click.quillsQS', '.quills-hover-add-cart', function(e) {
+        // Trigger Quick Shop Drawer on card button click (Catalog + Home Bestsellers)
+        $(document).off('click.quillsQS', '.quills-hover-add-cart, .quills-btn--add-to-cart').on('click.quillsQS', '.quills-hover-add-cart, .quills-btn--add-to-cart', function(e) {
             e.preventDefault();
             e.stopPropagation();
             e.stopImmediatePropagation();
             var productId = $(this).data('product-id');
             if (!productId) {
-                productId = $(this).closest('.quills-coffee-card').data('product-id');
+                productId = $(this).closest('.quills-coffee-card, .quills-product-card').data('product-id');
             }
             if (productId) {
                 openQuickShopDrawer(productId);

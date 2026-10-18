@@ -292,12 +292,9 @@ $img_dir   = $theme_uri . 'assets/images/home/';
                 </div>
               </a>
               <div class="quills-product-quick-add">
-                <form class="quills-quick-add-form" method="post" action="<?php echo esc_url( function_exists( 'wc_get_cart_url' ) ? wc_get_cart_url() : home_url( '/cart/' ) ); ?>" style="width: 100%;">
-                  <input type="hidden" name="add-to-cart" value="<?php echo esc_attr( $p_id ); ?>" />
-                  <button type="submit" class="quills-btn quills-btn--add-to-cart" aria-label="<?php echo esc_attr( sprintf( __( 'ADD TO CART %s', 'coffee-cafe-corner' ), $p_name ) ); ?>">
-                    <span>ADD TO CART</span>
-                  </button>
-                </form>
+                <button type="button" class="quills-btn quills-btn--add-to-cart quills-hover-add-cart" data-product-id="<?php echo esc_attr( $p_id ); ?>" data-permalink="<?php echo esc_url( $p_link ); ?>" aria-label="<?php echo esc_attr( sprintf( __( 'ADD TO CART %s', 'coffee-cafe-corner' ), $p_name ) ); ?>">
+                  <span>ADD TO CART</span>
+                </button>
               </div>
             </div>
             <div class="quills-product-info">

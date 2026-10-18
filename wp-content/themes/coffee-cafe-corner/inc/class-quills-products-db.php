@@ -403,9 +403,9 @@ class Coffee_Cafe_Corner_Quills_Products_DB {
 		}
 
 		$bestseller_slug_groups = array(
-			array( 'blacksmith-espresso', 'blacksmith-espresso-blend' ),
-			array( 'inkwell-blend', 'inkwell-signature-blend' ),
-			array( 'southern-gothic', 'southern-gothic-cold-brew' ),
+			array( 'blacksmith-espresso-blend', 'blacksmith-espresso' ),
+			array( 'inkwell-signature-blend', 'inkwell-blend' ),
+			array( 'southern-gothic-cold-brew', 'southern-gothic' ),
 		);
 
 		$products = array();

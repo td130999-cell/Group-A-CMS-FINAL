@@ -76,8 +76,15 @@ class Quills_Coffee_Experience {
     public static function map_product_request($query_vars) {
         if (!empty($query_vars['product'])) {
             $slug = sanitize_title($query_vars['product']);
-            if ($slug === 'inkwell-house-blend') {
-                $slug = 'inkwell-signature-blend';
+            $alias_map = [
+                'blacksmith-espresso'  => 'blacksmith-espresso-blend',
+                'inkwell-blend'        => 'inkwell-signature-blend',
+                'inkwell-house-blend'  => 'inkwell-signature-blend',
+                'southern-gothic'      => 'southern-gothic-cold-brew',
+                'southern-gothic-12oz' => 'southern-gothic-cold-brew',
+            ];
+            if (isset($alias_map[$slug])) {
+                $slug = $alias_map[$slug];
             }
             $query_vars['post_type'] = 'product';
             $query_vars['name']      = $slug;
