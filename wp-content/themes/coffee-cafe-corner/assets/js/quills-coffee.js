@@ -269,8 +269,8 @@
             var $btn = $(this);
             var productId = $btn.data('product-id');
             var qty = parseInt($('#quills-qty-input').val(), 10) || 1;
-            var size = $('#quills-size-group .quills-pill-btn.active').data('size') || '12oz';
-            var grind = $('#quills-grind-group .quills-pill-btn.active').data('grind') || 'Whole Bean';
+            var size = $('#quills-size-group').length ? ($('#quills-size-group .quills-pill-btn.active').data('size') || '12oz') : '';
+            var grind = $('#quills-grind-group').length ? ($('#quills-grind-group .quills-pill-btn.active').data('grind') || 'Whole Bean') : '';
             var purchaseType = $('input[name="quills_purchase_type"]:checked').val() || 'onetime';
             var frequency = '';
             if (purchaseType === 'subscribe') {

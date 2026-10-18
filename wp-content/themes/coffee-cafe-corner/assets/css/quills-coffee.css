@@ -782,6 +782,14 @@ body.quills-body {
     box-shadow: 0 4px 12px rgba(224, 80, 56, 0.25);
 }
 
+.quills-btn-add-cart--gear {
+    background: #eb5740 !important;
+}
+
+.quills-btn-add-cart--gear:hover {
+    background: #d4432d !important;
+}
+
 .quills-btn-add-cart.is-unavailable {
     background: #eba498 !important;
     color: #ffffff !important;

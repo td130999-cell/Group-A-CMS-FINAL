@@ -320,12 +320,30 @@ body,
     padding: 22px 18px 18px 18px;
     box-sizing: border-box;
     z-index: 5;
+    cursor: pointer;
 }
 
 .quills-product-card:hover .quills-product-hover-overlay {
     opacity: 1;
     visibility: visible;
     pointer-events: auto;
+}
+
+.quills-hover-link-overlay {
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 auto;
+    width: 100%;
+    text-decoration: none !important;
+    color: inherit !important;
+    cursor: pointer;
+    overflow: hidden;
+}
+
+.quills-hover-link-overlay:hover,
+.quills-hover-link-overlay:focus {
+    text-decoration: none !important;
+    color: inherit !important;
 }
 
 /* Hover Header: Script Title + Clean White Divider Line */

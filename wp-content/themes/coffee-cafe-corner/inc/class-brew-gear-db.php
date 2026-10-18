@@ -121,7 +121,7 @@ class Coffee_Cafe_Corner_Brew_Gear_DB {
 				'slug'        => 'baratza-encore-grinder',
 				'title'       => 'Baratza Encore Grinder',
 				'price'       => '149.00',
-				'description' => 'The standard for at-home brewing, the Baratza Encore is consistent, reliable, and versatile.',
+				'description' => 'The standard for at-home brewing, the Baratza Encore is consistent, reliable, and versatile. With 40 individual grind settings, from fine for espresso to coarse for French press, the Encore is an accurate and durable workhorse for any coffee enthusiast.',
 				'image'       => 'baratza-encore-grinder.png',
 				'menu_order'  => 1,
 			),
@@ -129,7 +129,7 @@ class Coffee_Cafe_Corner_Brew_Gear_DB {
 				'slug'        => 'breville-bambino-espresso-machine',
 				'title'       => 'Breville Bambino Espresso Machine',
 				'price'       => '299.00',
-				'description' => 'Like professional machines, the Bambino can deliver third wave specialty coffee at home using 54mm portafilter.',
+				'description' => 'The Breville Bambino delivers barista-quality espresso in a compact, easy-to-use machine. Its 54mm portafilter holds an 18-gram dose for full flavor, while low-pressure pre-infusion and 9-bar extraction help produce balanced, consistent shots. A powerful manual steam wand creates silky microfoam ideal for latte art, and Breville’s ThermoJet heating system gets the machine ready to brew in just 3 seconds.',
 				'image'       => 'breville-bambino-espresso-machine.png',
 				'menu_order'  => 2,
 			),
@@ -137,7 +137,7 @@ class Coffee_Cafe_Corner_Brew_Gear_DB {
 				'slug'        => 'breville-luxe-brewer-thermal',
 				'title'       => 'Breville Luxe Brewer™ Thermal',
 				'price'       => '349.00',
-				'description' => 'Precision craft filter coffee brewer with double wall thermal carafe for optimal temperature stability.',
+				'description' => 'Precision craft filter coffee brewer with double wall thermal carafe for optimal temperature stability. Features customizable brew settings for Gold Cup standard filter coffee at home.',
 				'image'       => 'breville-luxe-brewer-thermal.png',
 				'menu_order'  => 3,
 			),
@@ -175,7 +175,14 @@ class Coffee_Cafe_Corner_Brew_Gear_DB {
 					wp_set_object_terms( $product_id, 'simple', 'product_type', false );
 				}
 			} else {
-				// Ensure meta consistency
+				// Ensure content and meta consistency
+				wp_update_post( array(
+					'ID'             => $existing->ID,
+					'post_title'     => $item['title'],
+					'post_content'   => $item['description'],
+					'post_excerpt'   => $item['description'],
+					'comment_status' => 'open',
+				) );
 				update_post_meta( $existing->ID, '_price', $item['price'] );
 				update_post_meta( $existing->ID, '_regular_price', $item['price'] );
 				update_post_meta( $existing->ID, '_brew_gear_image', $item['image'] );

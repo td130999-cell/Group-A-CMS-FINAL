@@ -30,7 +30,11 @@ function coffee_cafe_corner_scripts() {
 	wp_enqueue_style( 'coffee-cafe-corner-brew-gear', trailingslashit( get_template_directory_uri() ) . 'assets/css/brew-gear.css', array(), COFFEE_CAFE_CORNER_VERSION );
 
 	// Enqueue Quills Brew Gear JS
-	wp_enqueue_script( 'coffee-cafe-corner-brew-gear-js', trailingslashit( get_template_directory_uri() ) . 'assets/js/brew-gear.js', array(), COFFEE_CAFE_CORNER_VERSION, true );
+	wp_enqueue_script( 'coffee-cafe-corner-brew-gear-js', trailingslashit( get_template_directory_uri() ) . 'assets/js/brew-gear.js', array( 'jquery' ), COFFEE_CAFE_CORNER_VERSION, true );
+	wp_localize_script( 'coffee-cafe-corner-brew-gear-js', 'quillsData', array(
+		'ajaxUrl' => admin_url( 'admin-ajax.php' ),
+		'nonce'   => wp_create_nonce( 'quills_nonce' ),
+	) );
 
 	// Enqueue Quills Wholesale stylesheet
 	wp_enqueue_style( 'coffee-cafe-corner-wholesale', trailingslashit( get_template_directory_uri() ) . 'assets/css/wholesale.css', array(), COFFEE_CAFE_CORNER_VERSION );

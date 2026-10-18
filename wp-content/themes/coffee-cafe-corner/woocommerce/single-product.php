@@ -76,6 +76,11 @@ $sub_price       = wc_price(round($price * 0.9, 2));
 if (!class_exists('Coffee_Cafe_Corner_Coffee_DB')) {
     require_once get_template_directory() . '/inc/class-coffee-db.php';
 }
+if (!class_exists('Coffee_Cafe_Corner_Brew_Gear_DB')) {
+    require_once get_template_directory() . '/inc/class-brew-gear-db.php';
+}
+
+$is_brew_gear = has_term( 'brew-gear', 'product_cat', $id ) || (bool) get_post_meta( $id, '_brew_gear_image', true );
 
 $tasting_notes = get_post_meta($id, '_coffee_tasting_notes', true) ?: (get_post_meta($id, '_quills_tasting_notes', true) ?: 'Graham cracker, cooked cherries, vanilla');
 $roast         = get_post_meta($id, '_coffee_roast', true) ?: (get_post_meta($id, '_quills_roast_profile', true) ?: 'Medium');
@@ -85,10 +90,14 @@ $origins       = get_post_meta($id, '_coffee_origins', true) ?: (get_post_meta($
 $short_title   = strtoupper(trim(explode('|', $title)[0]));
 
 // Images from Database
-$main_img_url = Coffee_Cafe_Corner_Coffee_DB::get_product_image_url($id);
-$gallery_urls = Coffee_Cafe_Corner_Coffee_DB::get_product_gallery_urls($id);
-
-$all_images = array_unique(array_filter(array_merge([$main_img_url], $gallery_urls)));
+if ( $is_brew_gear ) {
+    $main_img_url = Coffee_Cafe_Corner_Brew_Gear_DB::get_product_image_url($id);
+    $all_images   = array( $main_img_url );
+} else {
+    $main_img_url = Coffee_Cafe_Corner_Coffee_DB::get_product_image_url($id);
+    $gallery_urls = Coffee_Cafe_Corner_Coffee_DB::get_product_gallery_urls($id);
+    $all_images   = array_unique(array_filter(array_merge([$main_img_url], $gallery_urls)));
+}
 
 // Database review comments (real reviews from wp_comments with transient caching)
 $reviews_cache_key = 'quills_sp_reviews_' . $id;
@@ -142,7 +151,11 @@ if ( false !== $cached_reviews && is_array( $cached_reviews ) ) {
         <ul class="quills-breadcrumbs">
             <li><a href="<?php echo esc_url(home_url('/')); ?>">Home</a></li>
             <li><span class="sep">/</span></li>
-            <li><a href="<?php echo esc_url(home_url('/coffee/')); ?>">Coffee</a></li>
+            <?php if ( $is_brew_gear ) : ?>
+                <li><a href="<?php echo esc_url(home_url('/brew-gear/')); ?>">Brew Gear</a></li>
+            <?php else : ?>
+                <li><a href="<?php echo esc_url(home_url('/coffee/')); ?>">Coffee</a></li>
+            <?php endif; ?>
             <li><span class="sep">/</span></li>
             <li class="active"><?php echo esc_html($title); ?></li>
         </ul>
@@ -153,7 +166,7 @@ if ( false !== $cached_reviews && is_array( $cached_reviews ) ) {
     <div class="quills-separator-line"></div>
 </div>
 
-<?php if ($review_count > 0): ?>
+<?php if ($review_count > 0 && ! $is_brew_gear): ?>
 <!-- Top Testimonial Quote Slider (Image 2) -->
 <section class="quills-sp-quote-slider-section" aria-label="<?php esc_attr_e( 'Customer Quote', 'coffee-cafe-corner' ); ?>">
     <div class="quills-container quills-sp-quote-container">
@@ -235,10 +248,10 @@ if ( false !== $cached_reviews && is_array( $cached_reviews ) ) {
                                 echo wpautop(wp_kses_post($post_content));
                             }
                             ?>
-                            <?php if (!empty($origins) && strpos($post_content, $origins) === false): ?>
+                            <?php if (! $is_brew_gear && !empty($origins) && strpos($post_content, $origins) === false): ?>
                                 <p class="quills-desc-meta-line"><strong>Current coffees:</strong> <?php echo esc_html($origins); ?></p>
                             <?php endif; ?>
-                            <?php if (!empty($tasting_notes) && strpos($post_content, $tasting_notes) === false): ?>
+                            <?php if (! $is_brew_gear && !empty($tasting_notes) && strpos($post_content, $tasting_notes) === false): ?>
                                 <p class="quills-desc-meta-line"><strong>We taste:</strong> <?php echo esc_html($tasting_notes); ?>.</p>
                             <?php endif; ?>
                         </div>
@@ -268,6 +281,7 @@ if ( false !== $cached_reviews && is_array( $cached_reviews ) ) {
                     <span class="quills-price-current" id="quills-dynamic-price"><?php echo $formatted_price; ?></span>
                 </div>
 
+                <?php if ( ! $is_brew_gear ) : ?>
                 <!-- Size Selection Pills (Image 1) -->
                 <div class="quills-option-group" id="quills-size-group">
                     <div class="quills-section-label">Size: <span id="quills-selected-size-label">12oz</span></div>
@@ -346,6 +360,7 @@ if ( false !== $cached_reviews && is_array( $cached_reviews ) ) {
                         </div>
                     </label>
                 </div>
+                <?php endif; ?>
 
                 <!-- Quantity & Add to Cart -->
                 <div class="quills-add-cart-row">
@@ -355,8 +370,13 @@ if ( false !== $cached_reviews && is_array( $cached_reviews ) ) {
                         <button type="button" class="quills-qty-btn" id="quills-qty-plus" aria-label="Increase quantity">+</button>
                     </div>
 
-                    <button type="button" class="quills-btn-add-cart" id="quills-btn-add-to-cart" data-product-id="<?php echo esc_attr($id); ?>" data-base-price="<?php echo esc_attr($price); ?>">
-                        <span class="quills-btn-text">ADD TO CART</span>
+                    <button type="button" class="quills-btn-add-cart <?php echo $is_brew_gear ? 'quills-btn-add-cart--gear' : ''; ?>" id="quills-btn-add-to-cart" data-product-id="<?php echo esc_attr($id); ?>" data-base-price="<?php echo esc_attr($price); ?>">
+                        <span class="quills-btn-text">
+                            <?php if ( $is_brew_gear ) : ?>
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align: -3px; margin-right: 6px;"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+                            <?php endif; ?>
+                            ADD TO CART
+                        </span>
                         <span class="quills-btn-spinner"></span>
                     </button>
                 </div>
