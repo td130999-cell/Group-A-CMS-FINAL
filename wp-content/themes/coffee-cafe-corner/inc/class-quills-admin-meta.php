@@ -88,7 +88,7 @@ class Coffee_Cafe_Corner_Admin_Meta {
 
 		// Home bestsellers tags
 		$tag       = get_post_meta( $id, '_quills_tag', true );
-		$tag_color = get_post_meta( $id, '_quills_tag_color', true ) ?: '#E5A823';
+		$tag_color = get_post_meta( $id, '_quills_tag_color', true ) ?: '#1c1d1d';
 		$tag_desc  = get_post_meta( $id, '_quills_tag_desc', true );
 
 		// Subscriptions rollover

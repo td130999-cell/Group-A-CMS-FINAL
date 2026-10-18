@@ -30,6 +30,7 @@ class Coffee_Cafe_Corner_Search_DB {
 	 * Ensure pages like B2B Login and B2B Onboarding exist in database for authentic Quills search
 	 */
 	public static function ensure_search_database_records() {
+		return; // Seeder disabled: Data is permanently managed in database
 		$b2b_pages = array(
 			'b2b-login'      => 'B2B Login',
 			'b2b-onboarding' => 'B2B Onboarding',

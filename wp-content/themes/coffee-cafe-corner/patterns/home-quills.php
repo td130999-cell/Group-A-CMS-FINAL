@@ -262,18 +262,18 @@ $img_dir   = $theme_uri . 'assets/images/home/';
             $tag_color = get_post_meta( $p_id, '_quills_tag_color', true );
             if ( empty( $tag_color ) ) {
               if ( strpos( $slug, 'blacksmith' ) !== false ) {
-                $tag_color = '#E5A823';
+                $tag_color = '#1c1d1d';
               } elseif ( strpos( $slug, 'inkwell' ) !== false ) {
                 $tag_color = '#EB5A3C';
               } elseif ( strpos( $slug, 'southern' ) !== false ) {
                 $tag_color = '#8C6FA9';
               } else {
-                $tag_color = '#E5A823';
+                $tag_color = '#1c1d1d';
               }
             }
 
-            // 4. Tag Description
-            $tag_desc = get_post_meta( $p_id, '_quills_tag_desc', true ) ?: $bestseller->get_short_description();
+            // 4. Tag Description (Database first)
+            $tag_desc = get_post_meta( $p_id, '_quills_tag_desc', true );
             if ( empty( $tag_desc ) ) {
               if ( strpos( $slug, 'blacksmith' ) !== false ) {
                 $tag_desc = 'The F1 car of our lineup. Our signature espresso that folks enjoy in every latte, cappuccino, and cortado in our cafés.';
@@ -281,6 +281,8 @@ $img_dir   = $theme_uri . 'assets/images/home/';
                 $tag_desc = "The daily driver. Our classic house blend that's on drip at our cafes from open to close. Loved by regulars for 17 years.";
               } elseif ( strpos( $slug, 'southern' ) !== false ) {
                 $tag_desc = 'Our cold brew blend crafted for our customers who prefer their coffee chilled.';
+              } else {
+                $tag_desc = $bestseller->get_short_description();
               }
             }
 
