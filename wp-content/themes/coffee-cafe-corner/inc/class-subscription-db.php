@@ -458,34 +458,36 @@ class Coffee_Cafe_Corner_Subscription_DB {
 				</a>
 
 				<!-- Hover Tasting Details Card matching Image 1 & Quills Coffee -->
-				<div class="rollover_inner">
+				<div class="rollover_inner" data-permalink="<?php echo esc_url( $permalink ); ?>">
 					<div class="rollover_wrapper">
-						<div class="rollover_top">
-							<span class="collection_name"></span>
-							<h4 class="prod_title"><?php echo esc_html( $title ); ?></h4>
-						</div>
-						<div class="rollover_content">
-							<div class="rte">
-								<div class="metafield-rich_text_field">
-									<?php
-									if ( ! empty( $rollover_html ) ) {
-										echo wp_kses_post( $rollover_html );
-									} else {
-										?>
-										<p><em><strong><?php echo esc_html( $tasting_notes ); ?></strong></em></p>
-										<?php if ( ! empty( $process ) ) : ?>
-											<p><strong><?php esc_html_e( 'Process:', 'coffee-cafe-corner' ); ?></strong> <?php echo esc_html( $process ); ?></p>
-										<?php endif; ?>
-										<?php if ( ! empty( $origins ) ) : ?>
-											<p><strong><?php esc_html_e( 'Origins:', 'coffee-cafe-corner' ); ?></strong> <?php echo esc_html( $origins ); ?></p>
-										<?php endif; ?>
-										<?php
-									}
-									?>
-								</div>
+						<a href="<?php echo esc_url( $permalink ); ?>" class="rollover_link_overlay" aria-label="<?php echo esc_attr( $title ); ?>">
+							<div class="rollover_top">
+								<span class="collection_name"></span>
+								<h4 class="prod_title"><?php echo esc_html( $title ); ?></h4>
 							</div>
-							<p class="rollover_short"></p>
-						</div>
+							<div class="rollover_content">
+								<div class="rte">
+									<div class="metafield-rich_text_field">
+										<?php
+										if ( ! empty( $rollover_html ) ) {
+											echo wp_kses_post( $rollover_html );
+										} else {
+											?>
+											<p><em><strong><?php echo esc_html( $tasting_notes ); ?></strong></em></p>
+											<?php if ( ! empty( $process ) ) : ?>
+												<p><strong><?php esc_html_e( 'Process:', 'coffee-cafe-corner' ); ?></strong> <?php echo esc_html( $process ); ?></p>
+											<?php endif; ?>
+											<?php if ( ! empty( $origins ) ) : ?>
+												<p><strong><?php esc_html_e( 'Origins:', 'coffee-cafe-corner' ); ?></strong> <?php echo esc_html( $origins ); ?></p>
+											<?php endif; ?>
+											<?php
+										}
+										?>
+									</div>
+								</div>
+								<p class="rollover_short"></p>
+							</div>
+						</a>
 					</div>
 				</div>
 			</div>

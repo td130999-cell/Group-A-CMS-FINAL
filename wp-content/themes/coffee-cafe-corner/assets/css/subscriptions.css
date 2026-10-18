@@ -564,6 +564,7 @@
     transition: opacity 0.15s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.15s ease;
     pointer-events: auto;
     z-index: 10;
+    cursor: pointer;
 }
 
 .quills-product-card:hover .rollover_inner {
@@ -572,9 +573,28 @@
 }
 
 .rollover_inner .rollover_wrapper {
-    max-height: calc(100% - 10px);
-    overflow: auto;
+    height: 100%;
+    max-height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.rollover_inner .rollover_link_overlay {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    width: 100%;
+    text-decoration: none !important;
+    color: #ffffff !important;
+    cursor: pointer;
+    overflow-y: auto;
     scrollbar-width: thin;
+}
+
+.rollover_inner .rollover_link_overlay:hover,
+.rollover_inner .rollover_link_overlay:focus {
+    text-decoration: none !important;
+    color: #ffffff !important;
 }
 
 .rollover_inner .rollover_top {

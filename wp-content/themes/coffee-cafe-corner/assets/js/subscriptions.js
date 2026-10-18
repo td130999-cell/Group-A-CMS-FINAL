@@ -254,5 +254,21 @@
             }
         });
 
+        // --- 5. Direct Navigation on Product Media / Rollover Click ---
+        $(document).on('click', '.quills-product-media, .rollover_inner', function(e) {
+            // If the user directly clicked an anchor link, let standard browser navigation proceed
+            if ($(e.target).closest('a').length) {
+                return;
+            }
+            var $card = $(this).closest('.quills-product-card');
+            var permalink = $(this).data('permalink') ||
+                            $(this).find('.rollover_link_overlay').attr('href') ||
+                            $card.find('.quills-product-title a').attr('href') ||
+                            $card.find('.quills-product-image-link').attr('href');
+            if (permalink) {
+                window.location.href = permalink;
+            }
+        });
+
     });
 })(jQuery);
