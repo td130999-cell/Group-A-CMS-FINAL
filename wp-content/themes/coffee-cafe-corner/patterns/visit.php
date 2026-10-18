@@ -53,80 +53,24 @@ $section_title = get_post_meta( $page_id, '_visit_section_title', true ) ?: 'LOC
 
 $cafes = get_post_meta( $page_id, '_visit_cafes', true );
 
-// Fallback cafes data if not yet seeded
+// Fallback from quills_cafe_details in database if _visit_cafes is not set
 if ( empty( $cafes ) || ! is_array( $cafes ) ) {
-    $cafes = array(
-        array(
-            'id'            => 'nulu',
-            'name'          => 'NULU OR "THE FIREHOUSE"',
-            'image'         => 'nulu.jpg',
-            'address'       => '802 E. Main Street, Louisville, KY 40206',
-            'map_url'       => 'https://www.google.com/maps/place/802+E+Main+St,+Louisville,+KY+40206',
-            'hours'         => 'Mon-Fri: 6AM-7PM · Sat-Sun: 7AM-7PM',
-            'phone'         => '(502) 861-5844',
-            'read_more_url' => home_url( '/about-us?view=nulu' ),
-        ),
-        array(
-            'id'            => 'highlands',
-            'name'          => 'HIGHLANDS',
-            'image'         => 'highlands.jpg',
-            'address'       => '930 Baxter Avenue, Louisville, KY 40204',
-            'map_url'       => 'https://www.google.com/maps/place/930+Baxter+Ave,+Louisville,+KY+40204',
-            'hours'         => 'Mon-Fri: 7AM-6PM · Sat-Sun: 7AM-7PM',
-            'phone'         => '(502) 861-5844',
-            'read_more_url' => home_url( '/about-us?view=highlands' ),
-        ),
-        array(
-            'id'            => 'indianapolis',
-            'name'          => 'INDIANAPOLIS',
-            'image'         => 'indianapolis.jpg',
-            'address'       => '941 N. Meridian Street, Indianapolis, IN 46204',
-            'map_url'       => 'https://www.google.com/maps/place/941+N+Meridian+St,+Indianapolis,+IN+46204',
-            'hours'         => 'Mon-Fri: 6AM-6PM · Sat-Sun: 7AM-7PM',
-            'phone'         => '(502) 861-5844',
-            'read_more_url' => home_url( '/about-us?view=indianapolis' ),
-        ),
-        array(
-            'id'            => 'st-matthews',
-            'name'          => 'ST. MATTHEWS',
-            'image'         => 'st-matthews.jpg',
-            'address'       => '3939 Shelbyville Rd., Suite 105, Louisville, KY 40207',
-            'map_url'       => 'https://www.google.com/maps/place/3939+Shelbyville+Rd+Suite+105,+Louisville,+KY+40207',
-            'hours'         => 'Mon-Fri: 6AM-6PM · Sat-Sun: 7AM-7PM',
-            'phone'         => '(502) 861-5844',
-            'read_more_url' => home_url( '/about-us?view=st-matthews' ),
-        ),
-        array(
-            'id'            => 'j-town',
-            'name'          => 'J-TOWN',
-            'image'         => 'j-town.jpg',
-            'address'       => '10501 Watterson Trail, Louisville, KY 40299',
-            'map_url'       => 'https://www.google.com/maps/place/10501+Watterson+Trail,+Louisville,+KY+40299',
-            'hours'         => 'Mon-Fri: 6AM-6PM · Sat-Sun: 7AM-7PM',
-            'phone'         => '(502) 861-5844',
-            'read_more_url' => home_url( '/about-us?view=j-town' ),
-        ),
-        array(
-            'id'            => 'norton-commons',
-            'name'          => 'NORTON COMMONS',
-            'image'         => 'norton-commons.jpg',
-            'address'       => '11213 River Beauty Loop, Prospect, KY 40059',
-            'map_url'       => 'https://www.google.com/maps/place/11213+River+Beauty+Loop,+Prospect,+KY+40059',
-            'hours'         => 'Mon-Fri: 6AM-6PM · Sat-Sun: 7AM-7PM',
-            'phone'         => '(502) 861-5844',
-            'read_more_url' => home_url( '/about-us?view=norton-commons' ),
-        ),
-        array(
-            'id'            => 'frankfort-avenue',
-            'name'          => 'FRANKFORT AVENUE',
-            'image'         => 'frankfort-avenue.jpg',
-            'address'       => '2001 Frankfort Avenue, Louisville, KY 40206',
-            'map_url'       => 'https://www.google.com/maps/place/2001+Frankfort+Ave,+Louisville,+KY+40206',
-            'hours'         => 'Mon-Fri: 7AM-7PM · Sat-Sun: 7AM-7PM',
-            'phone'         => '(502) 861-5844',
-            'read_more_url' => home_url( '/about-us?view=frankfort-avenue' ),
-        ),
-    );
+    $all_cafe_details = get_option( 'quills_cafe_details' );
+    if ( ! empty( $all_cafe_details ) && is_array( $all_cafe_details ) ) {
+        $cafes = array();
+        foreach ( $all_cafe_details as $c_id => $c_data ) {
+            $cafes[] = array(
+                'id'            => $c_id,
+                'name'          => isset( $c_data['title'] ) ? $c_data['title'] : '',
+                'image'         => isset( $c_data['image_main'] ) ? $c_data['image_main'] : '',
+                'address'       => isset( $c_data['address'] ) ? $c_data['address'] : '',
+                'map_url'       => isset( $c_data['map_url'] ) ? $c_data['map_url'] : '',
+                'hours'         => isset( $c_data['hours'] ) ? $c_data['hours'] : '',
+                'phone'         => isset( $c_data['phone'] ) ? $c_data['phone'] : '',
+                'read_more_url' => home_url( '/about-us?view=' . $c_id ),
+            );
+        }
+    }
 }
 
 // Split into Row 1 (3 cafes) and Row 2 (4 cafes)

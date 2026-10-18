@@ -1,70 +1,227 @@
 /**
  * Brew Gear Collection JavaScript
  * 
- * Handles client-side sort interactions and interactive Add-to-Cart
+ * Handles:
+ * - Client-side sort interactions
+ * - Direct card click navigation to product detail page
+ * - AJAX Add to Cart opening the Quills Slide-in Cart Drawer
  *
  * @package Coffee_Cafe_Corner
  */
 
-document.addEventListener('DOMContentLoaded', function () {
-    // 1. Sort by dropdown interaction
-    const sortSelect = document.getElementById('quills-sort-by-select');
-    if (sortSelect) {
-        sortSelect.addEventListener('change', function () {
-            const selectedVal = this.value;
-            const currentUrl = new URL(window.location.href);
+(function ($) {
+    'use strict';
+
+    $(document).ready(function () {
+
+        // 1. Sort by dropdown interaction
+        $('#quills-sort-by-select').on('change', function () {
+            var selectedVal = $(this).val();
+            var currentUrl = new URL(window.location.href);
             currentUrl.searchParams.set('sort_by', selectedVal);
             window.location.href = currentUrl.toString();
         });
-    }
 
-    // 2. Interactive Add To Cart buttons inside hover overlay
-    const addToCartForms = document.querySelectorAll('.quills-add-to-cart-form');
-    addToCartForms.forEach(function (form) {
-        form.addEventListener('submit', function (e) {
+        // 2. Direct Navigation to Product Detail Page when clicking anywhere on the card/image/hover (except Add to Cart button)
+        $(document).on('click', '.quills-product-image-box, .quills-product-hover-overlay', function (e) {
+            // Do not navigate if user clicked the Add to Cart button or inside the form
+            if ($(e.target).closest('.quills-hover-action, .quills-add-to-cart-btn, .quills-add-to-cart-form').length) {
+                return;
+            }
+
+            var $box = $(this).closest('.quills-product-image-box');
+            var permalink = $box.attr('data-permalink') ||
+                            $box.find('.quills-hover-link-overlay').attr('href') ||
+                            $box.find('.quills-product-default-view').attr('href') ||
+                            $box.closest('.quills-product-card').find('.quills-product-title-link').attr('href');
+
+            if (permalink) {
+                window.location.href = permalink;
+            }
+        });
+
+        // 3. Helper: Guarantee Cart Drawer DOM exists
+        function ensureCartDrawerContainer() {
+            if (!$('#quills-cart-drawer').length) {
+                $('body').append(
+                    '<div class="quills-cart-overlay" id="quills-cart-overlay" aria-hidden="true"></div>' +
+                    '<aside class="quills-cart-drawer" id="quills-cart-drawer" aria-hidden="true">' +
+                        '<div id="quills-cart-drawer-content"></div>' +
+                    '</aside>'
+                );
+            }
+        }
+        ensureCartDrawerContainer();
+
+        // 4. Helper: Update Cart Counter in Header
+        function updateHeaderBadge(count) {
+            var $badge = $('.quills-cart-badge');
+            if ($badge.length) {
+                $badge.text(count);
+                if (count > 0) {
+                    $badge.show();
+                } else {
+                    $badge.hide();
+                }
+            }
+        }
+
+        // 5. Helper: Open / Close Cart Drawer
+        function openCartDrawer() {
+            ensureCartDrawerContainer();
+            $('#quills-cart-overlay').addClass('is-active').attr('aria-hidden', 'false');
+            $('#quills-cart-drawer').addClass('is-active').attr('aria-hidden', 'false');
+            $('body').addClass('quills-drawer-open');
+        }
+
+        function closeCartDrawer() {
+            $('#quills-cart-overlay').removeClass('is-active').attr('aria-hidden', 'true');
+            $('#quills-cart-drawer').removeClass('is-active').attr('aria-hidden', 'true');
+            $('body').removeClass('quills-drawer-open');
+        }
+
+        // Close drawer events
+        $(document).on('click', '#quills-cart-overlay, #quills-drawer-close, .quills-drawer-close', function (e) {
             e.preventDefault();
-            const btn = form.querySelector('.quills-add-to-cart-btn');
-            const productIdInput = form.querySelector('input[name="add-to-cart"]');
-            if (!productIdInput || !btn) return;
+            closeCartDrawer();
+        });
 
-            const productId = productIdInput.value;
-            const originalText = btn.textContent;
-            btn.textContent = 'ADDING...';
-            btn.disabled = true;
+        $(document).on('keyup', function (e) {
+            if (e.key === 'Escape') {
+                closeCartDrawer();
+            }
+        });
 
-            // Submit via FormData to WooCommerce
-            const formData = new FormData(form);
-            formData.append('product_id', productId);
-            formData.append('quantity', 1);
+        // Click on header cart icon to toggle drawer
+        $(document).on('click', '.quills-cart-link, .quills-cart-toggle, .quills-cart-icon-wrapper', function (e) {
+            e.preventDefault();
+            openCartDrawer();
+            refreshCartDrawer();
+        });
 
-            fetch(window.location.href, {
-                method: 'POST',
-                body: formData,
-                headers: {
-                    'X-Requested-With': 'XMLHttpRequest'
+        function refreshCartDrawer() {
+            var ajaxUrl = (typeof quillsData !== 'undefined' && quillsData.ajaxUrl) ? quillsData.ajaxUrl : '/wp-admin/admin-ajax.php';
+            var nonce = (typeof quillsData !== 'undefined' && quillsData.nonce) ? quillsData.nonce : '';
+
+            $.ajax({
+                url: ajaxUrl,
+                type: 'POST',
+                data: {
+                    action: 'quills_get_cart_drawer',
+                    nonce: nonce
+                },
+                success: function (resp) {
+                    if (resp && resp.success && resp.data && resp.data.drawer_html) {
+                        $('#quills-cart-drawer-content').html(resp.data.drawer_html);
+                    }
                 }
-            })
-            .then(function () {
-                btn.textContent = 'ADDED!';
-                btn.classList.add('is-added');
+            });
+        }
 
-                // Update cart count badge in header
-                const cartBadge = document.querySelector('.quills-cart-badge');
-                if (cartBadge) {
-                    const currentCount = parseInt(cartBadge.textContent, 10) || 0;
-                    cartBadge.textContent = currentCount + 1;
+        // Stepper (+ / -) in Cart Drawer
+        $(document).on('click', '.quills-drawer-step-btn', function (e) {
+            e.preventDefault();
+            var $btn = $(this);
+            var key = $btn.data('key');
+            var newQty = parseInt($btn.data('qty'), 10);
+            var ajaxUrl = (typeof quillsData !== 'undefined' && quillsData.ajaxUrl) ? quillsData.ajaxUrl : '/wp-admin/admin-ajax.php';
+            var nonce = (typeof quillsData !== 'undefined' && quillsData.nonce) ? quillsData.nonce : '';
+
+            $.ajax({
+                url: ajaxUrl,
+                type: 'POST',
+                data: {
+                    action: 'quills_update_cart_qty',
+                    nonce: nonce,
+                    cart_item_key: key,
+                    quantity: newQty
+                },
+                success: function (resp) {
+                    if (resp && resp.success) {
+                        updateHeaderBadge(resp.data.cart_count);
+                        if (resp.data.drawer_html) {
+                            $('#quills-cart-drawer-content').html(resp.data.drawer_html);
+                        }
+                    }
                 }
-
-                setTimeout(function () {
-                    btn.textContent = originalText;
-                    btn.classList.remove('is-added');
-                    btn.disabled = false;
-                }, 1600);
-            })
-            .catch(function () {
-                // Fallback to normal form submit if fetch fails
-                form.submit();
             });
         });
+
+        // Remove item from Cart Drawer
+        $(document).on('click', '.quills-drawer-remove-btn', function (e) {
+            e.preventDefault();
+            var $btn = $(this);
+            var key = $btn.data('key');
+            var ajaxUrl = (typeof quillsData !== 'undefined' && quillsData.ajaxUrl) ? quillsData.ajaxUrl : '/wp-admin/admin-ajax.php';
+            var nonce = (typeof quillsData !== 'undefined' && quillsData.nonce) ? quillsData.nonce : '';
+
+            $.ajax({
+                url: ajaxUrl,
+                type: 'POST',
+                data: {
+                    action: 'quills_remove_cart_item',
+                    nonce: nonce,
+                    cart_item_key: key
+                },
+                success: function (resp) {
+                    if (resp && resp.success) {
+                        updateHeaderBadge(resp.data.cart_count);
+                        if (resp.data.drawer_html) {
+                            $('#quills-cart-drawer-content').html(resp.data.drawer_html);
+                        }
+                    }
+                }
+            });
+        });
+
+        // 6. Interactive AJAX Add to Cart opening Slide-in Cart Drawer
+        $(document).on('click', '.quills-add-to-cart-btn', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            var $btn = $(this);
+            var productId = $btn.data('product-id') || $btn.closest('.quills-product-card').data('product-id');
+            if (!productId) return;
+
+            var originalText = $btn.text();
+            $btn.text('ADDING...').prop('disabled', true);
+
+            var ajaxUrl = (typeof quillsData !== 'undefined' && quillsData.ajaxUrl) ? quillsData.ajaxUrl : '/wp-admin/admin-ajax.php';
+            var nonce = (typeof quillsData !== 'undefined' && quillsData.nonce) ? quillsData.nonce : '';
+
+            $.ajax({
+                url: ajaxUrl,
+                type: 'POST',
+                data: {
+                    action: 'quills_add_to_cart',
+                    nonce: nonce,
+                    product_id: productId,
+                    quantity: 1,
+                    purchase_type: 'onetime'
+                },
+                success: function (res) {
+                    $btn.text('ADDED ✓').addClass('is-added');
+
+                    setTimeout(function () {
+                        $btn.text(originalText).removeClass('is-added').prop('disabled', false);
+
+                        if (res && res.success) {
+                            if (res.data && res.data.cart_count !== undefined) {
+                                updateHeaderBadge(res.data.cart_count);
+                            }
+                            if (res.data && res.data.drawer_html) {
+                                $('#quills-cart-drawer-content').html(res.data.drawer_html);
+                            }
+                            openCartDrawer();
+                        }
+                    }, 350);
+                },
+                error: function () {
+                    $btn.text(originalText).prop('disabled', false);
+                    alert('Could not add to cart. Please try again.');
+                }
+            });
+        });
+
     });
-});
+})(jQuery);

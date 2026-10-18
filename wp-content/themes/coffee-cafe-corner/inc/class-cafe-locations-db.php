@@ -148,6 +148,7 @@ class Coffee_Cafe_Corner_Cafe_Locations_DB {
 	 * Ensure Database has initial records
 	 */
 	public static function ensure_initial_database() {
+		return; // Seeder disabled: Data is permanently managed in database
 		$existing = get_option( self::OPTION_KEY );
 		if ( empty( $existing ) || ! is_array( $existing ) ) {
 			$defaults = self::get_default_cafes();

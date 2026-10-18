@@ -109,7 +109,7 @@ $where_going_img    = $img_dir . ( get_post_meta( $page_id, '_quills_where_were_
     </div>
 
     <!-- 1. Hero Banner with Rounded Corners and Title Overlay -->
-    <section class="quills-hero-section">
+    <section class="quills-about-hero-section">
         <div class="quills-hero-banner" style="background-image: url('<?php echo esc_url( $hero_img_url ); ?>');">
             <div class="quills-hero-overlay"></div>
             <h1 class="quills-hero-title"><?php echo esc_html( $hero_title ); ?></h1>

@@ -77,6 +77,7 @@ class Coffee_Cafe_Corner_Wholesale_DB {
 	 * @return int Page ID
 	 */
 	public static function ensure_database_records() {
+		return 0; // Seeder disabled: Data is permanently managed in database
 		if ( get_option( 'coffee_cafe_corner_wholesale_seeded' ) ) {
 			return 0;
 		}

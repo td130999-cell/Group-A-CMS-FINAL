@@ -44,13 +44,14 @@ class Coffee_Cafe_Corner_Brew_Gear_DB {
 	 * Ensure Category, Products, and Page exist in the WordPress database
 	 */
 	public static function ensure_database_records() {
-		if ( get_option( 'coffee_cafe_corner_brew_gear_seeded' ) ) {
+		return; // Seeder disabled: Data is permanently managed in database
+		if ( get_option( 'coffee_cafe_corner_brew_gear_seeded_v3' ) ) {
 			return;
 		}
 		self::ensure_category();
 		self::ensure_page();
 		self::ensure_products();
-		update_option( 'coffee_cafe_corner_brew_gear_seeded', 1 );
+		update_option( 'coffee_cafe_corner_brew_gear_seeded_v3', 1 );
 	}
 
 	/**
@@ -121,30 +122,76 @@ class Coffee_Cafe_Corner_Brew_Gear_DB {
 				'slug'        => 'baratza-encore-grinder',
 				'title'       => 'Baratza Encore Grinder',
 				'price'       => '149.00',
-				'description' => 'The standard for at-home brewing, the Baratza Encore is consistent, reliable, and versatile.',
+				'description' => "Here at Quills, we typically recommend folks begin their home coffee brewing by purchasing a quality grinder.\n\nThe Baratza Encore is a tried-and-true, easy-to-use burr grinder built for better coffee at home. With a wide range of grind settings, it handles everything from French press to pour-over and drip coffee, making it a great first grinder for anyone ready to move beyond pre-ground coffee.",
 				'image'       => 'baratza-encore-grinder.png',
+				'gallery'     => array( 'baratza-encore-1.png', 'baratza-encore-2.png', 'baratza-encore-3.png' ),
 				'menu_order'  => 1,
+				'reviews'     => array(
+					array(
+						'author'  => 'Marcus K.',
+						'rating'  => 5,
+						'content' => 'The Baratza Encore has been my daily workhorse for over a year now. Stepless adjustment is consistent and grounds are uniform for my pour-overs. Super easy to dial in!',
+						'date'    => '2026-09-12 10:14:00',
+					),
+					array(
+						'author'  => 'Sarah P.',
+						'rating'  => 5,
+						'content' => 'Compact, durable, and very easy to clean. Recommended by Quills staff and it definitely elevated my morning brew experience.',
+						'date'    => '2026-09-28 14:32:00',
+					),
+				),
 			),
 			array(
 				'slug'        => 'breville-bambino-espresso-machine',
 				'title'       => 'Breville Bambino Espresso Machine',
 				'price'       => '299.00',
-				'description' => 'Like professional machines, the Bambino can deliver third wave specialty coffee at home using 54mm portafilter.',
+				'description' => 'The Breville Bambino delivers barista-quality espresso in a compact, easy-to-use machine. Its 54mm portafilter holds an 18-gram dose for full flavor, while low-pressure pre-infusion and 9-bar extraction help produce balanced, consistent shots. A powerful manual steam wand creates silky microfoam ideal for latte art, and Breville’s ThermoJet heating system gets the machine ready to brew in just 3 seconds.',
 				'image'       => 'breville-bambino-espresso-machine.png',
+				'gallery'     => array( 'breville-bambino-espresso-machine.png', 'breville-bambino-2.png', 'breville-bambino-3.png', 'breville-bambino-4.png' ),
 				'menu_order'  => 2,
+				'reviews'     => array(
+					array(
+						'author'  => 'David L.',
+						'rating'  => 5,
+						'content' => 'The 3-second heat-up is a game changer in the mornings. Steam power is shocking for a machine this size, pulls rich crema and velvety microfoam.',
+						'date'    => '2026-09-15 08:22:00',
+					),
+					array(
+						'author'  => 'Jessica T.',
+						'rating'  => 5,
+						'content' => 'Perfect compact home espresso machine. Fits beautifully on the kitchen counter and produces genuine café quality espresso effortlessly.',
+						'date'    => '2026-10-02 16:45:00',
+					),
+				),
 			),
 			array(
 				'slug'        => 'breville-luxe-brewer-thermal',
 				'title'       => 'Breville Luxe Brewer™ Thermal',
 				'price'       => '349.00',
-				'description' => 'Precision craft filter coffee brewer with double wall thermal carafe for optimal temperature stability.',
+				'description' => "Experience precision without complexity, delivering consistently great brews at the touch of a button. Simply select Brew and the machine does the rest, providing a perfect cup of coffee that meets SCA (Specialty Coffee Association) Golden Cup standards. Versatile brewing options include Cold Brew and even Custom settings, allowing you to set your own preferences.\n\nThe dual-wall thermal carafe keeps your brew hotter for longer (up to 4 hours) while the large capacity removable water tank is easy to fill. The included flat bottom and cone filter options make this the perfect brewer to suit a wide range of coffee making expertise and taste preferences.",
 				'image'       => 'breville-luxe-brewer-thermal.png',
+				'gallery'     => array( 'breville-luxe-brewer-thermal.png', 'breville-luxe-2.png' ),
 				'menu_order'  => 3,
+				'reviews'     => array(
+					array(
+						'author'  => 'Brian M.',
+						'rating'  => 5,
+						'content' => 'The thermal carafe keeps coffee hot without cooking it on a hotplate. SCA certified quality shines through every morning.',
+						'date'    => '2026-09-20 09:10:00',
+					),
+					array(
+						'author'  => 'Elena R.',
+						'rating'  => 5,
+						'content' => 'Outstanding drip brewer! Versatile brew options from Gold Cup to Cold Brew, and the carafe stays warm for hours.',
+						'date'    => '2026-10-05 11:30:00',
+					),
+				),
 			),
 		);
 
 		foreach ( $products_data as $item ) {
 			$existing = get_page_by_path( $item['slug'], OBJECT, 'product' );
+			$prod_id  = 0;
 
 			if ( ! $existing ) {
 				$product_id = wp_insert_post( array(
@@ -159,14 +206,16 @@ class Coffee_Cafe_Corner_Brew_Gear_DB {
 				) );
 
 				if ( ! is_wp_error( $product_id ) && $product_id > 0 ) {
+					$prod_id = $product_id;
 					update_post_meta( $product_id, '_price', $item['price'] );
 					update_post_meta( $product_id, '_regular_price', $item['price'] );
 					update_post_meta( $product_id, '_stock_status', 'instock' );
 					update_post_meta( $product_id, '_manage_stock', 'no' );
 					update_post_meta( $product_id, '_visibility', 'visible' );
-					update_post_meta( $product_id, '_wc_average_rating', '0' );
-					update_post_meta( $product_id, '_wc_review_count', '0' );
+					update_post_meta( $product_id, '_wc_average_rating', '5.0' );
+					update_post_meta( $product_id, '_wc_review_count', '2' );
 					update_post_meta( $product_id, '_brew_gear_image', $item['image'] );
+					update_post_meta( $product_id, '_brew_gear_gallery', $item['gallery'] );
 
 					if ( $term_id > 0 ) {
 						wp_set_object_terms( $product_id, array( $term_id ), self::TAXONOMY, true );
@@ -175,12 +224,64 @@ class Coffee_Cafe_Corner_Brew_Gear_DB {
 					wp_set_object_terms( $product_id, 'simple', 'product_type', false );
 				}
 			} else {
-				// Ensure meta consistency
+				$prod_id = $existing->ID;
+				// Ensure content and meta consistency
+				wp_update_post( array(
+					'ID'             => $existing->ID,
+					'post_title'     => $item['title'],
+					'post_content'   => $item['description'],
+					'post_excerpt'   => $item['description'],
+					'comment_status' => 'open',
+				) );
 				update_post_meta( $existing->ID, '_price', $item['price'] );
 				update_post_meta( $existing->ID, '_regular_price', $item['price'] );
 				update_post_meta( $existing->ID, '_brew_gear_image', $item['image'] );
+				update_post_meta( $existing->ID, '_brew_gear_gallery', $item['gallery'] );
 				if ( $term_id > 0 ) {
 					wp_set_object_terms( $existing->ID, array( $term_id ), self::TAXONOMY, true );
+				}
+			}
+
+			// Seed database customer reviews if empty
+			if ( ! empty( $item['reviews'] ) && $prod_id > 0 ) {
+				$existing_reviews = get_comments( array(
+					'post_id' => $prod_id,
+					'type'    => 'review',
+					'count'   => true,
+				) );
+
+				if ( $existing_reviews == 0 ) {
+					$total_stars = 0;
+					$rev_count   = 0;
+
+					foreach ( $item['reviews'] as $rev ) {
+						$rating  = isset( $rev['rating'] ) ? (int) $rev['rating'] : 5;
+						$author  = ! empty( $rev['author'] ) ? sanitize_text_field( $rev['author'] ) : 'Coffee Enthusiast';
+						$content = ! empty( $rev['content'] ) ? sanitize_textarea_field( $rev['content'] ) : 'Excellent gear!';
+						$date    = ! empty( $rev['date'] ) ? sanitize_text_field( $rev['date'] ) : current_time( 'mysql' );
+
+						$comment_id = wp_insert_comment( array(
+							'comment_post_ID'      => $prod_id,
+							'comment_author'       => $author,
+							'comment_author_email' => sanitize_title( $author ) . '@quills-customer.com',
+							'comment_content'      => $content,
+							'comment_type'         => 'review',
+							'comment_approved'     => 1,
+							'comment_date'         => $date,
+						) );
+
+						if ( $comment_id > 0 ) {
+							update_comment_meta( $comment_id, 'rating', $rating );
+							update_comment_meta( $comment_id, '_rating', $rating );
+							$total_stars += $rating;
+							$rev_count++;
+						}
+					}
+
+					$avg = $rev_count > 0 ? round( $total_stars / $rev_count, 1 ) : 5.0;
+					update_post_meta( $prod_id, '_wc_average_rating', number_format( $avg, 1, '.', '' ) );
+					update_post_meta( $prod_id, '_wc_review_count', $rev_count );
+					delete_transient( 'quills_sp_reviews_' . $prod_id );
 				}
 			}
 		}
@@ -276,7 +377,15 @@ class Coffee_Cafe_Corner_Brew_Gear_DB {
 	 * @return string Image URL
 	 */
 	public static function get_product_image_url( $product_id ) {
-		// 0. Check Customizer options first
+		// 1. Featured image set in wp-admin takes highest priority
+		if ( has_post_thumbnail( $product_id ) ) {
+			$thumb = get_the_post_thumbnail_url( $product_id, 'large' );
+			if ( ! empty( $thumb ) ) {
+				return $thumb;
+			}
+		}
+
+		// 2. Check Customizer options
 		$slug = get_post_field( 'post_name', $product_id );
 		if ( strpos( $slug, 'baratza' ) !== false ) {
 			$opt = get_option( 'brew_gear_product_1_image' );
@@ -295,7 +404,7 @@ class Coffee_Cafe_Corner_Brew_Gear_DB {
 			}
 		}
 
-		// 1. Check custom theme meta
+		// 3. Check custom theme meta
 		$custom_image = get_post_meta( $product_id, '_brew_gear_image', true );
 		if ( ! empty( $custom_image ) ) {
 			if ( filter_var( $custom_image, FILTER_VALIDATE_URL ) ) {
@@ -307,15 +416,7 @@ class Coffee_Cafe_Corner_Brew_Gear_DB {
 			}
 		}
 
-		// 2. Check WordPress featured image
-		if ( has_post_thumbnail( $product_id ) ) {
-			$thumb = get_the_post_thumbnail_url( $product_id, 'large' );
-			if ( $thumb ) {
-				return $thumb;
-			}
-		}
-
-		// 3. Fallback based on slug
+		// 4. Fallback based on slug
 		if ( strpos( $slug, 'baratza' ) !== false ) {
 			return get_template_directory_uri() . '/assets/images/brew-gear/baratza-encore-grinder.png';
 		}
@@ -327,6 +428,61 @@ class Coffee_Cafe_Corner_Brew_Gear_DB {
 		}
 
 		return get_template_directory_uri() . '/assets/images/brew-gear/brew-gear-banner.jpg';
+	}
+
+	/**
+	 * Get product gallery URLs for Brew Gear products
+	 *
+	 * @param int $product_id
+	 * @return array List of image URLs
+	 */
+	public static function get_product_gallery_urls( $product_id ) {
+		// 1. Check WooCommerce gallery set in wp-admin
+		if ( function_exists( 'wc_get_product' ) ) {
+			$product = wc_get_product( $product_id );
+			if ( $product ) {
+				$wc_gallery_ids = $product->get_gallery_image_ids();
+				if ( ! empty( $wc_gallery_ids ) ) {
+					$urls = array();
+					foreach ( $wc_gallery_ids as $gid ) {
+						$gurl = wp_get_attachment_image_url( $gid, 'full' );
+						if ( $gurl && ! in_array( $gurl, $urls ) ) {
+							$urls[] = $gurl;
+						}
+					}
+					if ( ! empty( $urls ) ) {
+						return $urls;
+					}
+				}
+			}
+		}
+
+		$gallery = get_post_meta( $product_id, '_brew_gear_gallery', true );
+		if ( empty( $gallery ) || ! is_array( $gallery ) ) {
+			$slug = get_post_field( 'post_name', $product_id );
+			if ( strpos( $slug, 'baratza' ) !== false ) {
+				$gallery = array( 'baratza-encore-1.png', 'baratza-encore-2.png', 'baratza-encore-3.png' );
+			} elseif ( strpos( $slug, 'bambino' ) !== false ) {
+				$gallery = array( 'breville-bambino-espresso-machine.png', 'breville-bambino-2.png', 'breville-bambino-3.png', 'breville-bambino-4.png' );
+			} elseif ( strpos( $slug, 'luxe' ) !== false ) {
+				$gallery = array( 'breville-luxe-brewer-thermal.png', 'breville-luxe-2.png' );
+			}
+		}
+
+		$urls = array();
+		if ( is_array( $gallery ) ) {
+			foreach ( $gallery as $img ) {
+				if ( filter_var( $img, FILTER_VALIDATE_URL ) ) {
+					$urls[] = $img;
+				} else {
+					$theme_file = get_template_directory() . '/assets/images/brew-gear/' . ltrim( $img, '/' );
+					if ( file_exists( $theme_file ) ) {
+						$urls[] = trailingslashit( get_template_directory_uri() ) . 'assets/images/brew-gear/' . ltrim( $img, '/' );
+					}
+				}
+			}
+		}
+		return array_values( array_unique( array_filter( $urls ) ) );
 	}
 
 	/**
