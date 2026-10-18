@@ -570,6 +570,100 @@
                 });
             }
         });
+
+        // ==========================================
+        // Upsell Section ("People often add:") Carousel Slider (Matching Image 1 & 2)
+        // ==========================================
+        function updateUpsellNavButtons() {
+            var $track = $('#quills-upsell-track');
+            if (!$track.length) return;
+            var el = $track[0];
+            if (el.scrollLeft > 10) {
+                $('#quills-upsell-prev').fadeIn(150);
+            } else {
+                $('#quills-upsell-prev').fadeOut(150);
+            }
+            if (el.scrollLeft + el.clientWidth >= el.scrollWidth - 10) {
+                $('#quills-upsell-next').fadeOut(150);
+            } else {
+                $('#quills-upsell-next').fadeIn(150);
+            }
+        }
+
+        $(document).on('click', '#quills-upsell-next', function(e) {
+            e.preventDefault();
+            var $track = $('#quills-upsell-track');
+            if ($track.length) {
+                var current = $track.scrollLeft();
+                $track.animate({ scrollLeft: current + 300 }, 300, function() {
+                    updateUpsellNavButtons();
+                });
+            }
+        });
+
+        $(document).on('click', '#quills-upsell-prev', function(e) {
+            e.preventDefault();
+            var $track = $('#quills-upsell-track');
+            if ($track.length) {
+                var current = $track.scrollLeft();
+                $track.animate({ scrollLeft: current - 300 }, 300, function() {
+                    updateUpsellNavButtons();
+                });
+            }
+        });
+
+        $(document).on('scroll', '#quills-upsell-track', function() {
+            updateUpsellNavButtons();
+        });
+
+        $(document).on('click', '#quills-upsell-toggle', function(e) {
+            e.preventDefault();
+            $(this).closest('.quills-drawer-upsell-section').toggleClass('collapsed');
+        });
+
+        $(document).on('click', '.quills-drawer-upsell-add-btn', function(e) {
+            e.preventDefault();
+            var $btn = $(this);
+            var productId = $btn.data('product-id');
+            if (!productId || $btn.hasClass('loading')) return;
+
+            $btn.addClass('loading');
+            var ajaxUrl = (typeof quillsData !== 'undefined' && quillsData.ajaxUrl) ? quillsData.ajaxUrl : '/wp-admin/admin-ajax.php';
+            var nonce = (typeof quillsData !== 'undefined' && quillsData.nonce) ? quillsData.nonce : '';
+
+            $.ajax({
+                url: ajaxUrl,
+                type: 'POST',
+                data: {
+                    action: 'quills_add_to_cart',
+                    nonce: nonce,
+                    product_id: productId,
+                    quantity: 1,
+                    size: '',
+                    grind: '',
+                    purchase_type: 'onetime'
+                },
+                success: function(resp) {
+                    $btn.removeClass('loading');
+                    if (resp && resp.success) {
+                        setQuillsCartCount(resp.data.cart_count);
+                        if (resp.data.drawer_html) {
+                            $('#quills-cart-drawer-content').html(resp.data.drawer_html);
+                            updateUpsellNavButtons();
+                        }
+                    }
+                },
+                error: function() {
+                    $btn.removeClass('loading');
+                }
+            });
+        });
+
+        // Trigger on cart open
+        $(document).on('click', '.quills-header-cart-icon, .quills-quick-cart-trigger', function() {
+            setTimeout(updateUpsellNavButtons, 200);
+        });
     });
 
 })(jQuery);
+

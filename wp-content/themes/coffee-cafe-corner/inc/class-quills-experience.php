@@ -800,39 +800,130 @@ class Quills_Coffee_Experience {
         $count = $cart->get_cart_contents_count();
         $subtotal = $cart->get_cart_contents_total();
 
-        // Query database for Upsell: Crewneck Sweatshirt (Evergreen)
-        $upsell_product = null;
-        $upsell_posts = get_posts([
-            'name'             => 'crewneck-sweatshirt-evergreen',
-            'post_type'        => 'product',
-            'post_status'      => 'publish',
-            'numberposts'      => 1,
-            'suppress_filters' => true
-        ]);
-        if (!empty($upsell_posts)) {
-            $upsell_product = wc_get_product($upsell_posts[0]->ID);
-        }
-
-        $upsell_data = [
-            'id'    => $upsell_product ? $upsell_product->get_id() : 0,
-            'title' => $upsell_product ? $upsell_product->get_name() : 'Crewneck Sweatshirt (Evergreen)',
-            'price' => $upsell_product ? wc_price($upsell_product->get_price()) : '$45.00',
-            'img'   => ''
-        ];
-        if ($upsell_product) {
-            $img_id = $upsell_product->get_image_id();
-            if ($img_id) {
-                $upsell_data['img'] = wp_get_attachment_image_url($img_id, 'medium');
-            }
-            if (!$upsell_data['img']) {
-                $meta_img = get_post_meta($upsell_product->get_id(), '_merch_image', true);
-                if ($meta_img) {
-                    $upsell_data['img'] = get_template_directory_uri() . '/assets/images/' . ltrim($meta_img, '/');
+        // Query database for Upsells (People often add): Popular Merch & Coffee items
+        $cart_product_ids = [];
+        if (!empty($items)) {
+            foreach ($items as $c_item) {
+                if (!empty($c_item['product_id'])) {
+                    $cart_product_ids[] = absint($c_item['product_id']);
                 }
             }
         }
-        if (!$upsell_data['img']) {
-            $upsell_data['img'] = get_template_directory_uri() . '/assets/images/merch/crewneck-sweatshirt-evergreen.png';
+
+        if (!class_exists('Coffee_Cafe_Corner_Merch_DB')) {
+            require_once get_template_directory() . '/inc/class-merch-db.php';
+        }
+        if (!class_exists('Coffee_Cafe_Corner_Coffee_DB')) {
+            require_once get_template_directory() . '/inc/class-coffee-db.php';
+        }
+        if (!class_exists('Coffee_Cafe_Corner_Brew_Gear_DB')) {
+            require_once get_template_directory() . '/inc/class-brew-gear-db.php';
+        }
+
+        // Ordered priority list of slugs matching Quills Coffee store recommendations
+        $upsell_slug_candidates = [
+            'crewneck-sweatshirt-evergreen',
+            'owl-tee-in-pastel-green',
+            'quills-postage-tote-bag',
+            'quills-speckled-coffee-mug',
+            'crewneck-sweatshirt-sandstone',
+            'owl-ringer-tee',
+            'two-tone-embroidered-hat',
+            'inkwell-signature-blend',
+            'blacksmith-espresso-blend'
+        ];
+
+        $upsell_products_data = [];
+        $loaded_pids = [];
+
+        foreach ($upsell_slug_candidates as $slug) {
+            $p_post = get_page_by_path($slug, OBJECT, 'product');
+            if (!$p_post) {
+                $alt_posts = get_posts([
+                    'name'             => $slug,
+                    'post_type'        => 'product',
+                    'post_status'      => 'publish',
+                    'numberposts'      => 1,
+                    'suppress_filters' => true,
+                ]);
+                if (!empty($alt_posts)) {
+                    $p_post = $alt_posts[0];
+                }
+            }
+
+            if ($p_post) {
+                $p_id = $p_post->ID;
+                if (in_array($p_id, $cart_product_ids, true) || in_array($p_id, $loaded_pids, true)) {
+                    continue;
+                }
+
+                $p_obj = wc_get_product($p_id);
+                if ($p_obj && $p_obj->is_in_stock()) {
+                    $is_m = has_term('merch', 'product_cat', $p_id) || (bool) get_post_meta($p_id, '_merch_image', true);
+                    $is_g = has_term('brew-gear', 'product_cat', $p_id) || (bool) get_post_meta($p_id, '_brew_gear_image', true);
+
+                    if ($is_m) {
+                        $p_img = Coffee_Cafe_Corner_Merch_DB::get_product_image_url($p_id);
+                    } elseif ($is_g) {
+                        $p_img = Coffee_Cafe_Corner_Brew_Gear_DB::get_product_image_url($p_id);
+                    } else {
+                        $p_img = wp_get_attachment_image_url($p_obj->get_image_id(), 'medium');
+                        if (!$p_img) {
+                            $p_img = Coffee_Cafe_Corner_Coffee_DB::get_product_image_url($p_id);
+                        }
+                    }
+
+                    if (!$p_img) {
+                        $p_img = wc_placeholder_img_src();
+                    }
+
+                    $upsell_products_data[] = [
+                        'id'    => $p_id,
+                        'title' => $p_obj->get_name(),
+                        'price' => wc_price($p_obj->get_price()),
+                        'img'   => $p_img
+                    ];
+                    $loaded_pids[] = $p_id;
+                }
+            }
+        }
+
+        // Fallback: If fewer than 4 items, pull additional products directly from WC database
+        if (count($upsell_products_data) < 4) {
+            $extra_posts = get_posts([
+                'post_type'        => 'product',
+                'post_status'      => 'publish',
+                'numberposts'      => 6,
+                'exclude'          => array_merge($cart_product_ids, $loaded_pids),
+                'suppress_filters' => true,
+            ]);
+            foreach ($extra_posts as $ep) {
+                $p_obj = wc_get_product($ep->ID);
+                if ($p_obj && $p_obj->is_in_stock()) {
+                    $p_id = $ep->ID;
+                    $p_img = wp_get_attachment_image_url($p_obj->get_image_id(), 'medium');
+                    if (!$p_img) {
+                        $p_img = Coffee_Cafe_Corner_Merch_DB::get_product_image_url($p_id);
+                    }
+                    if (!$p_img) {
+                        $p_img = Coffee_Cafe_Corner_Coffee_DB::get_product_image_url($p_id);
+                    }
+                    if (!$p_img) {
+                        $p_img = wc_placeholder_img_src();
+                    }
+
+                    $upsell_products_data[] = [
+                        'id'    => $p_id,
+                        'title' => $p_obj->get_name(),
+                        'price' => wc_price($p_obj->get_price()),
+                        'img'   => $p_img
+                    ];
+                    $loaded_pids[] = $p_id;
+                    if (count($upsell_products_data) >= 6) {
+                        break;
+                    }
+                }
+            }
         }
 
         ob_start();
@@ -948,7 +1039,8 @@ class Quills_Coffee_Experience {
                     <?php endforeach; ?>
                 </div>
 
-                <!-- Upsell Section: People often add -->
+                <!-- Upsell Section: People often add (Matching Image 1 & 2) -->
+                <?php if (!empty($upsell_products_data)): ?>
                 <div class="quills-drawer-upsell-section">
                     <div class="quills-drawer-upsell-header" id="quills-upsell-toggle">
                         <span class="quills-drawer-upsell-title">People often add:</span>
@@ -956,22 +1048,33 @@ class Quills_Coffee_Experience {
                     </div>
 
                     <div class="quills-drawer-upsell-box" id="quills-upsell-box">
-                        <div class="quills-drawer-upsell-card">
-                            <img src="<?php echo esc_url($upsell_data['img']); ?>" alt="<?php echo esc_attr($upsell_data['title']); ?>" class="quills-drawer-upsell-thumb">
-                            <div class="quills-drawer-upsell-meta">
-                                <div class="quills-drawer-upsell-name"><?php echo esc_html($upsell_data['title']); ?></div>
-                                <div class="quills-drawer-upsell-price-tag"><?php echo $upsell_data['price']; ?></div>
+                        <div class="quills-drawer-upsell-slider-wrap">
+                            <button type="button" class="quills-drawer-upsell-nav quills-drawer-upsell-prev" id="quills-upsell-prev" aria-label="Previous recommended products" style="display: none;">‹</button>
+
+                            <div class="quills-drawer-upsell-track" id="quills-upsell-track">
+                                <?php foreach ($upsell_products_data as $u_prod): ?>
+                                    <div class="quills-drawer-upsell-card" data-product-id="<?php echo esc_attr($u_prod['id']); ?>">
+                                        <img src="<?php echo esc_url($u_prod['img']); ?>" alt="<?php echo esc_attr($u_prod['title']); ?>" class="quills-drawer-upsell-thumb" loading="lazy">
+                                        <div class="quills-drawer-upsell-meta">
+                                            <div class="quills-drawer-upsell-name" title="<?php echo esc_attr($u_prod['title']); ?>"><?php echo esc_html($u_prod['title']); ?></div>
+                                            <div class="quills-drawer-upsell-price-tag"><?php echo $u_prod['price']; ?></div>
+                                        </div>
+                                        <button type="button" class="quills-drawer-upsell-add-btn" data-product-id="<?php echo esc_attr($u_prod['id']); ?>" title="Quick add to cart" aria-label="Add <?php echo esc_attr($u_prod['title']); ?>">
+                                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+                                                <line x1="3" y1="6" x2="21" y2="6"></line>
+                                                <path d="M16 10a4 4 0 0 1-8 0"></path>
+                                            </svg>
+                                        </button>
+                                    </div>
+                                <?php endforeach; ?>
                             </div>
-                            <button type="button" class="quills-drawer-upsell-add-btn" data-product-id="<?php echo esc_attr($upsell_data['id']); ?>" title="Quick add to cart">
-                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
-                                    <line x1="3" y1="6" x2="21" y2="6"></line>
-                                    <path d="M16 10a4 4 0 0 1-8 0"></path>
-                                </svg>
-                            </button>
+
+                            <button type="button" class="quills-drawer-upsell-nav quills-drawer-upsell-next" id="quills-upsell-next" aria-label="Next recommended products">›</button>
                         </div>
                     </div>
                 </div>
+                <?php endif; ?>
             </div>
 
             <!-- Footer Section -->

@@ -705,5 +705,138 @@
   margin: 0 !important;
 }
 
+/* People Often Add Horizontal Carousel (Image 1 & 2) */
+.quills-drawer-upsell-slider-wrap {
+  position: relative !important;
+  display: flex !important;
+  align-items: center !important;
+  width: 100% !important;
+}
+
+.quills-drawer-upsell-track {
+  display: flex !important;
+  gap: 10px !important;
+  overflow-x: auto !important;
+  scroll-snap-type: x mandatory !important;
+  scroll-behavior: smooth !important;
+  scrollbar-width: none !important;
+  -ms-overflow-style: none !important;
+  padding: 4px 2px 8px 2px !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+}
+
+.quills-drawer-upsell-track::-webkit-scrollbar {
+  display: none !important;
+}
+
+.quills-drawer-upsell-card {
+  flex: 0 0 290px !important;
+  max-width: 290px !important;
+  scroll-snap-align: start !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 12px !important;
+  background: #ffffff !important;
+  border: 1px solid #e5dfd4 !important;
+  border-radius: 6px !important;
+  padding: 8px 12px !important;
+  box-sizing: border-box !important;
+  transition: all 0.2s ease !important;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.03) !important;
+}
+
+.quills-drawer-upsell-thumb {
+  width: 52px !important;
+  height: 52px !important;
+  object-fit: cover !important;
+  border-radius: 4px !important;
+  background: #fbf8f2 !important;
+  flex-shrink: 0 !important;
+  border: 1px solid #ece7dd !important;
+}
+
+.quills-drawer-upsell-meta {
+  flex: 1 !important;
+  min-width: 0 !important;
+}
+
+.quills-drawer-upsell-name {
+  font-size: 13.5px !important;
+  font-weight: 600 !important;
+  color: #1a1a1a !important;
+  line-height: 1.3 !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+
+.quills-drawer-upsell-price-tag {
+  font-size: 13px !important;
+  font-weight: 700 !important;
+  color: #1a1a1a !important;
+  margin-top: 3px !important;
+}
+
+.quills-drawer-upsell-add-btn {
+  width: 32px !important;
+  height: 32px !important;
+  border: 1px solid #c9b97a !important;
+  border-radius: 6px !important;
+  background: #ceb775 !important;
+  cursor: pointer !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  color: #1a1a1a !important;
+  transition: all 0.15s ease !important;
+  flex-shrink: 0 !important;
+  padding: 0 !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08) !important;
+}
+
+.quills-drawer-upsell-add-btn:hover {
+  background: #bfa660 !important;
+  border-color: #1a1a1a !important;
+  transform: scale(1.05) !important;
+}
+
+.quills-drawer-upsell-nav {
+  position: absolute !important;
+  top: 50% !important;
+  transform: translateY(-50%) !important;
+  width: 28px !important;
+  height: 28px !important;
+  border-radius: 50% !important;
+  background: #ffffff !important;
+  border: 1px solid #d5cfc5 !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.14) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  cursor: pointer !important;
+  z-index: 10 !important;
+  font-size: 18px !important;
+  font-weight: 700 !important;
+  color: #1a1a1a !important;
+  line-height: 1 !important;
+  padding: 0 !important;
+  transition: all 0.15s ease !important;
+}
+
+.quills-drawer-upsell-nav:hover {
+  background: #f7f4ed !important;
+  border-color: #1a1a1a !important;
+  transform: translateY(-50%) scale(1.08) !important;
+}
+
+.quills-drawer-upsell-prev {
+  left: -8px !important;
+}
+
+.quills-drawer-upsell-next {
+  right: -8px !important;
+}
+
 
 
