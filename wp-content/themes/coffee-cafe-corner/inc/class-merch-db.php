@@ -4,8 +4,8 @@
  *
  * Handles database interaction for Quills Coffee Merchandise (Merch):
  * - Automatically verifies and seeds the category, 12 apparel/merch products, and page in the database
- * - Matches the exact 12 products and pricing shown in the Merch layout
- * - Provides dynamic database queries and sorting
+ * - Matches the exact 12 products, pricing, high-res images, sizing, and descriptions from Quills Coffee
+ * - Provides dynamic database queries, sorting, and single product helper methods
  *
  * @package Coffee_Cafe_Corner
  */
@@ -25,9 +25,13 @@ class Coffee_Cafe_Corner_Merch_DB {
 	}
 
 	public static function ensure_database_records() {
+		if ( get_option( 'coffee_cafe_corner_merch_seeded_v4' ) ) {
+			return;
+		}
 		self::ensure_category();
 		self::ensure_page();
 		self::ensure_products();
+		update_option( 'coffee_cafe_corner_merch_seeded_v4', 1 );
 	}
 
 	public static function ensure_category() {
@@ -86,121 +90,245 @@ class Coffee_Cafe_Corner_Merch_DB {
 
 		$merch_products = array(
 			array(
-				'slug'         => 'crewneck-sweatshirt-evergreen',
+				'slugs'        => array( 'crewneck-sweatshirt-evergreen', 'quills-coffee-leaves-crewneck-sweatshirt' ),
 				'title'        => 'Crewneck Sweatshirt (Evergreen)',
 				'price'        => '45.00',
-				'description'  => 'Comfortable heavyweight cotton-fleece crewneck in rich evergreen forest shade with classic Quills emblem embroidery.',
-				'image'        => 'merch/crewneck-sweatshirt-evergreen.png',
-				'rating'       => '0',
-				'review_count' => 0,
+				'description'  => "Midweight Quills fleece sweatshirt in evergreen color.\n\nCotton/polyester blend.",
+				'image'        => 'merch-crewneck-evergreen.jpg',
+				'gallery'      => array( 'merch-crewneck-evergreen.jpg' ),
+				'sizes'        => array(
+					array( 'size' => 'XS', 'available' => false ),
+					array( 'size' => 'S', 'available' => false ),
+					array( 'size' => 'M', 'available' => true ),
+					array( 'size' => 'L', 'available' => true ),
+					array( 'size' => 'XL', 'available' => true ),
+					array( 'size' => '2XL', 'available' => false ),
+				),
+				'default_size' => 'M',
+				'low_stock'    => 'Low stock: 3 left',
+				'rating'       => '5.0',
+				'review_count' => 2,
 				'menu_order'   => 1,
+				'reviews'      => array(
+					array(
+						'author'  => 'Tyler B.',
+						'rating'  => 5,
+						'content' => 'Super soft fleece and fits true to size. The evergreen color and owl embroidery are top notch!',
+						'date'    => '2026-09-18 11:20:00',
+					),
+					array(
+						'author'  => 'Hannah M.',
+						'rating'  => 5,
+						'content' => 'One of my favorite sweatshirts now. Washes nicely without shrinking.',
+						'date'    => '2026-10-01 15:45:00',
+					),
+				),
 			),
 			array(
-				'slug'         => 'crewneck-sweatshirt-sandstone',
+				'slugs'        => array( 'crewneck-sweatshirt-sandstone', 'quills-coffee-leaves-crewneck-sweatshirt-copy' ),
 				'title'        => 'Crewneck Sweatshirt (Sandstone)',
 				'price'        => '45.00',
-				'description'  => 'Soft brushed sandstone fleece crewneck sweatshirt, perfect for cool morning cafe rituals.',
-				'image'        => 'merch/crewneck-sweatshirt-sandstone.png',
+				'description'  => "Midweight Quills fleece sweatshirt in sandstone color.\n\nCotton/polyester blend.",
+				'image'        => 'merch-crewneck-sandstone.jpg',
+				'gallery'      => array( 'merch-crewneck-sandstone.jpg' ),
+				'sizes'        => array(
+					array( 'size' => 'XS', 'available' => true ),
+					array( 'size' => 'S', 'available' => true ),
+					array( 'size' => 'M', 'available' => true ),
+					array( 'size' => 'L', 'available' => true ),
+					array( 'size' => 'XL', 'available' => true ),
+					array( 'size' => '2XL', 'available' => false ),
+				),
+				'default_size' => 'M',
+				'low_stock'    => 'Low stock: 4 left',
 				'rating'       => '0',
 				'review_count' => 0,
 				'menu_order'   => 2,
 			),
 			array(
-				'slug'         => 'owl-ringer-tee',
+				'slugs'        => array( 'owl-ringer-tee', 'quills-kentucky-owl-ringer-tee' ),
 				'title'        => 'Owl Ringer Tee',
 				'price'        => '23.00',
-				'description'  => 'Vintage-inspired retro ringer tee featuring contrasting ribbed collar and the iconic Quills Owl graphic.',
-				'image'        => 'merch/owl-ringer-tee.png',
+				'description'  => "Retro ringer tee in ivory with dark green bands.\n\n100% cotton.",
+				'image'        => 'merch-owl-ringer-tee.jpg',
+				'gallery'      => array( 'merch-owl-ringer-tee.jpg' ),
+				'sizes'        => array(
+					array( 'size' => 'XS', 'available' => true ),
+					array( 'size' => 'S', 'available' => true ),
+					array( 'size' => 'M', 'available' => true ),
+					array( 'size' => 'L', 'available' => true ),
+					array( 'size' => 'XL', 'available' => false ),
+					array( 'size' => '2XL', 'available' => true ),
+				),
+				'default_size' => 'M',
+				'low_stock'    => 'Low stock: 2 left',
 				'rating'       => '0',
 				'review_count' => 0,
 				'menu_order'   => 3,
 			),
 			array(
-				'slug'         => 'owl-tee-in-pastel-green',
+				'slugs'        => array( 'owl-tee-in-pastel-green', 'quills-kentucky-owl-ringer-tee-copy' ),
 				'title'        => 'Owl Tee in Pastel Green',
 				'price'        => '26.00',
-				'description'  => 'Ultra-soft 100% combed ringspun cotton tee in soothing pastel sage green with subtle chest illustration.',
-				'image'        => 'merch/owl-tee-pastel-green.png',
+				'description'  => "Garment dyed heavyweight t-shirt in pastel green.\n\n100% US cotton.",
+				'image'        => 'merch-owl-tee-pastel-green.jpg',
+				'gallery'      => array( 'merch-owl-tee-pastel-green.jpg' ),
+				'sizes'        => array(
+					array( 'size' => 'S', 'available' => true ),
+					array( 'size' => 'M', 'available' => false ),
+					array( 'size' => 'L', 'available' => true ),
+					array( 'size' => 'XL', 'available' => true ),
+					array( 'size' => '2XL', 'available' => true ),
+				),
+				'default_size' => 'S',
+				'low_stock'    => 'Low stock: 5 left',
 				'rating'       => '5.0',
 				'review_count' => 2,
 				'menu_order'   => 4,
+				'reviews'      => array(
+					array(
+						'author'  => 'Emily C.',
+						'rating'  => 5,
+						'content' => 'Gorgeous sage green shade and the cotton is so heavy and durable.',
+						'date'    => '2026-09-14 09:30:00',
+					),
+					array(
+						'author'  => 'Jake W.',
+						'rating'  => 5,
+						'content' => 'Great boxy fit, love the subtle owl graphic.',
+						'date'    => '2026-10-03 14:15:00',
+					),
+				),
 			),
 			array(
-				'slug'         => 'owl-embroidered-hat',
+				'slugs'        => array( 'owl-embroidered-hat', 'quills-owl-embroidered-hat' ),
 				'title'        => 'Owl Embroidered Hat',
 				'price'        => '27.00',
-				'description'  => 'Low-profile unstructured dad hat with fine custom owl embroidery and brass buckle back strap.',
-				'image'        => 'merch/owl-embroidered-hat.png',
-				'rating'       => '4.0',
+				'description'  => "Unstructured snapback in green with gold embroidered owl logo.\n\n100% cotton.",
+				'image'        => 'merch-owl-embroidered-hat.jpg',
+				'gallery'      => array( 'merch-owl-embroidered-hat.jpg' ),
+				'sizes'        => array(),
+				'default_size' => '',
+				'low_stock'    => 'In stock',
+				'rating'       => '5.0',
 				'review_count' => 1,
 				'menu_order'   => 5,
+				'reviews'      => array(
+					array(
+						'author'  => 'Ryan G.',
+						'rating'  => 5,
+						'content' => 'Fits comfortably and embroidery quality is incredible.',
+						'date'    => '2026-09-22 17:00:00',
+					),
+				),
 			),
 			array(
-				'slug'         => 'two-tone-embroidered-hat',
+				'slugs'        => array( 'two-tone-embroidered-hat', 'quills-owl-embroidered-hat-copy' ),
 				'title'        => 'Two-tone Embroidered Hat',
 				'price'        => '27.00',
-				'description'  => 'Two-tone vintage baseball cap with structured crown and contrasting visor in earthy khaki and olive.',
-				'image'        => 'merch/two-tone-embroidered-hat.png',
+				'description'  => "Five-panel two-tone cap with embroidered Quills Coffee.\n\n100% cotton.",
+				'image'        => 'merch-twotone-embroidered-hat.jpg',
+				'gallery'      => array( 'merch-twotone-embroidered-hat.jpg' ),
+				'sizes'        => array(),
+				'default_size' => '',
+				'low_stock'    => 'In stock',
 				'rating'       => '0',
 				'review_count' => 0,
 				'menu_order'   => 6,
 			),
 			array(
-				'slug'         => 'quills-speckled-coffee-mug',
+				'slugs'        => array( 'quills-speckled-coffee-mug', 'quills-coffee-mug' ),
 				'title'        => 'Quills Speckled Coffee Mug',
 				'price'        => '19.00',
-				'description'  => 'Heavyweight 12oz ceramic diner mug with natural stone speckles and hand-stamped Quills logo.',
-				'image'        => 'merch/quills-speckled-coffee-mug.png',
+				'description'  => '12 oz ceramic mug in speckled ivory, with Quills logo and Steve the owl.',
+				'image'        => 'merch-speckled-coffee-mug.jpg',
+				'gallery'      => array( 'merch-speckled-coffee-mug.jpg' ),
+				'sizes'        => array(),
+				'default_size' => '',
+				'low_stock'    => 'In stock',
 				'rating'       => '0',
 				'review_count' => 0,
 				'menu_order'   => 7,
 			),
 			array(
-				'slug'         => 'quills-coffee-postage-mug',
+				'slugs'        => array( 'quills-coffee-postage-mug', 'quills-coffee-mug-copy' ),
 				'title'        => 'Quills Coffee Postage Mug',
 				'price'        => '19.00',
-				'description'  => 'Classic stoneware coffee mug celebrating our Louisville heritage with vintage postage postal artwork.',
-				'image'        => 'merch/quills-coffee-postage-mug.png',
+				'description'  => '12 oz ceramic mug in red with vintage postage postal artwork.',
+				'image'        => 'merch-coffee-postage-mug.jpg',
+				'gallery'      => array( 'merch-coffee-postage-mug.jpg' ),
+				'sizes'        => array(),
+				'default_size' => '',
+				'low_stock'    => 'Sold out',
+				'stock_status' => 'outofstock',
 				'rating'       => '0',
 				'review_count' => 0,
 				'menu_order'   => 8,
 			),
 			array(
-				'slug'         => 'quills-slow-coffee-hoodie-charcoal',
+				'slugs'        => array( 'quills-slow-coffee-hoodie-charcoal' ),
 				'title'        => 'Quill\'s Slow Coffee Hoodie (Charcoal)',
 				'price'        => '48.00',
-				'description'  => 'Cozy fleece pullover hoodie in heather charcoal with kangaroo pocket and "Slow Coffee" mantra typography on back.',
-				'image'        => 'merch/quills-slow-coffee-hoodie-charcoal.png',
+				'description'  => "QUILLS COFFEE MIDWEIGHT HOODED SWEATSHIRT \"SLOW COFFEE\"-CHARCOAL\n\nCozy fleece pullover hoodie in heather charcoal with kangaroo pocket and \"Slow Coffee\" mantra typography on back.",
+				'image'        => 'merch-slow-coffee-hoodie-charcoal.jpg',
+				'gallery'      => array( 'merch-slow-coffee-hoodie-charcoal.jpg', 'merch-slow-coffee-hoodie-back.jpg' ),
+				'sizes'        => array(
+					array( 'size' => 'S', 'available' => true ),
+					array( 'size' => 'M', 'available' => true ),
+					array( 'size' => 'L', 'available' => true ),
+					array( 'size' => 'XL', 'available' => false ),
+					array( 'size' => '2XL', 'available' => false ),
+				),
+				'default_size' => 'M',
+				'low_stock'    => 'Low stock: 2 left',
 				'rating'       => '0',
 				'review_count' => 0,
 				'menu_order'   => 9,
 			),
 			array(
-				'slug'         => 'quills-slow-coffee-hoodie-saddle',
+				'slugs'        => array( 'quills-slow-coffee-hoodie-saddle', 'quills-slow-coffee-hoodie-charcoal-copy' ),
 				'title'        => 'Quill\'s Slow Coffee Hoodie (Saddle)',
 				'price'        => '48.00',
-				'description'  => 'Rich warm saddle brown hoodie featuring double-lined hood, thick matching drawstrings, and custom print.',
-				'image'        => 'merch/quills-slow-coffee-hoodie-saddle.png',
+				'description'  => "QUILLS COFFEE MIDWEIGHT HOODED SWEATSHIRT \"SLOW COFFEE\"-SADDLE\n\nRich warm saddle brown hoodie featuring double-lined hood, thick matching drawstrings, and custom print.",
+				'image'        => 'merch-slow-coffee-hoodie-saddle.jpg',
+				'gallery'      => array( 'merch-slow-coffee-hoodie-saddle.jpg', 'merch-slow-coffee-hoodie-back.jpg' ),
+				'sizes'        => array(
+					array( 'size' => 'S', 'available' => true ),
+					array( 'size' => 'M', 'available' => true ),
+					array( 'size' => 'L', 'available' => true ),
+					array( 'size' => 'XL', 'available' => true ),
+					array( 'size' => '2XL', 'available' => false ),
+				),
+				'default_size' => 'M',
+				'low_stock'    => 'Low stock: 4 left',
 				'rating'       => '0',
 				'review_count' => 0,
 				'menu_order'   => 10,
 			),
 			array(
-				'slug'         => 'quills-postage-tote-bag',
+				'slugs'        => array( 'quills-postage-tote-bag' ),
 				'title'        => 'Quill\'s Postage Tote Bag',
 				'price'        => '18.00',
-				'description'  => 'Durable 100% natural cotton canvas tote with reinforced shoulder straps, designed for market runs and book carrying.',
-				'image'        => 'merch/quills-postage-tote-bag.png',
+				'description'  => "100% cotton, double-sided tote bag for carrying around your TBR stack.\nDrink good coffee and read good books. Forever and always.\n15\"W X 16\"H",
+				'image'        => 'merch-postage-tote-bag.jpg',
+				'gallery'      => array( 'merch-postage-tote-bag.jpg' ),
+				'sizes'        => array(),
+				'default_size' => '',
+				'low_stock'    => 'In stock',
 				'rating'       => '0',
 				'review_count' => 0,
 				'menu_order'   => 11,
 			),
 			array(
-				'slug'         => 'quills-patch-hat-petrol-blue',
+				'slugs'        => array( 'quills-patch-hat-petrol-blue', 'two-tone-embroidered-hat-copy' ),
 				'title'        => 'Quill\'s Patch Hat (Petrol Blue)',
 				'price'        => '27.00',
-				'description'  => 'Washed cotton twill cap in petrol blue with merrowed border woven Quills Coffee patch on front.',
-				'image'        => 'merch/quills-patch-hat-petrol-blue.png',
+				'description'  => "Five-panel two-tone cap with embroidered Quills Coffee patch.\n\n100% cotton.",
+				'image'        => 'merch-patch-hat-petrol-blue.jpg',
+				'gallery'      => array( 'merch-patch-hat-petrol-blue.jpg' ),
+				'sizes'        => array(),
+				'default_size' => '',
+				'low_stock'    => 'In stock',
 				'rating'       => '0',
 				'review_count' => 0,
 				'menu_order'   => 12,
@@ -208,46 +336,146 @@ class Coffee_Cafe_Corner_Merch_DB {
 		);
 
 		foreach ( $merch_products as $item ) {
-			$existing = get_page_by_path( $item['slug'], OBJECT, 'product' );
+			$stock_status = isset( $item['stock_status'] ) ? $item['stock_status'] : 'instock';
 
-			if ( ! $existing ) {
-				$product_id = wp_insert_post( array(
-					'post_title'     => $item['title'],
-					'post_name'      => $item['slug'],
-					'post_content'   => $item['description'],
-					'post_excerpt'   => $item['description'],
-					'post_status'    => 'publish',
-					'post_type'      => 'product',
-					'menu_order'     => $item['menu_order'],
-					'comment_status' => 'open',
-				) );
+			foreach ( $item['slugs'] as $slug ) {
+				$existing = get_page_by_path( $slug, OBJECT, 'product' );
+				$prod_id  = 0;
 
-				if ( ! is_wp_error( $product_id ) && $product_id > 0 ) {
-					update_post_meta( $product_id, '_price', $item['price'] );
-					update_post_meta( $product_id, '_regular_price', $item['price'] );
-					update_post_meta( $product_id, '_stock_status', 'instock' );
-					update_post_meta( $product_id, '_visibility', 'visible' );
-					update_post_meta( $product_id, '_wc_average_rating', $item['rating'] );
-					update_post_meta( $product_id, '_wc_review_count', $item['review_count'] );
-					update_post_meta( $product_id, '_merch_image', $item['image'] );
+				if ( ! $existing ) {
+					$product_id = wp_insert_post( array(
+						'post_title'     => $item['title'],
+						'post_name'      => $slug,
+						'post_content'   => $item['description'],
+						'post_excerpt'   => $item['description'],
+						'post_status'    => 'publish',
+						'post_type'      => 'product',
+						'menu_order'     => $item['menu_order'],
+						'comment_status' => 'open',
+					) );
 
-					if ( $term_id > 0 ) {
-						wp_set_object_terms( $product_id, array( $term_id ), self::TAXONOMY, true );
+					if ( ! is_wp_error( $product_id ) && $product_id > 0 ) {
+						$prod_id = $product_id;
+						update_post_meta( $product_id, '_price', $item['price'] );
+						update_post_meta( $product_id, '_regular_price', $item['price'] );
+						update_post_meta( $product_id, '_stock_status', $stock_status );
+						update_post_meta( $product_id, '_visibility', 'visible' );
+						update_post_meta( $product_id, '_wc_average_rating', $item['rating'] );
+						update_post_meta( $product_id, '_wc_review_count', $item['review_count'] );
+						update_post_meta( $product_id, '_merch_image', $item['image'] );
+						update_post_meta( $product_id, '_merch_gallery', $item['gallery'] );
+						update_post_meta( $product_id, '_merch_sizes', $item['sizes'] );
+						update_post_meta( $product_id, '_merch_default_size', $item['default_size'] );
+						update_post_meta( $product_id, '_merch_low_stock', $item['low_stock'] );
+
+						if ( $term_id > 0 ) {
+							wp_set_object_terms( $product_id, array( $term_id ), self::TAXONOMY, true );
+						}
+						wp_set_object_terms( $product_id, 'simple', 'product_type', false );
 					}
-					wp_set_object_terms( $product_id, 'simple', 'product_type', false );
+				} else {
+					$prod_id = $existing->ID;
+					wp_update_post( array(
+						'ID'             => $existing->ID,
+						'post_title'     => $item['title'],
+						'post_content'   => $item['description'],
+						'post_excerpt'   => $item['description'],
+						'comment_status' => 'open',
+					) );
+					update_post_meta( $prod_id, '_price', $item['price'] );
+					update_post_meta( $prod_id, '_regular_price', $item['price'] );
+					update_post_meta( $prod_id, '_stock_status', $stock_status );
+					update_post_meta( $prod_id, '_wc_average_rating', $item['rating'] );
+					update_post_meta( $prod_id, '_wc_review_count', $item['review_count'] );
+					update_post_meta( $prod_id, '_merch_image', $item['image'] );
+					update_post_meta( $prod_id, '_merch_gallery', $item['gallery'] );
+					update_post_meta( $prod_id, '_merch_sizes', $item['sizes'] );
+					update_post_meta( $prod_id, '_merch_default_size', $item['default_size'] );
+					update_post_meta( $prod_id, '_merch_low_stock', $item['low_stock'] );
+					if ( $term_id > 0 ) {
+						wp_set_object_terms( $prod_id, array( $term_id ), self::TAXONOMY, true );
+					}
 				}
-			} else {
-				$pid = $existing->ID;
-				update_post_meta( $pid, '_price', $item['price'] );
-				update_post_meta( $pid, '_regular_price', $item['price'] );
-				update_post_meta( $pid, '_wc_average_rating', $item['rating'] );
-				update_post_meta( $pid, '_wc_review_count', $item['review_count'] );
-				update_post_meta( $pid, '_merch_image', $item['image'] );
-				if ( $term_id > 0 ) {
-					wp_set_object_terms( $pid, array( $term_id ), self::TAXONOMY, true );
+
+				// Seed customer reviews if provided
+				if ( ! empty( $item['reviews'] ) && $prod_id > 0 ) {
+					$existing_reviews = get_comments( array(
+						'post_id' => $prod_id,
+						'type'    => 'review',
+						'count'   => true,
+					) );
+
+					if ( $existing_reviews == 0 ) {
+						$total_stars = 0;
+						$rev_count   = 0;
+
+						foreach ( $item['reviews'] as $rev ) {
+							$rating  = isset( $rev['rating'] ) ? (int) $rev['rating'] : 5;
+							$author  = ! empty( $rev['author'] ) ? sanitize_text_field( $rev['author'] ) : 'Quills Customer';
+							$content = ! empty( $rev['content'] ) ? sanitize_textarea_field( $rev['content'] ) : 'Great quality merch!';
+							$date    = ! empty( $rev['date'] ) ? sanitize_text_field( $rev['date'] ) : current_time( 'mysql' );
+
+							$comment_id = wp_insert_comment( array(
+								'comment_post_ID'      => $prod_id,
+								'comment_author'       => $author,
+								'comment_author_email' => sanitize_title( $author ) . '@quills-customer.com',
+								'comment_content'      => $content,
+								'comment_type'         => 'review',
+								'comment_approved'     => 1,
+								'comment_date'         => $date,
+							) );
+
+							if ( $comment_id > 0 ) {
+								update_comment_meta( $comment_id, 'rating', $rating );
+								update_comment_meta( $comment_id, '_rating', $rating );
+								$total_stars += $rating;
+								$rev_count++;
+							}
+						}
+
+						$avg = $rev_count > 0 ? round( $total_stars / $rev_count, 1 ) : 5.0;
+						update_post_meta( $prod_id, '_wc_average_rating', number_format( $avg, 1, '.', '' ) );
+						update_post_meta( $prod_id, '_wc_review_count', $rev_count );
+						delete_transient( 'quills_sp_reviews_' . $prod_id );
+					}
 				}
 			}
 		}
+	}
+
+	public static function get_product_image_url( $product_id ) {
+		$img_name = get_post_meta( $product_id, '_merch_image', true );
+		if ( ! $img_name ) {
+			$img_name = 'merch-crewneck-evergreen.jpg';
+		}
+		$basename = basename( $img_name );
+		return trailingslashit( get_template_directory_uri() ) . 'assets/images/merch/' . $basename;
+	}
+
+	public static function get_product_gallery_urls( $product_id ) {
+		$gallery = get_post_meta( $product_id, '_merch_gallery', true );
+		if ( ! is_array( $gallery ) || empty( $gallery ) ) {
+			return array( self::get_product_image_url( $product_id ) );
+		}
+		$urls = array();
+		foreach ( $gallery as $img ) {
+			$basename = basename( $img );
+			$urls[]   = trailingslashit( get_template_directory_uri() ) . 'assets/images/merch/' . $basename;
+		}
+		return array_unique( array_filter( $urls ) );
+	}
+
+	public static function get_product_sizes( $product_id ) {
+		$sizes = get_post_meta( $product_id, '_merch_sizes', true );
+		return is_array( $sizes ) ? $sizes : array();
+	}
+
+	public static function get_product_default_size( $product_id ) {
+		return get_post_meta( $product_id, '_merch_default_size', true ) ?: 'M';
+	}
+
+	public static function get_product_low_stock( $product_id ) {
+		return get_post_meta( $product_id, '_merch_low_stock', true ) ?: '';
 	}
 
 	public static function get_merch_products_query( $sort_by = 'manual' ) {

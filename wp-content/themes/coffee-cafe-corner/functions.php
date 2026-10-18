@@ -81,11 +81,19 @@ function coffee_cafe_corner_scripts() {
 		) );
 	}
 
-	// Enqueue Quills Merch stylesheet
+	// Enqueue Quills Merch stylesheet & script
 	if ( file_exists( get_template_directory() . '/assets/css/merch-quills.css' ) ) {
 		wp_enqueue_style( 'coffee-cafe-corner-merch-quills', trailingslashit( get_template_directory_uri() ) . 'assets/css/merch-quills.css', array(), filemtime( get_template_directory() . '/assets/css/merch-quills.css' ) );
 	} elseif ( file_exists( get_template_directory() . '/assets/css/merch.css' ) ) {
 		wp_enqueue_style( 'coffee-cafe-corner-merch', trailingslashit( get_template_directory_uri() ) . 'assets/css/merch.css', array(), filemtime( get_template_directory() . '/assets/css/merch.css' ) );
+	}
+
+	if ( file_exists( get_template_directory() . '/assets/js/merch-quills.js' ) ) {
+		wp_enqueue_script( 'coffee-cafe-corner-merch-js', trailingslashit( get_template_directory_uri() ) . 'assets/js/merch-quills.js', array( 'jquery' ), filemtime( get_template_directory() . '/assets/js/merch-quills.js' ), true );
+		wp_localize_script( 'coffee-cafe-corner-merch-js', 'quillsData', array(
+			'ajaxUrl' => admin_url( 'admin-ajax.php' ),
+			'nonce'   => wp_create_nonce( 'quills_nonce' ),
+		) );
 	}
 
 	// Enqueue Quills Gift Cards stylesheet

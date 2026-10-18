@@ -79,8 +79,12 @@ if (!class_exists('Coffee_Cafe_Corner_Coffee_DB')) {
 if (!class_exists('Coffee_Cafe_Corner_Brew_Gear_DB')) {
     require_once get_template_directory() . '/inc/class-brew-gear-db.php';
 }
+if (!class_exists('Coffee_Cafe_Corner_Merch_DB')) {
+    require_once get_template_directory() . '/inc/class-merch-db.php';
+}
 
 $is_brew_gear = has_term( 'brew-gear', 'product_cat', $id ) || (bool) get_post_meta( $id, '_brew_gear_image', true );
+$is_merch     = has_term( 'merch', 'product_cat', $id ) || (bool) get_post_meta( $id, '_merch_image', true );
 
 $tasting_notes = get_post_meta($id, '_coffee_tasting_notes', true) ?: (get_post_meta($id, '_quills_tasting_notes', true) ?: 'Graham cracker, cooked cherries, vanilla');
 $roast         = get_post_meta($id, '_coffee_roast', true) ?: (get_post_meta($id, '_quills_roast_profile', true) ?: 'Medium');
@@ -89,11 +93,22 @@ $type          = get_post_meta($id, '_coffee_type', true) ?: (get_post_meta($id,
 $origins       = get_post_meta($id, '_coffee_origins', true) ?: (get_post_meta($id, '_quills_country', true) ?: 'Colombia, Guatemala, & Ethiopia');
 $short_title   = strtoupper(trim(explode('|', $title)[0]));
 
+$merch_sizes  = array();
+$default_size = 'M';
+$low_stock    = '';
+
 // Images from Database
 if ( $is_brew_gear ) {
     $main_img_url = Coffee_Cafe_Corner_Brew_Gear_DB::get_product_image_url($id);
     $gallery_urls = Coffee_Cafe_Corner_Brew_Gear_DB::get_product_gallery_urls($id);
     $all_images   = array_unique(array_filter(array_merge([$main_img_url], $gallery_urls)));
+} elseif ( $is_merch ) {
+    $main_img_url = Coffee_Cafe_Corner_Merch_DB::get_product_image_url($id);
+    $gallery_urls = Coffee_Cafe_Corner_Merch_DB::get_product_gallery_urls($id);
+    $all_images   = array_unique(array_filter(array_merge([$main_img_url], $gallery_urls)));
+    $merch_sizes  = Coffee_Cafe_Corner_Merch_DB::get_product_sizes($id);
+    $default_size = Coffee_Cafe_Corner_Merch_DB::get_product_default_size($id);
+    $low_stock    = Coffee_Cafe_Corner_Merch_DB::get_product_low_stock($id);
 } else {
     $main_img_url = Coffee_Cafe_Corner_Coffee_DB::get_product_image_url($id);
     $gallery_urls = Coffee_Cafe_Corner_Coffee_DB::get_product_gallery_urls($id);
@@ -154,6 +169,8 @@ if ( false !== $cached_reviews && is_array( $cached_reviews ) ) {
             <li><span class="sep">/</span></li>
             <?php if ( $is_brew_gear ) : ?>
                 <li><a href="<?php echo esc_url(home_url('/brew-gear/')); ?>">Brew Gear</a></li>
+            <?php elseif ( $is_merch ) : ?>
+                <li><a href="<?php echo esc_url(home_url('/merch/')); ?>">Merch</a></li>
             <?php else : ?>
                 <li><a href="<?php echo esc_url(home_url('/coffee/')); ?>">Coffee</a></li>
             <?php endif; ?>
@@ -167,7 +184,7 @@ if ( false !== $cached_reviews && is_array( $cached_reviews ) ) {
     <div class="quills-separator-line"></div>
 </div>
 
-<?php if ($review_count > 0 && ! $is_brew_gear): ?>
+<?php if ($review_count > 0 && ! $is_brew_gear && ! $is_merch): ?>
 <!-- Top Testimonial Quote Slider (Image 2) -->
 <section class="quills-sp-quote-slider-section" aria-label="<?php esc_attr_e( 'Customer Quote', 'coffee-cafe-corner' ); ?>">
     <div class="quills-container quills-sp-quote-container">
@@ -249,10 +266,10 @@ if ( false !== $cached_reviews && is_array( $cached_reviews ) ) {
                                 echo wpautop(wp_kses_post($post_content));
                             }
                             ?>
-                            <?php if (! $is_brew_gear && !empty($origins) && strpos($post_content, $origins) === false): ?>
+                            <?php if (! $is_brew_gear && ! $is_merch && !empty($origins) && strpos($post_content, $origins) === false): ?>
                                 <p class="quills-desc-meta-line"><strong>Current coffees:</strong> <?php echo esc_html($origins); ?></p>
                             <?php endif; ?>
-                            <?php if (! $is_brew_gear && !empty($tasting_notes) && strpos($post_content, $tasting_notes) === false): ?>
+                            <?php if (! $is_brew_gear && ! $is_merch && !empty($tasting_notes) && strpos($post_content, $tasting_notes) === false): ?>
                                 <p class="quills-desc-meta-line"><strong>We taste:</strong> <?php echo esc_html($tasting_notes); ?>.</p>
                             <?php endif; ?>
                         </div>
@@ -260,10 +277,14 @@ if ( false !== $cached_reviews && is_array( $cached_reviews ) ) {
                 </div>
             </div>
 
-            <!-- Right Column: Details & Add to Cart (Image 1) -->
+            <!-- Right Column: Details & Add to Cart (Image 1 & Image 2) -->
             <div class="quills-product-details">
+                <?php if ( $is_merch ) : ?>
+                    <div class="quills-vendor-subtitle">QUILLS COFFEE</div>
+                <?php endif; ?>
                 <h1 class="quills-product-title"><?php echo esc_html($title); ?></h1>
 
+                <?php if ( ! $is_merch ) : ?>
                 <!-- Star Rating Badge -->
                 <div class="quills-rating-badge">
                     <a href="#quills-reviews-section" class="quills-rating-link">
@@ -276,91 +297,121 @@ if ( false !== $cached_reviews && is_array( $cached_reviews ) ) {
                         <?php endif; ?>
                     </a>
                 </div>
+                <?php endif; ?>
 
                 <!-- Price -->
                 <div class="quills-price-box">
                     <span class="quills-price-current" id="quills-dynamic-price"><?php echo $formatted_price; ?></span>
                 </div>
 
-                <?php if ( ! $is_brew_gear ) : ?>
-                <!-- Size Selection Pills (Image 1) -->
-                <div class="quills-option-group" id="quills-size-group">
-                    <div class="quills-section-label">Size: <span id="quills-selected-size-label">12oz</span></div>
-                    <div class="quills-pills-row">
-                        <button type="button" class="quills-pill-btn active" data-size="12oz">12oz</button>
-                        <button type="button" class="quills-pill-btn" data-size="5lb">5lb</button>
-                        <button type="button" class="quills-pill-btn" data-size="2lb">2lb</button>
+                <?php if ( $is_merch ) : ?>
+                    <!-- Merch Size Selection Chips (Image 2) -->
+                    <?php if ( ! empty( $merch_sizes ) ) : ?>
+                        <div class="quills-option-group quills-merch-size-group" id="quills-merch-size-group">
+                            <div class="quills-section-label">Size: <span id="quills-selected-size-label"><?php echo esc_html($default_size); ?></span></div>
+                            <div class="quills-merch-size-chips">
+                                <?php foreach ( $merch_sizes as $sz ) : 
+                                    $is_avail  = ! empty( $sz['available'] );
+                                    $is_active = ( $sz['size'] === $default_size );
+                                ?>
+                                    <button type="button" 
+                                        class="quills-size-chip <?php echo $is_active ? 'active' : ''; ?> <?php echo ! $is_avail ? 'is-disabled' : ''; ?>" 
+                                        data-size="<?php echo esc_attr($sz['size']); ?>"
+                                        <?php echo ! $is_avail ? 'disabled aria-disabled="true"' : ''; ?>>
+                                        <?php echo esc_html($sz['size']); ?>
+                                    </button>
+                                <?php endforeach; ?>
+                            </div>
+                        </div>
+                    <?php endif; ?>
+
+                    <!-- Low Stock Indicator (Image 2) -->
+                    <?php if ( ! empty( $low_stock ) ) : ?>
+                        <div class="quills-merch-stock-status">
+                            <span class="quills-stock-dot"></span>
+                            <span class="quills-stock-text"><?php echo esc_html($low_stock); ?></span>
+                        </div>
+                    <?php endif; ?>
+
+                <?php elseif ( ! $is_brew_gear ) : ?>
+                    <!-- Size Selection Pills (Image 1) -->
+                    <div class="quills-option-group" id="quills-size-group">
+                        <div class="quills-section-label">Size: <span id="quills-selected-size-label">12oz</span></div>
+                        <div class="quills-pills-row">
+                            <button type="button" class="quills-pill-btn active" data-size="12oz">12oz</button>
+                            <button type="button" class="quills-pill-btn" data-size="5lb">5lb</button>
+                            <button type="button" class="quills-pill-btn" data-size="2lb">2lb</button>
+                        </div>
                     </div>
-                </div>
 
-                <!-- Grind Type Selection Pills (Image 1) -->
-                <div class="quills-option-group" id="quills-grind-group">
-                    <div class="quills-section-label">Grind Type: <span id="quills-selected-grind-label">Whole Bean</span></div>
-                    <div class="quills-pills-row quills-grind-pills">
-                        <button type="button" class="quills-pill-btn active" data-grind="Whole Bean">Whole Bean</button>
-                        <button type="button" class="quills-pill-btn" data-grind="Automatic Drip">Automatic Drip</button>
-                        <button type="button" class="quills-pill-btn" data-grind="Espresso">Espresso</button>
-                        <button type="button" class="quills-pill-btn" data-grind="Aeropress">Aeropress</button>
-                        <button type="button" class="quills-pill-btn" data-grind="Pour Over">Pour Over</button>
-                        <button type="button" class="quills-pill-btn" data-grind="Chemex">Chemex</button>
-                        <button type="button" class="quills-pill-btn" data-grind="French Press / Cold Brew">French Press / Cold Brew</button>
+                    <!-- Grind Type Selection Pills (Image 1) -->
+                    <div class="quills-option-group" id="quills-grind-group">
+                        <div class="quills-section-label">Grind Type: <span id="quills-selected-grind-label">Whole Bean</span></div>
+                        <div class="quills-pills-row quills-grind-pills">
+                            <button type="button" class="quills-pill-btn active" data-grind="Whole Bean">Whole Bean</button>
+                            <button type="button" class="quills-pill-btn" data-grind="Automatic Drip">Automatic Drip</button>
+                            <button type="button" class="quills-pill-btn" data-grind="Espresso">Espresso</button>
+                            <button type="button" class="quills-pill-btn" data-grind="Aeropress">Aeropress</button>
+                            <button type="button" class="quills-pill-btn" data-grind="Pour Over">Pour Over</button>
+                            <button type="button" class="quills-pill-btn" data-grind="Chemex">Chemex</button>
+                            <button type="button" class="quills-pill-btn" data-grind="French Press / Cold Brew">French Press / Cold Brew</button>
+                        </div>
                     </div>
-                </div>
 
-                <!-- Purchase Options Box (Image 1) -->
-                <div class="quills-subscription-toggle">
-                    <!-- Option 1: One-Time Purchase -->
-                    <label class="quills-sub-option active" data-type="onetime">
-                        <div class="quills-sub-row">
-                            <span class="quills-radio-custom"></span>
-                            <input type="radio" name="quills_purchase_type" value="onetime" checked style="display: none;">
-                            <span class="quills-sub-title">One-time purchase</span>
-                            <span class="quills-sub-price" id="quills-onetime-price-label"><?php echo $formatted_price; ?> <small>each</small></span>
-                        </div>
-                    </label>
-
-                    <!-- Option 2: Subscribe & Save 10% -->
-                    <label class="quills-sub-option" data-type="subscribe">
-                        <div class="quills-sub-row">
-                            <span class="quills-radio-custom"></span>
-                            <input type="radio" name="quills_purchase_type" value="subscribe" style="display: none;">
-                            <div class="quills-sub-title-wrap">
-                                <span class="quills-sub-title">Subscribe</span>
-                                <span class="quills-badge-save-v2">Save 10%</span>
+                    <!-- Purchase Options Box (Image 1) -->
+                    <div class="quills-subscription-toggle">
+                        <!-- Option 1: One-Time Purchase -->
+                        <label class="quills-sub-option active" data-type="onetime">
+                            <div class="quills-sub-row">
+                                <span class="quills-radio-custom"></span>
+                                <input type="radio" name="quills_purchase_type" value="onetime" checked style="display: none;">
+                                <span class="quills-sub-title">One-time purchase</span>
+                                <span class="quills-sub-price" id="quills-onetime-price-label"><?php echo $formatted_price; ?> <small>each</small></span>
                             </div>
-                            <span class="quills-sub-price" id="quills-subscribe-price-label">
-                                <del><?php echo $formatted_price; ?></del> <strong><?php echo $sub_price; ?></strong> <small>each</small>
-                            </span>
-                        </div>
+                        </label>
 
-                        <!-- Inside Frequency Selector (Image 1) -->
-                        <div class="quills-sub-drawer" id="quills-sub-drawer">
-                            <div class="quills-freq-headline">Pick how often we send it</div>
-                            <div class="quills-freq-pills-row">
-                                <button type="button" class="quills-freq-pill" data-freq="1">Deliver every 1 week</button>
-                                <button type="button" class="quills-freq-pill is-selected" data-freq="2">Deliver every 2 weeks</button>
-                                <button type="button" class="quills-freq-pill" data-freq="3">Deliver every 3 weeks</button>
-                                <button type="button" class="quills-freq-pill" data-freq="4">Deliver every 4 weeks</button>
+                        <!-- Option 2: Subscribe & Save 10% -->
+                        <label class="quills-sub-option" data-type="subscribe">
+                            <div class="quills-sub-row">
+                                <span class="quills-radio-custom"></span>
+                                <input type="radio" name="quills_purchase_type" value="subscribe" style="display: none;">
+                                <div class="quills-sub-title-wrap">
+                                    <span class="quills-sub-title">Subscribe</span>
+                                    <span class="quills-badge-save-v2">Save 10%</span>
+                                </div>
+                                <span class="quills-sub-price" id="quills-subscribe-price-label">
+                                    <del><?php echo $formatted_price; ?></del> <strong><?php echo $sub_price; ?></strong> <small>each</small>
+                                </span>
                             </div>
 
-                            <div class="quills-sub-perks-box">
-                                <div class="quills-perk-row">
-                                    <div class="quills-perk-title"><strong>FREE bag of Inkwell</strong> in your first delivery</div>
-                                    <div class="quills-perk-sub">(new subscribers only)</div>
+                            <!-- Inside Frequency Selector (Image 1) -->
+                            <div class="quills-sub-drawer" id="quills-sub-drawer">
+                                <div class="quills-freq-headline">Pick how often we send it</div>
+                                <div class="quills-freq-pills-row">
+                                    <button type="button" class="quills-freq-pill" data-freq="1">Deliver every 1 week</button>
+                                    <button type="button" class="quills-freq-pill is-selected" data-freq="2">Deliver every 2 weeks</button>
+                                    <button type="button" class="quills-freq-pill" data-freq="3">Deliver every 3 weeks</button>
+                                    <button type="button" class="quills-freq-pill" data-freq="4">Deliver every 4 weeks</button>
                                 </div>
-                                <div class="quills-perk-row">
-                                    <div class="quills-perk-title"><strong>10% OFF</strong> Recurring</div>
-                                </div>
-                                <div class="quills-perk-row">
-                                    <div class="quills-perk-title"><span class="quills-dollar-icon">$</span> <strong>Lowest Price</strong></div>
-                                </div>
-                                <div class="quills-perk-row">
-                                    <div class="quills-perk-title"><strong>Cancel or Update</strong> Any Time</div>
+
+                                <div class="quills-sub-perks-box">
+                                    <div class="quills-perk-row">
+                                        <div class="quills-perk-title"><strong>FREE bag of Inkwell</strong> in your first delivery</div>
+                                        <div class="quills-perk-sub">(new subscribers only)</div>
+                                    </div>
+                                    <div class="quills-perk-row">
+                                        <div class="quills-perk-title"><strong>10% OFF</strong> Recurring</div>
+                                    </div>
+                                    <div class="quills-perk-row">
+                                        <div class="quills-perk-title"><span class="quills-dollar-icon">$</span> <strong>Lowest Price</strong></div>
+                                    </div>
+                                    <div class="quills-perk-row">
+                                        <div class="quills-perk-title"><strong>Cancel or Update</strong> Any Time</div>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    </label>
-                </div>
+                        </label>
+                    </div>
                 <?php endif; ?>
 
                 <!-- Quantity & Add to Cart -->

@@ -467,10 +467,17 @@ class Quills_Coffee_Experience {
         }
 
         $is_brew_gear = has_term('brew-gear', 'product_cat', $product_id) || (bool)get_post_meta($product_id, '_brew_gear_image', true);
+        $is_merch     = has_term('merch', 'product_cat', $product_id) || (bool)get_post_meta($product_id, '_merch_image', true);
 
         if ($is_brew_gear) {
             $unit_price = $base_price;
             $item_data  = [];
+        } elseif ($is_merch) {
+            $unit_price = $base_price;
+            $item_data  = [];
+            if (!empty($size)) {
+                $item_data['Size'] = $size;
+            }
         } else {
             // Calculate unit price according to Size
             if ($size === '5lb') {
@@ -813,12 +820,18 @@ class Quills_Coffee_Experience {
                         $line_total = wc_price($cart_item['line_total']);
 
                         // Image directly from DB
-                        $is_gear = has_term('brew-gear', 'product_cat', $product_id) || (bool)get_post_meta($product_id, '_brew_gear_image', true);
+                        $is_gear  = has_term('brew-gear', 'product_cat', $product_id) || (bool)get_post_meta($product_id, '_brew_gear_image', true);
+                        $is_merch = has_term('merch', 'product_cat', $product_id) || (bool)get_post_meta($product_id, '_merch_image', true);
                         if ($is_gear) {
                             if (!class_exists('Coffee_Cafe_Corner_Brew_Gear_DB')) {
                                 require_once get_template_directory() . '/inc/class-brew-gear-db.php';
                             }
                             $img_url = Coffee_Cafe_Corner_Brew_Gear_DB::get_product_image_url($product_id);
+                        } elseif ($is_merch) {
+                            if (!class_exists('Coffee_Cafe_Corner_Merch_DB')) {
+                                require_once get_template_directory() . '/inc/class-merch-db.php';
+                            }
+                            $img_url = Coffee_Cafe_Corner_Merch_DB::get_product_image_url($product_id);
                         } else {
                             $img_url = wp_get_attachment_image_url($product->get_image_id(), 'thumbnail');
                             if (!$img_url && class_exists('Coffee_Cafe_Corner_Coffee_DB')) {
@@ -827,7 +840,7 @@ class Quills_Coffee_Experience {
                             if (!$img_url) {
                                 $meta_img = get_post_meta($product_id, '_merch_image', true);
                                 if ($meta_img) {
-                                    $img_url = get_template_directory_uri() . '/assets/images/' . ltrim($meta_img, '/');
+                                    $img_url = get_template_directory_uri() . '/assets/images/merch/' . basename($meta_img);
                                 }
                             }
                         }

@@ -449,3 +449,98 @@
   }
 }
 
+/* ========================================================
+   MERCH SINGLE PRODUCT PAGE STYLES (MATCHING IMAGES 2 & 3)
+   ======================================================== */
+.quills-vendor-subtitle {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
+  font-size: 12.5px !important;
+  font-weight: 700 !important;
+  letter-spacing: 2px !important;
+  text-transform: uppercase !important;
+  color: #666666 !important;
+  margin-bottom: 8px !important;
+}
+
+.quills-merch-size-group {
+  margin-top: 22px !important;
+  margin-bottom: 16px !important;
+}
+
+.quills-merch-size-chips {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: 10px !important;
+  margin-top: 10px !important;
+}
+
+.quills-size-chip {
+  min-width: 48px !important;
+  height: 40px !important;
+  padding: 0 14px !important;
+  background: #ffffff !important;
+  border: 1px solid #d1d5db !important;
+  border-radius: 4px !important;
+  font-family: inherit !important;
+  font-size: 14px !important;
+  font-weight: 600 !important;
+  color: #1a1a1a !important;
+  cursor: pointer !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  transition: all 0.2s ease !important;
+}
+
+.quills-size-chip:hover:not(.is-disabled) {
+  border-color: #1a1a1a !important;
+}
+
+.quills-size-chip.active {
+  border: 2px solid #1a1a1a !important;
+  background: #ffffff !important;
+  color: #1a1a1a !important;
+  box-shadow: inset 0 0 0 1px #1a1a1a !important;
+}
+
+.quills-size-chip.is-disabled {
+  opacity: 0.45 !important;
+  cursor: not-allowed !important;
+  text-decoration: line-through !important;
+  background: rgba(0, 0, 0, 0.03) !important;
+  border: 1px dashed #cccccc !important;
+}
+
+.quills-merch-stock-status {
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  margin-top: 16px !important;
+  margin-bottom: 20px !important;
+}
+
+.quills-stock-dot {
+  width: 8px !important;
+  height: 8px !important;
+  border-radius: 50% !important;
+  background-color: #f59e0b !important;
+  display: inline-block !important;
+}
+
+.quills-stock-text {
+  font-size: 14px !important;
+  font-weight: 500 !important;
+  color: #1a1a1a !important;
+}
+
+/* Merch Card Clickable Area */
+.quills-merch-card {
+  cursor: pointer !important;
+}
+
+.quills-merch-card .quills-merch-info a {
+  color: inherit !important;
+  text-decoration: none !important;
+}
+
+
