@@ -184,25 +184,93 @@ class Coffee_Cafe_Corner_Coffee_DB {
     }
 
     public static function get_filter_counts() {
+        global $wpdb;
+
+        $coffee_ids = $wpdb->get_col( $wpdb->prepare( "
+            SELECT p.ID 
+            FROM {$wpdb->posts} p
+            JOIN {$wpdb->term_relationships} tr ON p.ID = tr.object_id
+            JOIN {$wpdb->term_taxonomy} tt ON tr.term_taxonomy_id = tt.term_taxonomy_id
+            JOIN {$wpdb->terms} t ON tt.term_id = t.term_id
+            WHERE p.post_type = 'product'
+              AND p.post_status = 'publish'
+              AND t.slug = %s
+              AND p.ID NOT IN (88, 90, 92)
+        ", self::CATEGORY_SLUG ) );
+
         $counts = array(
             'process' => array(
-                'Honey'            => 1,
-                'Natural'          => 4,
-                'Washed'           => 10,
-                'Washed & Natural' => 4,
+                'Honey'            => 0,
+                'Natural'          => 0,
+                'Washed'           => 0,
+                'Washed & Natural' => 0,
             ),
             'roast'   => array(
-                'Dark'   => 1,
-                'Light'  => 5,
-                'Medium' => 7,
+                'Dark'   => 0,
+                'Light'  => 0,
+                'Medium' => 0,
             ),
             'type'    => array(
-                'Blend'         => 7,
-                'Decaf'         => 1,
-                'Espresso'      => 1,
-                'Single Origin' => 5,
+                'Blend'         => 0,
+                'Decaf'         => 0,
+                'Espresso'      => 0,
+                'Single Origin' => 0,
             ),
         );
+
+        if ( ! empty( $coffee_ids ) ) {
+            $id_placeholders = implode( ',', array_map( 'intval', $coffee_ids ) );
+
+            // Process counts
+            $proc_rows = $wpdb->get_results( "
+                SELECT meta_value, COUNT(DISTINCT post_id) as cnt
+                FROM {$wpdb->postmeta}
+                WHERE post_id IN ({$id_placeholders})
+                  AND meta_key = '_coffee_process'
+                GROUP BY meta_value
+            " );
+            foreach ( $proc_rows as $row ) {
+                if ( isset( $counts['process'][ $row->meta_value ] ) ) {
+                    $counts['process'][ $row->meta_value ] = (int) $row->cnt;
+                }
+            }
+
+            // Roast counts
+            $roast_rows = $wpdb->get_results( "
+                SELECT meta_value, COUNT(DISTINCT post_id) as cnt
+                FROM {$wpdb->postmeta}
+                WHERE post_id IN ({$id_placeholders})
+                  AND meta_key = '_coffee_roast'
+                GROUP BY meta_value
+            " );
+            foreach ( $roast_rows as $row ) {
+                if ( isset( $counts['roast'][ $row->meta_value ] ) ) {
+                    $counts['roast'][ $row->meta_value ] = (int) $row->cnt;
+                }
+            }
+
+            // Type counts
+            $type_rows = $wpdb->get_results( "
+                SELECT meta_value, COUNT(DISTINCT post_id) as cnt
+                FROM {$wpdb->postmeta}
+                WHERE post_id IN ({$id_placeholders})
+                  AND meta_key = '_coffee_type'
+                GROUP BY meta_value
+            " );
+            $type_key_map = array(
+                'blend'         => 'Blend',
+                'decaf'         => 'Decaf',
+                'espresso'      => 'Espresso',
+                'single-origin' => 'Single Origin',
+            );
+            foreach ( $type_rows as $row ) {
+                $val_lower = strtolower( trim( $row->meta_value ) );
+                if ( isset( $type_key_map[ $val_lower ] ) ) {
+                    $counts['type'][ $type_key_map[ $val_lower ] ] = (int) $row->cnt;
+                }
+            }
+        }
+
         return $counts;
     }
 
@@ -219,7 +287,7 @@ class Coffee_Cafe_Corner_Coffee_DB {
                 'price'         => '20.00',
                 'price_display' => 'FROM $20.00',
                 'type'          => array( 'blend' ),
-                'process'       => array( 'Washed & Natural' ),
+                'process'       => array( 'Washed' ),
                 'roast'         => array( 'Medium' ),
                 'origins'       => 'Colombia, Guatemala, Ethiopia',
                 'notes'         => 'Graham cracker, cooked cherries, vanilla',
@@ -274,7 +342,7 @@ class Coffee_Cafe_Corner_Coffee_DB {
                 'price'         => '20.00',
                 'price_display' => 'FROM $20.00',
                 'type'          => array( 'espresso', 'blend' ),
-                'process'       => array( 'Washed & Natural' ),
+                'process'       => array( 'Washed', 'Natural' ),
                 'roast'         => array( 'Medium' ),
                 'origins'       => 'Colombia, Nicaragua, Ethiopia',
                 'notes'         => "Baker's chocolate, blueberries, hazelnut",
@@ -337,7 +405,7 @@ class Coffee_Cafe_Corner_Coffee_DB {
                 'price'         => '20.00',
                 'price_display' => 'FROM $20.00',
                 'type'          => array( 'blend' ),
-                'process'       => array( 'Washed, Natural' ),
+                'process'       => array( 'Washed', 'Natural' ),
                 'roast'         => array( 'Medium' ),
                 'origins'       => 'Brazil & Colombia',
                 'notes'         => 'Chocolate, caramel, well-balanced.',
