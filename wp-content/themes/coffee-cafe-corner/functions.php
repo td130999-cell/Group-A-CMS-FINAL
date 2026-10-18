@@ -27,10 +27,12 @@ function coffee_cafe_corner_scripts() {
 	wp_enqueue_style( 'coffee-cafe-corner-visit', trailingslashit( get_template_directory_uri() ) . 'assets/css/visit-quills.css', array(), COFFEE_CAFE_CORNER_VERSION );
 
 	// Enqueue Quills Brew Gear stylesheet
-	wp_enqueue_style( 'coffee-cafe-corner-brew-gear', trailingslashit( get_template_directory_uri() ) . 'assets/css/brew-gear.css', array(), COFFEE_CAFE_CORNER_VERSION );
+	$brew_gear_css = get_template_directory() . '/assets/css/brew-gear.css';
+	wp_enqueue_style( 'coffee-cafe-corner-brew-gear', trailingslashit( get_template_directory_uri() ) . 'assets/css/brew-gear.css', array(), file_exists( $brew_gear_css ) ? filemtime( $brew_gear_css ) : COFFEE_CAFE_CORNER_VERSION );
 
 	// Enqueue Quills Brew Gear JS
-	wp_enqueue_script( 'coffee-cafe-corner-brew-gear-js', trailingslashit( get_template_directory_uri() ) . 'assets/js/brew-gear.js', array( 'jquery' ), COFFEE_CAFE_CORNER_VERSION, true );
+	$brew_gear_js = get_template_directory() . '/assets/js/brew-gear.js';
+	wp_enqueue_script( 'coffee-cafe-corner-brew-gear-js', trailingslashit( get_template_directory_uri() ) . 'assets/js/brew-gear.js', array( 'jquery' ), file_exists( $brew_gear_js ) ? filemtime( $brew_gear_js ) : COFFEE_CAFE_CORNER_VERSION, true );
 	wp_localize_script( 'coffee-cafe-corner-brew-gear-js', 'quillsData', array(
 		'ajaxUrl' => admin_url( 'admin-ajax.php' ),
 		'nonce'   => wp_create_nonce( 'quills_nonce' ),

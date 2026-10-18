@@ -92,7 +92,8 @@ $short_title   = strtoupper(trim(explode('|', $title)[0]));
 // Images from Database
 if ( $is_brew_gear ) {
     $main_img_url = Coffee_Cafe_Corner_Brew_Gear_DB::get_product_image_url($id);
-    $all_images   = array( $main_img_url );
+    $gallery_urls = Coffee_Cafe_Corner_Brew_Gear_DB::get_product_gallery_urls($id);
+    $all_images   = array_unique(array_filter(array_merge([$main_img_url], $gallery_urls)));
 } else {
     $main_img_url = Coffee_Cafe_Corner_Coffee_DB::get_product_image_url($id);
     $gallery_urls = Coffee_Cafe_Corner_Coffee_DB::get_product_gallery_urls($id);
