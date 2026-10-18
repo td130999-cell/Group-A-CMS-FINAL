@@ -29,6 +29,7 @@ class Coffee_Cafe_Corner_Quills_Products_DB {
 	 * Ensure Categories, Pages, and Products exist in WooCommerce Database
 	 */
 	public static function ensure_database_records() {
+		return; // Seeder disabled: Data is permanently managed in database
 		// Only run when WooCommerce is active
 		if ( ! class_exists( 'WooCommerce' ) ) {
 			return;

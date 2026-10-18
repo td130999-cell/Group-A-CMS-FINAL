@@ -25,6 +25,7 @@ class Coffee_Cafe_Corner_Merch_DB {
 	}
 
 	public static function ensure_database_records() {
+		return; // Seeder disabled: Data is permanently managed in database
 		if ( get_option( 'coffee_cafe_corner_merch_seeded_v4' ) ) {
 			return;
 		}
@@ -444,6 +445,14 @@ class Coffee_Cafe_Corner_Merch_DB {
 	}
 
 	public static function get_product_image_url( $product_id ) {
+		// 1. Featured image set in wp-admin takes highest priority
+		if ( has_post_thumbnail( $product_id ) ) {
+			$thumb = get_the_post_thumbnail_url( $product_id, 'large' );
+			if ( ! empty( $thumb ) ) {
+				return $thumb;
+			}
+		}
+
 		$img_name = get_post_meta( $product_id, '_merch_image', true );
 		if ( ! $img_name ) {
 			$img_name = 'merch-crewneck-evergreen.jpg';
@@ -453,6 +462,26 @@ class Coffee_Cafe_Corner_Merch_DB {
 	}
 
 	public static function get_product_gallery_urls( $product_id ) {
+		// 1. Check WooCommerce gallery set in wp-admin
+		if ( function_exists( 'wc_get_product' ) ) {
+			$product = wc_get_product( $product_id );
+			if ( $product ) {
+				$wc_gallery_ids = $product->get_gallery_image_ids();
+				if ( ! empty( $wc_gallery_ids ) ) {
+					$urls = array();
+					foreach ( $wc_gallery_ids as $gid ) {
+						$gurl = wp_get_attachment_image_url( $gid, 'full' );
+						if ( $gurl && ! in_array( $gurl, $urls ) ) {
+							$urls[] = $gurl;
+						}
+					}
+					if ( ! empty( $urls ) ) {
+						return $urls;
+					}
+				}
+			}
+		}
+
 		$gallery = get_post_meta( $product_id, '_merch_gallery', true );
 		if ( ! is_array( $gallery ) || empty( $gallery ) ) {
 			return array( self::get_product_image_url( $product_id ) );

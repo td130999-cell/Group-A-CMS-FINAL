@@ -44,6 +44,7 @@ class Coffee_Cafe_Corner_Brew_Gear_DB {
 	 * Ensure Category, Products, and Page exist in the WordPress database
 	 */
 	public static function ensure_database_records() {
+		return; // Seeder disabled: Data is permanently managed in database
 		if ( get_option( 'coffee_cafe_corner_brew_gear_seeded_v3' ) ) {
 			return;
 		}
@@ -376,7 +377,15 @@ class Coffee_Cafe_Corner_Brew_Gear_DB {
 	 * @return string Image URL
 	 */
 	public static function get_product_image_url( $product_id ) {
-		// 0. Check Customizer options first
+		// 1. Featured image set in wp-admin takes highest priority
+		if ( has_post_thumbnail( $product_id ) ) {
+			$thumb = get_the_post_thumbnail_url( $product_id, 'large' );
+			if ( ! empty( $thumb ) ) {
+				return $thumb;
+			}
+		}
+
+		// 2. Check Customizer options
 		$slug = get_post_field( 'post_name', $product_id );
 		if ( strpos( $slug, 'baratza' ) !== false ) {
 			$opt = get_option( 'brew_gear_product_1_image' );
@@ -395,7 +404,7 @@ class Coffee_Cafe_Corner_Brew_Gear_DB {
 			}
 		}
 
-		// 1. Check custom theme meta
+		// 3. Check custom theme meta
 		$custom_image = get_post_meta( $product_id, '_brew_gear_image', true );
 		if ( ! empty( $custom_image ) ) {
 			if ( filter_var( $custom_image, FILTER_VALIDATE_URL ) ) {
@@ -407,15 +416,7 @@ class Coffee_Cafe_Corner_Brew_Gear_DB {
 			}
 		}
 
-		// 2. Check WordPress featured image
-		if ( has_post_thumbnail( $product_id ) ) {
-			$thumb = get_the_post_thumbnail_url( $product_id, 'large' );
-			if ( $thumb ) {
-				return $thumb;
-			}
-		}
-
-		// 3. Fallback based on slug
+		// 4. Fallback based on slug
 		if ( strpos( $slug, 'baratza' ) !== false ) {
 			return get_template_directory_uri() . '/assets/images/brew-gear/baratza-encore-grinder.png';
 		}
@@ -436,6 +437,26 @@ class Coffee_Cafe_Corner_Brew_Gear_DB {
 	 * @return array List of image URLs
 	 */
 	public static function get_product_gallery_urls( $product_id ) {
+		// 1. Check WooCommerce gallery set in wp-admin
+		if ( function_exists( 'wc_get_product' ) ) {
+			$product = wc_get_product( $product_id );
+			if ( $product ) {
+				$wc_gallery_ids = $product->get_gallery_image_ids();
+				if ( ! empty( $wc_gallery_ids ) ) {
+					$urls = array();
+					foreach ( $wc_gallery_ids as $gid ) {
+						$gurl = wp_get_attachment_image_url( $gid, 'full' );
+						if ( $gurl && ! in_array( $gurl, $urls ) ) {
+							$urls[] = $gurl;
+						}
+					}
+					if ( ! empty( $urls ) ) {
+						return $urls;
+					}
+				}
+			}
+		}
+
 		$gallery = get_post_meta( $product_id, '_brew_gear_gallery', true );
 		if ( empty( $gallery ) || ! is_array( $gallery ) ) {
 			$slug = get_post_field( 'post_name', $product_id );

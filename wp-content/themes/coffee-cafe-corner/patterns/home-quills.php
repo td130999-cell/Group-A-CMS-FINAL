@@ -228,43 +228,102 @@ $img_dir   = $theme_uri . 'assets/images/home/';
             $p_reviews  = $bestseller->get_review_count();
 
             $slug = $bestseller->get_slug();
-            if ( strpos( $slug, 'blacksmith' ) !== false ) {
-              $front_img_url = $img_dir . 'product-blacksmith-front.jpg';
-              $tag           = 'BLACKSMITH';
-              $tag_color     = '#E5A823';
-              $tag_desc      = 'The F1 car of our lineup. Our signature espresso that folks enjoy in every latte, cappuccino, and cortado in our cafés.';
-              $tasting       = "Baker's chocolate, blueberries, hazelnut";
-              $details       = "Process: Washed & Natural\nOrigins: Colombia, Nicaragua, Ethiopia";
-              if ( empty( $p_reviews ) ) { $p_reviews = 53; }
-            } elseif ( strpos( $slug, 'inkwell' ) !== false ) {
-              $front_img_url = $img_dir . 'product-inkwell-front.jpg';
-              $tag           = 'INKWELL';
-              $tag_color     = '#EB5A3C';
-              $tag_desc      = "The daily driver. Our classic house blend that's on drip at our cafes from open to close. Loved by regulars for 17 years.";
-              $tasting       = 'honey, chocolate, clementine';
-              $details       = "Process: Washed & Natural\nOrigins: Colombia, Guatemala, Ethiopia";
-              if ( empty( $p_reviews ) ) { $p_reviews = 80; }
-            } elseif ( strpos( $slug, 'southern' ) !== false ) {
-              $front_img_url = $img_dir . 'product-southern-gothic-front.jpg';
-              $tag           = 'SOUTHERN GOTHIC';
-              $tag_color     = '#8C6FA9';
-              $tag_desc      = 'Our cold brew blend crafted for our customers who prefer their coffee chilled.';
-              $tasting       = 'Milk chocolate, brown sugar, orange';
-              $details       = "Process: Washed & Natural\nOrigins: Central & South America";
-              if ( empty( $p_reviews ) ) { $p_reviews = 21; }
-            } else {
-              $image_id      = $bestseller->get_image_id();
-              $front_img_url = $image_id ? wp_get_attachment_image_url( $image_id, 'full' ) : '';
-              if ( ! $front_img_url ) {
+
+            // 1. Featured image from database (wp-admin edits take priority)
+            $image_id      = $bestseller->get_image_id();
+            $front_img_url = $image_id ? wp_get_attachment_image_url( $image_id, 'full' ) : '';
+            if ( ! $front_img_url ) {
+              if ( strpos( $slug, 'blacksmith' ) !== false ) {
+                $front_img_url = $img_dir . 'product-blacksmith-front.jpg';
+              } elseif ( strpos( $slug, 'inkwell' ) !== false ) {
+                $front_img_url = $img_dir . 'product-inkwell-front.jpg';
+              } elseif ( strpos( $slug, 'southern' ) !== false ) {
+                $front_img_url = $img_dir . 'product-southern-gothic-front.jpg';
+              } else {
                 $front_img_url = $img_dir . 'product-blacksmith-front.jpg';
               }
-              $tag           = get_post_meta( $p_id, '_quills_tag', true ) ?: strtoupper( $bestseller->get_slug() );
-              $tag_color     = get_post_meta( $p_id, '_quills_tag_color', true ) ?: '#000000';
-              $tag_desc      = get_post_meta( $p_id, '_quills_tag_desc', true ) ?: $bestseller->get_short_description();
-              $tasting       = get_post_meta( $p_id, '_quills_tasting', true );
-              $details       = get_post_meta( $p_id, '_quills_details', true );
             }
-            $back_img_url    = $img_dir . 'product-bag-back.jpg';
+
+            // 2. Tag / Title
+            $tag = get_post_meta( $p_id, '_quills_tag', true );
+            if ( empty( $tag ) ) {
+              if ( strpos( $slug, 'blacksmith' ) !== false ) {
+                $tag = 'BLACKSMITH';
+              } elseif ( strpos( $slug, 'inkwell' ) !== false ) {
+                $tag = 'INKWELL';
+              } elseif ( strpos( $slug, 'southern' ) !== false ) {
+                $tag = 'SOUTHERN GOTHIC';
+              } else {
+                $tag = strtoupper( $p_name );
+              }
+            }
+
+            // 3. Tag Color
+            $tag_color = get_post_meta( $p_id, '_quills_tag_color', true );
+            if ( empty( $tag_color ) ) {
+              if ( strpos( $slug, 'blacksmith' ) !== false ) {
+                $tag_color = '#E5A823';
+              } elseif ( strpos( $slug, 'inkwell' ) !== false ) {
+                $tag_color = '#EB5A3C';
+              } elseif ( strpos( $slug, 'southern' ) !== false ) {
+                $tag_color = '#8C6FA9';
+              } else {
+                $tag_color = '#E5A823';
+              }
+            }
+
+            // 4. Tag Description
+            $tag_desc = get_post_meta( $p_id, '_quills_tag_desc', true ) ?: $bestseller->get_short_description();
+            if ( empty( $tag_desc ) ) {
+              if ( strpos( $slug, 'blacksmith' ) !== false ) {
+                $tag_desc = 'The F1 car of our lineup. Our signature espresso that folks enjoy in every latte, cappuccino, and cortado in our cafés.';
+              } elseif ( strpos( $slug, 'inkwell' ) !== false ) {
+                $tag_desc = "The daily driver. Our classic house blend that's on drip at our cafes from open to close. Loved by regulars for 17 years.";
+              } elseif ( strpos( $slug, 'southern' ) !== false ) {
+                $tag_desc = 'Our cold brew blend crafted for our customers who prefer their coffee chilled.';
+              }
+            }
+
+            // 5. Tasting Notes
+            $tasting = get_post_meta( $p_id, '_coffee_tasting_notes', true ) ?: ( get_post_meta( $p_id, '_quills_tasting_notes', true ) ?: get_post_meta( $p_id, '_quills_tasting', true ) );
+            if ( empty( $tasting ) ) {
+              if ( strpos( $slug, 'blacksmith' ) !== false ) {
+                $tasting = "Baker's chocolate, blueberries, hazelnut";
+              } elseif ( strpos( $slug, 'inkwell' ) !== false ) {
+                $tasting = 'honey, chocolate, clementine';
+              } elseif ( strpos( $slug, 'southern' ) !== false ) {
+                $tasting = 'Milk chocolate, brown sugar, orange';
+              }
+            }
+
+            // 6. Details (Process & Origins)
+            $db_proc = get_post_meta( $p_id, '_coffee_process', true ) ?: get_post_meta( $p_id, '_quills_process', true );
+            $db_orig = get_post_meta( $p_id, '_coffee_origins', true ) ?: get_post_meta( $p_id, '_quills_country', true );
+            if ( ! empty( $db_proc ) || ! empty( $db_orig ) ) {
+              $details = '';
+              if ( $db_proc ) $details .= 'Process: ' . $db_proc;
+              if ( $db_orig ) $details .= ($details ? "\n" : '') . 'Origins: ' . $db_orig;
+            } else {
+              $details = get_post_meta( $p_id, '_quills_details', true );
+              if ( empty( $details ) ) {
+                if ( strpos( $slug, 'blacksmith' ) !== false ) {
+                  $details = "Process: Washed & Natural\nOrigins: Colombia, Nicaragua, Ethiopia";
+                } elseif ( strpos( $slug, 'inkwell' ) !== false ) {
+                  $details = "Process: Washed & Natural\nOrigins: Colombia, Guatemala, Ethiopia";
+                } elseif ( strpos( $slug, 'southern' ) !== false ) {
+                  $details = "Process: Washed & Natural\nOrigins: Central & South America";
+                }
+              }
+            }
+
+            // 7. Reviews
+            if ( empty( $p_reviews ) ) {
+              if ( strpos( $slug, 'blacksmith' ) !== false ) { $p_reviews = 53; }
+              elseif ( strpos( $slug, 'inkwell' ) !== false ) { $p_reviews = 80; }
+              elseif ( strpos( $slug, 'southern' ) !== false ) { $p_reviews = 21; }
+            }
+
+            $back_img_url = $img_dir . 'product-bag-back.jpg';
         ?>
           <div class="quills-product-card" data-product-id="<?php echo esc_attr( $p_id ); ?>">
             <div class="quills-product-meta-header">

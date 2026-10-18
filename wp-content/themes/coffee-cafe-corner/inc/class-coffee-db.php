@@ -29,6 +29,7 @@ class Coffee_Cafe_Corner_Coffee_DB {
     }
 
     public static function ensure_database_records() {
+        return; // Seeder disabled: Data is permanently managed in database
         if ( get_option( self::DB_VERSION ) ) {
             return;
         }
@@ -129,6 +130,14 @@ class Coffee_Cafe_Corner_Coffee_DB {
     }
 
     public static function get_product_image_url( $product_id ) {
+        // 1. Featured Image set in wp-admin takes highest priority
+        if ( has_post_thumbnail( $product_id ) ) {
+            $thumb = get_the_post_thumbnail_url( $product_id, 'large' );
+            if ( ! empty( $thumb ) ) {
+                return $thumb;
+            }
+        }
+
         $coffee_img = get_post_meta( $product_id, '_coffee_image', true );
         if ( ! empty( $coffee_img ) ) {
             $url = self::resolve_image_url( $coffee_img );
@@ -145,26 +154,13 @@ class Coffee_Cafe_Corner_Coffee_DB {
             }
         }
 
-        if ( has_post_thumbnail( $product_id ) ) {
-            return get_the_post_thumbnail_url( $product_id, 'large' );
-        }
-
         return trailingslashit( get_template_directory_uri() ) . 'assets/images/coffee/inkwell.jpg';
     }
 
     public static function get_product_gallery_urls( $product_id ) {
         $urls = array();
-        $gallery_meta = get_post_meta( $product_id, '_coffee_gallery', true );
 
-        if ( is_array( $gallery_meta ) && ! empty( $gallery_meta ) ) {
-            foreach ( $gallery_meta as $gitem ) {
-                $url = self::resolve_image_url( $gitem );
-                if ( ! empty( $url ) && ! in_array( $url, $urls ) ) {
-                    $urls[] = $url;
-                }
-            }
-        }
-
+        // 1. Check WooCommerce gallery set in wp-admin first
         if ( function_exists( 'wc_get_product' ) ) {
             $product = wc_get_product( $product_id );
             if ( $product ) {
@@ -176,6 +172,20 @@ class Coffee_Cafe_Corner_Coffee_DB {
                             $urls[] = $gurl;
                         }
                     }
+                }
+            }
+        }
+
+        if ( ! empty( $urls ) ) {
+            return $urls;
+        }
+
+        $gallery_meta = get_post_meta( $product_id, '_coffee_gallery', true );
+        if ( is_array( $gallery_meta ) && ! empty( $gallery_meta ) ) {
+            foreach ( $gallery_meta as $gitem ) {
+                $url = self::resolve_image_url( $gitem );
+                if ( ! empty( $url ) && ! in_array( $url, $urls ) ) {
+                    $urls[] = $url;
                 }
             }
         }
@@ -996,23 +1006,36 @@ class Coffee_Cafe_Corner_Coffee_DB {
         $product_slug    = get_post_field( 'post_name', $product_id );
         $raw_custom_desc = '';
 
-        // Standardized brand tasting notes and subtitles matching live Quills Coffee
-        if ( strpos( $title, 'Inkwell' ) !== false || strpos( $product_slug, 'inkwell' ) !== false ) {
-            $subtitle      = 'Our Signature House Blend';
-            $tasting_notes = 'Graham cracker, cooked cherries, vanilla';
-            $process_str   = 'Washed & Natural';
-            $origins       = 'Colombia, Guatemala, Ethiopia';
-        } elseif ( strpos( $title, 'Blacksmith' ) !== false || strpos( $product_slug, 'blacksmith' ) !== false ) {
-            $subtitle      = 'Our Signature Espresso';
-            $tasting_notes = "Baker's chocolate, blueberries, hazelnut";
-            $process_str   = 'Washed & Natural';
-            $origins       = 'Colombia, Nicaragua, Ethiopia';
-        } elseif ( strpos( $title, 'Southern Gothic' ) !== false || strpos( $product_slug, 'southern-gothic' ) !== false ) {
-            $subtitle      = '';
-            $tasting_notes = 'Chocolate, caramel, well-balanced.';
-            $process_str   = 'Washed, Natural';
-            $origins       = 'Brazil & Colombia';
-        } elseif ( strpos( $title, 'Bit of Both' ) !== false || strpos( $product_slug, 'bit-of-both' ) !== false ) {
+        // Brand tasting notes and subtitles fallback only if not set in database
+        if ( empty( $tasting_notes ) ) {
+            if ( strpos( $title, 'Inkwell' ) !== false || strpos( $product_slug, 'inkwell' ) !== false ) {
+                $tasting_notes = 'Graham cracker, cooked cherries, vanilla';
+            } elseif ( strpos( $title, 'Blacksmith' ) !== false || strpos( $product_slug, 'blacksmith' ) !== false ) {
+                $tasting_notes = "Baker's chocolate, blueberries, hazelnut";
+            } elseif ( strpos( $title, 'Southern Gothic' ) !== false || strpos( $product_slug, 'southern-gothic' ) !== false ) {
+                $tasting_notes = 'Chocolate, caramel, well-balanced.';
+            }
+        }
+        if ( empty( $subtitle ) ) {
+            if ( strpos( $title, 'Inkwell' ) !== false || strpos( $product_slug, 'inkwell' ) !== false ) {
+                $subtitle = 'Our Signature House Blend';
+            } elseif ( strpos( $title, 'Blacksmith' ) !== false || strpos( $product_slug, 'blacksmith' ) !== false ) {
+                $subtitle = 'Our Signature Espresso';
+            }
+        }
+        if ( empty( $process_str ) ) {
+            if ( strpos( $title, 'Inkwell' ) !== false || strpos( $product_slug, 'inkwell' ) !== false || strpos( $title, 'Blacksmith' ) !== false || strpos( $product_slug, 'blacksmith' ) !== false ) {
+                $process_str = 'Washed & Natural';
+            }
+        }
+        if ( empty( $origins ) ) {
+            if ( strpos( $title, 'Inkwell' ) !== false || strpos( $product_slug, 'inkwell' ) !== false ) {
+                $origins = 'Colombia, Guatemala, Ethiopia';
+            } elseif ( strpos( $title, 'Blacksmith' ) !== false || strpos( $product_slug, 'blacksmith' ) !== false ) {
+                $origins = 'Colombia, Nicaragua, Ethiopia';
+            }
+        }
+        if ( strpos( $title, 'Bit of Both' ) !== false || strpos( $product_slug, 'bit-of-both' ) !== false ) {
             $raw_custom_desc = 'Our house blend Inkwell and the current seasonal coffee.';
         } elseif ( strpos( $title, 'The Home Barista' ) !== false || strpos( $product_slug, 'home-barista' ) !== false ) {
             $raw_custom_desc = 'Our signature Blacksmith espresso and our seasonal espresso.';

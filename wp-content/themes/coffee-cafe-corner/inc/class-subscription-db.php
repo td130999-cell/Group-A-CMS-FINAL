@@ -28,6 +28,7 @@ class Coffee_Cafe_Corner_Subscription_DB {
 	}
 
 	public static function ensure_database_records() {
+		return; // Seeder disabled: Data is permanently managed in database
 		self::ensure_category();
 		self::ensure_page();
 		self::ensure_products();
@@ -315,6 +316,14 @@ class Coffee_Cafe_Corner_Subscription_DB {
 	}
 
 	public static function get_product_image_url( $product_id ) {
+		// 1. Featured Image set in wp-admin takes highest priority
+		if ( has_post_thumbnail( $product_id ) ) {
+			$thumb = get_the_post_thumbnail_url( $product_id, 'large' );
+			if ( ! empty( $thumb ) ) {
+				return $thumb;
+			}
+		}
+
 		$img      = get_post_meta( $product_id, '_coffee_image', true );
 		$fallback = get_post_meta( $product_id, '_coffee_fallback_image', true );
 
@@ -337,10 +346,6 @@ class Coffee_Cafe_Corner_Subscription_DB {
 			if ( file_exists( $theme_dir . '/assets/images/coffee/' . basename( $rel ) ) ) {
 				return $theme_uri . '/assets/images/coffee/' . basename( $rel );
 			}
-		}
-
-		if ( has_post_thumbnail( $product_id ) ) {
-			return get_the_post_thumbnail_url( $product_id, 'large' );
 		}
 
 		return $theme_uri . '/assets/images/coffee/blacksmith.jpg';

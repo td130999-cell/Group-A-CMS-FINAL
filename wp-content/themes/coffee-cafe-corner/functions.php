@@ -253,6 +253,7 @@ add_action( 'customize_register', 'coffee_cafe_corner_customize_footer' );
  * Seed Footer Options and Navigation Menus in Database if not present
  */
 function coffee_cafe_corner_init_footer_database() {
+	return; // Seeder disabled: All data managed in database
 	// 1. Seed options in wp_options
 	$defaults = array(
 		'footer_brand_name'       => 'QUILLS COFFEE',
@@ -372,6 +373,7 @@ add_action( 'init', 'coffee_cafe_corner_register_visit_pattern', 9 );
  * Seed Visit Page and Cafes Post Meta in Database if not present
  */
 function coffee_cafe_corner_init_visit_database() {
+	return; // Seeder disabled: All data managed in database
 	if ( get_option( 'coffee_cafe_corner_visit_seeded' ) ) {
 		return;
 	}
@@ -566,6 +568,11 @@ if ( class_exists( 'Coffee_Cafe_Corner_Cafe_Locations_DB' ) ) {
  * Quills Products (Home Bestsellers, Merch, Gift Cards) Database Management
  */
 require_once get_template_directory() . '/inc/class-quills-products-db.php';
+
+/**
+ * Quills Product Custom Meta Box & Cache Sync for wp-admin
+ */
+require_once get_template_directory() . '/inc/class-quills-admin-meta.php';
 
 /**
  * Permanently disable WooCommerce Coming Soon / Site Visibility mode
