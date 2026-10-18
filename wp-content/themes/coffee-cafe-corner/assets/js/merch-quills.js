@@ -66,7 +66,9 @@
         function closeCartDrawer() {
             $('#quills-cart-overlay').removeClass('is-active').attr('aria-hidden', 'true');
             $('#quills-cart-drawer').removeClass('is-active').attr('aria-hidden', 'true');
-            $('body').removeClass('quills-drawer-open');
+            if (!$('#quills-quick-shop-drawer').hasClass('is-active')) {
+                $('body').removeClass('quills-drawer-open');
+            }
         }
 
         $(document).on('click', '#quills-cart-overlay, #quills-drawer-close, .quills-drawer-close', function (e) {
@@ -74,9 +76,44 @@
             closeCartDrawer();
         });
 
+        // Ensure Quick Shop Drawer DOM container exists
+        function ensureQuickShopDrawerContainer() {
+            if (!$('#quills-quick-shop-drawer').length) {
+                $('body').append(
+                    '<div class="quills-quick-shop-overlay" id="quills-quick-shop-overlay" aria-hidden="true"></div>' +
+                    '<div class="quills-quick-shop-drawer" id="quills-quick-shop-drawer" role="dialog" aria-modal="true" aria-hidden="true">' +
+                        '<div class="quills-quick-shop-content" id="quills-quick-shop-content"></div>' +
+                    '</div>'
+                );
+            }
+        }
+        ensureQuickShopDrawerContainer();
+
+        function openQuickShopDrawer(html) {
+            ensureQuickShopDrawerContainer();
+            $('#quills-quick-shop-content').html(html);
+            $('#quills-quick-shop-overlay').addClass('is-active').attr('aria-hidden', 'false');
+            $('#quills-quick-shop-drawer').addClass('is-active').attr('aria-hidden', 'false');
+            $('body').addClass('quills-drawer-open');
+        }
+
+        function closeQuickShopDrawer() {
+            $('#quills-quick-shop-overlay').removeClass('is-active').attr('aria-hidden', 'true');
+            $('#quills-quick-shop-drawer').removeClass('is-active').attr('aria-hidden', 'true');
+            if (!$('#quills-cart-drawer').hasClass('is-active')) {
+                $('body').removeClass('quills-drawer-open');
+            }
+        }
+
+        $(document).on('click', '#quills-quick-shop-overlay, #quills-qs-close, .quills-qs-close', function (e) {
+            e.preventDefault();
+            closeQuickShopDrawer();
+        });
+
         $(document).on('keyup', function (e) {
             if (e.key === 'Escape') {
                 closeCartDrawer();
+                closeQuickShopDrawer();
             }
         });
 
@@ -115,19 +152,92 @@
             $('#quills-selected-size-label').text(selectedSize);
         });
 
-        // 6. Quick Add to Cart via AJAX on /merch/ Collection Page
-        $(document).on('submit', '.quills-merch-quick-add-form', function (e) {
+        // 6. Open Quick Shop Drawer on /merch/ Collection Page when clicking "ADD TO CART" (Image 5)
+        $(document).on('click', '.quills-merch-btn-add:not(.is-soldout)', function (e) {
             e.preventDefault();
-            var $form = $(this);
-            var $btn = $form.find('.quills-merch-btn-add');
-            var productId = $form.find('input[name="add-to-cart"]').val();
+            e.stopPropagation();
 
-            if (!productId || $btn.hasClass('loading') || $btn.hasClass('is-soldout')) {
+            var $btn = $(this);
+            var $form = $btn.closest('form');
+            var productId = $form.find('input[name="add-to-cart"]').val() || $btn.closest('.quills-merch-card').data('product-id');
+
+            if (!productId || $btn.hasClass('loading')) {
                 return;
             }
 
             var origHtml = $btn.html();
-            $btn.addClass('loading').prop('disabled', true).html('<span>ADDING...</span>');
+            $btn.addClass('loading').prop('disabled', true).html('<span>LOADING...</span>');
+
+            var ajaxUrl = (typeof quillsData !== 'undefined' && quillsData.ajaxUrl) ? quillsData.ajaxUrl : '/wp-admin/admin-ajax.php';
+            var nonce = (typeof quillsData !== 'undefined' && quillsData.nonce) ? quillsData.nonce : '';
+
+            $.ajax({
+                url: ajaxUrl,
+                type: 'POST',
+                data: {
+                    action: 'quills_get_quick_shop_drawer',
+                    nonce: nonce,
+                    product_id: productId
+                },
+                success: function (resp) {
+                    $btn.removeClass('loading').prop('disabled', false).html(origHtml);
+                    if (resp && resp.success && resp.data && resp.data.html) {
+                        openQuickShopDrawer(resp.data.html);
+                    }
+                },
+                error: function () {
+                    $btn.removeClass('loading').prop('disabled', false).html(origHtml);
+                }
+            });
+        });
+
+        $(document).on('submit', '.quills-merch-quick-add-form', function (e) {
+            e.preventDefault();
+            $(this).find('.quills-merch-btn-add').trigger('click');
+        });
+
+        // Inside Quick Shop Drawer: Size selection
+        $(document).on('click', '.quills-qs-size-chips .quills-size-chip:not(.is-disabled)', function (e) {
+            e.preventDefault();
+            var $chips = $(this).closest('.quills-qs-size-chips');
+            $chips.find('.quills-size-chip').removeClass('active');
+            $(this).addClass('active');
+            var selectedSize = $(this).data('size');
+            $('#quills-qs-selected-size').text(selectedSize);
+        });
+
+        // Inside Quick Shop Drawer: Stepper (+ / -)
+        $(document).on('click', '#quills-qs-qty-minus', function (e) {
+            e.preventDefault();
+            var $input = $('#quills-qs-qty-input');
+            var val = parseInt($input.val(), 10) || 1;
+            if (val > 1) {
+                $input.val(val - 1);
+            }
+        });
+
+        $(document).on('click', '#quills-qs-qty-plus', function (e) {
+            e.preventDefault();
+            var $input = $('#quills-qs-qty-input');
+            var val = parseInt($input.val(), 10) || 1;
+            $input.val(val + 1);
+        });
+
+        // Inside Quick Shop Drawer: ADD TO CART button
+        $(document).on('click', '#quills-qs-btn-add', function (e) {
+            e.preventDefault();
+            var $btn = $(this);
+            var productId = $btn.data('product-id');
+            var qty = parseInt($('#quills-qs-qty-input').val(), 10) || 1;
+            var size = $('.quills-qs-size-chips .quills-size-chip.active').data('size') || 'M';
+
+            if (!productId || $btn.hasClass('loading')) {
+                return;
+            }
+
+            $btn.addClass('loading').prop('disabled', true);
+            var origText = $btn.find('.quills-qs-btn-text').text();
+            $btn.find('.quills-qs-btn-text').text('ADDING...');
 
             var ajaxUrl = (typeof quillsData !== 'undefined' && quillsData.ajaxUrl) ? quillsData.ajaxUrl : '/wp-admin/admin-ajax.php';
             var nonce = (typeof quillsData !== 'undefined' && quillsData.nonce) ? quillsData.nonce : '';
@@ -139,11 +249,15 @@
                     action: 'quills_add_to_cart',
                     nonce: nonce,
                     product_id: productId,
-                    quantity: 1,
-                    size: 'M'
+                    quantity: qty,
+                    size: size
                 },
                 success: function (resp) {
-                    $btn.removeClass('loading').prop('disabled', false).html(origHtml);
+                    $btn.removeClass('loading').prop('disabled', false);
+                    $btn.find('.quills-qs-btn-text').text(origText);
+
+                    // Close Quick Shop Drawer and open Cart Drawer!
+                    closeQuickShopDrawer();
 
                     if (resp && resp.success) {
                         updateHeaderBadge(resp.data.cart_count);
@@ -152,17 +266,25 @@
                         }
                         openCartDrawer();
                     } else {
-                        var msg = (resp && resp.data && resp.data.message) ? resp.data.message : 'Item added to cart.';
                         openCartDrawer();
                         refreshCartDrawer();
                     }
                 },
                 error: function () {
-                    $btn.removeClass('loading').prop('disabled', false).html(origHtml);
+                    $btn.removeClass('loading').prop('disabled', false);
+                    $btn.find('.quills-qs-btn-text').text(origText);
+                    closeQuickShopDrawer();
                     openCartDrawer();
                     refreshCartDrawer();
                 }
             });
+        });
+
+        // Inside Quick Shop Drawer: Buy with Shop Pay
+        $(document).on('click', '#quills-qs-btn-shop', function (e) {
+            e.preventDefault();
+            var checkoutUrl = $(this).data('checkout-url') || '/checkout/';
+            window.location.href = checkoutUrl;
         });
 
         // 7. Add to Cart on Merch Single Product Detail Page

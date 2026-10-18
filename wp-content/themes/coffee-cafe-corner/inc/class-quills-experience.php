@@ -571,11 +571,25 @@ class Quills_Coffee_Experience {
 
         $formatted_price = function_exists('wc_price') ? wc_price($base_price) : '$' . number_format($base_price, 2);
 
-        // Images from Database
-        if (!class_exists('Coffee_Cafe_Corner_Coffee_DB')) {
-            require_once get_template_directory() . '/inc/class-coffee-db.php';
+        // Check if product is Merch
+        if (!class_exists('Coffee_Cafe_Corner_Merch_DB')) {
+            require_once get_template_directory() . '/inc/class-merch-db.php';
         }
-        $img_url = Coffee_Cafe_Corner_Coffee_DB::get_product_image_url($product_id);
+        $is_merch = has_term('merch', 'product_cat', $product_id) || (bool) get_post_meta($product_id, '_merch_image', true);
+
+        // Images from Database
+        if ($is_merch) {
+            $img_url      = Coffee_Cafe_Corner_Merch_DB::get_product_image_url($product_id);
+            $merch_sizes  = Coffee_Cafe_Corner_Merch_DB::get_product_sizes($product_id);
+            $default_size = Coffee_Cafe_Corner_Merch_DB::get_product_default_size($product_id);
+        } else {
+            if (!class_exists('Coffee_Cafe_Corner_Coffee_DB')) {
+                require_once get_template_directory() . '/inc/class-coffee-db.php';
+            }
+            $img_url      = Coffee_Cafe_Corner_Coffee_DB::get_product_image_url($product_id);
+            $merch_sizes  = [];
+            $default_size = '';
+        }
 
         // Database Reviews
         $comments = get_comments([
@@ -597,7 +611,7 @@ class Quills_Coffee_Experience {
         }
         $rating_round = $avg_rating > 0 ? (int) round($avg_rating) : ($review_count > 0 ? 5 : 0);
 
-        // Sizes configuration
+        // Sizes configuration for coffee
         $is_bundle = ($base_price >= 40.00);
         $sizes = $is_bundle ? ['Two 12oz Bags'] : ['12oz', '5lb', '2lb'];
 
@@ -621,50 +635,79 @@ class Quills_Coffee_Experience {
             </div>
 
             <div class="quills-qs-info">
-                <h3 class="quills-qs-title"><?php echo esc_html($title); ?></h3>
+                <?php if ($is_merch): ?>
+                    <div class="quills-vendor-subtitle">QUILLS COFFEE</div>
+                    <h3 class="quills-qs-title quills-qs-title--merch"><i><?php echo esc_html($title); ?></i></h3>
+                <?php else: ?>
+                    <h3 class="quills-qs-title"><?php echo esc_html($title); ?></h3>
+                <?php endif; ?>
                 
                 <div class="quills-qs-price" id="quills-qs-price"><?php echo $formatted_price; ?></div>
 
                 <div class="quills-qs-rating">
                     <span class="quills-qs-stars">
                         <?php for ($i = 1; $i <= 5; $i++): ?>
-                            <span class="star <?php echo ($review_count > 0 && $i <= $rating_round) ? 'filled' : 'empty'; ?>">★</span>
+                            <span class="star <?php echo ($is_merch || ($review_count > 0 && $i <= $rating_round)) ? 'filled' : 'empty'; ?>">★</span>
                         <?php endfor; ?>
                     </span>
-                    <span class="quills-qs-review-count">
-                        <?php echo ($review_count > 0) ? '(' . esc_html($review_count) . ' reviews)' : '(No reviews)'; ?>
-                    </span>
+                    <?php if (!$is_merch): ?>
+                        <span class="quills-qs-review-count">
+                            <?php echo ($review_count > 0) ? '(' . esc_html($review_count) . ' reviews)' : '(No reviews)'; ?>
+                        </span>
+                    <?php endif; ?>
                 </div>
 
-                <!-- Size Selector -->
-                <div class="quills-qs-option-group" id="quills-qs-size-group">
-                    <div class="quills-qs-option-label">Size: <span id="quills-qs-selected-size"><?php echo esc_html($sizes[0]); ?></span></div>
-                    <div class="quills-qs-pills-row">
-                        <?php foreach ($sizes as $idx => $s): ?>
-                            <button type="button" class="quills-qs-pill quills-qs-size-pill <?php echo ($idx === 0) ? 'active' : ''; ?>" data-size="<?php echo esc_attr($s); ?>">
-                                <?php echo esc_html($s); ?>
-                            </button>
-                        <?php endforeach; ?>
+                <?php if ($is_merch): ?>
+                    <!-- Merch Size Selection Chips (Image 5) -->
+                    <?php if (!empty($merch_sizes)): ?>
+                        <div class="quills-qs-option-group quills-merch-size-group" id="quills-qs-size-group">
+                            <div class="quills-qs-option-label">Size: <span id="quills-qs-selected-size"><?php echo esc_html($default_size); ?></span></div>
+                            <div class="quills-merch-size-chips quills-qs-size-chips">
+                                <?php foreach ($merch_sizes as $sz): 
+                                    $is_avail  = !empty($sz['available']);
+                                    $is_active = ($sz['size'] === $default_size);
+                                ?>
+                                    <button type="button" 
+                                        class="quills-size-chip quills-qs-size-chip <?php echo $is_active ? 'active' : ''; ?> <?php echo !$is_avail ? 'is-disabled' : ''; ?>" 
+                                        data-size="<?php echo esc_attr($sz['size']); ?>"
+                                        <?php echo !$is_avail ? 'disabled aria-disabled="true"' : ''; ?>>
+                                        <?php echo esc_html($sz['size']); ?>
+                                    </button>
+                                <?php endforeach; ?>
+                            </div>
+                        </div>
+                    <?php endif; ?>
+                <?php else: ?>
+                    <!-- Coffee Size Selector -->
+                    <div class="quills-qs-option-group" id="quills-qs-size-group">
+                        <div class="quills-qs-option-label">Size: <span id="quills-qs-selected-size"><?php echo esc_html($sizes[0]); ?></span></div>
+                        <div class="quills-qs-pills-row">
+                            <?php foreach ($sizes as $idx => $s): ?>
+                                <button type="button" class="quills-qs-pill quills-qs-size-pill <?php echo ($idx === 0) ? 'active' : ''; ?>" data-size="<?php echo esc_attr($s); ?>">
+                                    <?php echo esc_html($s); ?>
+                                </button>
+                            <?php endforeach; ?>
+                        </div>
                     </div>
-                </div>
 
-                <!-- Grind Type Selector -->
-                <div class="quills-qs-option-group" id="quills-qs-grind-group">
-                    <div class="quills-qs-option-label">Grind Type: <span id="quills-qs-selected-grind">Whole Bean</span></div>
-                    <div class="quills-qs-pills-row quills-qs-grind-pills">
-                        <?php foreach ($grinds as $idx => $g): ?>
-                            <button type="button" class="quills-qs-pill quills-qs-grind-pill <?php echo ($idx === 0) ? 'active' : ''; ?>" data-grind="<?php echo esc_attr($g); ?>">
-                                <?php echo esc_html($g); ?>
-                            </button>
-                        <?php endforeach; ?>
+                    <!-- Grind Type Selector -->
+                    <div class="quills-qs-option-group" id="quills-qs-grind-group">
+                        <div class="quills-qs-option-label">Grind Type: <span id="quills-qs-selected-grind">Whole Bean</span></div>
+                        <div class="quills-qs-pills-row quills-qs-grind-pills">
+                            <?php foreach ($grinds as $idx => $g): ?>
+                                <button type="button" class="quills-qs-pill quills-qs-grind-pill <?php echo ($idx === 0) ? 'active' : ''; ?>" data-grind="<?php echo esc_attr($g); ?>">
+                                    <?php echo esc_html($g); ?>
+                                </button>
+                            <?php endforeach; ?>
+                        </div>
                     </div>
-                </div>
+                <?php endif; ?>
 
                 <!-- Add to Cart Action Row -->
                 <div class="quills-qs-actions-row">
                     <div class="quills-qs-qty-stepper">
                         <button type="button" class="quills-qs-qty-btn" id="quills-qs-qty-minus" aria-label="Decrease quantity">—</button>
-                        <input type="number" class="quills-qs-qty-input" id="quills-qs-qty-input" value="1" min="1" readonly />
+                        <input type="text" class="quills-qs-qty-input" id="quills-qs-qty-input" value="1" readonly inputmode="numeric" />
                         <button type="button" class="quills-qs-qty-btn" id="quills-qs-qty-plus" aria-label="Increase quantity">+</button>
                     </div>
 

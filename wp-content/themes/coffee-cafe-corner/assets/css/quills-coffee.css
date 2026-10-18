@@ -729,15 +729,19 @@ body.quills-body {
 }
 
 .quills-qty-stepper input#quills-qty-input,
-.quills-qty-stepper input {
+.quills-qty-stepper input,
+.quills-qs-qty-stepper input#quills-qs-qty-input,
+.quills-qs-qty-stepper input {
     flex: 1 !important;
-    width: 48px !important;
+    width: 44px !important;
     height: 100% !important;
+    min-width: 0 !important;
     border: none !important;
+    border-radius: 0 !important;
     background: transparent !important;
     color: #1a1a1a !important;
-    font-family: 'Barlow Condensed', -apple-system, BlinkMacSystemFont, sans-serif !important;
-    font-size: 18px !important;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
+    font-size: 16px !important;
     font-weight: 700 !important;
     text-align: center !important;
     padding: 0 !important;
@@ -747,12 +751,15 @@ body.quills-body {
     outline: none !important;
     opacity: 1 !important;
     visibility: visible !important;
+    display: block !important;
     -webkit-appearance: none !important;
     -moz-appearance: textfield !important;
 }
 
 .quills-qty-stepper input#quills-qty-input::-webkit-inner-spin-button,
-.quills-qty-stepper input#quills-qty-input::-webkit-outer-spin-button {
+.quills-qty-stepper input#quills-qty-input::-webkit-outer-spin-button,
+.quills-qs-qty-stepper input::-webkit-inner-spin-button,
+.quills-qs-qty-stepper input::-webkit-outer-spin-button {
     -webkit-appearance: none !important;
     margin: 0 !important;
 }
@@ -2624,8 +2631,9 @@ body.quills-single-product-page {
 /* Customer Reviews Section (Image 5) */
 .quills-reviews-section-v2 {
     padding: 50px 0 80px 0;
-    border-top: 1px solid #e2ded7;
-    background-color: #faf7f2;
+    border-top: 1px solid rgba(0, 0, 0, 0.08);
+    background: transparent !important;
+    background-color: transparent !important;
 }
 
 .quills-reviews-header-v2 {
@@ -2690,22 +2698,22 @@ body.quills-single-product-page {
 }
 
 .quills-btn-write-review-v2 {
-    background-color: #4a6750;
-    color: #ffffff;
-    border: none;
-    border-radius: 4px;
-    padding: 9px 20px;
-    font-family: 'Barlow Condensed', sans-serif;
-    font-size: 14px;
-    font-weight: 700;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
+    background-color: #5c7764 !important;
+    color: #ffffff !important;
+    border: none !important;
+    border-radius: 6px !important;
+    padding: 10px 22px !important;
+    font-family: 'Barlow Condensed', sans-serif !important;
+    font-size: 14px !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.12em !important;
+    text-transform: uppercase !important;
     cursor: pointer;
     transition: background-color 0.2s ease;
 }
 
 .quills-btn-write-review-v2:hover {
-    background-color: #3b5440;
+    background-color: #4b6352 !important;
 }
 
 .quills-review-icon-btn {
@@ -2910,10 +2918,10 @@ body.quills-single-product-page {
 }
 
 .quills-reviews-empty-msg {
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-    font-size: 14.5px;
-    font-weight: 500;
-    color: #2b2b2b;
+    font-family: 'Besley', Georgia, serif;
+    font-size: 15px;
+    font-weight: 700;
+    color: #222222;
     margin: 0 0 16px 0;
     letter-spacing: 0.1px;
 }
