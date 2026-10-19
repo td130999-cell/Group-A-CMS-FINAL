@@ -2286,6 +2286,11 @@ header.wp-block-template-part,
     box-sizing: border-box;
 }
 
+.quills-cart-badge.is-empty,
+.quills-cart-badge:empty {
+    display: none !important;
+}
+
 .quills-mobile-toggle {
     display: none;
     background: transparent;

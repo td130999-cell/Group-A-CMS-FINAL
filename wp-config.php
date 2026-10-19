@@ -81,6 +81,17 @@ if ( ! defined( 'ABSPATH' ) ) {
 	define( 'ABSPATH', __DIR__ . '/' );
 }
 
+if ( ! defined( 'DISABLE_WP_CRON' ) ) {
+	define( 'DISABLE_WP_CRON', true );
+}
+if ( ! defined( 'WP_HTTP_BLOCK_EXTERNAL' ) ) {
+	define( 'WP_HTTP_BLOCK_EXTERNAL', true );
+}
+if ( ! defined( 'WP_ACCESSIBLE_HOSTS' ) ) {
+	define( 'WP_ACCESSIBLE_HOSTS', 'localhost,127.0.0.1' );
+}
+
 /** Sets up WordPress vars and included files. */
 require_once ABSPATH . 'wp-settings.php';
+
 

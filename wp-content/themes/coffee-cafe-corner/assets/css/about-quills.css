@@ -125,10 +125,18 @@
    1. Hero Banner
    ========================================= */
 
-.quills-hero-section {
-    max-width: 1140px;
-    margin: 10px auto 48px auto;
-    padding: 0 20px;
+.quills-about-hero-section,
+.quills-about-page-container .quills-hero-section {
+    max-width: 1140px !important;
+    margin: 10px auto 48px auto !important;
+    padding: 0 20px !important;
+    height: auto !important;
+    min-height: unset !important;
+    background: transparent !important;
+    background-color: transparent !important;
+    display: block !important;
+    align-items: stretch !important;
+    overflow: visible !important;
 }
 
 .quills-hero-banner {

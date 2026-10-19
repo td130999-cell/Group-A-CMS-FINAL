@@ -25,17 +25,29 @@ if ( ! array_key_exists( $current_sort, $allowed_sorts ) ) {
 }
 
 $slug_to_img_fallback = array(
+  // Slugs Set 1
+  'crewneck-sweatshirt-evergreen'                => 'merch-crewneck-evergreen.jpg',
+  'crewneck-sweatshirt-sandstone'                => 'merch-crewneck-sandstone.jpg',
+  'owl-ringer-tee'                               => 'merch-owl-ringer-tee.jpg',
+  'owl-tee-in-pastel-green'                      => 'merch-owl-tee-pastel-green.jpg',
+  'owl-embroidered-hat'                          => 'merch-owl-embroidered-hat.jpg',
+  'two-tone-embroidered-hat'                     => 'merch-twotone-embroidered-hat.jpg',
+  'quills-speckled-coffee-mug'                   => 'merch-speckled-coffee-mug.jpg',
+  'quills-coffee-postage-mug'                    => 'merch-coffee-postage-mug.jpg',
+  'quills-slow-coffee-hoodie-charcoal'           => 'merch-slow-coffee-hoodie-charcoal.jpg',
+  'quills-slow-coffee-hoodie-saddle'             => 'merch-slow-coffee-hoodie-saddle.jpg',
+  'quills-postage-tote-bag'                      => 'merch-postage-tote-bag.jpg',
+  'quills-patch-hat-petrol-blue'                 => 'merch-patch-hat-petrol-blue.jpg',
+
+  // Slugs Set 2
   'quills-coffee-leaves-crewneck-sweatshirt'      => 'merch-crewneck-evergreen.jpg',
   'quills-coffee-leaves-crewneck-sweatshirt-copy' => 'merch-crewneck-sandstone.jpg',
   'quills-kentucky-owl-ringer-tee'               => 'merch-owl-ringer-tee.jpg',
   'quills-kentucky-owl-ringer-tee-copy'          => 'merch-owl-tee-pastel-green.jpg',
-  'quills-owl-embroidered-hat'                   => 'merch-owl-embroidered-hat.jpg',
   'quills-owl-embroidered-hat-copy'              => 'merch-twotone-embroidered-hat.jpg',
   'quills-coffee-mug'                            => 'merch-speckled-coffee-mug.jpg',
   'quills-coffee-mug-copy'                       => 'merch-coffee-postage-mug.jpg',
-  'quills-slow-coffee-hoodie-charcoal'           => 'merch-slow-coffee-hoodie-charcoal.jpg',
   'quills-slow-coffee-hoodie-charcoal-copy'      => 'merch-slow-coffee-hoodie-saddle.jpg',
-  'quills-postage-tote-bag'                      => 'merch-postage-tote-bag.jpg',
   'two-tone-embroidered-hat-copy'                => 'merch-patch-hat-petrol-blue.jpg',
 );
 
@@ -49,15 +61,47 @@ if ( ! empty( $wc_products ) ) {
   foreach ( $wc_products as $product ) {
     $p_id          = $product->get_id();
     $p_slug        = $product->get_slug();
+    $p_name_lower  = strtolower( $product->get_name() );
     $rating        = (float) $product->get_average_rating();
     $reviews_count = (int) $product->get_review_count();
 
     $thumb_id = $product->get_image_id();
     $img_url  = $thumb_id ? wp_get_attachment_image_url( $thumb_id, 'full' ) : '';
-    if ( ! $img_url && isset( $slug_to_img_fallback[ $p_slug ] ) ) {
-      $img_url = $img_dir . $slug_to_img_fallback[ $p_slug ];
-    } elseif ( ! $img_url ) {
-      $img_url = $img_dir . 'merch-crewneck-evergreen.jpg';
+    if ( ! $img_url ) {
+      if ( isset( $slug_to_img_fallback[ $p_slug ] ) ) {
+        $img_url = $img_dir . $slug_to_img_fallback[ $p_slug ];
+      } elseif ( strpos( $p_name_lower, 'sandstone' ) !== false ) {
+        $img_url = $img_dir . 'merch-crewneck-sandstone.jpg';
+      } elseif ( strpos( $p_name_lower, 'evergreen' ) !== false ) {
+        $img_url = $img_dir . 'merch-crewneck-evergreen.jpg';
+      } elseif ( strpos( $p_name_lower, 'ringer' ) !== false ) {
+        $img_url = $img_dir . 'merch-owl-ringer-tee.jpg';
+      } elseif ( strpos( $p_name_lower, 'pastel' ) !== false ) {
+        $img_url = $img_dir . 'merch-owl-tee-pastel-green.jpg';
+      } elseif ( strpos( $p_name_lower, 'two-tone' ) !== false || strpos( $p_name_lower, 'twotone' ) !== false ) {
+        $img_url = $img_dir . 'merch-twotone-embroidered-hat.jpg';
+      } elseif ( strpos( $p_name_lower, 'embroidered' ) !== false ) {
+        $img_url = $img_dir . 'merch-owl-embroidered-hat.jpg';
+      } elseif ( strpos( $p_name_lower, 'speckled' ) !== false ) {
+        $img_url = $img_dir . 'merch-speckled-coffee-mug.jpg';
+      } elseif ( strpos( $p_name_lower, 'postage mug' ) !== false || strpos( $p_slug, 'postage-mug' ) !== false ) {
+        $img_url = $img_dir . 'merch-coffee-postage-mug.jpg';
+      } elseif ( strpos( $p_name_lower, 'charcoal' ) !== false ) {
+        $img_url = $img_dir . 'merch-slow-coffee-hoodie-charcoal.jpg';
+      } elseif ( strpos( $p_name_lower, 'saddle' ) !== false ) {
+        $img_url = $img_dir . 'merch-slow-coffee-hoodie-saddle.jpg';
+      } elseif ( strpos( $p_name_lower, 'tote' ) !== false ) {
+        $img_url = $img_dir . 'merch-postage-tote-bag.jpg';
+      } elseif ( strpos( $p_name_lower, 'patch' ) !== false || strpos( $p_name_lower, 'petrol' ) !== false ) {
+        $img_url = $img_dir . 'merch-patch-hat-petrol-blue.jpg';
+      } else {
+        $img_url = $img_dir . 'merch-crewneck-evergreen.jpg';
+      }
+    }
+
+    $is_in_stock = $product->is_in_stock();
+    if ( strpos( $p_name_lower, 'postage mug' ) !== false || strpos( $p_slug, 'postage-mug' ) !== false ) {
+      $is_in_stock = false; // Quills web mau sold out
     }
 
     $merch_products[] = array(
@@ -69,7 +113,7 @@ if ( ! empty( $wc_products ) ) {
       'rating_type' => ( $rating > 0 ) ? 'filled' : 'empty',
       'reviews'     => ( $reviews_count > 0 ) ? '(' . $reviews_count . ' reviews)' : '(No reviews)',
       'link'        => get_permalink( $p_id ),
-      'in_stock'    => $product->is_in_stock(),
+      'in_stock'    => $is_in_stock,
     );
   }
 }

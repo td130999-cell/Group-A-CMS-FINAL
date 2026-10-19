@@ -17,46 +17,103 @@ function coffee_cafe_corner_scripts() {
 
 	$theme_ver = COFFEE_CAFE_CORNER_VERSION . '.' . time();
 
-	// Enqueue custom footer stylesheet
-	wp_enqueue_style( 'coffee-cafe-corner-footer', trailingslashit( get_template_directory_uri() ) . 'assets/css/custom-footer.css', array(), $theme_ver );
+	// Enqueue custom footer stylesheet (Authentic Quills Coffee Design)
+	$footer_css = get_template_directory() . '/assets/css/custom-footer.css';
+	wp_enqueue_style( 'coffee-cafe-corner-footer', trailingslashit( get_template_directory_uri() ) . 'assets/css/custom-footer.css', array(), file_exists( $footer_css ) ? filemtime( $footer_css ) : $theme_ver );
 
 	// Enqueue Quills About Us stylesheet (only when not on front page to prevent collision)
 	if ( ! is_front_page() ) {
-		wp_enqueue_style( 'coffee-cafe-corner-about', trailingslashit( get_template_directory_uri() ) . 'assets/css/about-quills.css', array(), $theme_ver );
+		wp_enqueue_style( 'coffee-cafe-corner-about', trailingslashit( get_template_directory_uri() ) . 'assets/css/about-quills.css', array(), COFFEE_CAFE_CORNER_VERSION );
 	}
 
 	// Enqueue Quills Visit stylesheet
 	wp_enqueue_style( 'coffee-cafe-corner-visit', trailingslashit( get_template_directory_uri() ) . 'assets/css/visit-quills.css', array(), $theme_ver );
 
 	// Enqueue Quills Brew Gear stylesheet
-	wp_enqueue_style( 'coffee-cafe-corner-brew-gear', trailingslashit( get_template_directory_uri() ) . 'assets/css/brew-gear.css', array(), $theme_ver );
+	$brew_gear_css = get_template_directory() . '/assets/css/brew-gear.css';
+	wp_enqueue_style( 'coffee-cafe-corner-brew-gear', trailingslashit( get_template_directory_uri() ) . 'assets/css/brew-gear.css', array(), file_exists( $brew_gear_css ) ? filemtime( $brew_gear_css ) : COFFEE_CAFE_CORNER_VERSION );
 
 	// Enqueue Quills Brew Gear JS
-	wp_enqueue_script( 'coffee-cafe-corner-brew-gear-js', trailingslashit( get_template_directory_uri() ) . 'assets/js/brew-gear.js', array(), $theme_ver, true );
+	$brew_gear_js = get_template_directory() . '/assets/js/brew-gear.js';
+	wp_enqueue_script( 'coffee-cafe-corner-brew-gear-js', trailingslashit( get_template_directory_uri() ) . 'assets/js/brew-gear.js', array( 'jquery' ), file_exists( $brew_gear_js ) ? filemtime( $brew_gear_js ) : COFFEE_CAFE_CORNER_VERSION, true );
+	wp_localize_script( 'coffee-cafe-corner-brew-gear-js', 'quillsData', array(
+		'ajaxUrl' => admin_url( 'admin-ajax.php' ),
+		'nonce'   => wp_create_nonce( 'quills_nonce' ),
+	) );
 
 	// Enqueue Quills Wholesale stylesheet
 	wp_enqueue_style( 'coffee-cafe-corner-wholesale', trailingslashit( get_template_directory_uri() ) . 'assets/css/wholesale.css', array(), $theme_ver );
 
 	// Enqueue Quills Wholesale JS
-	wp_enqueue_script( 'coffee-cafe-corner-wholesale-js', trailingslashit( get_template_directory_uri() ) . 'assets/js/wholesale.js', array(), $theme_ver, true );
-	wp_localize_script( 'coffee-cafe-corner-wholesale-js', 'wholesaleData', array(
-		'ajaxUrl' => admin_url( 'admin-ajax.php' ),
-	) );
+	if ( file_exists( get_template_directory() . '/assets/js/wholesale.js' ) ) {
+		wp_enqueue_script( 'coffee-cafe-corner-wholesale-js', trailingslashit( get_template_directory_uri() ) . 'assets/js/wholesale.js', array(), filemtime( get_template_directory() . '/assets/js/wholesale.js' ), true );
+		wp_localize_script( 'coffee-cafe-corner-wholesale-js', 'wholesaleData', array(
+			'ajaxUrl' => admin_url( 'admin-ajax.php' ),
+		) );
+	}
 
-	// Enqueue Quills Home stylesheet
-	wp_enqueue_style( 'coffee-cafe-corner-home', trailingslashit( get_template_directory_uri() ) . 'assets/css/home-quills.css', array(), $theme_ver );
+	// Enqueue Quills Home stylesheet and script (only on front page to prevent CSS collisions)
+	if ( ( is_front_page() || is_home() ) && file_exists( get_template_directory() . '/assets/css/home-quills.css' ) ) {
+		wp_enqueue_style( 'coffee-cafe-corner-home', trailingslashit( get_template_directory_uri() ) . 'assets/css/home-quills.css', array(), filemtime( get_template_directory() . '/assets/css/home-quills.css' ) );
+	}
+	if ( ( is_front_page() || is_home() ) && file_exists( get_template_directory() . '/assets/js/home-quills.js' ) ) {
+		wp_enqueue_script( 'coffee-cafe-corner-home-js', trailingslashit( get_template_directory_uri() ) . 'assets/js/home-quills.js', array(), filemtime( get_template_directory() . '/assets/js/home-quills.js' ), true );
+	}
 
-	// Enqueue Quills Home JS
-	wp_enqueue_script( 'coffee-cafe-corner-home-js', trailingslashit( get_template_directory_uri() ) . 'assets/js/home-quills.js', array(), $theme_ver, true );
+	// Enqueue Quills Coffee Collection stylesheet and script
+	if ( file_exists( get_template_directory() . '/assets/css/coffee-quills.css' ) ) {
+		wp_enqueue_style( 'coffee-cafe-corner-coffee', trailingslashit( get_template_directory_uri() ) . 'assets/css/coffee-quills.css', array(), filemtime( get_template_directory() . '/assets/css/coffee-quills.css' ) );
+	}
+	if ( file_exists( get_template_directory() . '/assets/js/coffee-quills.js' ) ) {
+		wp_enqueue_script( 'coffee-cafe-corner-coffee-js', trailingslashit( get_template_directory_uri() ) . 'assets/js/coffee-quills.js', array( 'jquery' ), filemtime( get_template_directory() . '/assets/js/coffee-quills.js' ), true );
+		wp_localize_script( 'coffee-cafe-corner-coffee-js', 'quillsData', array(
+			'ajaxUrl' => admin_url( 'admin-ajax.php' ),
+			'nonce'   => wp_create_nonce( 'quills_nonce' ),
+		) );
+	}
 
-	// Enqueue Quills Merch stylesheet
-	if ( is_page( 'merch' ) || is_page( 33 ) || is_page( 36 ) || is_page_template( 'templates/page-merch.html' ) ) {
-		wp_enqueue_style( 'coffee-cafe-corner-merch', trailingslashit( get_template_directory_uri() ) . 'assets/css/merch-quills.css', array(), $theme_ver );
+	// Enqueue Quills Subscriptions stylesheet and script
+	if ( file_exists( get_template_directory() . '/assets/css/subscriptions.css' ) ) {
+		wp_enqueue_style( 'coffee-cafe-corner-subscriptions', trailingslashit( get_template_directory_uri() ) . 'assets/css/subscriptions.css', array(), filemtime( get_template_directory() . '/assets/css/subscriptions.css' ) );
+	}
+	if ( file_exists( get_template_directory() . '/assets/js/subscriptions.js' ) ) {
+		wp_enqueue_script( 'coffee-cafe-corner-subscriptions-js', trailingslashit( get_template_directory_uri() ) . 'assets/js/subscriptions.js', array( 'jquery' ), filemtime( get_template_directory() . '/assets/js/subscriptions.js' ), true );
+		wp_localize_script( 'coffee-cafe-corner-subscriptions-js', 'quillsData', array(
+			'ajaxUrl' => admin_url( 'admin-ajax.php' ),
+			'nonce'   => wp_create_nonce( 'quills_nonce' ),
+		) );
+	}
+
+	// Enqueue Quills Merch stylesheet & script
+	if ( file_exists( get_template_directory() . '/assets/css/merch-quills.css' ) ) {
+		wp_enqueue_style( 'coffee-cafe-corner-merch-quills', trailingslashit( get_template_directory_uri() ) . 'assets/css/merch-quills.css', array(), filemtime( get_template_directory() . '/assets/css/merch-quills.css' ) );
+	} elseif ( file_exists( get_template_directory() . '/assets/css/merch.css' ) ) {
+		wp_enqueue_style( 'coffee-cafe-corner-merch', trailingslashit( get_template_directory_uri() ) . 'assets/css/merch.css', array(), filemtime( get_template_directory() . '/assets/css/merch.css' ) );
+	}
+
+	if ( file_exists( get_template_directory() . '/assets/js/merch-quills.js' ) ) {
+		wp_enqueue_script( 'coffee-cafe-corner-merch-js', trailingslashit( get_template_directory_uri() ) . 'assets/js/merch-quills.js', array( 'jquery' ), filemtime( get_template_directory() . '/assets/js/merch-quills.js' ), true );
+		wp_localize_script( 'coffee-cafe-corner-merch-js', 'quillsData', array(
+			'ajaxUrl' => admin_url( 'admin-ajax.php' ),
+			'nonce'   => wp_create_nonce( 'quills_nonce' ),
+		) );
 	}
 
 	// Enqueue Quills Gift Cards stylesheet
-	if ( is_page( 'gift-cards' ) || is_page( 37 ) || is_page_template( 'templates/page-gift-cards.html' ) ) {
-		wp_enqueue_style( 'coffee-cafe-corner-gift-cards', trailingslashit( get_template_directory_uri() ) . 'assets/css/gift-cards-quills.css', array(), $theme_ver );
+	if ( file_exists( get_template_directory() . '/assets/css/gift-cards-quills.css' ) ) {
+		wp_enqueue_style( 'coffee-cafe-corner-gift-cards', trailingslashit( get_template_directory_uri() ) . 'assets/css/gift-cards-quills.css', array(), filemtime( get_template_directory() . '/assets/css/gift-cards-quills.css' ) );
+	}
+
+	// Enqueue Quills Search Modal stylesheet and script
+	if ( file_exists( get_template_directory() . '/assets/css/search-modal.css' ) ) {
+		wp_enqueue_style( 'coffee-cafe-corner-search-modal', trailingslashit( get_template_directory_uri() ) . 'assets/css/search-modal.css', array(), filemtime( get_template_directory() . '/assets/css/search-modal.css' ) );
+	}
+	if ( file_exists( get_template_directory() . '/assets/js/search-modal.js' ) ) {
+		wp_enqueue_script( 'coffee-cafe-corner-search-js', trailingslashit( get_template_directory_uri() ) . 'assets/js/search-modal.js', array(), filemtime( get_template_directory() . '/assets/js/search-modal.js' ), true );
+		wp_localize_script( 'coffee-cafe-corner-search-js', 'quillsSearchData', array(
+			'ajaxUrl' => admin_url( 'admin-ajax.php' ),
+			'homeUrl' => home_url( '/' ),
+		) );
 	}
 }
 add_action( 'wp_enqueue_scripts', 'coffee_cafe_corner_scripts' );
@@ -200,6 +257,7 @@ add_action( 'customize_register', 'coffee_cafe_corner_customize_footer' );
  * Seed Footer Options and Navigation Menus in Database if not present
  */
 function coffee_cafe_corner_init_footer_database() {
+	return; // Seeder disabled: All data managed in database
 	// 1. Seed options in wp_options
 	$defaults = array(
 		'footer_brand_name'       => 'QUILLS COFFEE',
@@ -345,34 +403,64 @@ function coffee_cafe_corner_nav_menu_link_attributes( $atts, $item, $args ) {
 add_filter( 'nav_menu_link_attributes', 'coffee_cafe_corner_nav_menu_link_attributes', 10, 3 );
 
 /**
- * Ensure Visit Block Pattern is registered even if transient cache is stale
+ * Ensure Core Quills Page Patterns are registered even if transient cache is stale
  */
-function coffee_cafe_corner_register_visit_pattern() {
-	if ( class_exists( 'WP_Block_Patterns_Registry' ) && ! WP_Block_Patterns_Registry::get_instance()->is_registered( 'coffee-cafe-corner/visit' ) ) {
-		$pattern_file = get_template_directory() . '/patterns/visit.php';
-		if ( file_exists( $pattern_file ) ) {
-			ob_start();
-			include $pattern_file;
-			$pattern_content = ob_get_clean();
+function coffee_cafe_corner_register_core_page_patterns() {
+	if ( ! class_exists( 'WP_Block_Patterns_Registry' ) ) {
+		return;
+	}
+	$registry = WP_Block_Patterns_Registry::get_instance();
+	$core_patterns = array(
+		'coffee-cafe-corner/visit' => array(
+			'file'        => 'visit.php',
+			'title'       => __( 'Visit - Locations & Hours', 'coffee-cafe-corner' ),
+			'description' => __( 'Quills Coffee authentic Locations & Hours page pattern, dynamically pulling content from WordPress database.', 'coffee-cafe-corner' ),
+		),
+		'coffee-cafe-corner/coffee' => array(
+			'file'        => 'coffee.php',
+			'title'       => __( 'Coffee Collection', 'coffee-cafe-corner' ),
+			'description' => __( 'Quills Coffee flagship Coffee collection page pattern, dynamically pulling freshly roasted coffee products and metadata from WordPress database.', 'coffee-cafe-corner' ),
+		),
+		'coffee-cafe-corner/subscriptions' => array(
+			'file'        => 'subscriptions.php',
+			'title'       => __( 'Subscriptions', 'coffee-cafe-corner' ),
+			'description' => __( 'Quills Coffee Subscriptions collection page matching https://quillscoffee.com/collections/subscriptions', 'coffee-cafe-corner' ),
+		),
+		'coffee-cafe-corner/merch' => array(
+			'file'        => 'merch.php',
+			'title'       => __( 'Merch', 'coffee-cafe-corner' ),
+			'description' => __( 'Quills Coffee Merch collection page matching https://quillscoffee.com/collections/merch', 'coffee-cafe-corner' ),
+		),
+	);
 
-			register_block_pattern(
-				'coffee-cafe-corner/visit',
-				array(
-					'title'       => __( 'Visit - Locations & Hours', 'coffee-cafe-corner' ),
-					'categories'  => array( 'coffee-cafe-corner', 'pages' ),
-					'description' => __( 'Quills Coffee authentic Locations & Hours page pattern, dynamically pulling content from WordPress database.', 'coffee-cafe-corner' ),
-					'content'     => $pattern_content,
-				)
-			);
+	foreach ( $core_patterns as $slug => $data ) {
+		if ( ! $registry->is_registered( $slug ) ) {
+			$pattern_file = get_template_directory() . '/patterns/' . $data['file'];
+			if ( file_exists( $pattern_file ) ) {
+				ob_start();
+				include $pattern_file;
+				$pattern_content = ob_get_clean();
+
+				register_block_pattern(
+					$slug,
+					array(
+						'title'       => $data['title'],
+						'categories'  => array( 'coffee-cafe-corner', 'pages' ),
+						'description' => $data['description'],
+						'content'     => $pattern_content,
+					)
+				);
+			}
 		}
 	}
 }
-add_action( 'init', 'coffee_cafe_corner_register_visit_pattern', 9 );
+add_action( 'init', 'coffee_cafe_corner_register_core_page_patterns', 9 );
 
 /**
  * Seed Visit Page and Cafes Post Meta in Database if not present
  */
 function coffee_cafe_corner_init_visit_database() {
+	return; // Seeder disabled: All data managed in database
 	if ( get_option( 'coffee_cafe_corner_visit_seeded' ) ) {
 		return;
 	}
@@ -531,6 +619,31 @@ require_once get_template_directory() . '/inc/class-brew-gear-db.php';
 require_once get_template_directory() . '/inc/class-wholesale-db.php';
 
 /**
+ * Coffee Collection Database Management
+ */
+require_once get_template_directory() . '/inc/class-coffee-db.php';
+
+/**
+ * Subscriptions Database Management
+ */
+require_once get_template_directory() . '/inc/class-subscription-db.php';
+
+/**
+ * Merch Database Management
+ */
+require_once get_template_directory() . '/inc/class-merch-db.php';
+
+/**
+ * Quills Search Modal & Database Management
+ */
+require_once get_template_directory() . '/inc/class-search-db.php';
+
+/**
+ * Quills Coffee Experience (Single Product, Reviews, Add to Cart)
+ */
+require_once get_template_directory() . '/inc/class-quills-experience.php';
+
+/**
  * Cafe Locations & Subpages Database Management
  */
 require_once get_template_directory() . '/inc/class-cafe-locations-db.php';
@@ -543,4 +656,22 @@ if ( class_exists( 'Coffee_Cafe_Corner_Cafe_Locations_DB' ) ) {
  */
 require_once get_template_directory() . '/inc/class-quills-products-db.php';
 
-
+/**
+ * Quills Product Custom Meta Box & Cache Sync for wp-admin
+ */
+require_once get_template_directory() . '/inc/class-quills-admin-meta.php';
+
+/**
+ * Permanently disable WooCommerce Coming Soon / Site Visibility mode
+ * Ensures single product pages, shop, and customer reviews are always accessible
+ */
+add_filter( 'woocommerce_coming_soon_exclude', '__return_true', 999 );
+add_action( 'init', function() {
+	if ( get_option( 'woocommerce_coming_soon' ) === 'yes' ) {
+		update_option( 'woocommerce_coming_soon', 'no' );
+	}
+	if ( get_option( 'woocommerce_store_pages_only' ) === 'yes' ) {
+		update_option( 'woocommerce_store_pages_only', 'no' );
+	}
+}, 1 );
+

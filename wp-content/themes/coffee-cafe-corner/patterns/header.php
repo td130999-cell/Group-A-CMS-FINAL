@@ -14,14 +14,14 @@
       
       <!-- Left: Inline Search Box -->
       <div class="quills-header-left">
-        <form role="search" method="get" class="quills-search-form" action="<?php echo esc_url( home_url( '/' ) ); ?>">
-          <button type="submit" class="quills-search-btn" aria-label="<?php esc_attr_e( 'Search', 'coffee-cafe-corner' ); ?>">
+        <form role="search" method="get" class="quills-search-form" action="<?php echo esc_url( home_url( '/' ) ); ?>" onsubmit="if(window.quillsOpenSearch){window.quillsOpenSearch();}; return false;">
+          <button type="button" class="quills-search-btn" aria-label="<?php esc_attr_e( 'Search', 'coffee-cafe-corner' ); ?>" onclick="if(window.quillsOpenSearch){window.quillsOpenSearch();};">
             <svg class="quills-icon quills-icon--search" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#151515" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <circle cx="11" cy="11" r="7.5"></circle>
               <line x1="21" y1="21" x2="16.5" y2="16.5"></line>
             </svg>
           </button>
-          <input type="search" class="quills-search-input" placeholder="Search..." value="<?php echo get_search_query(); ?>" name="s" autocomplete="off" />
+          <input type="text" class="quills-search-input" placeholder="Search..." readonly onclick="if(window.quillsOpenSearch){window.quillsOpenSearch();};" onfocus="if(window.quillsOpenSearch){window.quillsOpenSearch();};" autocomplete="off" />
         </form>
       </div>
 
@@ -60,16 +60,13 @@
                 <path fill="#151515" d="m1.87025,4a0.87,0.87 0 1 0 0,1.741l1.6,0a0.863,0.863 0 0 1 0.854,0.707l0.173,0.907l1.871,9.827a3.782,3.782 0 0 0 3.706,3.065l10.864,0a3.781,3.781 0 0 0 3.706,-3.065l1.871,-9.827a0.87,0.87 0 0 0 -0.854,-1.034l-19.59,0l-0.037,-0.2a2.62,2.62 0 0 0 -2.565,-2.121l-1.599,0zm4.53,4.062l18.2,0l-1.675,8.794a2.022,2.022 0 0 1 -2,1.65l-10.851,0a2.023,2.023 0 0 1 -2,-1.65l0,0l-1.674,-8.794zm5.041,13.345a1.741,1.741 0 1 0 1.741,1.741a1.741,1.741 0 0 0 -1.738,-1.741l-0.003,0zm8.123,0a1.741,1.741 0 1 0 1.741,1.741a1.741,1.741 0 0 0 -1.738,-1.741l-0.003,0z" />
               </g>
             </svg>
-            <span class="quills-cart-badge"><?php 
-              $cart_count = 1;
+            <?php 
+              $cart_count = 0;
               if ( function_exists('WC') && WC()->cart ) {
-                $wc_count = WC()->cart->get_cart_contents_count();
-                if ( $wc_count > 0 ) {
-                  $cart_count = $wc_count;
-                }
+                $cart_count = (int) WC()->cart->get_cart_contents_count();
               }
-              echo esc_html( $cart_count );
-            ?></span>
+            ?>
+            <span class="quills-cart-badge<?php echo ($cart_count === 0) ? ' is-empty' : ''; ?>" id="quills-cart-badge" <?php echo ($cart_count === 0) ? 'style="display:none;"' : ''; ?>><?php echo esc_html( $cart_count ); ?></span>
           </div>
         </a>
 
@@ -93,41 +90,16 @@
 
   <!-- Bottom Row: Centered Navigation Menu -->
   <nav class="quills-header-bottom" id="quills-nav-menu" aria-label="<?php esc_attr_e( 'Primary Navigation', 'coffee-cafe-corner' ); ?>">
-    <?php
-    if ( has_nav_menu( 'primary' ) ) {
-      wp_nav_menu( array(
-        'theme_location' => 'primary',
-        'container'      => false,
-        'menu_class'     => 'quills-nav-list',
-        'fallback_cb'    => false,
-        'depth'          => 2,
-      ) );
-    } else {
-      $primary_menu = wp_get_nav_menu_object( 'Primary Navigation' );
-      if ( $primary_menu ) {
-        wp_nav_menu( array(
-          'menu'        => $primary_menu->term_id,
-          'container'   => false,
-          'menu_class'  => 'quills-nav-list',
-          'fallback_cb' => false,
-          'depth'       => 2,
-        ) );
-      } else {
-        ?>
-        <ul class="quills-nav-list">
-          <li class="quills-nav-item"><a href="<?php echo esc_url( home_url('/shop/') ); ?>" class="quills-nav-link">COFFEE</a></li>
-          <li class="quills-nav-item"><a href="<?php echo esc_url( home_url('/subscriptions/') ); ?>" class="quills-nav-link">SUBSCRIPTIONS</a></li>
-          <li class="quills-nav-item"><a href="<?php echo esc_url( home_url('/brew-gear/') ); ?>" class="quills-nav-link">BREW GEAR</a></li>
-          <li class="quills-nav-item"><a href="<?php echo esc_url( home_url('/wholesale/') ); ?>" class="quills-nav-link">WHOLESALE</a></li>
-          <li class="quills-nav-item"><a href="<?php echo esc_url( home_url('/merch/') ); ?>" class="quills-nav-link">MERCH</a></li>
-          <li class="quills-nav-item"><a href="<?php echo esc_url( home_url('/gift-cards/') ); ?>" class="quills-nav-link">GIFT CARDS</a></li>
-          <li class="quills-nav-item"><a href="<?php echo esc_url( home_url('/visit/') ); ?>" class="quills-nav-link">VISIT</a></li>
-          <li class="quills-nav-item"><a href="<?php echo esc_url( home_url('/about/') ); ?>" class="quills-nav-link">ABOUT</a></li>
-        </ul>
-        <?php
-      }
-    }
-    ?>
+    <ul class="quills-nav-list">
+      <li class="quills-nav-item"><a href="<?php echo esc_url( home_url('/coffee/') ); ?>" class="quills-nav-link">COFFEE</a></li>
+      <li class="quills-nav-item"><a href="<?php echo esc_url( home_url('/subscriptions/') ); ?>" class="quills-nav-link">SUBSCRIPTIONS</a></li>
+      <li class="quills-nav-item"><a href="<?php echo esc_url( home_url('/brew-gear/') ); ?>" class="quills-nav-link">BREW GEAR</a></li>
+      <li class="quills-nav-item"><a href="<?php echo esc_url( home_url('/wholesale/') ); ?>" class="quills-nav-link">WHOLESALE</a></li>
+      <li class="quills-nav-item"><a href="<?php echo esc_url( home_url('/merch/') ); ?>" class="quills-nav-link">MERCH</a></li>
+      <li class="quills-nav-item"><a href="<?php echo esc_url( home_url('/gift-cards/') ); ?>" class="quills-nav-link">GIFT CARDS</a></li>
+      <li class="quills-nav-item"><a href="<?php echo esc_url( home_url('/visit/') ); ?>" class="quills-nav-link">VISIT</a></li>
+      <li class="quills-nav-item"><a href="<?php echo esc_url( home_url('/about/') ); ?>" class="quills-nav-link">ABOUT</a></li>
+    </ul>
   </nav>
 </div>
 <!-- /wp:html -->

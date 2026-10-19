@@ -5,6 +5,38 @@
  * Body & Links: Clarendon URW Extra Narrow / Besley (#fffdeb)
  */
 
+@font-face {
+    font-family: 'Revelstoke';
+    src: url('../fonts/Revelstoke-Bold.woff2') format('woff2');
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Revelstoke';
+    src: url('../fonts/Revelstoke-Regular.woff2') format('woff2');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Clarendon URW Extra Narrow';
+    src: url('../fonts/ClarendonURWExtNar-Reg.woff2') format('woff2');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Clarendon URW Extra Narrow';
+    src: url('../fonts/ClarendonURWExtNar-Bol.woff2') format('woff2');
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+}
+
 .quills-footer-wrapper {
     background-color: #5c7056 !important;
     color: #fffdeb;

@@ -257,18 +257,29 @@ body,
     padding-bottom: 110px;
 }
 
+.quills-brew-gear-wrapper .quills-product-card,
+.quills-product-grid .quills-product-card,
 .quills-product-card {
-    display: flex;
-    flex-direction: column;
+    display: flex !important;
+    flex-direction: column !important;
     text-decoration: none !important;
     color: inherit !important;
-    background: transparent;
-    transition: transform 0.25s ease;
-    cursor: pointer;
+    background: transparent !important;
+    border: none !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    overflow: visible !important;
+    transition: transform 0.25s ease !important;
+    cursor: pointer !important;
 }
 
+.quills-brew-gear-wrapper .quills-product-card:hover,
+.quills-product-grid .quills-product-card:hover,
 .quills-product-card:hover {
     text-decoration: none !important;
+    border: none !important;
+    box-shadow: none !important;
+    transform: none !important;
 }
 
 /* Image Container (1:1 Aspect Ratio Matching Mockup) */
@@ -277,7 +288,7 @@ body,
     aspect-ratio: 1 / 1;
     position: relative;
     margin-bottom: 22px;
-    background: transparent;
+    background: transparent !important;
     overflow: hidden;
 }
 
@@ -317,9 +328,10 @@ body,
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    padding: 22px 18px 18px 18px;
+    padding: 16px 16px 16px 16px;
     box-sizing: border-box;
     z-index: 5;
+    cursor: pointer;
 }
 
 .quills-product-card:hover .quills-product-hover-overlay {
@@ -328,21 +340,40 @@ body,
     pointer-events: auto;
 }
 
+.quills-hover-link-overlay {
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 auto;
+    width: 100%;
+    min-height: 0;
+    text-decoration: none !important;
+    color: inherit !important;
+    cursor: pointer;
+    overflow: hidden;
+}
+
+.quills-hover-link-overlay:hover,
+.quills-hover-link-overlay:focus {
+    text-decoration: none !important;
+    color: inherit !important;
+}
+
 /* Hover Header: Script Title + Clean White Divider Line */
 .quills-hover-header {
     width: 100%;
     text-align: left;
+    flex-shrink: 0;
 }
 
 .quills-hover-title {
     font-family: 'El Hidrant', cursive, serif !important;
     font-style: italic !important;
-    font-size: 22px !important;
+    font-size: 20px !important;
     line-height: 1.2 !important;
     font-weight: 400 !important;
     color: #FFFFFF !important;
     display: block;
-    margin: 0 0 8px 0;
+    margin: 0 0 6px 0;
     letter-spacing: 0.3px;
     white-space: nowrap;
     overflow: hidden;
@@ -357,17 +388,18 @@ body,
 
 /* Hover Center Image */
 .quills-hover-image-wrap {
-    flex: 1;
+    flex: 1 1 auto;
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 8px 0;
+    padding: 4px 0;
     overflow: hidden;
+    min-height: 0;
 }
 
 .quills-hover-image {
-    max-width: 82%;
-    max-height: 82%;
+    max-width: 75%;
+    max-height: 160px;
     width: auto;
     height: auto;
     object-fit: contain;
@@ -377,6 +409,8 @@ body,
 /* Hover Action: ADD TO CART Button */
 .quills-hover-action {
     width: 100%;
+    flex-shrink: 0;
+    margin-top: 6px;
 }
 
 .quills-add-to-cart-form {
@@ -387,13 +421,13 @@ body,
 
 .quills-add-to-cart-btn {
     width: 100%;
-    height: 44px;
+    height: 42px;
     background-color: #dfcd81 !important; /* Exact measured warm yellow/golden tan from user mockup */
     border: 1px solid #151515 !important;
     color: #151515 !important;
     font-family: 'Revelstoke', sans-serif !important;
     font-weight: 700 !important;
-    font-size: 15px !important;
+    font-size: 14px !important;
     letter-spacing: 1.8px !important;
     text-transform: uppercase !important;
     cursor: pointer !important;
