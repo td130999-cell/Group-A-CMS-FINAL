@@ -412,6 +412,7 @@
     grid-template-columns: repeat(3, 1fr) !important;
     gap: 20px !important;
   }
+
   .quills-merch-banner {
     height: 320px !important;
   }
@@ -421,13 +422,16 @@
   .quills-merch-container {
     padding: 0 20px !important;
   }
+
   .quills-merch-grid {
     grid-template-columns: repeat(2, 1fr) !important;
     gap: 16px !important;
   }
+
   .quills-merch-banner {
     height: 240px !important;
   }
+
   .quills-merch-banner-title {
     font-size: 40px !important;
   }
@@ -437,13 +441,16 @@
   .quills-merch-container {
     padding: 0 16px !important;
   }
+
   .quills-merch-grid {
     grid-template-columns: 1fr !important;
     gap: 20px !important;
   }
+
   .quills-merch-banner {
     height: 190px !important;
   }
+
   .quills-merch-banner-title {
     font-size: 34px !important;
   }
@@ -837,7 +844,3 @@
 .quills-drawer-upsell-next {
   right: -8px !important;
 }
-
-
-
-

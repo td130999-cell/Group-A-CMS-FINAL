@@ -17,6 +17,10 @@ function coffee_cafe_corner_scripts() {
 
 	$theme_ver = COFFEE_CAFE_CORNER_VERSION . '.' . time();
 
+	// Enqueue custom footer stylesheet (Authentic Quills Coffee Design)
+	$footer_css = get_template_directory() . '/assets/css/custom-footer.css';
+	wp_enqueue_style( 'coffee-cafe-corner-footer', trailingslashit( get_template_directory_uri() ) . 'assets/css/custom-footer.css', array(), file_exists( $footer_css ) ? filemtime( $footer_css ) : $theme_ver );
+
 	// Enqueue Quills About Us stylesheet (only when not on front page to prevent collision)
 	if ( ! is_front_page() ) {
 		wp_enqueue_style( 'coffee-cafe-corner-about', trailingslashit( get_template_directory_uri() ) . 'assets/css/about-quills.css', array(), COFFEE_CAFE_CORNER_VERSION );
@@ -641,4 +645,4 @@ add_action( 'init', function() {
 		update_option( 'woocommerce_store_pages_only', 'no' );
 	}
 }, 1 );
-
+
