@@ -78,6 +78,8 @@ class Coffee_Cafe_Corner_Admin_Meta {
 			$origins = get_post_meta( $id, '_quills_country', true );
 		}
 
+		$price_display = get_post_meta( $id, '_price_display', true );
+
 		$subtitle = get_post_meta( $id, '_coffee_subtitle', true );
 
 		// Merch specific
@@ -140,9 +142,15 @@ class Coffee_Cafe_Corner_Admin_Meta {
 				<input type="text" id="quills_origins" name="quills_origins" value="<?php echo esc_attr( $origins ); ?>" placeholder="Colombia, Guatemala, Ethiopia" />
 			</div>
 
-			<div class="quills-meta-field full">
+			<div class="quills-meta-field">
 				<label for="quills_subtitle"><?php esc_html_e( 'Subtitle / Phụ đề thẻ cà phê', 'coffee-cafe-corner' ); ?></label>
 				<input type="text" id="quills_subtitle" name="quills_subtitle" value="<?php echo esc_attr( $subtitle ); ?>" placeholder="Our Signature House Blend" />
+			</div>
+
+			<div class="quills-meta-field">
+				<label for="quills_price_display"><?php esc_html_e( 'Display Price (Giá hiển thị thẻ, vd: FROM $20.00 hoặc $25.00)', 'coffee-cafe-corner' ); ?></label>
+				<input type="text" id="quills_price_display" name="quills_price_display" value="<?php echo esc_attr( $price_display ); ?>" placeholder="FROM $20.00 hoặc $20.00" />
+				<span class="desc"><?php esc_html_e( 'Nếu để trống, sẽ tự động dùng Giá bán thường của WooCommerce.', 'coffee-cafe-corner' ); ?></span>
 			</div>
 
 			<div class="quills-meta-section-title">👕 THUỘC TÍNH SẢN PHẨM MERCH (MERCHANDISE ATTRIBUTES)</div>
@@ -244,6 +252,21 @@ class Coffee_Cafe_Corner_Admin_Meta {
 		// 6. Subtitle
 		if ( isset( $_POST['quills_subtitle'] ) ) {
 			update_post_meta( $post_id, '_coffee_subtitle', sanitize_text_field( wp_unslash( $_POST['quills_subtitle'] ) ) );
+		}
+
+		// 6.1. Price Display
+		if ( isset( $_POST['quills_price_display'] ) ) {
+			$custom_price_disp = sanitize_text_field( wp_unslash( $_POST['quills_price_display'] ) );
+			if ( ! empty( $custom_price_disp ) ) {
+				update_post_meta( $post_id, '_price_display', $custom_price_disp );
+			} else {
+				$raw_reg_price = isset( $_POST['_regular_price'] ) ? sanitize_text_field( wp_unslash( $_POST['_regular_price'] ) ) : get_post_meta( $post_id, '_regular_price', true );
+				if ( ! empty( $raw_reg_price ) ) {
+					update_post_meta( $post_id, '_price_display', '$' . number_format( (float) $raw_reg_price, 2 ) );
+				} else {
+					delete_post_meta( $post_id, '_price_display' );
+				}
+			}
 		}
 
 		// 7. Merch sizes
