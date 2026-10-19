@@ -403,29 +403,58 @@ function coffee_cafe_corner_nav_menu_link_attributes( $atts, $item, $args ) {
 add_filter( 'nav_menu_link_attributes', 'coffee_cafe_corner_nav_menu_link_attributes', 10, 3 );
 
 /**
- * Ensure Visit Block Pattern is registered even if transient cache is stale
+ * Ensure Core Quills Page Patterns are registered even if transient cache is stale
  */
-function coffee_cafe_corner_register_visit_pattern() {
-	if ( class_exists( 'WP_Block_Patterns_Registry' ) && ! WP_Block_Patterns_Registry::get_instance()->is_registered( 'coffee-cafe-corner/visit' ) ) {
-		$pattern_file = get_template_directory() . '/patterns/visit.php';
-		if ( file_exists( $pattern_file ) ) {
-			ob_start();
-			include $pattern_file;
-			$pattern_content = ob_get_clean();
+function coffee_cafe_corner_register_core_page_patterns() {
+	if ( ! class_exists( 'WP_Block_Patterns_Registry' ) ) {
+		return;
+	}
+	$registry = WP_Block_Patterns_Registry::get_instance();
+	$core_patterns = array(
+		'coffee-cafe-corner/visit' => array(
+			'file'        => 'visit.php',
+			'title'       => __( 'Visit - Locations & Hours', 'coffee-cafe-corner' ),
+			'description' => __( 'Quills Coffee authentic Locations & Hours page pattern, dynamically pulling content from WordPress database.', 'coffee-cafe-corner' ),
+		),
+		'coffee-cafe-corner/coffee' => array(
+			'file'        => 'coffee.php',
+			'title'       => __( 'Coffee Collection', 'coffee-cafe-corner' ),
+			'description' => __( 'Quills Coffee flagship Coffee collection page pattern, dynamically pulling freshly roasted coffee products and metadata from WordPress database.', 'coffee-cafe-corner' ),
+		),
+		'coffee-cafe-corner/subscriptions' => array(
+			'file'        => 'subscriptions.php',
+			'title'       => __( 'Subscriptions', 'coffee-cafe-corner' ),
+			'description' => __( 'Quills Coffee Subscriptions collection page matching https://quillscoffee.com/collections/subscriptions', 'coffee-cafe-corner' ),
+		),
+		'coffee-cafe-corner/merch' => array(
+			'file'        => 'merch.php',
+			'title'       => __( 'Merch', 'coffee-cafe-corner' ),
+			'description' => __( 'Quills Coffee Merch collection page matching https://quillscoffee.com/collections/merch', 'coffee-cafe-corner' ),
+		),
+	);
 
-			register_block_pattern(
-				'coffee-cafe-corner/visit',
-				array(
-					'title'       => __( 'Visit - Locations & Hours', 'coffee-cafe-corner' ),
-					'categories'  => array( 'coffee-cafe-corner', 'pages' ),
-					'description' => __( 'Quills Coffee authentic Locations & Hours page pattern, dynamically pulling content from WordPress database.', 'coffee-cafe-corner' ),
-					'content'     => $pattern_content,
-				)
-			);
+	foreach ( $core_patterns as $slug => $data ) {
+		if ( ! $registry->is_registered( $slug ) ) {
+			$pattern_file = get_template_directory() . '/patterns/' . $data['file'];
+			if ( file_exists( $pattern_file ) ) {
+				ob_start();
+				include $pattern_file;
+				$pattern_content = ob_get_clean();
+
+				register_block_pattern(
+					$slug,
+					array(
+						'title'       => $data['title'],
+						'categories'  => array( 'coffee-cafe-corner', 'pages' ),
+						'description' => $data['description'],
+						'content'     => $pattern_content,
+					)
+				);
+			}
 		}
 	}
 }
-add_action( 'init', 'coffee_cafe_corner_register_visit_pattern', 9 );
+add_action( 'init', 'coffee_cafe_corner_register_core_page_patterns', 9 );
 
 /**
  * Seed Visit Page and Cafes Post Meta in Database if not present
