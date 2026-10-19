@@ -508,7 +508,6 @@ class Coffee_Cafe_Corner_Quills_Products_DB {
 			}
 			return $ordered_products;
 		}
-
 		switch ( $sort ) {
 			case 'price-ascending':
 				$args['orderby'] = 'price';

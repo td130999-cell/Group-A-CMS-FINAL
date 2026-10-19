@@ -53,7 +53,6 @@
         this.classList.toggle('is-touched');
       }, { passive: true });
     });
-
     // Quick Shop Drawer trigger for Bestsellers on Homepage
     document.addEventListener('click', function (e) {
       const addBtn = e.target.closest('.quills-btn--add-to-cart, .quills-hover-add-cart');

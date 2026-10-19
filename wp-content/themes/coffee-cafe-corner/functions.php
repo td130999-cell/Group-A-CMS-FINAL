@@ -15,8 +15,7 @@ function coffee_cafe_corner_scripts() {
 	wp_enqueue_script( 'coffee-cafe-corner-theme', trailingslashit( get_template_directory_uri() ) . 'assets/js/theme.js',
 	    array( 'jquery' ), COFFEE_CAFE_CORNER_VERSION,true );
 
-	// Enqueue custom footer stylesheet
-	wp_enqueue_style( 'coffee-cafe-corner-footer', trailingslashit( get_template_directory_uri() ) . 'assets/css/custom-footer.css', array(), COFFEE_CAFE_CORNER_VERSION );
+	$theme_ver = COFFEE_CAFE_CORNER_VERSION . '.' . time();
 
 	// Enqueue Quills About Us stylesheet (only when not on front page to prevent collision)
 	if ( ! is_front_page() ) {
@@ -24,7 +23,7 @@ function coffee_cafe_corner_scripts() {
 	}
 
 	// Enqueue Quills Visit stylesheet
-	wp_enqueue_style( 'coffee-cafe-corner-visit', trailingslashit( get_template_directory_uri() ) . 'assets/css/visit-quills.css', array(), COFFEE_CAFE_CORNER_VERSION );
+	wp_enqueue_style( 'coffee-cafe-corner-visit', trailingslashit( get_template_directory_uri() ) . 'assets/css/visit-quills.css', array(), $theme_ver );
 
 	// Enqueue Quills Brew Gear stylesheet
 	$brew_gear_css = get_template_directory() . '/assets/css/brew-gear.css';
@@ -39,7 +38,7 @@ function coffee_cafe_corner_scripts() {
 	) );
 
 	// Enqueue Quills Wholesale stylesheet
-	wp_enqueue_style( 'coffee-cafe-corner-wholesale', trailingslashit( get_template_directory_uri() ) . 'assets/css/wholesale.css', array(), COFFEE_CAFE_CORNER_VERSION );
+	wp_enqueue_style( 'coffee-cafe-corner-wholesale', trailingslashit( get_template_directory_uri() ) . 'assets/css/wholesale.css', array(), $theme_ver );
 
 	// Enqueue Quills Wholesale JS
 	if ( file_exists( get_template_directory() . '/assets/js/wholesale.js' ) ) {
@@ -170,8 +169,9 @@ function coffee_cafe_corner_setup() {
 	// Add support for responsive embedded content.
 	add_theme_support( 'responsive-embeds' );
 
-	// Register navigation menus for Footer
+	// Register navigation menus for Header and Footer
 	register_nav_menus( array(
+		'primary'            => esc_html__( 'Primary Navigation', 'coffee-cafe-corner' ),
 		'footer-quick-links' => esc_html__( 'Footer Quick Links', 'coffee-cafe-corner' ),
 		'footer-company'     => esc_html__( 'Footer Company', 'coffee-cafe-corner' ),
 	) );
@@ -341,8 +341,62 @@ function coffee_cafe_corner_init_footer_database() {
 
 		update_option( 'coffee_cafe_corner_menus_seeded', 1 );
 	}
+
+	// 3. Primary Navigation Menu in database (Header)
+	$primary_menu = wp_get_nav_menu_object( 'Primary Navigation' );
+	if ( ! $primary_menu ) {
+		$primary_menu_id = wp_create_nav_menu( 'Primary Navigation' );
+		if ( ! is_wp_error( $primary_menu_id ) ) {
+			$primary_items = array(
+				array( 'title' => 'COFFEE',        'url' => home_url( '/shop/' ) ),
+				array( 'title' => 'SUBSCRIPTIONS', 'url' => home_url( '/subscriptions/' ) ),
+				array( 'title' => 'BREW GEAR',     'url' => home_url( '/brew-gear/' ) ),
+				array( 'title' => 'WHOLESALE',     'url' => home_url( '/wholesale/' ) ),
+				array( 'title' => 'MERCH',         'url' => home_url( '/merch/' ) ),
+				array( 'title' => 'GIFT CARDS',    'url' => home_url( '/gift-cards/' ) ),
+				array( 'title' => 'VISIT',         'url' => home_url( '/visit/' ) ),
+				array( 'title' => 'ABOUT',         'url' => home_url( '/about/' ) ),
+			);
+			foreach ( $primary_items as $pos => $item ) {
+				wp_update_nav_menu_item( $primary_menu_id, 0, array(
+					'menu-item-title'    => $item['title'],
+					'menu-item-url'      => $item['url'],
+					'menu-item-status'   => 'publish',
+					'menu-item-position' => $pos + 1,
+				) );
+			}
+		}
+	} else {
+		$primary_menu_id = $primary_menu->term_id;
+	}
+
+	$locations = get_theme_mod( 'nav_menu_locations', array() );
+	if ( ! empty( $primary_menu_id ) && ( empty( $locations['primary'] ) || $locations['primary'] !== $primary_menu_id ) ) {
+		$locations['primary'] = $primary_menu_id;
+		set_theme_mod( 'nav_menu_locations', $locations );
+	}
 }
 add_action( 'init', 'coffee_cafe_corner_init_footer_database' );
+
+/**
+ * Add custom classes to Primary Navigation menu items and links
+ */
+function coffee_cafe_corner_nav_menu_classes( $classes, $item, $args ) {
+	if ( isset( $args->theme_location ) && 'primary' === $args->theme_location ) {
+		$classes[] = 'quills-nav-item';
+	}
+	return $classes;
+}
+add_filter( 'nav_menu_css_class', 'coffee_cafe_corner_nav_menu_classes', 10, 3 );
+
+function coffee_cafe_corner_nav_menu_link_attributes( $atts, $item, $args ) {
+	if ( isset( $args->theme_location ) && 'primary' === $args->theme_location ) {
+		$existing_class = isset( $atts['class'] ) ? $atts['class'] . ' ' : '';
+		$atts['class'] = trim( $existing_class . 'quills-nav-link' );
+	}
+	return $atts;
+}
+add_filter( 'nav_menu_link_attributes', 'coffee_cafe_corner_nav_menu_link_attributes', 10, 3 );
 
 /**
  * Ensure Visit Block Pattern is registered even if transient cache is stale
@@ -587,7 +641,4 @@ add_action( 'init', function() {
 		update_option( 'woocommerce_store_pages_only', 'no' );
 	}
 }, 1 );
-
-
-
 

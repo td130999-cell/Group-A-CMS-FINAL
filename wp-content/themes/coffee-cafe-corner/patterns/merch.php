@@ -67,7 +67,6 @@ if ( ! empty( $wc_products ) ) {
 
     $thumb_id = $product->get_image_id();
     $img_url  = $thumb_id ? wp_get_attachment_image_url( $thumb_id, 'full' ) : '';
-
     if ( ! $img_url ) {
       if ( isset( $slug_to_img_fallback[ $p_slug ] ) ) {
         $img_url = $img_dir . $slug_to_img_fallback[ $p_slug ];
