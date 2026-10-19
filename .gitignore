@@ -14,4 +14,6 @@ Thumbs.db
 docker-compose.override.yml
 __pycache__/
 wp-content/uploads/wc-logs/
+wp-content/ai1wm-backups/
+*.wpress
 
