@@ -1,0 +1,241 @@
+.coffee-cafe-corner-notice {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-pack: justify;
+    -ms-flex-pack: justify;
+    justify-content: space-between;
+    background-image: url('../img/notice-bg.png');
+    background-size: cover;
+    background-repeat: no-repeat;
+    padding: 0px !important;
+}
+.notc-contnt {
+    width: 85%;
+}
+img.notc-right-img {
+    height: 295px;
+    object-fit: cover;
+}
+.coffee-cafe-corner-notice.notice.notice-info.is-dismissible .notice-dismiss:before {
+    content: "\f335";
+    color: #ffffff;
+    background: #787c82;
+    border-radius: 50%;
+    width: 16px;
+    height: 16px;
+    line-height: 16px;
+    font-size: 14px;
+}
+.notice-right-img-box {
+    display: flex;
+    object-fit: cover;
+}
+.coffee-cafe-corner-notice .welcome-message h4 {
+    color: #4092D7;
+    font-size: 16px;
+    font-weight: 400;
+    margin:0px;
+}
+.coffee-cafe-corner-notice .welcome-message h1 {
+    font-size: 25px;
+    font-weight: 600;
+    color: #2F2F2F;
+}
+.coffee-cafe-corner-notice .welcome-message p {
+    font-size: 16px;
+    font-weight: 400;
+    color: #A4A4A4;
+    margin-top: 0px;
+}
+.coffee-cafe-corner-notice .welcome-message .action-buttons {
+    padding-top: 10px;
+    display: flex;
+}
+a.button.notice-btn.button-hero {
+    font-size: 14px;
+    font-weight: 600;
+    color: #2F2F2F;
+    display: inline-block;
+    padding: 2px; /* thickness of border */
+    border-radius: 10px;
+    background: linear-gradient(270deg, #A5DCFD 0%, #4294D8 100%);
+    text-decoration: none;
+    border: none;
+}
+.notc-btn-txt {
+    display: inline-block;
+    font-size: 14px;
+    font-weight: 600;
+    color: #2F2F2F;
+    background: #ffffff;
+    border-radius: 8px; /* slightly smaller for inner content */
+    padding: 0px 25px;
+}
+.coffee-cafe-corner-notice .welcome-message {
+    display:-webkit-box;
+    display:-ms-flexbox;
+    display:flex;
+    -webkit-box-orient:vertical;
+    -webkit-box-direction:normal;
+    -ms-flex-direction:column;
+    flex-direction:column;
+    -webkit-box-pack:center;
+    -ms-flex-pack:center;
+    justify-content:center;
+}
+.notc-theme-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(270deg, #A5DCFD 0%, #4294D8 100%);
+    color: #fff;
+    width: 55px;
+    height: 55px;
+    border-radius: 15px;
+    font-size: 50px;
+    padding: 25px;
+}
+.notice-left-icon-box {
+    margin: 45px 25px;
+}
+a.demo-btn.btn,a.bundle-btn.btn {
+    display: inline-block;
+    font-size: 14px;
+    font-weight: 600;
+    color: #ffffff;
+    border-radius: 8px;
+    padding: 14px 24px;
+    text-decoration: none;
+    margin-left: 10px;
+}
+a.demo-btn.btn,a.bundle-btn.btn:hover{
+    background: linear-gradient(270deg, #A5DCFD 0%, #4294D8 100%);
+    color: #ffffff;
+}
+a.bundle-btn.btn,a.demo-btn.btn:hover{
+    background: #FF881D;
+    color: #ffffff;
+}
+.bundle-btn.btn {
+  animation: blink-text 1.5s infinite;
+}
+
+/* Keyframes for text color blinking */
+@keyframes blink-text {
+  0%, 100% {
+    color: #ffffff; /* normal color */
+  }
+  50% {
+    color: #000000; /* highlight color */
+  }
+}
+@media screen and (max-width: 767px) {
+    .notice-right-img-box {
+        display: none;
+    }
+    .coffee-cafe-corner-notice .welcome-message .action-buttons{
+        display: block;
+    }
+    .coffee-cafe-corner-notice{
+        display: inline-block;
+        text-align: center;
+    }
+    .notc-contnt {
+        padding: 15px;
+        width: 90%;
+    }
+    .notc-btn-txt{
+        padding: 0px 20px;
+    }
+    .notice-left-img-box {
+        margin: 20px;
+    }
+    .coffee-cafe-corner-notice .welcome-message p {
+        font-size: 13px;
+    }
+}
+@media (max-width: 1023px) and (min-width: 768px) {
+    .notice-right-img-box {
+        display: none;
+    }
+    .notc-contnt {
+        padding: 15px;
+    }
+    .notc-btn-txt{
+        padding: 0px 10px;
+    }
+    a.demo-btn.btn, a.bundle-btn.btn{
+        padding: 12px 8px;
+    }
+}
+@media (max-width: 1199px) and (min-width: 1024px) {
+    img.notc-right-img {
+        display: none;
+    }
+    .notc-contnt {
+        padding: 15px;
+    }
+a.demo-btn.btn, a.bundle-btn.btn {
+    padding: 14px;
+}
+}
+@media (max-width: 1439px) and (min-width: 1200px) {
+    .notice-left-icon-box {
+        margin: 30px 10px;
+    }
+    .notc-theme-icon {
+        width: 35px;
+        height: 35px;
+        border-radius: 15px;
+        font-size: 40px;
+        padding: 20px;
+    }
+    .coffee-cafe-corner-notice .welcome-message h4 {
+        color: #4092D7;
+        font-size: 12px;
+    }
+    .coffee-cafe-corner-notice .welcome-message h1 {
+        font-size: 16px;
+    }
+    .coffee-cafe-corner-notice .welcome-message p {
+        font-size: 12px;
+    }
+    .notc-btn-txt {
+        font-size: 12px;
+        padding: 5px 20px;
+    }
+    .notc-contnt {
+        padding: 7px;
+    }
+    img.notc-right-img {
+        height: 175px;
+    }
+}
+@media (max-width: 1500px) and (min-width: 1440px) {
+    img.notc-right-img {
+        height: 200px;
+    }
+    .coffee-cafe-corner-notice .welcome-message h1 {
+        font-size: 20px;
+    }
+    .coffee-cafe-corner-notice .welcome-message p {
+        font-size: 12px;
+    }
+    .notice-left-icon-box {
+        margin: 45px 15px;
+    }
+    .notc-theme-icon {
+        width: 50px;
+        height: 50px;
+        border-radius: 15px;
+        font-size: 40px;
+        padding: 15px;
+    }
+    .notc-btn-txt {
+        padding: 0px 15px;
+    }
+    a.demo-btn.btn, a.bundle-btn.btn {
+        padding: 14px 12px;
+    }
+}
