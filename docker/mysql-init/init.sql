@@ -1538,7 +1538,7 @@ INSERT INTO `wp_options` VALUES
 (576,'footer_lang','EN','yes'),
 (577,'footer_social_facebook','https://facebook.com/','yes'),
 (578,'footer_social_instagram','https://instagram.com/','yes'),
-(579,'footer_copyright','© 2026, Quills Coffee . Website by Cronk Studios','yes'),
+(579,'footer_copyright','© 2026 Group CMS A','yes'),
 (580,'_transient_product_query-transient-version','1792394447','on'),
 (581,'coffee_cafe_corner_menus_seeded','1','auto'),
 (593,'coffee_cafe_corner_visit_seeded','1','auto'),

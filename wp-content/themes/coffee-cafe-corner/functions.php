@@ -233,7 +233,7 @@ function coffee_cafe_corner_customize_footer( $wp_customize ) {
 		'footer_lang'             => array( 'label' => 'Language Code', 'default' => 'EN' ),
 		'footer_social_facebook'  => array( 'label' => 'Facebook URL', 'default' => 'https://facebook.com/' ),
 		'footer_social_instagram' => array( 'label' => 'Instagram URL', 'default' => 'https://instagram.com/' ),
-		'footer_copyright'        => array( 'label' => 'Copyright Text', 'default' => '© 2026, Quills Coffee . Website by Cronk Studios' ),
+		'footer_copyright'        => array( 'label' => 'Copyright Text', 'default' => '© 2026 Group CMS A' ),
 	);
 
 	foreach ( $settings as $id => $data ) {
@@ -269,7 +269,7 @@ function coffee_cafe_corner_init_footer_database() {
 		'footer_lang'             => 'EN',
 		'footer_social_facebook'  => 'https://facebook.com/',
 		'footer_social_instagram' => 'https://instagram.com/',
-		'footer_copyright'        => '© 2026, Quills Coffee . Website by Cronk Studios',
+		'footer_copyright'        => '© 2026 Group CMS A',
 	);
 
 	foreach ( $defaults as $opt => $val ) {
