@@ -16,7 +16,7 @@ $currency        = get_option( 'footer_currency', function_exists( 'get_woocomme
 $lang            = get_option( 'footer_lang', 'EN' );
 $facebook_url    = get_option( 'footer_social_facebook', 'https://www.facebook.com/quillscoffee' );
 $instagram_url   = get_option( 'footer_social_instagram', 'https://www.instagram.com/quillscoffee' );
-$copyright_text  = get_option( 'footer_copyright', '© ' . date('Y') . ', Quills Coffee . Website by Cronk Studios' );
+$copyright_text  = get_option( 'footer_copyright', '© ' . date('Y') . ' Group CMS A' );
 
 // Replace dynamic year token if present
 $copyright_text = str_replace( array('{year}', '%YEAR%'), date('Y'), $copyright_text );
