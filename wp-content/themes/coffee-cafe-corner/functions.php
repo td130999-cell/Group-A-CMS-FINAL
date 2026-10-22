@@ -742,4 +742,25 @@ add_action( 'wp_head', function() {
 	}
 }, 999 );
 
+/**
+ * Add Direct Orders shortcut to the WordPress Admin Bar user menu
+ */
+add_action( 'admin_bar_menu', function( $wp_admin_bar ) {
+	if ( ! is_user_logged_in() ) {
+		return;
+	}
+	$orders_url = function_exists( 'wc_get_endpoint_url' ) && function_exists( 'wc_get_page_permalink' )
+		? wc_get_endpoint_url( 'orders', '', wc_get_page_permalink( 'myaccount' ) )
+		: home_url( '/my-account/orders/' );
+
+	$wp_admin_bar->add_node( array(
+		'parent' => 'user-actions',
+		'id'     => 'quills-user-orders',
+		'title'  => __( ' Orders', 'coffee-cafe-corner' ),
+		'href'   => $orders_url,
+		'meta'   => array( 'tabindex' => 0 ),
+	) );
+}, 15 );
+
+
 
