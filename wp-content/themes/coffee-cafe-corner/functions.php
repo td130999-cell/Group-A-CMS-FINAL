@@ -7,7 +7,8 @@ if ( ! defined( 'COFFEE_CAFE_CORNER_VERSION' ) ) {
  * Enqueue scripts and styles.
  */
 function coffee_cafe_corner_scripts() {
-	wp_enqueue_style( 'coffee-cafe-corner-style', trailingslashit( get_template_directory_uri() ) . 'assets/css/style.css', array(), COFFEE_CAFE_CORNER_VERSION );
+	$main_css = get_template_directory() . '/assets/css/style.css';
+	wp_enqueue_style( 'coffee-cafe-corner-style', trailingslashit( get_template_directory_uri() ) . 'assets/css/style.css', array(), file_exists( $main_css ) ? filemtime( $main_css ) : COFFEE_CAFE_CORNER_VERSION );
 
 	wp_enqueue_style( 'fontawesome', trailingslashit( get_template_directory_uri() ) . 'assets/css/font-awesome/css/all.css', array(), COFFEE_CAFE_CORNER_VERSION );
 
@@ -674,4 +675,66 @@ add_action( 'init', function() {
 		update_option( 'woocommerce_store_pages_only', 'no' );
 	}
 }, 1 );
+
+/**
+ * Custom Styling strictly isolated to WooCommerce My Account Orders table action button.
+ * Ensures the 'View' button text is clearly legible in high-contrast white,
+ * matching the theme's brand coffee palette without affecting any other pages on the site.
+ */
+add_action( 'wp_head', function() {
+	if ( function_exists( 'is_account_page' ) && is_account_page() ) {
+		?>
+		<style id="quills-myaccount-orders-action-btn-css">
+		/* Strictly scoped to My Account Orders Table Action Buttons */
+		.woocommerce-account .woocommerce-orders-table__cell-order-actions a.button,
+		.woocommerce-account .woocommerce-orders-table a.button.view,
+		.woocommerce-account table.my_account_orders a.button.view,
+		.woocommerce-account .woocommerce-MyAccount-content table.woocommerce-orders-table a.button {
+			color: #ffffff !important;
+			background-color: #663A1E !important;
+			border: 1px solid #663A1E !important;
+			font-size: 13px !important;
+			font-weight: 600 !important;
+			font-family: inherit !important;
+			text-transform: capitalize !important;
+			line-height: 1.4 !important;
+			padding: 8px 22px !important;
+			border-radius: 6px !important;
+			text-decoration: none !important;
+			display: inline-flex !important;
+			align-items: center !important;
+			justify-content: center !important;
+			min-width: 80px !important;
+			text-align: center !important;
+			letter-spacing: 0.5px !important;
+			cursor: pointer !important;
+			transition: all 0.2s ease !important;
+			box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+		}
+		.woocommerce-account .woocommerce-orders-table__cell-order-actions a.button:hover,
+		.woocommerce-account .woocommerce-orders-table a.button.view:hover,
+		.woocommerce-account table.my_account_orders a.button.view:hover,
+		.woocommerce-account .woocommerce-MyAccount-content table.woocommerce-orders-table a.button:hover {
+			color: #ffffff !important;
+			background-color: #4A2813 !important;
+			border-color: #4A2813 !important;
+			text-decoration: none !important;
+			transform: translateY(-1px);
+			box-shadow: 0 4px 8px rgba(102, 58, 30, 0.3) !important;
+		}
+		.woocommerce-account .woocommerce-orders-table__cell-order-actions a.button:active {
+			transform: translateY(0);
+			box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15) !important;
+		}
+		.woocommerce-account .woocommerce-orders-table__cell-order-actions a.button * {
+			color: #ffffff !important;
+		}
+		.woocommerce-account .woocommerce-orders-table__cell-order-actions a.button.view:empty::after {
+			content: "View";
+		}
+		</style>
+		<?php
+	}
+}, 999 );
+
 

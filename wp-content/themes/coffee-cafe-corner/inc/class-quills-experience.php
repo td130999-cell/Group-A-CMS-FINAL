@@ -122,7 +122,7 @@ class Quills_Coffee_Experience {
             'quills-coffee-script',
             get_template_directory_uri() . '/assets/js/quills-coffee.js',
             ['jquery'],
-            '1.1.5',
+            file_exists(get_template_directory() . '/assets/js/quills-coffee.js') ? filemtime(get_template_directory() . '/assets/js/quills-coffee.js') : '1.1.6',
             true
         );
 
