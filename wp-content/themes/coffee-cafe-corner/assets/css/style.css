@@ -2468,7 +2468,8 @@ header.wp-block-template-part,
     max-width: 100% !important;
     display: block !important;
     object-fit: contain;
-    mix-blend-mode: multiply
+    mix-blend-mode: multiply !important;
+    background: transparent !important;
 }
 
 /* Right: Action Items */

@@ -456,7 +456,7 @@ class Coffee_Cafe_Corner_Quills_Products_DB {
 		$args = array(
 			'category' => array( 'merch' ),
 			'status'   => 'publish',
-			'limit'    => 12,
+			'limit'    => -1,
 		);
 
 		if ( 'featured' === $sort || empty( $sort ) ) {
@@ -491,19 +491,12 @@ class Coffee_Cafe_Corner_Quills_Products_DB {
 					}
 				}
 			}
-
-			if ( count( $ordered_products ) >= 12 ) {
-				return $ordered_products;
-			}
-
-			$fallback = wc_get_products( $args );
-			foreach ( $fallback as $p ) {
-				if ( ! in_array( $p->get_id(), $used_ids, true ) ) {
+			// Append all remaining published products in category 'merch' (including newly added from wp-admin)
+			$all_merch = wc_get_products( $args );
+			foreach ( $all_merch as $p ) {
+				if ( ! in_array( $p->get_id(), $used_ids, true ) && $p->is_visible() ) {
 					$ordered_products[] = $p;
 					$used_ids[] = $p->get_id();
-				}
-				if ( count( $ordered_products ) >= 12 ) {
-					break;
 				}
 			}
 			return $ordered_products;

@@ -110,6 +110,8 @@ body.quills-body {
     height: 38px;
     width: auto;
     display: block;
+    mix-blend-mode: multiply;
+    background: transparent;
 }
 
 .quills-header__actions {

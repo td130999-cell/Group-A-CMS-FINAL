@@ -663,6 +663,11 @@ require_once get_template_directory() . '/inc/class-quills-products-db.php';
 require_once get_template_directory() . '/inc/class-quills-admin-meta.php';
 
 /**
+ * Quills Page Content Admin Management (Home Page & About Us)
+ */
+require_once get_template_directory() . '/inc/class-quills-page-content-admin.php';
+
+/**
  * Permanently disable WooCommerce Coming Soon / Site Visibility mode
  * Ensures single product pages, shop, and customer reviews are always accessible
  */
