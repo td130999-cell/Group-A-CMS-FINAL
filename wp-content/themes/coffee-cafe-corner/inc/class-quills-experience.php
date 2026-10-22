@@ -148,6 +148,12 @@ class Quills_Coffee_Experience {
                 return $custom;
             }
         }
+        if ( (function_exists('is_checkout') && is_checkout() && !empty(is_wc_endpoint_url('order-received'))) || !empty(get_query_var('order-received')) ) {
+            $custom = get_template_directory() . '/woocommerce/checkout/thankyou.php';
+            if (file_exists($custom)) {
+                return $custom;
+            }
+        }
         return $template;
     }
 

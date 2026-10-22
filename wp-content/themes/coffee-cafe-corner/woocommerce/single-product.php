@@ -434,7 +434,7 @@ if ( false !== $cached_reviews && is_array( $cached_reviews ) ) {
                 </div>
 
                 <!-- Buy with Shop Pay Button (Image 1) -->
-                <button type="button" class="quills-btn-shop-pay" id="quills-btn-shop-pay" onclick="window.location.href='<?php echo esc_url(wc_get_checkout_url()); ?>';">
+                <button type="button" class="quills-btn-shop-pay" id="quills-btn-shop-pay" data-checkout-url="<?php echo esc_url(wc_get_checkout_url()); ?>">
                     <span>Buy with</span> <span class="quills-shop-brand">shop</span>
                 </button>
 

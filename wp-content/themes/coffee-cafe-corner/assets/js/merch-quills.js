@@ -283,8 +283,32 @@
         // Inside Quick Shop Drawer: Buy with Shop Pay
         $(document).on('click', '#quills-qs-btn-shop', function (e) {
             e.preventDefault();
-            var checkoutUrl = $(this).data('checkout-url') || '/checkout/';
-            window.location.href = checkoutUrl;
+            var $btn = $(this);
+            var checkoutUrl = $btn.data('checkout-url') || '/checkout/';
+            var $wrapper = $btn.closest('.quills-qs-content');
+            var productId = $btn.data('product-id');
+            var qty = parseInt($wrapper.find('#quills-qs-qty-input').val(), 10) || 1;
+            var size = $wrapper.find('.quills-qs-size-btn.active').data('size') || '';
+
+            var ajaxUrl = (window.quillsMerch && window.quillsMerch.ajaxUrl) ? window.quillsMerch.ajaxUrl : '/wp-admin/admin-ajax.php';
+            var nonce = (window.quillsMerch && window.quillsMerch.nonce) ? window.quillsMerch.nonce : '';
+
+            $btn.css('opacity', '0.7');
+
+            $.ajax({
+                url: ajaxUrl,
+                type: 'POST',
+                data: {
+                    action: 'quills_add_to_cart',
+                    nonce: nonce,
+                    product_id: productId,
+                    quantity: qty,
+                    size: size
+                },
+                complete: function () {
+                    window.location.href = checkoutUrl;
+                }
+            });
         });
 
         // 7. Add to Cart on Merch Single Product Detail Page

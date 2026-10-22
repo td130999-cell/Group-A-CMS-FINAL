@@ -318,6 +318,46 @@
             });
         });
 
+        // Buy with Shop Pay on Product Page -> Add to cart then redirect to checkout
+        $('#quills-btn-shop-pay').on('click', function(e) {
+            e.preventDefault();
+            var $btn = $(this);
+            if ($btn.hasClass('is-disabled') || $btn.hasClass('loading')) return;
+
+            var $addBtn = $('#quills-btn-add-to-cart');
+            var productId = $addBtn.data('product-id');
+            var qty = parseInt($('#quills-qty-input').val(), 10) || 1;
+            var size = $('#quills-size-group').length ? ($('#quills-size-group .quills-pill-btn.active').data('size') || '12oz') : '';
+            var grind = $('#quills-grind-group').length ? ($('#quills-grind-group .quills-pill-btn.active').data('grind') || 'Whole Bean') : '';
+            var purchaseType = $('input[name="quills_purchase_type"]:checked').val() || 'onetime';
+            var frequency = '';
+            if (purchaseType === 'subscribe') {
+                var $activeFreq = $('.quills-freq-pill.is-selected');
+                frequency = $activeFreq.length ? $activeFreq.text().trim() : 'Deliver every 2 weeks';
+            }
+            var checkoutUrl = $btn.data('checkout-url') || '/checkout/';
+
+            $btn.addClass('loading').css('opacity', '0.7');
+
+            $.ajax({
+                url: (typeof quillsData !== 'undefined' && quillsData.ajaxUrl) ? quillsData.ajaxUrl : '/wp-admin/admin-ajax.php',
+                type: 'POST',
+                data: {
+                    action: 'quills_add_to_cart',
+                    nonce: (typeof quillsData !== 'undefined' && quillsData.nonce) ? quillsData.nonce : '',
+                    product_id: productId,
+                    quantity: qty,
+                    size: size,
+                    grind: grind,
+                    purchase_type: purchaseType,
+                    frequency: frequency
+                },
+                complete: function() {
+                    window.location.href = checkoutUrl;
+                }
+            });
+        });
+
         // Stepper (+ / -) in Cart Drawer
         $(document).on('click', '.quills-drawer-step-btn', function(e) {
             e.preventDefault();
