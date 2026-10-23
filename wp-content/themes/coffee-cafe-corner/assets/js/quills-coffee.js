@@ -265,6 +265,18 @@
             refreshCartDrawer();
         });
 
+        // Ensure guests are directed to login before proceeding to checkout
+        $(document).on('click', '.quills-drawer-checkout-btn', function(e) {
+            if (typeof quillsData !== 'undefined' && !quillsData.isLoggedIn) {
+                var href = $(this).attr('href');
+                if (href && href.indexOf('my-account') === -1) {
+                    e.preventDefault();
+                    var myAcc = quillsData.myAccountUrl || '/my-account/';
+                    window.location.href = myAcc + (myAcc.indexOf('?') > -1 ? '&' : '?') + 'redirect_to=' + encodeURIComponent(href);
+                }
+            }
+        });
+
         // Add to Cart via AJAX & Open Slide-in Cart Drawer
         $('#quills-btn-add-to-cart').on('click', function(e) {
             e.preventDefault();
@@ -319,15 +331,24 @@
         });
 
         // Buy with Shop Pay on Product Page -> Add to cart then redirect to checkout
-        $('#quills-btn-shop-pay').on('click', function(e) {
+        $('#quills-btn-shop-pay').off('click.shopPay').on('click.shopPay', function(e) {
             e.preventDefault();
             var $btn = $(this);
-            if ($btn.hasClass('is-disabled') || $btn.hasClass('loading')) return;
+            if ($btn.hasClass('is-disabled') || $btn.hasClass('loading') || $btn.attr('data-processing') === 'true') return;
+            $btn.attr('data-processing', 'true').addClass('loading').prop('disabled', true).css('opacity', '0.7');
 
             var $addBtn = $('#quills-btn-add-to-cart');
             var productId = $addBtn.data('product-id');
             var qty = parseInt($('#quills-qty-input').val(), 10) || 1;
-            var size = $('#quills-size-group').length ? ($('#quills-size-group .quills-pill-btn.active').data('size') || '12oz') : '';
+
+            var size = '';
+            var $merchSize = $('.quills-merch-size-chips .quills-size-chip.active');
+            if ($merchSize.length) {
+                size = $merchSize.data('size') || 'M';
+            } else if ($('#quills-size-group').length) {
+                size = $('#quills-size-group .quills-pill-btn.active').data('size') || '12oz';
+            }
+
             var grind = $('#quills-grind-group').length ? ($('#quills-grind-group .quills-pill-btn.active').data('grind') || 'Whole Bean') : '';
             var purchaseType = $('input[name="quills_purchase_type"]:checked').val() || 'onetime';
             var frequency = '';
@@ -336,8 +357,11 @@
                 frequency = $activeFreq.length ? $activeFreq.text().trim() : 'Deliver every 2 weeks';
             }
             var checkoutUrl = $btn.data('checkout-url') || '/checkout/';
-
-            $btn.addClass('loading').css('opacity', '0.7');
+            var targetUrl = checkoutUrl;
+            if (typeof quillsData !== 'undefined' && !quillsData.isLoggedIn) {
+                var myAcc = quillsData.myAccountUrl || '/my-account/';
+                targetUrl = myAcc + (myAcc.indexOf('?') !== -1 ? '&' : '?') + 'redirect_to=' + encodeURIComponent(checkoutUrl);
+            }
 
             $.ajax({
                 url: (typeof quillsData !== 'undefined' && quillsData.ajaxUrl) ? quillsData.ajaxUrl : '/wp-admin/admin-ajax.php',
@@ -353,7 +377,7 @@
                     frequency: frequency
                 },
                 complete: function() {
-                    window.location.href = checkoutUrl;
+                    window.location.href = targetUrl;
                 }
             });
         });
@@ -1168,6 +1192,9 @@
             }
         }
 
+        window.openQuickShopDrawer = openQuickShopDrawer;
+        window.closeQuickShopDrawer = closeQuickShopDrawer;
+
         // Trigger Quick Shop Drawer on card button click (Catalog + Home Bestsellers)
         $(document).off('click.quillsQS', '.quills-hover-add-cart, .quills-btn--add-to-cart').on('click.quillsQS', '.quills-hover-add-cart, .quills-btn--add-to-cart', function(e) {
             e.preventDefault();
@@ -1315,13 +1342,21 @@
         });
 
         // Quick Shop: Buy with Shop Pay
-        $(document).off('click', '#quills-qs-btn-shop').on('click', '#quills-qs-btn-shop', function(e) {
+        $(document).off('click.quillsQSShop', '#quills-qs-btn-shop').on('click.quillsQSShop', '#quills-qs-btn-shop', function(e) {
             e.preventDefault();
             var $btn = $(this);
-            var $wrapper = $btn.closest('.quills-qs-wrapper');
+            if ($btn.data('processing') || $btn.hasClass('loading') || $btn.prop('disabled')) return;
+            $btn.data('processing', true).addClass('loading').prop('disabled', true).css('opacity', '0.7');
+
+            var $wrapper = $btn.closest('.quills-qs-wrapper, .quills-qs-content');
             var productId = $btn.data('product-id');
             var checkoutUrl = $btn.data('checkout-url') || '/checkout/';
-            var size = $wrapper.find('.quills-qs-size-pill.active').data('size') || '12oz';
+            var targetUrl = checkoutUrl;
+            if (typeof quillsData !== 'undefined' && !quillsData.isLoggedIn) {
+                var myAcc = quillsData.myAccountUrl || '/my-account/';
+                targetUrl = myAcc + (myAcc.indexOf('?') !== -1 ? '&' : '?') + 'redirect_to=' + encodeURIComponent(checkoutUrl);
+            }
+            var size = $wrapper.find('.quills-qs-size-pill.active, .quills-qs-size-chip.active, .quills-size-chip.active').data('size') || '12oz';
             var grind = $wrapper.find('.quills-qs-grind-pill.active').data('grind') || 'Whole Bean';
             var quantity = parseInt($wrapper.find('#quills-qs-qty-input').val(), 10) || 1;
 
@@ -1337,11 +1372,8 @@
                     grind: grind,
                     purchase_type: 'onetime'
                 },
-                success: function() {
-                    window.location.href = checkoutUrl;
-                },
-                error: function() {
-                    window.location.href = checkoutUrl;
+                complete: function() {
+                    window.location.href = targetUrl;
                 }
             });
         });

@@ -127,11 +127,13 @@ class Quills_Coffee_Experience {
         );
 
         wp_localize_script('quills-coffee-script', 'quillsData', [
-            'ajaxUrl'   => admin_url('admin-ajax.php'),
-            'nonce'     => wp_create_nonce('quills_nonce'),
-            'cartUrl'   => wc_get_cart_url(),
-            'siteUrl'   => home_url(),
-            'shopUrl'   => wc_get_page_permalink('shop')
+            'ajaxUrl'      => admin_url('admin-ajax.php'),
+            'nonce'        => wp_create_nonce('quills_nonce'),
+            'cartUrl'      => wc_get_cart_url(),
+            'siteUrl'      => home_url(),
+            'shopUrl'      => wc_get_page_permalink('shop'),
+            'isLoggedIn'   => is_user_logged_in(),
+            'myAccountUrl' => wc_get_page_permalink('myaccount'),
         ]);
     }
 
@@ -555,6 +557,9 @@ class Quills_Coffee_Experience {
      * AJAX Get Quick Shop Drawer HTML from Database (Image 2)
      */
     public static function ajax_get_quick_shop_drawer() {
+        if (session_status() === PHP_SESSION_ACTIVE) {
+            session_write_close();
+        }
         if (isset($_POST['nonce'])) {
             check_ajax_referer('quills_nonce', 'nonce', false);
         }
@@ -1099,7 +1104,19 @@ class Quills_Coffee_Experience {
 
                 <div class="quills-drawer-tax-notice">Taxes and shipping calculated at checkout</div>
 
-                <a href="<?php echo esc_url(wc_get_checkout_url()); ?>" class="quills-drawer-checkout-btn">
+                <?php
+                $checkout_url = function_exists('wc_get_checkout_url') ? wc_get_checkout_url() : home_url('/checkout/');
+                if (!is_user_logged_in()) {
+                    $myaccount_url = function_exists('wc_get_page_permalink') ? wc_get_page_permalink('myaccount') : '';
+                    if (!$myaccount_url) {
+                        $myaccount_url = wp_login_url();
+                    }
+                    $drawer_checkout_href = add_query_arg('redirect_to', urlencode($checkout_url), $myaccount_url);
+                } else {
+                    $drawer_checkout_href = $checkout_url;
+                }
+                ?>
+                <a href="<?php echo esc_url($drawer_checkout_href); ?>" class="quills-drawer-checkout-btn">
                     CHECK OUT
                 </a>
             </div>

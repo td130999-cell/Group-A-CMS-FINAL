@@ -9,6 +9,44 @@
 
     $(document).ready(function() {
 
+        // Reusable Mouse Drag & Touch Swipe Gesture Engine
+        function setupSliderDrag($elem, onPrev, onNext) {
+            if (!$elem || !$elem.length) return;
+            var isDown = false;
+            var startX = 0;
+            var moved = false;
+
+            $elem.on('mousedown touchstart', function(e) {
+                isDown = true;
+                moved = false;
+                startX = e.pageX || (e.originalEvent.touches && e.originalEvent.touches[0].pageX);
+                $elem.addClass('is-dragging');
+            });
+
+            $(document).on('mousemove touchmove', function(e) {
+                if (!isDown) return;
+                var currentX = e.pageX || (e.originalEvent.touches && e.originalEvent.touches[0].pageX);
+                if (Math.abs(currentX - startX) > 10) {
+                    moved = true;
+                }
+            });
+
+            $(document).on('mouseup touchend', function(e) {
+                if (!isDown) return;
+                isDown = false;
+                $elem.removeClass('is-dragging');
+                var endX = e.pageX || (e.originalEvent.changedTouches && e.originalEvent.changedTouches[0].pageX);
+                var diff = endX - startX;
+                if (moved && Math.abs(diff) > 35) {
+                    if (diff < 0) {
+                        onNext();
+                    } else {
+                        onPrev();
+                    }
+                }
+            });
+        }
+
         // --- 1. Top Testimonial Slider ---
         var $topSlider = $('#quills-top-testimonial-slider');
         if ($topSlider.length) {
@@ -94,6 +132,23 @@
 
             updateTopNavState();
             startTopTimer();
+
+            // Mouse Drag & Touch Swipe support for Top Slider
+            setupSliderDrag($topSlider.find('.quills-sub-track-container'), function() {
+                if (topIndex > 0) {
+                    goToTopSlide(topIndex - 1);
+                } else {
+                    goToTopSlide(topCount - 1);
+                }
+                resetTopTimer();
+            }, function() {
+                if (topIndex < topCount - 1) {
+                    goToTopSlide(topIndex + 1);
+                } else {
+                    goToTopSlide(0);
+                }
+                resetTopTimer();
+            });
         }
 
         // --- 2. Bottom Testimonial Slider ---
@@ -181,6 +236,23 @@
 
             updateBotNavState();
             startBotTimer();
+
+            // Mouse Drag & Touch Swipe support for Bottom Slider
+            setupSliderDrag($botSlider.find('.quills-sub-track-container'), function() {
+                if (botIndex > 0) {
+                    goToBotSlide(botIndex - 1);
+                } else {
+                    goToBotSlide(botCount - 1);
+                }
+                resetBotTimer();
+            }, function() {
+                if (botIndex < botCount - 1) {
+                    goToBotSlide(botIndex + 1);
+                } else {
+                    goToBotSlide(0);
+                }
+                resetBotTimer();
+            });
         }
 
         // --- 3. Filter Drawer Toggle ---

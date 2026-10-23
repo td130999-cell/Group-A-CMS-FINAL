@@ -443,7 +443,8 @@ if ( false !== $cached_reviews && is_array( $cached_reviews ) ) {
                     if (btn) {
                         btn.addEventListener('click', function(e) {
                             e.preventDefault();
-                            if (btn.classList.contains('is-disabled') || btn.classList.contains('loading')) return;
+                            if (btn.classList.contains('is-disabled') || btn.classList.contains('loading') || btn.getAttribute('data-processing') === 'true') return;
+                            btn.setAttribute('data-processing', 'true');
                             btn.classList.add('loading');
                             btn.style.opacity = '0.7';
 
@@ -479,6 +480,13 @@ if ( false !== $cached_reviews && is_array( $cached_reviews ) ) {
                             }
 
                             var checkoutUrl = btn.getAttribute('data-checkout-url') || '<?php echo esc_js(wc_get_checkout_url()); ?>';
+                            var isLoggedIn = <?php echo json_encode(is_user_logged_in()); ?>;
+                            var myAccountUrl = '<?php echo esc_js(wc_get_page_permalink("myaccount")); ?>';
+                            var targetUrl = checkoutUrl;
+                            if (!isLoggedIn) {
+                                targetUrl = myAccountUrl + (myAccountUrl.indexOf('?') !== -1 ? '&' : '?') + 'redirect_to=' + encodeURIComponent(checkoutUrl);
+                            }
+
                             var ajaxUrl = (window.quillsData && window.quillsData.ajaxUrl) ? window.quillsData.ajaxUrl : '<?php echo esc_js(admin_url("admin-ajax.php")); ?>';
                             var nonce = (window.quillsData && window.quillsData.nonce) ? window.quillsData.nonce : '<?php echo esc_js(wp_create_nonce("quills_nonce")); ?>';
 
@@ -496,9 +504,9 @@ if ( false !== $cached_reviews && is_array( $cached_reviews ) ) {
                                 method: 'POST',
                                 body: formData
                             }).then(function() {
-                                window.location.href = checkoutUrl;
+                                window.location.href = targetUrl;
                             }).catch(function() {
-                                window.location.href = checkoutUrl;
+                                window.location.href = targetUrl;
                             });
                         });
                     }

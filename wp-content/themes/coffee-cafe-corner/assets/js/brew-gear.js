@@ -223,5 +223,38 @@
             });
         });
 
+        // 7. Buy with shop button on Brew Gear cards -> Add to cart & redirect to /checkout/
+        $(document).off('click.brewGearShop', '.quills-bg-btn-shop').on('click.brewGearShop', '.quills-bg-btn-shop', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            var $btn = $(this);
+            if ($btn.hasClass('loading') || $btn.prop('disabled')) return;
+
+            var productId = $btn.data('product-id') || $btn.closest('.quills-product-card').data('product-id');
+            var checkoutUrl = $btn.data('checkout-url') || '/checkout/';
+            if (!productId) return;
+
+            $btn.addClass('loading').prop('disabled', true).css('opacity', '0.7');
+
+            var ajaxUrl = (typeof quillsData !== 'undefined' && quillsData.ajaxUrl) ? quillsData.ajaxUrl : '/wp-admin/admin-ajax.php';
+            var nonce = (typeof quillsData !== 'undefined' && quillsData.nonce) ? quillsData.nonce : '';
+
+            $.ajax({
+                url: ajaxUrl,
+                type: 'POST',
+                data: {
+                    action: 'quills_add_to_cart',
+                    nonce: nonce,
+                    product_id: productId,
+                    quantity: 1,
+                    purchase_type: 'onetime'
+                },
+                complete: function() {
+                    window.location.href = checkoutUrl;
+                }
+            });
+        });
+
     });
 })(jQuery);

@@ -465,15 +465,25 @@
         });
 
         // Quick Shop: Buy with Shop Pay
-        $(document).on('click', '#quills-qs-btn-shop', function(e) {
+        $(document).off('click.quillsQSShop', '#quills-qs-btn-shop').on('click.quillsQSShop', '#quills-qs-btn-shop', function(e) {
             e.preventDefault();
             var $btn = $(this);
-            var $wrapper = $btn.closest('.quills-qs-wrapper');
+            if ($btn.data('processing') || $btn.hasClass('loading') || $btn.prop('disabled')) return;
+            $btn.data('processing', true).addClass('loading').prop('disabled', true).css('opacity', '0.7');
+
+            var $wrapper = $btn.closest('.quills-qs-wrapper, .quills-qs-content');
             var productId = $btn.data('product-id');
             var checkoutUrl = $btn.data('checkout-url') || '/checkout/';
-            var size = $wrapper.find('.quills-qs-size-pill.active').data('size') || '12oz';
+            var targetUrl = checkoutUrl;
+            if (typeof quillsData !== 'undefined' && !quillsData.isLoggedIn) {
+                var myAcc = quillsData.myAccountUrl || '/my-account/';
+                targetUrl = myAcc + (myAcc.indexOf('?') !== -1 ? '&' : '?') + 'redirect_to=' + encodeURIComponent(checkoutUrl);
+            }
+            var size = $wrapper.find('.quills-qs-size-pill.active, .quills-qs-size-chip.active').data('size') || '12oz';
             var grind = $wrapper.find('.quills-qs-grind-pill.active').data('grind') || 'Whole Bean';
             var quantity = parseInt($wrapper.find('#quills-qs-qty-input').val(), 10) || 1;
+
+            $btn.addClass('loading').prop('disabled', true).css('opacity', '0.7');
 
             $.ajax({
                 url: (typeof quillsData !== 'undefined' && quillsData.ajaxUrl) ? quillsData.ajaxUrl : '/wp-admin/admin-ajax.php',
@@ -487,11 +497,8 @@
                     grind: grind,
                     purchase_type: 'onetime'
                 },
-                success: function() {
-                    window.location.href = checkoutUrl;
-                },
-                error: function() {
-                    window.location.href = checkoutUrl;
+                complete: function() {
+                    window.location.href = targetUrl;
                 }
             });
         });
@@ -531,26 +538,88 @@
             });
         }
 
-        // 5. Testimonial Sliders
+        // 5. Testimonial Sliders with Arrows & Mouse Drag / Touch Swipe
         var topQuotes = [
             { text: '"Heaven in a cup."', author: '— Tracy S.' },
             { text: '"The cleanest pour-over roast in Louisville. Sweet and lively."', author: '— Michael K.' },
             { text: '"Consistently fresh, vibrant and roasted with exceptional care."', author: '— Amanda L.' }
         ];
+        var currentTopQuote = 0;
 
-        $('.quills-slider-dot[data-index]').on('click', function() {
-            var idx = parseInt($(this).data('index'), 10);
+        function showTopQuote(idx) {
+            if (idx < 0) idx = topQuotes.length - 1;
+            if (idx >= topQuotes.length) idx = 0;
+            currentTopQuote = idx;
+
             $('.quills-slider-dot[data-index]').removeClass('is-active');
-            $(this).addClass('is-active');
+            $('.quills-slider-dot[data-index="' + idx + '"]').addClass('is-active');
 
             if (topQuotes[idx]) {
-                $('#quills-quote-text').fadeOut(150, function() {
+                $('#quills-quote-text').stop(true, true).fadeOut(150, function() {
                     $(this).text(topQuotes[idx].text).fadeIn(150);
                 });
-                $('#quills-quote-author').fadeOut(150, function() {
+                $('#quills-quote-author').stop(true, true).fadeOut(150, function() {
                     $(this).text(topQuotes[idx].author).fadeIn(150);
                 });
             }
+        }
+
+        $(document).on('click', '#quills-quote-prev', function(e) {
+            e.preventDefault();
+            showTopQuote(currentTopQuote - 1);
+        });
+
+        $(document).on('click', '#quills-quote-next', function(e) {
+            e.preventDefault();
+            showTopQuote(currentTopQuote + 1);
+        });
+
+        $(document).on('click', '.quills-slider-dot[data-index]', function() {
+            var idx = parseInt($(this).data('index'), 10);
+            showTopQuote(idx);
+        });
+
+        // Drag/Swipe Gesture for Top Slider
+        (function setupSliderDrag(selector, onPrev, onNext) {
+            var $elem = $(selector);
+            if (!$elem.length) return;
+            var isDown = false;
+            var startX = 0;
+            var moved = false;
+
+            $elem.on('mousedown touchstart', function(e) {
+                isDown = true;
+                moved = false;
+                startX = e.pageX || (e.originalEvent.touches && e.originalEvent.touches[0].pageX);
+                $elem.addClass('is-dragging');
+            });
+
+            $(document).on('mousemove touchmove', function(e) {
+                if (!isDown) return;
+                var currentX = e.pageX || (e.originalEvent.touches && e.originalEvent.touches[0].pageX);
+                if (Math.abs(currentX - startX) > 10) {
+                    moved = true;
+                }
+            });
+
+            $(document).on('mouseup touchend', function(e) {
+                if (!isDown) return;
+                isDown = false;
+                $elem.removeClass('is-dragging');
+                var endX = e.pageX || (e.originalEvent.changedTouches && e.originalEvent.changedTouches[0].pageX);
+                var diff = endX - startX;
+                if (moved && Math.abs(diff) > 40) {
+                    if (diff < 0) {
+                        onNext();
+                    } else {
+                        onPrev();
+                    }
+                }
+            });
+        })('#quills-quote-slider-track', function() {
+            showTopQuote(currentTopQuote - 1);
+        }, function() {
+            showTopQuote(currentTopQuote + 1);
         });
 
         var bottomQuotes = [
@@ -558,17 +627,79 @@
             { text: '"Their single-origin Ethiopia Bombe is hands-down the best coffee I had this year."', author: '— Sarah Jenkins' },
             { text: '"Subscribed to Blacksmith espresso for over 2 years now. Never disappointed."', author: '— David R.' }
         ];
+        var currentBottomQuote = 0;
 
-        $('.quills-slider-dot[data-bottom-index]').on('click', function() {
-            var idx = parseInt($(this).data('bottom-index'), 10);
+        function showBottomQuote(idx) {
+            if (idx < 0) idx = bottomQuotes.length - 1;
+            if (idx >= bottomQuotes.length) idx = 0;
+            currentBottomQuote = idx;
+
             $('.quills-slider-dot[data-bottom-index]').removeClass('is-active');
-            $(this).addClass('is-active');
+            $('.quills-slider-dot[data-bottom-index="' + idx + '"]').addClass('is-active');
 
             if (bottomQuotes[idx]) {
-                $('#quills-bottom-quote-text').fadeOut(150, function() {
+                $('#quills-bottom-quote-text').stop(true, true).fadeOut(150, function() {
                     $(this).text(bottomQuotes[idx].text).fadeIn(150);
                 });
             }
+        }
+
+        $(document).on('click', '#quills-bottom-quote-prev', function(e) {
+            e.preventDefault();
+            showBottomQuote(currentBottomQuote - 1);
+        });
+
+        $(document).on('click', '#quills-bottom-quote-next', function(e) {
+            e.preventDefault();
+            showBottomQuote(currentBottomQuote + 1);
+        });
+
+        $(document).on('click', '.quills-slider-dot[data-bottom-index]', function() {
+            var idx = parseInt($(this).data('bottom-index'), 10);
+            showBottomQuote(idx);
+        });
+
+        // Drag/Swipe Gesture for Bottom Slider
+        (function setupBottomSliderDrag(selector, onPrev, onNext) {
+            var $elem = $(selector);
+            if (!$elem.length) return;
+            var isDown = false;
+            var startX = 0;
+            var moved = false;
+
+            $elem.on('mousedown touchstart', function(e) {
+                isDown = true;
+                moved = false;
+                startX = e.pageX || (e.originalEvent.touches && e.originalEvent.touches[0].pageX);
+                $elem.addClass('is-dragging');
+            });
+
+            $(document).on('mousemove touchmove', function(e) {
+                if (!isDown) return;
+                var currentX = e.pageX || (e.originalEvent.touches && e.originalEvent.touches[0].pageX);
+                if (Math.abs(currentX - startX) > 10) {
+                    moved = true;
+                }
+            });
+
+            $(document).on('mouseup touchend', function(e) {
+                if (!isDown) return;
+                isDown = false;
+                $elem.removeClass('is-dragging');
+                var endX = e.pageX || (e.originalEvent.changedTouches && e.originalEvent.changedTouches[0].pageX);
+                var diff = endX - startX;
+                if (moved && Math.abs(diff) > 40) {
+                    if (diff < 0) {
+                        onNext();
+                    } else {
+                        onPrev();
+                    }
+                }
+            });
+        })('#quills-testimonials-track', function() {
+            showBottomQuote(currentBottomQuote - 1);
+        }, function() {
+            showBottomQuote(currentBottomQuote + 1);
         });
 
         // ==========================================
