@@ -1163,13 +1163,27 @@ body.home .quills-home-wrapper,
   font-weight: 700 !important;
 }
 
-.quills-hoot-form {
+.quills-hoot-form,
+.quills-hoot-form-row {
   display: flex !important;
   margin-top: 30px !important;
+  position: relative !important;
+  width: 100% !important;
+}
+
+.quills-hoot-form-row .wpcf7-form-control-wrap {
+  flex-grow: 1 !important;
+  display: flex !important;
+  width: auto !important;
+}
+
+.quills-hoot-card .wpcf7-form {
+  margin: 0 !important;
 }
 
 .quills-hoot-input {
   flex-grow: 1 !important;
+  width: 100% !important;
   border: 1px solid #3A3836 !important;
   border-right: none !important;
   padding: 12px 16px !important;
@@ -1178,6 +1192,7 @@ body.home .quills-home-wrapper,
   border-radius: 0 !important;
   background: #ffffff !important;
   font-family: 'Clarendon URW Extra Narrow', serif !important;
+  box-sizing: border-box !important;
 }
 
 .quills-hoot-input:focus {
@@ -1198,11 +1213,54 @@ body.home .quills-home-wrapper,
   border-radius: 0 !important;
   text-transform: uppercase !important;
   transition: opacity 0.25s ease !important;
+  box-sizing: border-box !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
 }
 
 .quills-hoot-btn:hover {
   opacity: 0.85 !important;
 }
+
+/* Contact Form 7 Feedback Messages inside The Hoot Card */
+.quills-hoot-card .wpcf7-response-output {
+  margin: 16px 0 0 0 !important;
+  padding: 12px 16px !important;
+  font-family: 'Clarendon URW Extra Narrow', Georgia, serif !important;
+  font-size: 15px !important;
+  line-height: 1.4 !important;
+  border-radius: 0 !important;
+  text-align: center !important;
+  box-sizing: border-box !important;
+}
+
+.quills-hoot-card .wpcf7-form.sent .wpcf7-response-output {
+  background: #eef7ee !important;
+  border: 1px solid #78a876 !important;
+  color: #2e592c !important;
+}
+
+.quills-hoot-card .wpcf7-form.invalid .wpcf7-response-output,
+.quills-hoot-card .wpcf7-form.unaccepted .wpcf7-response-output,
+.quills-hoot-card .wpcf7-form.failed .wpcf7-response-output {
+  background: #fdf2f0 !important;
+  border: 1px solid #e05338 !important;
+  color: #b53822 !important;
+}
+
+.quills-hoot-card .wpcf7-not-valid-tip {
+  color: #b53822 !important;
+  font-family: 'Clarendon URW Extra Narrow', Georgia, serif !important;
+  font-size: 13px !important;
+  margin-top: 4px !important;
+  text-align: left !important;
+}
+
+.quills-hoot-card .wpcf7-spinner {
+  margin: 0 0 0 8px !important;
+}
+
 
 /* ========================================================
    RESPONSIVE BREAKPOINTS
@@ -1259,12 +1317,17 @@ body.home .quills-home-wrapper,
   .quills-hoot-bg-right {
     display: none !important;
   }
-  .quills-hoot-form {
+  .quills-hoot-form,
+  .quills-hoot-form-row {
     flex-direction: column !important;
+  }
+  .quills-hoot-form-row .wpcf7-form-control-wrap {
+    width: 100% !important;
   }
   .quills-hoot-input {
     border-right: 1px solid #3A3836 !important;
     border-bottom: none !important;
+    width: 100% !important;
   }
   .quills-hoot-btn {
     width: 100% !important;

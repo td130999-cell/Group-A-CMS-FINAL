@@ -537,10 +537,18 @@ $team_quote    = get_option( 'quills_home_team_quote', "“The best tasting pour
           <p>We share what the people behind your coffee have been up to that week. You may hear about some wild coffee our head roaster Justin has tasted. Or behind-the-scenes on the new seasonal drinks our beverage director Jess is whipping up.</p>
           <p>And we always add a little something fun in the PS.</p>
         </div>
+        <div class="quills-hoot-form-container">
+        <?php
+        if ( shortcode_exists( 'contact-form-7' ) ) {
+            echo do_shortcode( '[contact-form-7 id="141" title="The Hoot Newsletter"]' );
+        } else {
+        ?>
         <form class="quills-hoot-form" method="post" action="<?php echo esc_url( home_url( '/contact#newsletter' ) ); ?>">
           <input type="email" name="hoot_email" class="quills-hoot-input" placeholder="Email" required autocomplete="email" />
           <button type="submit" class="quills-hoot-btn" aria-label="Try It">TRY IT</button>
         </form>
+        <?php } ?>
+        </div>
       </div>
     </div>
   </section>

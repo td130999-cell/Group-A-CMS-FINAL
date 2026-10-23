@@ -879,5 +879,7 @@ function quills_redirect_to_checkout_after_login( $redirect, $user ) {
 	return $redirect;
 }
 
-
-
+/**
+ * Disable automatic <p> tag wrapping in Contact Form 7 to preserve custom form markup.
+ */
+add_filter( 'wpcf7_autop_or_not', '__return_false' );
