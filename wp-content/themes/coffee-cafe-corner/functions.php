@@ -802,6 +802,7 @@ add_filter( 'script_loader_tag', function( $tag, $handle, $src ) {
 		'quills-coffee-script',
 		'coffee-cafe-corner-brew-gear-js',
 		'coffee-cafe-corner-wholesale-js',
+		'contact-form-7',
 	);
 
 	if ( in_array( $handle, $defer_scripts, true ) ) {
@@ -883,3 +884,34 @@ function quills_redirect_to_checkout_after_login( $redirect, $user ) {
  * Disable automatic <p> tag wrapping in Contact Form 7 to preserve custom form markup.
  */
 add_filter( 'wpcf7_autop_or_not', '__return_false' );
+
+/**
+ * Quills Page Cache Invalidation Hooks
+ * Automatically clears RAM-cached pages whenever posts, products, or options are modified.
+ */
+function quills_flush_page_cache() {
+	$dirs = array(
+		'/dev/shm/quills_page_cache',
+		WP_CONTENT_DIR . '/cache/quills_page_cache',
+	);
+	foreach ( $dirs as $dir ) {
+		if ( is_dir( $dir ) ) {
+			$files = glob( $dir . '/*' );
+			if ( is_array( $files ) ) {
+				foreach ( $files as $file ) {
+					if ( is_file( $file ) ) {
+						@unlink( $file );
+					}
+				}
+			}
+		}
+	}
+}
+add_action( 'save_post', 'quills_flush_page_cache' );
+add_action( 'edit_post', 'quills_flush_page_cache' );
+add_action( 'delete_post', 'quills_flush_page_cache' );
+add_action( 'woocommerce_update_product', 'quills_flush_page_cache' );
+add_action( 'customize_save_after', 'quills_flush_page_cache' );
+add_action( 'wp_trash_post', 'quills_flush_page_cache' );
+add_action( 'switch_theme', 'quills_flush_page_cache' );
+

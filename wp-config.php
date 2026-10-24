@@ -4,6 +4,9 @@
  * Configured dynamically for Docker environment
  */
 
+// Enable WordPress Drop-in Page Cache
+define( 'WP_CACHE', true );
+
 // ** Database settings from environment variables with sensible defaults ** //
 define( 'DB_NAME', getenv('WORDPRESS_DB_NAME') ?: 'wordpress' );
 define( 'DB_USER', getenv('WORDPRESS_DB_USER') ?: 'wordpress' );
