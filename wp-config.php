@@ -4,6 +4,9 @@
  * Configured dynamically for Docker environment
  */
 
+// Enable WordPress Drop-in Page Cache
+define( 'WP_CACHE', true );
+
 // ** Database settings from environment variables with sensible defaults ** //
 define( 'DB_NAME', getenv('WORDPRESS_DB_NAME') ?: 'wordpress' );
 define( 'DB_USER', getenv('WORDPRESS_DB_USER') ?: 'wordpress' );
@@ -35,6 +38,9 @@ $table_prefix = getenv('WORDPRESS_TABLE_PREFIX') ?: 'wp_';
  */
 $debug_mode = getenv('WORDPRESS_DEBUG');
 define( 'WP_DEBUG', filter_var($debug_mode ?: false, FILTER_VALIDATE_BOOLEAN) );
+define( 'WP_DEBUG_LOG', true );
+define( 'WP_DEBUG_DISPLAY', false );
+@ini_set( 'display_errors', '0' );
 
 /**
  * Direct filesystem method to allow installing plugins/themes without FTP prompts.

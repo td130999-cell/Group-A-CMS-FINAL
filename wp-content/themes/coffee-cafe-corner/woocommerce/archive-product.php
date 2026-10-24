@@ -63,7 +63,7 @@ foreach ($all_products as $p) {
 
         <div class="quills-header__logo">
             <a href="<?php echo esc_url(home_url('/')); ?>">
-                <img src="<?php echo esc_url(home_url('/wp-content/uploads/quills/quills_logo.png')); ?>" alt="Quills Coffee" class="quills-logo-img">
+                <img src="<?php echo esc_url(home_url('/wp-content/uploads/quills/gropacoffe.png')); ?>" alt="Quills Coffee" class="quills-logo-img">
             </a>
         </div>
 

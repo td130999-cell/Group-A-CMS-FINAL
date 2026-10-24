@@ -137,10 +137,23 @@ $theme_url      = trailingslashit( get_template_directory_uri() );
                     <svg class="quills-chevron" width="10" height="6" viewBox="0 0 10 6" fill="none"><path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
                 </div>
 
-                <!-- Language Selector -->
-                <div class="quills-selector quills-lang-selector" title="Select Language">
-                    <span><?php echo esc_html( $lang ); ?></span>
+                <!-- Language Selector Dropdown integrated with GTranslate -->
+                <div class="quills-selector quills-lang-selector" id="quillsFooterLangSelector" title="Select Language" tabindex="0" role="button" aria-haspopup="true" aria-expanded="false">
+                    <span class="quills-current-lang-text"><?php echo esc_html( $lang ); ?></span>
                     <svg class="quills-chevron" width="10" height="6" viewBox="0 0 10 6" fill="none"><path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    
+                    <div class="quills-lang-dropdown notranslate" id="quillsFooterLangDropdown">
+                        <button type="button" class="quills-lang-option active" data-lang="en">
+                            <span class="quills-lang-flag">🇺🇸</span>
+                            <span class="quills-lang-name">English</span>
+                            <span class="quills-lang-check">✓</span>
+                        </button>
+                        <button type="button" class="quills-lang-option" data-lang="vi">
+                            <span class="quills-lang-flag">🇻🇳</span>
+                            <span class="quills-lang-name">Viet Nam</span>
+                            <span class="quills-lang-check">✓</span>
+                        </button>
+                    </div>
                 </div>
 
                 <!-- Social Links -->
@@ -170,3 +183,121 @@ $theme_url      = trailingslashit( get_template_directory_uri() );
         </div>
     </div>
 </div>
+
+<script>
+(function() {
+    function initQuillsFooterLang() {
+        var selector = document.getElementById('quillsFooterLangSelector');
+        var dropdown = document.getElementById('quillsFooterLangDropdown');
+        if (!selector || !dropdown) return;
+
+        var label = selector.querySelector('.quills-current-lang-text');
+        var options = dropdown.querySelectorAll('.quills-lang-option');
+
+        // Toggle open/close
+        selector.addEventListener('click', function(e) {
+            if (e.target.closest('.quills-lang-option')) return;
+            e.stopPropagation();
+            var isOpen = selector.classList.toggle('is-open');
+            selector.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+        });
+
+        // Close on click outside
+        document.addEventListener('click', function(e) {
+            if (!selector.contains(e.target)) {
+                selector.classList.remove('is-open');
+                selector.setAttribute('aria-expanded', 'false');
+            }
+        });
+
+        // Close on Escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' && selector.classList.contains('is-open')) {
+                selector.classList.remove('is-open');
+                selector.setAttribute('aria-expanded', 'false');
+                selector.focus();
+            }
+        });
+
+        // Trigger translation
+        function switchLanguage(targetLang) {
+            targetLang = (targetLang || 'en').toLowerCase();
+            
+            // Update UI state
+            if (label) {
+                label.textContent = targetLang.toUpperCase();
+            }
+            options.forEach(function(opt) {
+                if (opt.getAttribute('data-lang') === targetLang) {
+                    opt.classList.add('active');
+                } else {
+                    opt.classList.remove('active');
+                }
+            });
+
+            // Call GTranslate
+            if (typeof window.doGTranslate === 'function') {
+                window.doGTranslate('en|' + targetLang);
+            } else {
+                var script = document.createElement('script');
+                script.src = 'https://cdn.gtranslate.net/widgets/latest/lib.min.js';
+                script.onload = function() {
+                    if (window.__GT && window.__GT.translator) {
+                        window.__GT.translator.translate('en', targetLang);
+                    }
+                };
+                document.body.appendChild(script);
+            }
+
+            try {
+                localStorage.setItem('quills_user_lang', targetLang);
+            } catch(e) {}
+        }
+
+        // Attach click event to options
+        options.forEach(function(btn) {
+            btn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                var targetLang = btn.getAttribute('data-lang');
+                switchLanguage(targetLang);
+                selector.classList.remove('is-open');
+                selector.setAttribute('aria-expanded', 'false');
+            });
+        });
+
+        // Sync initial state on load
+        function syncCurrentLang() {
+            var current = 'en';
+            try {
+                var stored = JSON.parse(localStorage.getItem('__GT_TRANSLATE_LANGS'));
+                if (stored && stored.tgtLang) {
+                    current = stored.tgtLang;
+                } else if (localStorage.getItem('quills_user_lang')) {
+                    current = localStorage.getItem('quills_user_lang');
+                } else if (document.cookie.indexOf('googtrans=/en/vi') !== -1) {
+                    current = 'vi';
+                }
+            } catch(e) {}
+
+            if (label) label.textContent = current.toUpperCase();
+            options.forEach(function(opt) {
+                if (opt.getAttribute('data-lang') === current) {
+                    opt.classList.add('active');
+                } else {
+                    opt.classList.remove('active');
+                }
+            });
+        }
+
+        syncCurrentLang();
+        setTimeout(syncCurrentLang, 500);
+        setTimeout(syncCurrentLang, 1500);
+    }
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initQuillsFooterLang);
+    } else {
+        initQuillsFooterLang();
+    }
+})();
+</script>

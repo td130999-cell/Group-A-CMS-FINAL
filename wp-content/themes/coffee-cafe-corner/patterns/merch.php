@@ -100,9 +100,6 @@ if ( ! empty( $wc_products ) ) {
     }
 
     $is_in_stock = $product->is_in_stock();
-    if ( strpos( $p_name_lower, 'postage mug' ) !== false || strpos( $p_slug, 'postage-mug' ) !== false ) {
-      $is_in_stock = false; // Quills web mau sold out
-    }
 
     $merch_products[] = array(
       'id'          => $p_id,

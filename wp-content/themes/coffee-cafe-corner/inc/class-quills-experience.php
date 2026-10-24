@@ -122,16 +122,18 @@ class Quills_Coffee_Experience {
             'quills-coffee-script',
             get_template_directory_uri() . '/assets/js/quills-coffee.js',
             ['jquery'],
-            '1.1.5',
+            file_exists(get_template_directory() . '/assets/js/quills-coffee.js') ? filemtime(get_template_directory() . '/assets/js/quills-coffee.js') : '1.1.6',
             true
         );
 
         wp_localize_script('quills-coffee-script', 'quillsData', [
-            'ajaxUrl'   => admin_url('admin-ajax.php'),
-            'nonce'     => wp_create_nonce('quills_nonce'),
-            'cartUrl'   => wc_get_cart_url(),
-            'siteUrl'   => home_url(),
-            'shopUrl'   => wc_get_page_permalink('shop')
+            'ajaxUrl'      => admin_url('admin-ajax.php'),
+            'nonce'        => wp_create_nonce('quills_nonce'),
+            'cartUrl'      => wc_get_cart_url(),
+            'siteUrl'      => home_url(),
+            'shopUrl'      => wc_get_page_permalink('shop'),
+            'isLoggedIn'   => is_user_logged_in(),
+            'myAccountUrl' => wc_get_page_permalink('myaccount'),
         ]);
     }
 
@@ -144,6 +146,12 @@ class Quills_Coffee_Experience {
         }
         if (is_shop() || is_product_taxonomy()) {
             $custom = get_template_directory() . '/woocommerce/archive-product.php';
+            if (file_exists($custom)) {
+                return $custom;
+            }
+        }
+        if ( (function_exists('is_checkout') && is_checkout() && !empty(is_wc_endpoint_url('order-received'))) || !empty(get_query_var('order-received')) ) {
+            $custom = get_template_directory() . '/woocommerce/checkout/thankyou.php';
             if (file_exists($custom)) {
                 return $custom;
             }
@@ -549,6 +557,9 @@ class Quills_Coffee_Experience {
      * AJAX Get Quick Shop Drawer HTML from Database (Image 2)
      */
     public static function ajax_get_quick_shop_drawer() {
+        if (session_status() === PHP_SESSION_ACTIVE) {
+            session_write_close();
+        }
         if (isset($_POST['nonce'])) {
             check_ajax_referer('quills_nonce', 'nonce', false);
         }
@@ -1093,7 +1104,19 @@ class Quills_Coffee_Experience {
 
                 <div class="quills-drawer-tax-notice">Taxes and shipping calculated at checkout</div>
 
-                <a href="<?php echo esc_url(wc_get_checkout_url()); ?>" class="quills-drawer-checkout-btn">
+                <?php
+                $checkout_url = function_exists('wc_get_checkout_url') ? wc_get_checkout_url() : home_url('/checkout/');
+                if (!is_user_logged_in()) {
+                    $myaccount_url = function_exists('wc_get_page_permalink') ? wc_get_page_permalink('myaccount') : '';
+                    if (!$myaccount_url) {
+                        $myaccount_url = wp_login_url();
+                    }
+                    $drawer_checkout_href = add_query_arg('redirect_to', urlencode($checkout_url), $myaccount_url);
+                } else {
+                    $drawer_checkout_href = $checkout_url;
+                }
+                ?>
+                <a href="<?php echo esc_url($drawer_checkout_href); ?>" class="quills-drawer-checkout-btn">
                     CHECK OUT
                 </a>
             </div>

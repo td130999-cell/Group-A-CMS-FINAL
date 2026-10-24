@@ -130,6 +130,7 @@
     .quills-coffee-hero-card {
         min-height: 200px;
     }
+
     .quills-coffee-hero-title {
         font-size: 50px;
     }
@@ -146,22 +147,25 @@
 }
 
 .quills-announcement-headline {
-    font-size: 17px;
-    font-weight: 500;
+    font-family: 'Besley', 'Clarendon URW Extra Narrow', Georgia, 'Times New Roman', serif !important;
+    font-size: 17.5px;
+    font-weight: 700 !important;
     color: #2b2927;
     margin: 0 0 10px 0;
     line-height: 1.5;
 }
 
 .quills-announcement-schedule {
+    font-family: 'Besley', 'Clarendon URW Extra Narrow', Georgia, 'Times New Roman', serif !important;
     font-size: 16px;
-    font-weight: 500;
+    font-weight: 700 !important;
     color: #2b2927;
     line-height: 1.6;
     margin: 0;
 }
 
 @media (max-width: 768px) {
+
     .quills-announcement-headline,
     .quills-announcement-schedule {
         font-size: 15px;
@@ -188,6 +192,60 @@
 .quills-quote-slider-section {
     text-align: center;
     padding: 10px 0;
+    position: relative;
+}
+
+.quills-quote-slider-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    max-width: 860px;
+    margin: 0 auto;
+    position: relative;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+.quills-quote-slider-track,
+.quills-testimonials-track {
+    flex: 1;
+    min-width: 0;
+    cursor: grab;
+    touch-action: pan-y;
+    padding: 0 15px;
+    transition: transform 0.12s ease-out;
+}
+
+.quills-quote-slider-track:active,
+.quills-testimonials-track:active,
+.quills-quote-slider-track.is-dragging,
+.quills-testimonials-track.is-dragging {
+    cursor: grabbing !important;
+}
+
+.quills-quote-arrow {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 8px;
+    color: #4a4845;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: color 0.15s ease, transform 0.15s ease, background-color 0.15s ease;
+    flex-shrink: 0;
+    z-index: 5;
+}
+
+.quills-quote-arrow:hover {
+    color: #111111;
+    background-color: rgba(0, 0, 0, 0.06);
+    transform: scale(1.15);
+}
+
+.quills-quote-arrow:active {
+    transform: scale(0.95);
 }
 
 .quills-quote-stars {
@@ -252,6 +310,9 @@
     align-items: center;
     gap: 14px;
     margin: 35px 0 40px 0;
+    background: transparent !important;
+    background-color: transparent !important;
+    box-shadow: none !important;
     flex-wrap: wrap;
 }
 
@@ -306,6 +367,18 @@
 
 .quills-coffee-sidebar {
     padding-top: 5px;
+    background: transparent !important;
+    background-color: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+}
+
+.quills-coffee-sidebar .quills-accordion-item,
+.quills-coffee-sidebar .quills-accordion-header,
+.quills-coffee-sidebar .quills-accordion-content {
+    background: transparent !important;
+    background-color: transparent !important;
+    box-shadow: none !important;
 }
 
 /* =========================================
@@ -361,8 +434,8 @@
     justify-content: space-between;
     width: fit-content;
     max-width: 100%;
-    background-color: #ffffff;
-    border: 1px solid #d5cfc4;
+    background-color: #f0ebe1 !important;
+    border: 1px solid #d5cfc4 !important;
     border-radius: 4px;
     padding: 6px 12px;
     font-family: 'Besley', 'Clarendon URW Extra Narrow', Georgia, 'Times New Roman', serif;
@@ -375,8 +448,8 @@
 }
 
 .quills-filter-tag:hover {
-    border-color: #2b2927;
-    background-color: #faf8f5;
+    border-color: #2b2927 !important;
+    background-color: #e6e0d4 !important;
 }
 
 .quills-filter-tag-x {
@@ -470,7 +543,7 @@
 .quills-checkbox-custom {
     width: 17px;
     height: 17px;
-    background-color: #ffffff;
+    background-color: #f0ebe1;
     border: 1px solid #c9c3b8;
     border-radius: 2px;
     display: inline-flex;
@@ -485,17 +558,17 @@
     border-color: #2b2927;
 }
 
-.quills-filter-checkbox input[type="checkbox"]:focus-visible + .quills-checkbox-custom {
+.quills-filter-checkbox input[type="checkbox"]:focus-visible+.quills-checkbox-custom {
     outline: 2px solid #b53822;
     outline-offset: 1px;
 }
 
-.quills-filter-checkbox input[type="checkbox"]:checked + .quills-checkbox-custom {
+.quills-filter-checkbox input[type="checkbox"]:checked+.quills-checkbox-custom {
     border-color: #2b2927;
-    background-color: #ffffff;
+    background-color: #f0ebe1;
 }
 
-.quills-filter-checkbox input[type="checkbox"]:checked + .quills-checkbox-custom::after {
+.quills-filter-checkbox input[type="checkbox"]:checked+.quills-checkbox-custom::after {
     content: '';
     display: block;
     width: 4px;
@@ -558,18 +631,24 @@
     position: relative;
     display: inline-flex;
     align-items: center;
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
 }
 
 .quills-sort-select {
-    background: transparent;
-    border: none;
+    background: transparent !important;
+    background-color: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
     font-family: inherit;
     font-size: 13.5px;
     font-weight: 700;
     color: #151515;
     cursor: pointer;
     outline: none;
-    padding-right: 18px;
+    padding: 0 18px 0 0 !important;
+    border-radius: 0 !important;
     appearance: none;
     -webkit-appearance: none;
 }
@@ -654,7 +733,8 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(18, 18, 18, 0.86); /* Dark semi-transparent matching Image 1 */
+    background: rgba(18, 18, 18, 0.86);
+    /* Dark semi-transparent matching Image 1 */
     padding: 22px 18px 16px 18px;
     color: #ffffff;
     box-sizing: border-box;
@@ -727,7 +807,7 @@
     flex: 1 1 auto;
     overflow-y: auto;
     scrollbar-width: thin;
-    scrollbar-color: rgba(255,255,255,0.3) transparent;
+    scrollbar-color: rgba(255, 255, 255, 0.3) transparent;
     padding-right: 2px;
 }
 
@@ -781,7 +861,7 @@
     align-items: center;
     justify-content: center;
     transition: background-color 0.2s ease, transform 0.1s ease;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
 }
 
 .quills-coffee-card-media .quills-hover-add-cart:hover {
@@ -933,7 +1013,8 @@ h2.quills-testimonials-heading {
     width: 440px;
     max-width: 100vw;
     height: 100vh;
-    background: #fbf8f2; /* Exact cream tone matching Image 2 */
+    background: #fbf8f2;
+    /* Exact cream tone matching Image 2 */
     z-index: 1000005 !important;
     box-shadow: -6px 0 26px rgba(0, 0, 0, 0.16);
     transform: translateX(100%);
@@ -1277,7 +1358,7 @@ h2.quills-testimonials-heading {
 .quills-qs-spinner {
     width: 32px;
     height: 32px;
-    border: 3px solid rgba(0,0,0,0.1);
+    border: 3px solid rgba(0, 0, 0, 0.1);
     border-top-color: #151515;
     border-radius: 50%;
     animation: quillsQsSpin 0.7s linear infinite;
@@ -1285,13 +1366,16 @@ h2.quills-testimonials-heading {
 }
 
 @keyframes quillsQsSpin {
-    to { transform: rotate(360deg); }
+    to {
+        transform: rotate(360deg);
+    }
 }
 
 @media (max-width: 480px) {
     .quills-quick-shop-drawer {
         width: 100vw;
     }
+
     .quills-qs-wrapper {
         padding: 30px 20px;
     }
@@ -1483,4 +1567,3 @@ h2.quills-testimonials-heading {
 .quills-drawer-upsell-next {
     right: -8px;
 }
-

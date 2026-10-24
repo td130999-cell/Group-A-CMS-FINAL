@@ -67,7 +67,7 @@ if ( empty( $cafes ) || ! is_array( $cafes ) ) {
                 'map_url'       => isset( $c_data['map_url'] ) ? $c_data['map_url'] : '',
                 'hours'         => isset( $c_data['hours'] ) ? $c_data['hours'] : '',
                 'phone'         => isset( $c_data['phone'] ) ? $c_data['phone'] : '',
-                'read_more_url' => home_url( '/about-us?view=' . $c_id ),
+                'read_more_url' => home_url( '/visit/?view=' . $c_id ),
             );
         }
     }
@@ -117,7 +117,8 @@ $row_bottom_cafes = array_slice( $cafes, 3 );
                 <?php foreach ( $row_top_cafes as $cafe ) :
                     $img_src = filter_var( $cafe['image'], FILTER_VALIDATE_URL ) ? $cafe['image'] : $img_dir . $cafe['image'];
                     $map_link = ! empty( $cafe['map_url'] ) ? $cafe['map_url'] : 'https://www.google.com/maps/search/' . rawurlencode( $cafe['address'] );
-                    $card_link = ! empty( $cafe['read_more_url'] ) ? $cafe['read_more_url'] : $map_link;
+                    $raw_card_link = ! empty( $cafe['read_more_url'] ) ? $cafe['read_more_url'] : $map_link;
+                    $card_link = str_replace( '/about-us?view=', '/visit/?view=', $raw_card_link );
                 ?>
                     <article class="quills-cafe-card">
                         <a href="<?php echo esc_url( $card_link ); ?>" class="quills-cafe-image-link" aria-label="<?php echo esc_attr( $cafe['name'] ); ?>">
@@ -159,7 +160,8 @@ $row_bottom_cafes = array_slice( $cafes, 3 );
                 <?php foreach ( $row_bottom_cafes as $cafe ) :
                     $img_src = filter_var( $cafe['image'], FILTER_VALIDATE_URL ) ? $cafe['image'] : $img_dir . $cafe['image'];
                     $map_link = ! empty( $cafe['map_url'] ) ? $cafe['map_url'] : 'https://www.google.com/maps/search/' . rawurlencode( $cafe['address'] );
-                    $card_link = ! empty( $cafe['read_more_url'] ) ? $cafe['read_more_url'] : $map_link;
+                    $raw_card_link = ! empty( $cafe['read_more_url'] ) ? $cafe['read_more_url'] : $map_link;
+                    $card_link = str_replace( '/about-us?view=', '/visit/?view=', $raw_card_link );
                 ?>
                     <article class="quills-cafe-card">
                         <a href="<?php echo esc_url( $card_link ); ?>" class="quills-cafe-image-link" aria-label="<?php echo esc_attr( $cafe['name'] ); ?>">

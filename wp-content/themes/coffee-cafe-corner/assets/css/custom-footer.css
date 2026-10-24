@@ -303,3 +303,113 @@
         height: auto;
     }
 }
+
+/* ========================================================
+   Language Selector Dropdown (Integrated with GTranslate)
+   ======================================================== */
+.quills-lang-selector {
+    position: relative;
+    cursor: pointer;
+}
+
+.quills-lang-selector .quills-chevron {
+    transition: transform 0.2s ease;
+}
+
+.quills-lang-selector.is-open .quills-chevron {
+    transform: rotate(180deg);
+}
+
+.quills-lang-dropdown {
+    position: absolute;
+    bottom: calc(100% + 12px);
+    left: 0;
+    min-width: 170px;
+    background: #2b3927;
+    border: 1px solid rgba(255, 253, 235, 0.25);
+    border-radius: 8px;
+    padding: 6px;
+    box-shadow: 0 14px 35px rgba(0, 0, 0, 0.4);
+    display: none;
+    flex-direction: column;
+    gap: 3px;
+    z-index: 999999;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+}
+
+.quills-lang-selector.is-open .quills-lang-dropdown {
+    display: flex;
+    animation: quillsLangDropdownIn 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes quillsLangDropdownIn {
+    from {
+        opacity: 0;
+        transform: translateY(6px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.quills-lang-option {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    padding: 9px 12px;
+    border: none;
+    background: transparent;
+    color: #fffdeb;
+    font-family: inherit;
+    font-size: 13.5px;
+    font-weight: 500;
+    border-radius: 6px;
+    cursor: pointer;
+    text-align: left;
+    transition: background 0.15s ease, color 0.15s ease;
+}
+
+.quills-lang-option:hover {
+    background: rgba(255, 253, 235, 0.15);
+    color: #ffffff;
+}
+
+.quills-lang-option.active {
+    background: rgba(255, 253, 235, 0.22);
+    color: #ffffff;
+    font-weight: 700;
+}
+
+.quills-lang-flag {
+    font-size: 17px;
+    line-height: 1;
+}
+
+.quills-lang-name {
+    flex: 1;
+}
+
+.quills-lang-check {
+    font-size: 13px;
+    color: #f7d794;
+    opacity: 0;
+    margin-left: 6px;
+}
+
+.quills-lang-option.active .quills-lang-check {
+    opacity: 1;
+}
+
+/* Hide default GTranslate floating white box */
+#gt_float_wrapper,
+.gt_float_switcher,
+.gtranslate_wrapper.gt_float_switcher,
+body > div[class*="gt_float_switcher"] {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+}

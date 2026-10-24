@@ -104,17 +104,27 @@ $total_selected = count( $url_processes ) + count( $url_roasts ) + count( $url_t
 
 		<!-- Top Testimonial Quote Slider -->
 		<section class="quills-quote-slider-section" aria-label="<?php esc_attr_e( 'Customer Quote', 'coffee-cafe-corner' ); ?>">
-			<div class="quills-quote-stars">
-				<span class="quills-gold-star">★</span>
-				<span class="quills-gold-star">★</span>
-				<span class="quills-gold-star">★</span>
-				<span class="quills-gold-star">★</span>
-				<span class="quills-gold-star">★</span>
+			<div class="quills-quote-slider-wrapper">
+				<button type="button" class="quills-quote-arrow quills-quote-arrow-prev" id="quills-quote-prev" aria-label="<?php esc_attr_e( 'Previous Quote', 'coffee-cafe-corner' ); ?>">
+					<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+				</button>
+				<div class="quills-quote-slider-track" id="quills-quote-slider-track">
+					<div class="quills-quote-stars">
+						<span class="quills-gold-star">★</span>
+						<span class="quills-gold-star">★</span>
+						<span class="quills-gold-star">★</span>
+						<span class="quills-gold-star">★</span>
+						<span class="quills-gold-star">★</span>
+					</div>
+					<blockquote class="quills-quote-text" id="quills-quote-text">
+						"Heaven in a cup."
+					</blockquote>
+					<cite class="quills-quote-author" id="quills-quote-author">— Tracy S.</cite>
+				</div>
+				<button type="button" class="quills-quote-arrow quills-quote-arrow-next" id="quills-quote-next" aria-label="<?php esc_attr_e( 'Next Quote', 'coffee-cafe-corner' ); ?>">
+					<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+				</button>
 			</div>
-			<blockquote class="quills-quote-text" id="quills-quote-text">
-				"Heaven in a cup."
-			</blockquote>
-			<cite class="quills-quote-author" id="quills-quote-author">— Tracy S.</cite>
 			
 			<div class="quills-slider-dots">
 				<button type="button" class="quills-slider-dot is-active" data-index="0" aria-label="Quote 1"></button>
@@ -348,16 +358,26 @@ $total_selected = count( $url_processes ) + count( $url_roasts ) + count( $url_t
 				<h2 class="quills-testimonials-heading">
 					<?php esc_html_e( 'More kind words from customers', 'coffee-cafe-corner' ); ?>
 				</h2>
-				<div class="quills-testimonials-stars">
-					<span class="quills-gold-star">★</span>
-					<span class="quills-gold-star">★</span>
-					<span class="quills-gold-star">★</span>
-					<span class="quills-gold-star">★</span>
-					<span class="quills-gold-star">★</span>
+				<div class="quills-quote-slider-wrapper">
+					<button type="button" class="quills-quote-arrow quills-quote-arrow-prev" id="quills-bottom-quote-prev" aria-label="<?php esc_attr_e( 'Previous Testimonial', 'coffee-cafe-corner' ); ?>">
+						<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+					</button>
+					<div class="quills-testimonials-track" id="quills-testimonials-track">
+						<div class="quills-testimonials-stars">
+							<span class="quills-gold-star">★</span>
+							<span class="quills-gold-star">★</span>
+							<span class="quills-gold-star">★</span>
+							<span class="quills-gold-star">★</span>
+							<span class="quills-gold-star">★</span>
+						</div>
+						<blockquote class="quills-testimonials-quote" id="quills-bottom-quote-text">
+							"Amazing coffee. Quills is consistently head and shoulders above others."
+						</blockquote>
+					</div>
+					<button type="button" class="quills-quote-arrow quills-quote-arrow-next" id="quills-bottom-quote-next" aria-label="<?php esc_attr_e( 'Next Testimonial', 'coffee-cafe-corner' ); ?>">
+						<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+					</button>
 				</div>
-				<blockquote class="quills-testimonials-quote" id="quills-bottom-quote-text">
-					"Amazing coffee. Quills is consistently head and shoulders above others."
-				</blockquote>
 
 				<div class="quills-slider-dots">
 					<button type="button" class="quills-slider-dot is-active" data-bottom-index="0" aria-label="Customer 1"></button>

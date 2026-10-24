@@ -43,6 +43,9 @@ $hero_img_url  = $img_dir . $hero_img_file;
 // Section: Where We Started
 $where_started_title = get_post_meta( $page_id, '_quills_where_we_started_title', true ) ?: 'WHERE WE STARTED';
 $where_started_paragraphs = get_post_meta( $page_id, '_quills_where_we_started_paragraphs', true );
+if ( is_string( $where_started_paragraphs ) && ! empty( $where_started_paragraphs ) ) {
+    $where_started_paragraphs = array_filter( array_map( 'trim', preg_split( '/\r\n\r\n|\n\n/', $where_started_paragraphs ) ) );
+}
 if ( empty( $where_started_paragraphs ) || ! is_array( $where_started_paragraphs ) ) {
     $where_started_paragraphs = array(
         "In the early 2000s, many people drank coffee without thinking much about it. I couldn't stop thinking about it.",

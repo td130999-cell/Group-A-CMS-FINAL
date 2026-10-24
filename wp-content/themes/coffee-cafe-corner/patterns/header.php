@@ -28,7 +28,7 @@
       <!-- Center: Logo -->
       <div class="quills-header-center">
         <a href="<?php echo esc_url( home_url( '/' ) ); ?>" class="quills-logo-link" rel="home">
-          <img src="<?php echo esc_url( get_template_directory_uri() . '/assets/images/quills-logo.png' ); ?>" alt="<?php bloginfo( 'name' ); ?>" class="quills-logo-img" />
+          <img src="<?php echo esc_url( get_template_directory_uri() . '/assets/images/gropacoffe.png' ); ?>" alt="<?php bloginfo( 'name' ); ?>" class="quills-logo-img" />
         </a>
       </div>
 

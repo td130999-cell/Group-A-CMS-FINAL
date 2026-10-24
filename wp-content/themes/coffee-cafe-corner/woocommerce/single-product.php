@@ -434,9 +434,84 @@ if ( false !== $cached_reviews && is_array( $cached_reviews ) ) {
                 </div>
 
                 <!-- Buy with Shop Pay Button (Image 1) -->
-                <button type="button" class="quills-btn-shop-pay" id="quills-btn-shop-pay" onclick="window.location.href='<?php echo esc_url(wc_get_checkout_url()); ?>';">
+                <button type="button" class="quills-btn-shop-pay" id="quills-btn-shop-pay" data-checkout-url="<?php echo esc_url(wc_get_checkout_url()); ?>">
                     <span>Buy with</span> <span class="quills-shop-brand">shop</span>
                 </button>
+                <script>
+                (function() {
+                    var btn = document.getElementById('quills-btn-shop-pay');
+                    if (btn) {
+                        btn.addEventListener('click', function(e) {
+                            e.preventDefault();
+                            if (btn.classList.contains('is-disabled') || btn.classList.contains('loading') || btn.getAttribute('data-processing') === 'true') return;
+                            btn.setAttribute('data-processing', 'true');
+                            btn.classList.add('loading');
+                            btn.style.opacity = '0.7';
+
+                            var addBtn = document.getElementById('quills-btn-add-to-cart');
+                            var productId = addBtn ? addBtn.getAttribute('data-product-id') : '<?php echo esc_js($id); ?>';
+                            var qtyInput = document.getElementById('quills-qty-input');
+                            var qty = qtyInput ? (parseInt(qtyInput.value, 10) || 1) : 1;
+
+                            // Size extraction (handles both Merch chips and Coffee pills)
+                            var size = '';
+                            var activeMerchSize = document.querySelector('.quills-merch-size-chips .quills-size-chip.active');
+                            if (activeMerchSize) {
+                                size = activeMerchSize.getAttribute('data-size') || 'M';
+                            } else {
+                                var activeCoffeeSize = document.querySelector('#quills-size-group .quills-pill-btn.active');
+                                if (activeCoffeeSize) size = activeCoffeeSize.getAttribute('data-size') || '12oz';
+                            }
+
+                            // Grind extraction (Coffee only)
+                            var grind = '';
+                            var activeGrind = document.querySelector('#quills-grind-group .quills-pill-btn.active');
+                            if (activeGrind) grind = activeGrind.getAttribute('data-grind') || 'Whole Bean';
+
+                            // Purchase type
+                            var purchaseType = 'onetime';
+                            var checkedPurchase = document.querySelector('input[name="quills_purchase_type"]:checked');
+                            if (checkedPurchase) purchaseType = checkedPurchase.value || 'onetime';
+
+                            var frequency = '';
+                            if (purchaseType === 'subscribe') {
+                                var activeFreq = document.querySelector('.quills-freq-pill.is-selected');
+                                if (activeFreq) frequency = activeFreq.innerText.trim();
+                            }
+
+                            var checkoutUrl = btn.getAttribute('data-checkout-url') || '<?php echo esc_js(wc_get_checkout_url()); ?>';
+                            var isLoggedIn = <?php echo json_encode(is_user_logged_in()); ?>;
+                            var myAccountUrl = '<?php echo esc_js(wc_get_page_permalink("myaccount")); ?>';
+                            var targetUrl = checkoutUrl;
+                            if (!isLoggedIn) {
+                                targetUrl = myAccountUrl + (myAccountUrl.indexOf('?') !== -1 ? '&' : '?') + 'redirect_to=' + encodeURIComponent(checkoutUrl);
+                            }
+
+                            var ajaxUrl = (window.quillsData && window.quillsData.ajaxUrl) ? window.quillsData.ajaxUrl : '<?php echo esc_js(admin_url("admin-ajax.php")); ?>';
+                            var nonce = (window.quillsData && window.quillsData.nonce) ? window.quillsData.nonce : '<?php echo esc_js(wp_create_nonce("quills_nonce")); ?>';
+
+                            var formData = new FormData();
+                            formData.append('action', 'quills_add_to_cart');
+                            formData.append('nonce', nonce);
+                            formData.append('product_id', productId);
+                            formData.append('quantity', qty);
+                            formData.append('size', size);
+                            formData.append('grind', grind);
+                            formData.append('purchase_type', purchaseType);
+                            formData.append('frequency', frequency);
+
+                            fetch(ajaxUrl, {
+                                method: 'POST',
+                                body: formData
+                            }).then(function() {
+                                window.location.href = targetUrl;
+                            }).catch(function() {
+                                window.location.href = targetUrl;
+                            });
+                        });
+                    }
+                })();
+                </script>
 
                 <!-- Toast Notification -->
                 <div class="quills-cart-toast" id="quills-cart-toast">

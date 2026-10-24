@@ -8,6 +8,24 @@
 
 $theme_uri = trailingslashit( get_template_directory_uri() );
 $img_dir   = $theme_uri . 'assets/images/home/';
+
+// 1. Fetch Home Page Dynamic Settings from Database (wp_options)
+$hero_title    = get_option( 'quills_home_hero_title', "We find them, we roast them, you<br>just enjoy them." );
+$hero_subtitle = get_option( 'quills_home_hero_subtitle', "Get new delicious coffees that you and your guests will love, delivered<br>to your door on your schedule." );
+$hero_cta_text = get_option( 'quills_home_hero_cta_text', "START YOUR SUBSCRIPTION" );
+$hero_cta_link = get_option( 'quills_home_hero_cta_link', home_url( '/subscriptions/' ) );
+$hero_rating   = get_option( 'quills_home_rating_text', "4.62 stars across 13,082 reviews" );
+$hero_quote    = get_option( 'quills_home_hero_quote', "“I’ve searched far and wide and this is the place to get your cup or bag of greatness if you happen to be a true coffee aficionado.” — Jacob Y." );
+
+$team_title    = get_option( 'quills_home_team_title', "NO ROBOTS. JUST PEOPLE." );
+$team_p1       = get_option( 'quills_home_team_p1', "You should know who's choosing and roasting your coffee. No algorithms here." );
+$team_p2       = get_option( 'quills_home_team_p2', "It’s a small group of real people in the heart of Louisville, Kentucky who love finding and making great coffee and care about sharing it with you." );
+$team_p3       = get_option( 'quills_home_team_p3', "It’s our founder, Nathan, four operations team members, five roasters, four cafe managers, and 42 baristas." );
+$team_p4       = get_option( 'quills_home_team_p4', "Some of us have worked in coffee for years. Others discovered their passion more recently. What we all have in common is this belief that coffee should bring people together." );
+$team_p5       = get_option( 'quills_home_team_p5', "We’re doing our best to deliver coffee that connects people." );
+$team_cta_text = get_option( 'quills_home_team_cta_text', "SHOW ME THE COFFEE" );
+$team_cta_link = get_option( 'quills_home_team_cta_link', home_url( '/coffee/' ) );
+$team_quote    = get_option( 'quills_home_team_quote', "“The best tasting pour over coffee on this planet.” — Kelsey B." );
 ?>
 
 <div class="quills-home-wrapper alignfull">
@@ -22,21 +40,21 @@ $img_dir   = $theme_uri . 'assets/images/home/';
     <div class="quills-hero-content-wrapper">
       <div class="quills-hero-content">
         <h1 class="quills-hero-title">
-          We find them, we roast them, you<br>just enjoy them.
+          <?php echo wp_kses( $hero_title, array( 'br' => array(), 'strong' => array(), 'em' => array() ) ); ?>
         </h1>
         <p class="quills-hero-subtitle">
-          Get new delicious coffees that you and your guests will love, delivered<br>to your door on your schedule.
+          <?php echo wp_kses( $hero_subtitle, array( 'br' => array(), 'strong' => array(), 'em' => array() ) ); ?>
         </p>
         <div class="quills-hero-cta">
-          <a href="<?php echo esc_url( home_url( '/subscriptions/' ) ); ?>" class="quills-btn quills-btn--hero" aria-label="Start Your Subscription">
-            START YOUR SUBSCRIPTION
+          <a href="<?php echo esc_url( $hero_cta_link ); ?>" class="quills-btn quills-btn--hero" aria-label="<?php echo esc_attr( $hero_cta_text ); ?>">
+            <?php echo esc_html( $hero_cta_text ); ?>
           </a>
         </div>
         <div class="quills-hero-reviews">
           <div class="quills-hero-stars-wrap">
             <img src="<?php echo esc_url( $img_dir . 'hero-stars.png' ); ?>" alt="5 Stars" class="quills-hero-stars-img" width="135" height="25" />
           </div>
-          <p class="quills-rating-text">4.62 stars across 13,082 reviews</p>
+          <p class="quills-rating-text"><?php echo esc_html( $hero_rating ); ?></p>
           <p class="quills-featured-label"><strong>Featured in</strong></p>
           <div class="quills-press-logos">
             <img src="<?php echo esc_url( $img_dir . 'logo-garden-and-gun.png' ); ?>" alt="Garden &amp; Gun" class="quills-press-logo quills-press-garden" />
@@ -46,7 +64,7 @@ $img_dir   = $theme_uri . 'assets/images/home/';
           </div>
         </div>
         <div class="quills-hero-quote">
-          <p><em>“I’ve searched far and wide and this is the place to get your cup or bag of greatness if you happen to be a true coffee aficionado.”</em> — Jacob Y.</p>
+          <p><em><?php echo esc_html( $hero_quote ); ?></em></p>
         </div>
       </div>
     </div>
@@ -62,21 +80,21 @@ $img_dir   = $theme_uri . 'assets/images/home/';
           <img src="<?php echo esc_url( $img_dir . 'team-nathan.jpg' ); ?>" alt="Quills Coffee Team" class="quills-split-img" loading="lazy" />
         </div>
         <div class="quills-split-content">
-          <h2 class="quills-section-title">NO ROBOTS. JUST PEOPLE.</h2>
+          <h2 class="quills-section-title"><?php echo esc_html( $team_title ); ?></h2>
           <div class="quills-text-body">
-            <p>You should know who's choosing and roasting your coffee. No algorithms here.</p>
-            <p>It’s a small group of real people in the heart of Louisville, Kentucky who love finding and making great coffee and care about sharing it with you.</p>
-            <p>It’s our founder, Nathan, four operations team members, five roasters, four cafe managers, and 42 baristas.</p>
-            <p>Some of us have worked in coffee for years. Others discovered their passion more recently. What we all have in common is this belief that coffee should bring people together.</p>
-            <p>We’re doing our best to deliver coffee that connects people.</p>
+            <p><?php echo esc_html( $team_p1 ); ?></p>
+            <p><?php echo esc_html( $team_p2 ); ?></p>
+            <p><?php echo esc_html( $team_p3 ); ?></p>
+            <p><?php echo esc_html( $team_p4 ); ?></p>
+            <p><?php echo esc_html( $team_p5 ); ?></p>
           </div>
           <div class="quills-split-cta">
-            <a href="<?php echo esc_url( home_url( '/coffee/' ) ); ?>" class="quills-btn quills-btn--orange" aria-label="Show Me The Coffee">
-              SHOW ME THE COFFEE
+            <a href="<?php echo esc_url( $team_cta_link ); ?>" class="quills-btn quills-btn--orange" aria-label="<?php echo esc_attr( $team_cta_text ); ?>">
+              <?php echo esc_html( $team_cta_text ); ?>
             </a>
           </div>
           <div class="quills-split-quote">
-            <p>“The best tasting pour over coffee on this planet.” — Kelsey B.</p>
+            <p><?php echo esc_html( $team_quote ); ?></p>
           </div>
         </div>
       </div>
@@ -519,10 +537,18 @@ $img_dir   = $theme_uri . 'assets/images/home/';
           <p>We share what the people behind your coffee have been up to that week. You may hear about some wild coffee our head roaster Justin has tasted. Or behind-the-scenes on the new seasonal drinks our beverage director Jess is whipping up.</p>
           <p>And we always add a little something fun in the PS.</p>
         </div>
+        <div class="quills-hoot-form-container">
+        <?php
+        if ( shortcode_exists( 'contact-form-7' ) ) {
+            echo do_shortcode( '[contact-form-7 id="141" title="The Hoot Newsletter"]' );
+        } else {
+        ?>
         <form class="quills-hoot-form" method="post" action="<?php echo esc_url( home_url( '/contact#newsletter' ) ); ?>">
           <input type="email" name="hoot_email" class="quills-hoot-input" placeholder="Email" required autocomplete="email" />
           <button type="submit" class="quills-hoot-btn" aria-label="Try It">TRY IT</button>
         </form>
+        <?php } ?>
+        </div>
       </div>
     </div>
   </section>

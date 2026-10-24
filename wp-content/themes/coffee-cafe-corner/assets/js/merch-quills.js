@@ -281,10 +281,43 @@
         });
 
         // Inside Quick Shop Drawer: Buy with Shop Pay
-        $(document).on('click', '#quills-qs-btn-shop', function (e) {
+        $(document).off('click.quillsQSShop', '#quills-qs-btn-shop').on('click.quillsQSShop', '#quills-qs-btn-shop', function (e) {
             e.preventDefault();
-            var checkoutUrl = $(this).data('checkout-url') || '/checkout/';
-            window.location.href = checkoutUrl;
+            var $btn = $(this);
+            if ($btn.data('processing') || $btn.hasClass('loading') || $btn.prop('disabled')) return;
+            $btn.data('processing', true).addClass('loading').prop('disabled', true).css('opacity', '0.7');
+
+            var checkoutUrl = $btn.data('checkout-url') || '/checkout/';
+            var targetUrl = checkoutUrl;
+            var qData = (typeof quillsData !== 'undefined') ? quillsData : ((typeof window.quillsMerch !== 'undefined') ? window.quillsMerch : null);
+            if (qData && !qData.isLoggedIn) {
+                var myAcc = qData.myAccountUrl || '/my-account/';
+                targetUrl = myAcc + (myAcc.indexOf('?') !== -1 ? '&' : '?') + 'redirect_to=' + encodeURIComponent(checkoutUrl);
+            }
+            var $wrapper = $btn.closest('.quills-qs-wrapper, .quills-qs-content');
+            var productId = $btn.data('product-id');
+            var qty = parseInt($wrapper.find('#quills-qs-qty-input').val(), 10) || 1;
+            var size = $wrapper.find('.quills-qs-size-chip.active, .quills-size-chip.active, .quills-qs-size-pill.active').data('size') || '';
+
+            var ajaxUrl = (window.quillsMerch && window.quillsMerch.ajaxUrl) ? window.quillsMerch.ajaxUrl : ((typeof quillsData !== 'undefined' && quillsData.ajaxUrl) ? quillsData.ajaxUrl : '/wp-admin/admin-ajax.php');
+            var nonce = (window.quillsMerch && window.quillsMerch.nonce) ? window.quillsMerch.nonce : ((typeof quillsData !== 'undefined' && quillsData.nonce) ? quillsData.nonce : '');
+
+            $btn.addClass('loading').prop('disabled', true).css('opacity', '0.7');
+
+            $.ajax({
+                url: ajaxUrl,
+                type: 'POST',
+                data: {
+                    action: 'quills_add_to_cart',
+                    nonce: nonce,
+                    product_id: productId,
+                    quantity: qty,
+                    size: size
+                },
+                complete: function () {
+                    window.location.href = targetUrl;
+                }
+            });
         });
 
         // 7. Add to Cart on Merch Single Product Detail Page

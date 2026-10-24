@@ -26,6 +26,16 @@ class Coffee_Cafe_Corner_Coffee_DB {
         add_action( 'init', array( __CLASS__, 'ensure_database_records' ) );
         add_action( 'wp_ajax_quills_filter_coffee', array( __CLASS__, 'ajax_filter_coffee' ) );
         add_action( 'wp_ajax_nopriv_quills_filter_coffee', array( __CLASS__, 'ajax_filter_coffee' ) );
+        add_action( 'save_post_product', array( __CLASS__, 'clear_product_and_filter_cache' ) );
+        add_action( 'woocommerce_update_product', array( __CLASS__, 'clear_product_and_filter_cache' ) );
+        add_action( 'delete_post', array( __CLASS__, 'clear_product_and_filter_cache' ) );
+    }
+
+    public static function clear_product_and_filter_cache( $post_id = 0 ) {
+        delete_transient( 'quills_coffee_filter_counts' );
+        if ( ! empty( $post_id ) ) {
+            delete_transient( 'quills_card_html_' . $post_id );
+        }
     }
 
     public static function ensure_database_records() {
@@ -194,6 +204,12 @@ class Coffee_Cafe_Corner_Coffee_DB {
     }
 
     public static function get_filter_counts() {
+        $transient_key = 'quills_coffee_filter_counts';
+        $cached_counts = get_transient( $transient_key );
+        if ( false !== $cached_counts && is_array( $cached_counts ) ) {
+            return $cached_counts;
+        }
+
         global $wpdb;
 
         $coffee_ids = $wpdb->get_col( $wpdb->prepare( "
@@ -281,6 +297,7 @@ class Coffee_Cafe_Corner_Coffee_DB {
             }
         }
 
+        set_transient( $transient_key, $counts, 12 * HOUR_IN_SECONDS );
         return $counts;
     }
 

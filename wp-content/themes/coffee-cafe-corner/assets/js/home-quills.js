@@ -8,41 +8,50 @@
   'use strict';
 
   document.addEventListener('DOMContentLoaded', function () {
-    // FAQ Accordion
-    const accordionTriggers = document.querySelectorAll('.quills-accordion-trigger');
+    // FAQ Accordion (Delegated handler for robust execution)
+    document.addEventListener('click', function (e) {
+      const trigger = e.target.closest('.quills-accordion-trigger');
+      if (!trigger) return;
+      e.preventDefault();
 
-    accordionTriggers.forEach(function (trigger) {
-      trigger.addEventListener('click', function () {
-        const item = this.closest('.quills-accordion-item');
-        const panel = item ? item.querySelector('.quills-accordion-panel') : null;
+      const item = trigger.closest('.quills-accordion-item');
+      if (!item) return;
 
-        if (!item || !panel) return;
+      const panel = item.querySelector('.quills-accordion-panel');
+      const isOpen = item.classList.contains('is-open') || item.classList.contains('open');
 
-        const isOpen = item.classList.contains('is-open');
-
-        // Optional: Close other open accordion items
-        const allItems = document.querySelectorAll('.quills-accordion-item');
-        allItems.forEach(function (otherItem) {
-          if (otherItem !== item && otherItem.classList.contains('is-open')) {
-            otherItem.classList.remove('is-open');
-            const otherBtn = otherItem.querySelector('.quills-accordion-trigger');
-            if (otherBtn) otherBtn.setAttribute('aria-expanded', 'false');
-            const otherPanel = otherItem.querySelector('.quills-accordion-panel');
-            if (otherPanel) otherPanel.style.maxHeight = null;
+      // Close other open accordion items
+      const allItems = document.querySelectorAll('.quills-accordion-item');
+      allItems.forEach(function (otherItem) {
+        if (otherItem !== item && (otherItem.classList.contains('is-open') || otherItem.classList.contains('open'))) {
+          otherItem.classList.remove('is-open');
+          otherItem.classList.remove('open');
+          const otherBtn = otherItem.querySelector('.quills-accordion-trigger');
+          if (otherBtn) otherBtn.setAttribute('aria-expanded', 'false');
+          const otherPanel = otherItem.querySelector('.quills-accordion-panel');
+          if (otherPanel) {
+            otherPanel.style.maxHeight = null;
           }
-        });
-
-        // Toggle current item
-        if (isOpen) {
-          item.classList.remove('is-open');
-          this.setAttribute('aria-expanded', 'false');
-          panel.style.maxHeight = null;
-        } else {
-          item.classList.add('is-open');
-          this.setAttribute('aria-expanded', 'true');
-          panel.style.maxHeight = panel.scrollHeight + 'px';
         }
       });
+
+      // Toggle current item
+      if (isOpen) {
+        item.classList.remove('is-open');
+        item.classList.remove('open');
+        trigger.setAttribute('aria-expanded', 'false');
+        if (panel) {
+          panel.style.maxHeight = null;
+        }
+      } else {
+        item.classList.add('is-open');
+        item.classList.add('open');
+        trigger.setAttribute('aria-expanded', 'true');
+        if (panel) {
+          const scrollH = panel.scrollHeight;
+          panel.style.maxHeight = Math.max(scrollH, 250) + 'px';
+        }
+      }
     });
 
     // Touch device support for product card rollover

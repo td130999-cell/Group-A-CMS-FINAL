@@ -58,6 +58,17 @@ $g3_url       = filter_var( $cafe['gallery_3'], FILTER_VALIDATE_URL ) ? $cafe['g
 
 <div class="quills-cafe-subpage-container">
 
+    <!-- Breadcrumbs -->
+    <div class="quills-visit-breadcrumb-wrap" style="max-width: 1040px; margin: 20px auto 0 auto; padding: 0 16px;">
+        <nav class="quills-visit-breadcrumbs" aria-label="Breadcrumb">
+            <a href="<?php echo esc_url( home_url( '/' ) ); ?>">Home</a>
+            <span class="quills-visit-bc-sep">/</span>
+            <a href="<?php echo esc_url( home_url( '/visit/' ) ); ?>">Locations & Hours</a>
+            <span class="quills-visit-bc-sep">/</span>
+            <span class="quills-visit-bc-current"><?php echo esc_html( $cafe['title'] ); ?></span>
+        </nav>
+    </div>
+
     <!-- Cafe Title & Narrative Intro -->
     <header class="quills-subpage-header">
         <h1 class="quills-subpage-title"><?php echo esc_html( $cafe['title'] ); ?></h1>
