@@ -22,25 +22,30 @@ class Coffee_Cafe_Corner_Page_Content_Admin {
 		add_action( 'add_meta_boxes', array( __CLASS__, 'register_page_meta_boxes' ) );
 		add_action( 'save_post_page', array( __CLASS__, 'save_page_meta' ), 10, 2 );
 		add_action( 'admin_init', array( __CLASS__, 'handle_home_settings_save' ) );
-		add_action( 'wp', array( __CLASS__, 'refresh_home_pattern' ), 1 );
-		add_filter( 'render_block', array( __CLASS__, 'render_dynamic_home_pattern' ), 10, 2 );
+		add_action( 'admin_init', array( __CLASS__, 'handle_coffee_settings_save' ) );
+		add_action( 'admin_init', array( __CLASS__, 'handle_brew_gear_settings_save' ) );
+		add_action( 'admin_init', array( __CLASS__, 'handle_subscriptions_settings_save' ) );
+		add_action( 'wp', array( __CLASS__, 'refresh_dynamic_patterns' ), 1 );
+		add_filter( 'render_block', array( __CLASS__, 'render_dynamic_patterns' ), 10, 2 );
 	}
 
 	/**
-	 * Dynamically re-evaluate and register Home Quills pattern on every frontend load
+	 * Dynamically re-evaluate and register patterns on every frontend load
 	 */
-	public static function refresh_home_pattern() {
+	public static function refresh_dynamic_patterns() {
 		if ( ! class_exists( 'WP_Block_Patterns_Registry' ) ) {
 			return;
 		}
 		$registry = WP_Block_Patterns_Registry::get_instance();
+
+		// Refresh Home Quills
 		if ( $registry->is_registered( 'coffee-cafe-corner/home-quills' ) ) {
 			$registry->unregister( 'coffee-cafe-corner/home-quills' );
 		}
-		$pattern_file = get_template_directory() . '/patterns/home-quills.php';
-		if ( file_exists( $pattern_file ) ) {
+		$pattern_home = get_template_directory() . '/patterns/home-quills.php';
+		if ( file_exists( $pattern_home ) ) {
 			ob_start();
-			include $pattern_file;
+			include $pattern_home;
 			$pattern_content = ob_get_clean();
 			$registry->register( 'coffee-cafe-corner/home-quills', array(
 				'title'      => 'Home Quills',
@@ -48,30 +53,110 @@ class Coffee_Cafe_Corner_Page_Content_Admin {
 				'content'    => $pattern_content,
 			) );
 		}
+
+		// Refresh Coffee Collection
+		if ( $registry->is_registered( 'coffee-cafe-corner/coffee' ) ) {
+			$registry->unregister( 'coffee-cafe-corner/coffee' );
+		}
+		$pattern_coffee = get_template_directory() . '/patterns/coffee.php';
+		if ( file_exists( $pattern_coffee ) ) {
+			ob_start();
+			include $pattern_coffee;
+			$pattern_coffee_content = ob_get_clean();
+			$registry->register( 'coffee-cafe-corner/coffee', array(
+				'title'      => 'Coffee Collection',
+				'categories' => array( 'coffee-cafe-corner', 'pages' ),
+				'content'    => $pattern_coffee_content,
+			) );
+		}
+
+		// Refresh Brew Gear
+		if ( $registry->is_registered( 'coffee-cafe-corner/brew-gear' ) ) {
+			$registry->unregister( 'coffee-cafe-corner/brew-gear' );
+		}
+		$pattern_brew = get_template_directory() . '/patterns/brew-gear.php';
+		if ( file_exists( $pattern_brew ) ) {
+			ob_start();
+			include $pattern_brew;
+			$pattern_brew_content = ob_get_clean();
+			$registry->register( 'coffee-cafe-corner/brew-gear', array(
+				'title'      => 'Brew Gear',
+				'categories' => array( 'coffee-cafe-corner', 'pages' ),
+				'content'    => $pattern_brew_content,
+			) );
+		}
+
+		// Refresh Subscriptions
+		if ( $registry->is_registered( 'coffee-cafe-corner/subscriptions' ) ) {
+			$registry->unregister( 'coffee-cafe-corner/subscriptions' );
+		}
+		$pattern_sub = get_template_directory() . '/patterns/subscriptions.php';
+		if ( file_exists( $pattern_sub ) ) {
+			ob_start();
+			include $pattern_sub;
+			$pattern_sub_content = ob_get_clean();
+			$registry->register( 'coffee-cafe-corner/subscriptions', array(
+				'title'      => 'Subscriptions',
+				'categories' => array( 'coffee-cafe-corner', 'pages' ),
+				'content'    => $pattern_sub_content,
+			) );
+		}
+	}
+
+	public static function refresh_home_pattern() {
+		self::refresh_dynamic_patterns();
 	}
 
 	/**
-	 * Ensure Home Quills pattern evaluates dynamically at runtime on frontend
+	 * Ensure patterns evaluate dynamically at runtime on frontend
 	 */
-	public static function render_dynamic_home_pattern( $block_content, $block ) {
+	public static function render_dynamic_patterns( $block_content, $block ) {
 		if ( isset( $block['blockName'] ) && 'core/pattern' === $block['blockName'] ) {
-			if ( isset( $block['attrs']['slug'] ) && 'coffee-cafe-corner/home-quills' === $block['attrs']['slug'] ) {
-				$pattern_file = get_template_directory() . '/patterns/home-quills.php';
-				if ( file_exists( $pattern_file ) ) {
-					ob_start();
-					include $pattern_file;
-					return ob_get_clean();
+			if ( isset( $block['attrs']['slug'] ) ) {
+				$slug = $block['attrs']['slug'];
+				if ( 'coffee-cafe-corner/home-quills' === $slug ) {
+					$pattern_file = get_template_directory() . '/patterns/home-quills.php';
+					if ( file_exists( $pattern_file ) ) {
+						ob_start();
+						include $pattern_file;
+						return ob_get_clean();
+					}
+				} elseif ( 'coffee-cafe-corner/coffee' === $slug ) {
+					$pattern_file = get_template_directory() . '/patterns/coffee.php';
+					if ( file_exists( $pattern_file ) ) {
+						ob_start();
+						include $pattern_file;
+						return ob_get_clean();
+					}
+				} elseif ( 'coffee-cafe-corner/brew-gear' === $slug ) {
+					$pattern_file = get_template_directory() . '/patterns/brew-gear.php';
+					if ( file_exists( $pattern_file ) ) {
+						ob_start();
+						include $pattern_file;
+						return ob_get_clean();
+					}
+				} elseif ( 'coffee-cafe-corner/subscriptions' === $slug ) {
+					$pattern_file = get_template_directory() . '/patterns/subscriptions.php';
+					if ( file_exists( $pattern_file ) ) {
+						ob_start();
+						include $pattern_file;
+						return ob_get_clean();
+					}
 				}
 			}
 		}
 		return $block_content;
 	}
 
+	public static function render_dynamic_home_pattern( $block_content, $block ) {
+		return self::render_dynamic_patterns( $block_content, $block );
+	}
+
 	/**
 	 * Enqueue WordPress Media Library scripts
 	 */
 	public static function enqueue_admin_assets( $hook ) {
-		if ( false !== strpos( $hook, 'quills-home-settings' ) || 'post.php' === $hook || 'post-new.php' === $hook ) {
+		if ( false !== strpos( $hook, 'quills-home-settings' ) || false !== strpos( $hook, 'quills-coffee-settings' ) || false !== strpos( $hook, 'quills-brew-gear-settings' ) || false !== strpos( $hook, 'quills-subscriptions-settings' ) || 'post.php' === $hook || 'post-new.php' === $hook ) {
 			wp_enqueue_media();
 		}
 	}
@@ -100,6 +185,27 @@ class Coffee_Cafe_Corner_Page_Content_Admin {
 			'manage_options',
 			'quills-home-settings',
 			array( __CLASS__, 'render_home_settings_page' )
+		);
+		add_theme_page(
+			__( 'Cài đặt Trang Cà phê (Coffee)', 'coffee-cafe-corner' ),
+			__( 'Cài đặt Trang Cà phê (Coffee)', 'coffee-cafe-corner' ),
+			'manage_options',
+			'quills-coffee-settings',
+			array( __CLASS__, 'render_coffee_settings_page' )
+		);
+		add_theme_page(
+			__( 'Cài đặt Trang Dụng cụ (Brew Gear)', 'coffee-cafe-corner' ),
+			__( 'Cài đặt Dụng cụ (Brew Gear)', 'coffee-cafe-corner' ),
+			'manage_options',
+			'quills-brew-gear-settings',
+			array( __CLASS__, 'render_brew_gear_settings_page' )
+		);
+		add_theme_page(
+			__( 'Cài đặt Gói định kỳ (Subscriptions)', 'coffee-cafe-corner' ),
+			__( 'Cài đặt Gói định kỳ (Subscriptions)', 'coffee-cafe-corner' ),
+			'manage_options',
+			'quills-subscriptions-settings',
+			array( __CLASS__, 'render_subscriptions_settings_page' )
 		);
 	}
 
@@ -136,6 +242,42 @@ class Coffee_Cafe_Corner_Page_Content_Admin {
 				'quills_home_content_meta',
 				__( '🏠 Quản lý Toàn Bộ Nội dung Trang Chủ (Quills Home Page)', 'coffee-cafe-corner' ),
 				array( __CLASS__, 'render_home_meta_box' ),
+				'page',
+				'normal',
+				'high'
+			);
+		}
+
+		// Coffee Page Meta Box
+		if ( in_array( $slug, array( 'coffee', 'ca-phe' ), true ) ) {
+			add_meta_box(
+				'quills_coffee_content_meta',
+				__( '☕ Quản lý Toàn Bộ Nội dung Trang Cà Phê (Coffee Page Content)', 'coffee-cafe-corner' ),
+				array( __CLASS__, 'render_coffee_meta_box' ),
+				'page',
+				'normal',
+				'high'
+			);
+		}
+
+		// Brew Gear Page Meta Box
+		if ( in_array( $slug, array( 'brew-gear', 'dung-cu-pha' ), true ) ) {
+			add_meta_box(
+				'quills_brew_gear_content_meta',
+				__( '⚙️ Quản lý Toàn Bộ Nội dung Trang Dụng Cụ Pha (Brew Gear Content)', 'coffee-cafe-corner' ),
+				array( __CLASS__, 'render_brew_gear_meta_box' ),
+				'page',
+				'normal',
+				'high'
+			);
+		}
+
+		// Subscriptions Page Meta Box
+		if ( in_array( $slug, array( 'subscriptions', 'ca-phe-dinh-ky' ), true ) ) {
+			add_meta_box(
+				'quills_subscriptions_content_meta',
+				__( '📦 Quản lý Toàn Bộ Nội dung Trang Gói Định Kỳ (Subscriptions Content)', 'coffee-cafe-corner' ),
+				array( __CLASS__, 'render_subscriptions_meta_box' ),
 				'page',
 				'normal',
 				'high'
@@ -288,6 +430,21 @@ class Coffee_Cafe_Corner_Page_Content_Admin {
 		// Save Home Meta if editing Home page
 		if ( isset( $_POST['quills_home_meta_nonce_field'] ) && wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['quills_home_meta_nonce_field'] ) ), 'quills_home_meta_nonce' ) ) {
 			self::save_home_fields( $_POST );
+		}
+
+		// Save Coffee Meta if editing Coffee page
+		if ( isset( $_POST['quills_coffee_meta_nonce_field'] ) && wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['quills_coffee_meta_nonce_field'] ) ), 'quills_coffee_meta_nonce' ) ) {
+			self::save_coffee_fields( $_POST );
+		}
+
+		// Save Brew Gear Meta if editing Brew Gear page
+		if ( isset( $_POST['quills_brew_gear_meta_nonce_field'] ) && wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['quills_brew_gear_meta_nonce_field'] ) ), 'quills_brew_gear_meta_nonce' ) ) {
+			self::save_brew_gear_fields( $_POST );
+		}
+
+		// Save Subscriptions Meta if editing Subscriptions page
+		if ( isset( $_POST['quills_subscriptions_meta_nonce_field'] ) && wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['quills_subscriptions_meta_nonce_field'] ) ), 'quills_subscriptions_meta_nonce' ) ) {
+			self::save_subscriptions_fields( $_POST );
 		}
 	}
 
@@ -1228,6 +1385,1166 @@ class Coffee_Cafe_Corner_Page_Content_Admin {
 				}
 			}
 		}
+	}
+
+	/**
+	 * Render Meta Box for Coffee Page (in page 'Coffee')
+	 */
+	public static function render_coffee_meta_box( $post ) {
+		wp_nonce_field( 'quills_coffee_meta_nonce', 'quills_coffee_meta_nonce_field' );
+		self::render_coffee_form_fields();
+	}
+
+	/**
+	 * Render Standalone Coffee Settings Page under Appearance
+	 */
+	public static function render_coffee_settings_page() {
+		?>
+		<div class="wrap">
+			<h1 style="display: flex; align-items: center; gap: 10px; margin-bottom: 20px;">
+				<span>☕ Quản lý Toàn Bộ Nội dung Trang Cà Phê (Coffee Collection)</span>
+			</h1>
+
+			<?php if ( isset( $_GET['updated'] ) ) : ?>
+				<div class="notice notice-success is-dismissible">
+					<p><strong>✅ Dữ liệu Trang Cà phê đã được lưu thành công vào Database!</strong> Hãy mở trang /coffee/ ngoài giao diện và tải lại để xem nội dung mới nhất.</p>
+				</div>
+			<?php endif; ?>
+
+			<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
+				<input type="hidden" name="action" value="quills_save_coffee_settings">
+				<?php wp_nonce_field( 'quills_coffee_settings_action', 'quills_coffee_settings_nonce' ); ?>
+
+				<?php self::render_coffee_form_fields(); ?>
+
+				<div style="position: sticky; bottom: 20px; background: #fff; padding: 15px 20px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); border: 1px solid #cbd5e1; z-index: 100; display: flex; justify-content: space-between; align-items: center;">
+					<span style="font-weight: 600; color: #334155;">✨ Nhấn nút Lưu sau khi chỉnh sửa bất kỳ mục nào trên trang Cà phê:</span>
+					<input type="submit" name="submit" id="submit" class="button button-primary button-large" style="height: 44px; padding: 0 24px; font-size: 15px; font-weight: 700; background: #663A1E; border-color: #4a2812;" value="💾 Lưu Toàn Bộ Thay Đổi Trang Cà Phê (Save Coffee Settings)">
+				</div>
+			</form>
+		</div>
+		<?php
+	}
+
+	/**
+	 * Shared Form Fields for Coffee Page
+	 */
+	public static function render_coffee_form_fields() {
+		$coffee_img_dir = trailingslashit( get_template_directory_uri() ) . 'assets/images/coffee/';
+
+		$breadcrumb_home = get_option( 'quills_coffee_breadcrumb_home', 'Home' );
+		$breadcrumb_cur  = get_option( 'quills_coffee_breadcrumb_current', 'Coffee' );
+		$hero_title      = get_option( 'quills_coffee_hero_title', 'Coffee' );
+		$hero_img        = get_option( 'quills_coffee_hero_img', $coffee_img_dir . 'coffee-hero-barista.jpg' );
+
+		$roast_headline = get_option( 'quills_coffee_roast_headline', 'We want your coffee to be as fresh as possible. Therefore, we roast everything to order.' );
+		$roast_schedule = get_option( 'quills_coffee_roast_schedule', "Orders placed by midnight Sunday ship by Wednesday.<br />\nOrders placed by midnight Tuesday ship by Friday." );
+
+		$top_quote_1_text   = get_option( 'quills_coffee_top_quote_1_text', '"Heaven in a cup."' );
+		$top_quote_1_author = get_option( 'quills_coffee_top_quote_1_author', '— Tracy S.' );
+		$top_quote_2_text   = get_option( 'quills_coffee_top_quote_2_text', '"The cleanest pour-over roast in Louisville. Sweet and lively."' );
+		$top_quote_2_author = get_option( 'quills_coffee_top_quote_2_author', '— Michael K.' );
+		$top_quote_3_text   = get_option( 'quills_coffee_top_quote_3_text', '"Consistently fresh, vibrant and roasted with exceptional care."' );
+		$top_quote_3_author = get_option( 'quills_coffee_top_quote_3_author', '— Amanda L.' );
+
+		$tab_blend    = get_option( 'quills_coffee_tab_blend', 'Blends' );
+		$tab_single   = get_option( 'quills_coffee_tab_single', 'Single Origin' );
+		$tab_espresso = get_option( 'quills_coffee_tab_espresso', 'Espresso' );
+		$tab_decaf    = get_option( 'quills_coffee_tab_decaf', 'Decaf' );
+
+		$bottom_heading        = get_option( 'quills_coffee_bottom_heading', 'More kind words from customers' );
+		$bottom_quote_1_text   = get_option( 'quills_coffee_bottom_quote_1_text', '"Amazing coffee. Quills is consistently head and shoulders above others."' );
+		$bottom_quote_1_author = get_option( 'quills_coffee_bottom_quote_1_author', '— Mitchell George' );
+		$bottom_quote_2_text   = get_option( 'quills_coffee_bottom_quote_2_text', '"Their single-origin Ethiopia Bombe is hands-down the best coffee I had this year."' );
+		$bottom_quote_2_author = get_option( 'quills_coffee_bottom_quote_2_author', '— Sarah Jenkins' );
+		$bottom_quote_3_text   = get_option( 'quills_coffee_bottom_quote_3_text', '"Subscribed to Blacksmith espresso for over 2 years now. Never disappointed."' );
+		$bottom_quote_3_author = get_option( 'quills_coffee_bottom_quote_3_author', '— David R.' );
+		?>
+		<style>
+			.quills-admin-nav { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 20px; background: #fff; padding: 12px 16px; border-radius: 8px; border: 1px solid #cbd5e1; position: sticky; top: 32px; z-index: 99; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+			.quills-admin-nav a { text-decoration: none; font-size: 13px; font-weight: 600; color: #475569; padding: 6px 12px; border-radius: 6px; background: #f1f5f9; transition: all 0.2s; }
+			.quills-admin-nav a:hover { background: #663A1E; color: #fff; }
+			.quills-card { background: #ffffff; border: 1px solid #e2e8f0; border-radius: 8px; padding: 22px; margin-bottom: 24px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
+			.quills-card-title { font-size: 17px; font-weight: 700; color: #1e293b; margin-top: 0; margin-bottom: 18px; border-bottom: 2px solid #663A1E; padding-bottom: 10px; display: flex; align-items: center; gap: 8px; }
+			.quills-form-table { width: 100%; border-collapse: collapse; }
+			.quills-form-table th { width: 230px; text-align: left; vertical-align: top; padding: 12px 15px 12px 0; font-weight: 600; color: #334155; font-size: 13.5px; }
+			.quills-form-table td { padding: 8px 0; }
+			.quills-form-table input[type="text"], .quills-form-table textarea { width: 100%; max-width: 680px; border: 1px solid #cbd5e1; border-radius: 6px; padding: 8px 12px; font-size: 14px; }
+			.quills-img-row { display: flex; gap: 12px; align-items: center; margin-bottom: 6px; flex-wrap: wrap; }
+			.quills-img-preview { max-height: 80px; max-width: 140px; object-fit: contain; border-radius: 4px; border: 1px solid #cbd5e1; background: #fafafa; padding: 2px; }
+			.quills-desc { font-size: 12px; color: #64748b; margin-top: 4px; }
+			.quills-step-box { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 6px; padding: 16px; margin-bottom: 15px; max-width: 700px; }
+		</style>
+
+		<!-- Fast Navigation Jump Bar -->
+		<div class="quills-admin-nav">
+			<a href="#sec-coffee-hero">☕ 1. Hero Banner & Điều Hướng</a>
+			<a href="#sec-coffee-roast">♨️ 2. Thông Báo Lịch Rang</a>
+			<a href="#sec-coffee-top-quotes">💬 3. Slider Đánh Giá (Top Quotes)</a>
+			<a href="#sec-coffee-pills">🏷️ 4. 4 Tab Nút Lọc Danh Mục</a>
+			<a href="#sec-coffee-bottom-quotes">⭐ 5. Khối Đánh Giá Cuối Trang</a>
+		</div>
+
+		<!-- SECTION 1: HERO BANNER & BREADCRUMBS -->
+		<div class="quills-card" id="sec-coffee-hero">
+			<h2 class="quills-card-title">☕ 1. Phần Hero Banner & Điều Hướng (Breadcrumbs)</h2>
+			<table class="quills-form-table">
+				<tr>
+					<th><label for="quills_coffee_breadcrumb_home">Chữ liên kết Home (Breadcrumb):</label></th>
+					<td>
+						<input type="text" name="quills_coffee_breadcrumb_home" id="quills_coffee_breadcrumb_home" value="<?php echo esc_attr( $breadcrumb_home ); ?>">
+						<div class="quills-desc">Mặc định: Home</div>
+					</td>
+				</tr>
+				<tr>
+					<th><label for="quills_coffee_breadcrumb_current">Chữ trang hiện tại (Breadcrumb):</label></th>
+					<td>
+						<input type="text" name="quills_coffee_breadcrumb_current" id="quills_coffee_breadcrumb_current" value="<?php echo esc_attr( $breadcrumb_cur ); ?>">
+						<div class="quills-desc">Mặc định: Coffee</div>
+					</td>
+				</tr>
+				<tr>
+					<th><label for="quills_coffee_hero_title">Tiêu đề Hero Banner:</label></th>
+					<td>
+						<input type="text" name="quills_coffee_hero_title" id="quills_coffee_hero_title" value="<?php echo esc_attr( $hero_title ); ?>">
+						<div class="quills-desc">Kiểu chữ nghệ thuật (Script Font) hiển thị giữa banner. Mặc định: Coffee</div>
+					</td>
+				</tr>
+				<tr>
+					<th><label for="quills_coffee_hero_img">Ảnh bìa Hero Banner:</label></th>
+					<td>
+						<div class="quills-img-row">
+							<img id="preview_quills_coffee_hero_img" src="<?php echo esc_url( $hero_img ); ?>" class="quills-img-preview" alt="Coffee Hero Preview" />
+							<input type="text" name="quills_coffee_hero_img" id="quills_coffee_hero_img" value="<?php echo esc_attr( $hero_img ); ?>" style="max-width: 400px;">
+							<button type="button" class="button quills-upload-btn" data-target="#quills_coffee_hero_img" data-preview="#preview_quills_coffee_hero_img">📁 Chọn / Tải ảnh lên</button>
+							<button type="button" class="button quills-reset-btn" data-target="#quills_coffee_hero_img" data-preview="#preview_quills_coffee_hero_img" data-default="<?php echo esc_attr( $coffee_img_dir . 'coffee-hero-barista.jpg' ); ?>">Khôi phục</button>
+						</div>
+						<div class="quills-desc">Mặc định: assets/images/coffee/coffee-hero-barista.jpg</div>
+					</td>
+				</tr>
+			</table>
+		</div>
+
+		<!-- SECTION 2: ROASTING SCHEDULE ANNOUNCEMENT -->
+		<div class="quills-card" id="sec-coffee-roast">
+			<h2 class="quills-card-title">♨️ 2. Thông Báo Lịch Rang & Cam Kết Độ Tươi</h2>
+			<table class="quills-form-table">
+				<tr>
+					<th><label for="quills_coffee_roast_headline">Tiêu đề cam kết độ tươi:</label></th>
+					<td>
+						<textarea name="quills_coffee_roast_headline" id="quills_coffee_roast_headline" rows="2"><?php echo esc_textarea( $roast_headline ); ?></textarea>
+						<div class="quills-desc">Mặc định: We want your coffee to be as fresh as possible. Therefore, we roast everything to order.</div>
+					</td>
+				</tr>
+				<tr>
+					<th><label for="quills_coffee_roast_schedule">Chi tiết lịch rang & gửi hàng:</label></th>
+					<td>
+						<textarea name="quills_coffee_roast_schedule" id="quills_coffee_roast_schedule" rows="3"><?php echo esc_textarea( $roast_schedule ); ?></textarea>
+						<div class="quills-desc">Hỗ trợ &lt;br&gt; để xuống dòng giữa các ngày.</div>
+					</td>
+				</tr>
+			</table>
+		</div>
+
+		<!-- SECTION 3: TOP TESTIMONIAL QUOTES SLIDER -->
+		<div class="quills-card" id="sec-coffee-top-quotes">
+			<h2 class="quills-card-title">💬 3. Slider Trích Dẫn Đánh Giá Phía Trên (Top Customer Quotes)</h2>
+			<p class="quills-desc" style="margin-bottom: 16px;">Slider chạy xoay vòng 3 đánh giá kèm 5 sao vàng và mũi tên trái/phải:</p>
+
+			<div class="quills-step-box">
+				<h4 style="margin: 0 0 10px; color: #663A1E;">⭐ Đánh giá 1:</h4>
+				<table class="quills-form-table">
+					<tr>
+						<th style="width: 140px;"><label for="quills_coffee_top_quote_1_text">Nội dung trích dẫn:</label></th>
+						<td><input type="text" name="quills_coffee_top_quote_1_text" id="quills_coffee_top_quote_1_text" value="<?php echo esc_attr( $top_quote_1_text ); ?>"></td>
+					</tr>
+					<tr>
+						<th><label for="quills_coffee_top_quote_1_author">Tác giả:</label></th>
+						<td><input type="text" name="quills_coffee_top_quote_1_author" id="quills_coffee_top_quote_1_author" value="<?php echo esc_attr( $top_quote_1_author ); ?>"></td>
+					</tr>
+				</table>
+			</div>
+
+			<div class="quills-step-box">
+				<h4 style="margin: 0 0 10px; color: #663A1E;">⭐ Đánh giá 2:</h4>
+				<table class="quills-form-table">
+					<tr>
+						<th style="width: 140px;"><label for="quills_coffee_top_quote_2_text">Nội dung trích dẫn:</label></th>
+						<td><input type="text" name="quills_coffee_top_quote_2_text" id="quills_coffee_top_quote_2_text" value="<?php echo esc_attr( $top_quote_2_text ); ?>"></td>
+					</tr>
+					<tr>
+						<th><label for="quills_coffee_top_quote_2_author">Tác giả:</label></th>
+						<td><input type="text" name="quills_coffee_top_quote_2_author" id="quills_coffee_top_quote_2_author" value="<?php echo esc_attr( $top_quote_2_author ); ?>"></td>
+					</tr>
+				</table>
+			</div>
+
+			<div class="quills-step-box">
+				<h4 style="margin: 0 0 10px; color: #663A1E;">⭐ Đánh giá 3:</h4>
+				<table class="quills-form-table">
+					<tr>
+						<th style="width: 140px;"><label for="quills_coffee_top_quote_3_text">Nội dung trích dẫn:</label></th>
+						<td><input type="text" name="quills_coffee_top_quote_3_text" id="quills_coffee_top_quote_3_text" value="<?php echo esc_attr( $top_quote_3_text ); ?>"></td>
+					</tr>
+					<tr>
+						<th><label for="quills_coffee_top_quote_3_author">Tác giả:</label></th>
+						<td><input type="text" name="quills_coffee_top_quote_3_author" id="quills_coffee_top_quote_3_author" value="<?php echo esc_attr( $top_quote_3_author ); ?>"></td>
+					</tr>
+				</table>
+			</div>
+		</div>
+
+		<!-- SECTION 4: QUICK CATEGORY FILTER PILLS -->
+		<div class="quills-card" id="sec-coffee-pills">
+			<h2 class="quills-card-title">🏷️ 4. Bốn Nút Lọc Danh Mục Nhanh (Category Pills)</h2>
+			<table class="quills-form-table">
+				<tr>
+					<th><label for="quills_coffee_tab_blend">Nút 1 (Blend):</label></th>
+					<td>
+						<input type="text" name="quills_coffee_tab_blend" id="quills_coffee_tab_blend" value="<?php echo esc_attr( $tab_blend ); ?>">
+						<div class="quills-desc">Mặc định: Blends</div>
+					</td>
+				</tr>
+				<tr>
+					<th><label for="quills_coffee_tab_single">Nút 2 (Single Origin):</label></th>
+					<td>
+						<input type="text" name="quills_coffee_tab_single" id="quills_coffee_tab_single" value="<?php echo esc_attr( $tab_single ); ?>">
+						<div class="quills-desc">Mặc định: Single Origin</div>
+					</td>
+				</tr>
+				<tr>
+					<th><label for="quills_coffee_tab_espresso">Nút 3 (Espresso):</label></th>
+					<td>
+						<input type="text" name="quills_coffee_tab_espresso" id="quills_coffee_tab_espresso" value="<?php echo esc_attr( $tab_espresso ); ?>">
+						<div class="quills-desc">Mặc định: Espresso</div>
+					</td>
+				</tr>
+				<tr>
+					<th><label for="quills_coffee_tab_decaf">Nút 4 (Decaf):</label></th>
+					<td>
+						<input type="text" name="quills_coffee_tab_decaf" id="quills_coffee_tab_decaf" value="<?php echo esc_attr( $tab_decaf ); ?>">
+						<div class="quills-desc">Mặc định: Decaf</div>
+					</td>
+				</tr>
+			</table>
+		</div>
+
+		<!-- SECTION 5: CUSTOMER TESTIMONIALS BOTTOM BANNER -->
+		<div class="quills-card" id="sec-coffee-bottom-quotes">
+			<h2 class="quills-card-title">⭐ 5. Khối Đánh Giá Khách Hàng Cuối Trang (Bottom Customer Testimonials)</h2>
+			<table class="quills-form-table">
+				<tr>
+					<th><label for="quills_coffee_bottom_heading">Tiêu đề khối đánh giá:</label></th>
+					<td>
+						<input type="text" name="quills_coffee_bottom_heading" id="quills_coffee_bottom_heading" value="<?php echo esc_attr( $bottom_heading ); ?>">
+						<div class="quills-desc">Mặc định: More kind words from customers</div>
+					</td>
+				</tr>
+			</table>
+
+			<div class="quills-step-box" style="margin-top: 15px;">
+				<h4 style="margin: 0 0 10px; color: #663A1E;">⭐ Lời khen 1:</h4>
+				<table class="quills-form-table">
+					<tr>
+						<th style="width: 140px;"><label for="quills_coffee_bottom_quote_1_text">Nội dung trích dẫn:</label></th>
+						<td><input type="text" name="quills_coffee_bottom_quote_1_text" id="quills_coffee_bottom_quote_1_text" value="<?php echo esc_attr( $bottom_quote_1_text ); ?>"></td>
+					</tr>
+					<tr>
+						<th><label for="quills_coffee_bottom_quote_1_author">Tác giả:</label></th>
+						<td><input type="text" name="quills_coffee_bottom_quote_1_author" id="quills_coffee_bottom_quote_1_author" value="<?php echo esc_attr( $bottom_quote_1_author ); ?>"></td>
+					</tr>
+				</table>
+			</div>
+
+			<div class="quills-step-box">
+				<h4 style="margin: 0 0 10px; color: #663A1E;">⭐ Lời khen 2:</h4>
+				<table class="quills-form-table">
+					<tr>
+						<th style="width: 140px;"><label for="quills_coffee_bottom_quote_2_text">Nội dung trích dẫn:</label></th>
+						<td><input type="text" name="quills_coffee_bottom_quote_2_text" id="quills_coffee_bottom_quote_2_text" value="<?php echo esc_attr( $bottom_quote_2_text ); ?>"></td>
+					</tr>
+					<tr>
+						<th><label for="quills_coffee_bottom_quote_2_author">Tác giả:</label></th>
+						<td><input type="text" name="quills_coffee_bottom_quote_2_author" id="quills_coffee_bottom_quote_2_author" value="<?php echo esc_attr( $bottom_quote_2_author ); ?>"></td>
+					</tr>
+				</table>
+			</div>
+
+			<div class="quills-step-box">
+				<h4 style="margin: 0 0 10px; color: #663A1E;">⭐ Lời khen 3:</h4>
+				<table class="quills-form-table">
+					<tr>
+						<th style="width: 140px;"><label for="quills_coffee_bottom_quote_3_text">Nội dung trích dẫn:</label></th>
+						<td><input type="text" name="quills_coffee_bottom_quote_3_text" id="quills_coffee_bottom_quote_3_text" value="<?php echo esc_attr( $bottom_quote_3_text ); ?>"></td>
+					</tr>
+					<tr>
+						<th><label for="quills_coffee_bottom_quote_3_author">Tác giả:</label></th>
+						<td><input type="text" name="quills_coffee_bottom_quote_3_author" id="quills_coffee_bottom_quote_3_author" value="<?php echo esc_attr( $bottom_quote_3_author ); ?>"></td>
+					</tr>
+				</table>
+			</div>
+		</div>
+
+		<script>
+		jQuery(document).ready(function($) {
+			$('.quills-upload-btn').on('click', function(e) {
+				e.preventDefault();
+				var targetInput = $( $(this).data('target') );
+				var previewImg  = $( $(this).data('preview') );
+
+				var frame = wp.media({
+					title: 'Chọn hoặc tải ảnh lên cho Trang Cà phê',
+					button: { text: 'Sử dụng ảnh này' },
+					multiple: false
+				});
+
+				frame.on('select', function() {
+					var attachment = frame.state().get('selection').first().toJSON();
+					targetInput.val(attachment.url);
+					if (previewImg.length) {
+						previewImg.attr('src', attachment.url);
+					}
+				});
+
+				frame.open();
+			});
+
+			$('.quills-reset-btn').on('click', function(e) {
+				e.preventDefault();
+				var targetInput = $( $(this).data('target') );
+				var previewImg  = $( $(this).data('preview') );
+				var defaultVal  = $(this).data('default');
+				targetInput.val(defaultVal);
+				if (previewImg.length) {
+					previewImg.attr('src', defaultVal);
+				}
+			});
+		});
+		</script>
+		<?php
+	}
+
+	/**
+	 * Handle POST submission from Appearance -> Cài đặt Trang Cà phê
+	 */
+	public static function handle_coffee_settings_save() {
+		add_action( 'admin_post_quills_save_coffee_settings', function() {
+			if ( ! isset( $_POST['quills_coffee_settings_nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['quills_coffee_settings_nonce'] ) ), 'quills_coffee_settings_action' ) ) {
+				wp_die( 'Lỗi bảo mật (Invalid nonce).' );
+			}
+
+			if ( ! current_user_can( 'manage_options' ) ) {
+				wp_die( 'Bạn không có quyền thực hiện thao tác này.' );
+			}
+
+			self::save_coffee_fields( $_POST );
+
+			wp_safe_redirect( add_query_arg( array( 'page' => 'quills-coffee-settings', 'updated' => '1' ), admin_url( 'themes.php' ) ) );
+			exit;
+		} );
+	}
+
+	/**
+	 * Save Coffee fields to wp_options
+	 */
+	public static function save_coffee_fields( $data ) {
+		$text_fields = array(
+			'quills_coffee_breadcrumb_home',
+			'quills_coffee_breadcrumb_current',
+			'quills_coffee_hero_title',
+			'quills_coffee_hero_img',
+
+			'quills_coffee_top_quote_1_text',
+			'quills_coffee_top_quote_1_author',
+			'quills_coffee_top_quote_2_text',
+			'quills_coffee_top_quote_2_author',
+			'quills_coffee_top_quote_3_text',
+			'quills_coffee_top_quote_3_author',
+
+			'quills_coffee_tab_blend',
+			'quills_coffee_tab_single',
+			'quills_coffee_tab_espresso',
+			'quills_coffee_tab_decaf',
+
+			'quills_coffee_bottom_heading',
+			'quills_coffee_bottom_quote_1_text',
+			'quills_coffee_bottom_quote_1_author',
+			'quills_coffee_bottom_quote_2_text',
+			'quills_coffee_bottom_quote_2_author',
+			'quills_coffee_bottom_quote_3_text',
+			'quills_coffee_bottom_quote_3_author',
+		);
+
+		foreach ( $text_fields as $field ) {
+			if ( isset( $data[ $field ] ) ) {
+				update_option( $field, sanitize_text_field( wp_unslash( $data[ $field ] ) ) );
+			}
+		}
+
+		$textarea_fields = array(
+			'quills_coffee_roast_headline',
+			'quills_coffee_roast_schedule',
+		);
+
+		$allowed = array(
+			'br'     => array(),
+			'strong' => array(),
+			'em'     => array(),
+			'p'      => array(),
+			'span'   => array(
+				'class' => array(),
+				'style' => array(),
+			),
+		);
+
+		foreach ( $textarea_fields as $field ) {
+			if ( isset( $data[ $field ] ) ) {
+				update_option( $field, wp_kses( wp_unslash( $data[ $field ] ), $allowed ) );
+			}
+		}
+
+		// Clear transients & cache
+		delete_transient( 'quills_coffee_content' );
+		delete_transient( 'quills_coffee_filter_counts' );
+		clean_post_cache( 43 );
+		if ( function_exists( 'wp_cache_flush' ) ) {
+			wp_cache_flush();
+		}
+		self::clear_page_cache();
+	}
+
+	/**
+	 * Render Meta Box for Brew Gear Page (in page 'Brew Gear')
+	 */
+	public static function render_brew_gear_meta_box( $post ) {
+		wp_nonce_field( 'quills_brew_gear_meta_nonce', 'quills_brew_gear_meta_nonce_field' );
+		self::render_brew_gear_form_fields();
+	}
+
+	/**
+	 * Render Standalone Brew Gear Settings Page under Appearance
+	 */
+	public static function render_brew_gear_settings_page() {
+		?>
+		<div class="wrap">
+			<h1 style="display: flex; align-items: center; gap: 10px; margin-bottom: 20px;">
+				<span>⚙️ Quản lý Toàn Bộ Nội dung Trang Dụng Cụ Pha (Brew Gear)</span>
+			</h1>
+
+			<?php if ( isset( $_GET['updated'] ) ) : ?>
+				<div class="notice notice-success is-dismissible">
+					<p><strong>✅ Dữ liệu Trang Dụng cụ pha (Brew Gear) đã được lưu thành công vào Database!</strong> Hãy mở trang /brew-gear/ ngoài giao diện và tải lại để xem nội dung mới nhất.</p>
+				</div>
+			<?php endif; ?>
+
+			<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
+				<input type="hidden" name="action" value="quills_save_brew_gear_settings">
+				<?php wp_nonce_field( 'quills_brew_gear_settings_action', 'quills_brew_gear_settings_nonce' ); ?>
+
+				<?php self::render_brew_gear_form_fields(); ?>
+
+				<div style="position: sticky; bottom: 20px; background: #fff; padding: 15px 20px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); border: 1px solid #cbd5e1; z-index: 100; display: flex; justify-content: space-between; align-items: center;">
+					<span style="font-weight: 600; color: #334155;">✨ Nhấn nút Lưu sau khi chỉnh sửa bất kỳ mục nào trên trang Brew Gear:</span>
+					<input type="submit" name="submit" id="submit" class="button button-primary button-large" style="height: 44px; padding: 0 24px; font-size: 15px; font-weight: 700; background: #663A1E; border-color: #4a2812;" value="💾 Lưu Toàn Bộ Thay Đổi Trang Brew Gear (Save Brew Gear Settings)">
+				</div>
+			</form>
+		</div>
+		<?php
+	}
+
+	/**
+	 * Shared Form Fields for Brew Gear Page
+	 */
+	public static function render_brew_gear_form_fields() {
+		$brew_img_dir = trailingslashit( get_template_directory_uri() ) . 'assets/images/brew-gear/';
+
+		$breadcrumb_home = get_option( 'brew_gear_breadcrumb_home', 'Home' );
+		$banner_title    = get_option( 'brew_gear_banner_title', 'Brew Gear' );
+		$breadcrumb_cur  = get_option( 'brew_gear_breadcrumb_current', $banner_title );
+		$banner_img      = get_option( 'brew_gear_banner_image', $brew_img_dir . 'brew-gear-banner.jpg' );
+
+		$sort_label       = get_option( 'brew_gear_sort_label', 'Sort by:' );
+		$add_to_cart_text = get_option( 'brew_gear_add_to_cart_text', 'ADD TO CART' );
+		$no_products_text = get_option( 'brew_gear_no_products_text', 'No products found.' );
+
+		// Equipment products for quick editing
+		$p1 = get_page_by_path( 'baratza-encore-grinder', OBJECT, 'product' );
+		$p1_id = $p1 ? $p1->ID : 28;
+		$p1_title = $p1 ? $p1->post_title : 'Baratza Encore Grinder';
+		$p1_price = $p1 ? get_post_meta( $p1_id, '_price', true ) : '149.00';
+
+		$p2 = get_page_by_path( 'breville-bambino-espresso-machine', OBJECT, 'product' );
+		$p2_id = $p2 ? $p2->ID : 29;
+		$p2_title = $p2 ? $p2->post_title : 'Breville Bambino Espresso Machine';
+		$p2_price = $p2 ? get_post_meta( $p2_id, '_price', true ) : '299.00';
+
+		$p3 = get_page_by_path( 'breville-luxe-brewer-thermal', OBJECT, 'product' );
+		$p3_id = $p3 ? $p3->ID : 30;
+		$p3_title = $p3 ? $p3->post_title : 'Breville Luxe Brewer™ Thermal';
+		$p3_price = $p3 ? get_post_meta( $p3_id, '_price', true ) : '349.00';
+		?>
+		<style>
+			.quills-admin-nav { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 20px; background: #fff; padding: 12px 16px; border-radius: 8px; border: 1px solid #cbd5e1; position: sticky; top: 32px; z-index: 99; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+			.quills-admin-nav a { text-decoration: none; font-size: 13px; font-weight: 600; color: #475569; padding: 6px 12px; border-radius: 6px; background: #f1f5f9; transition: all 0.2s; }
+			.quills-admin-nav a:hover { background: #663A1E; color: #fff; }
+			.quills-card { background: #ffffff; border: 1px solid #e2e8f0; border-radius: 8px; padding: 22px; margin-bottom: 24px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
+			.quills-card-title { font-size: 17px; font-weight: 700; color: #1e293b; margin-top: 0; margin-bottom: 18px; border-bottom: 2px solid #663A1E; padding-bottom: 10px; display: flex; align-items: center; gap: 8px; }
+			.quills-form-table { width: 100%; border-collapse: collapse; }
+			.quills-form-table th { width: 230px; text-align: left; vertical-align: top; padding: 12px 15px 12px 0; font-weight: 600; color: #334155; font-size: 13.5px; }
+			.quills-form-table td { padding: 8px 0; }
+			.quills-form-table input[type="text"], .quills-form-table textarea { width: 100%; max-width: 680px; border: 1px solid #cbd5e1; border-radius: 6px; padding: 8px 12px; font-size: 14px; }
+			.quills-img-row { display: flex; gap: 12px; align-items: center; margin-bottom: 6px; flex-wrap: wrap; }
+			.quills-img-preview { max-height: 80px; max-width: 140px; object-fit: contain; border-radius: 4px; border: 1px solid #cbd5e1; background: #fafafa; padding: 2px; }
+			.quills-desc { font-size: 12px; color: #64748b; margin-top: 4px; }
+			.quills-step-box { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 6px; padding: 16px; margin-bottom: 15px; max-width: 700px; }
+		</style>
+
+		<!-- Fast Navigation Jump Bar -->
+		<div class="quills-admin-nav">
+			<a href="#sec-brew-hero">☕ 1. Hero Banner & Breadcrumbs</a>
+			<a href="#sec-brew-toolbar">🔧 2. Thanh Công Cụ & Nhãn Nút</a>
+			<a href="#sec-brew-products">⚙️ 3. Danh Sách Dụng Cụ Pha Chế</a>
+		</div>
+
+		<!-- SECTION 1: HERO BANNER & BREADCRUMBS -->
+		<div class="quills-card" id="sec-brew-hero">
+			<h2 class="quills-card-title">☕ 1. Phần Hero Banner & Điều Hướng (Breadcrumbs)</h2>
+			<table class="quills-form-table">
+				<tr>
+					<th><label for="brew_gear_breadcrumb_home">Chữ liên kết Home (Breadcrumb):</label></th>
+					<td>
+						<input type="text" name="brew_gear_breadcrumb_home" id="brew_gear_breadcrumb_home" value="<?php echo esc_attr( $breadcrumb_home ); ?>">
+						<div class="quills-desc">Mặc định: Home</div>
+					</td>
+				</tr>
+				<tr>
+					<th><label for="brew_gear_breadcrumb_current">Chữ trang hiện tại (Breadcrumb):</label></th>
+					<td>
+						<input type="text" name="brew_gear_breadcrumb_current" id="brew_gear_breadcrumb_current" value="<?php echo esc_attr( $breadcrumb_cur ); ?>">
+						<div class="quills-desc">Mặc định: Brew Gear</div>
+					</td>
+				</tr>
+				<tr>
+					<th><label for="brew_gear_banner_title">Tiêu đề Hero Banner:</label></th>
+					<td>
+						<input type="text" name="brew_gear_banner_title" id="brew_gear_banner_title" value="<?php echo esc_attr( $banner_title ); ?>">
+						<div class="quills-desc">Tiêu đề in hoa hiển thị giữa banner. Mặc định: Brew Gear</div>
+					</td>
+				</tr>
+				<tr>
+					<th><label for="brew_gear_banner_image">Ảnh bìa Hero Banner:</label></th>
+					<td>
+						<div class="quills-img-row">
+							<img id="preview_brew_gear_banner_image" src="<?php echo esc_url( $banner_img ); ?>" class="quills-img-preview" alt="Brew Gear Hero Preview" />
+							<input type="text" name="brew_gear_banner_image" id="brew_gear_banner_image" value="<?php echo esc_attr( $banner_img ); ?>" style="max-width: 400px;">
+							<button type="button" class="button quills-upload-btn" data-target="#brew_gear_banner_image" data-preview="#preview_brew_gear_banner_image">📁 Chọn / Tải ảnh lên</button>
+							<button type="button" class="button quills-reset-btn" data-target="#brew_gear_banner_image" data-preview="#preview_brew_gear_banner_image" data-default="<?php echo esc_attr( $brew_img_dir . 'brew-gear-banner.jpg' ); ?>">Khôi phục</button>
+						</div>
+						<div class="quills-desc">Mặc định: assets/images/brew-gear/brew-gear-banner.jpg</div>
+					</td>
+				</tr>
+			</table>
+		</div>
+
+		<!-- SECTION 2: TOOLBAR & LABELS -->
+		<div class="quills-card" id="sec-brew-toolbar">
+			<h2 class="quills-card-title">🔧 2. Thanh Công Cụ & Nhãn Nút Bấm</h2>
+			<table class="quills-form-table">
+				<tr>
+					<th><label for="brew_gear_sort_label">Nhãn sắp xếp (Sort by label):</label></th>
+					<td>
+						<input type="text" name="brew_gear_sort_label" id="brew_gear_sort_label" value="<?php echo esc_attr( $sort_label ); ?>">
+						<div class="quills-desc">Mặc định: Sort by:</div>
+					</td>
+				</tr>
+				<tr>
+					<th><label for="brew_gear_add_to_cart_text">Chữ trên nút thêm vào giỏ:</label></th>
+					<td>
+						<input type="text" name="brew_gear_add_to_cart_text" id="brew_gear_add_to_cart_text" value="<?php echo esc_attr( $add_to_cart_text ); ?>">
+						<div class="quills-desc">Mặc định: ADD TO CART</div>
+					</td>
+				</tr>
+				<tr>
+					<th><label for="brew_gear_no_products_text">Thông báo khi không có sản phẩm:</label></th>
+					<td>
+						<input type="text" name="brew_gear_no_products_text" id="brew_gear_no_products_text" value="<?php echo esc_attr( $no_products_text ); ?>">
+						<div class="quills-desc">Mặc định: No products found.</div>
+					</td>
+				</tr>
+			</table>
+		</div>
+
+		<!-- SECTION 3: PRODUCTS QUICK EDIT -->
+		<div class="quills-card" id="sec-brew-products">
+			<h2 class="quills-card-title">⚙️ 3. Quản Lý Nhanh 3 Sản Phẩm Dụng Cụ Pha Chế</h2>
+			<p class="quills-desc" style="margin-bottom: 16px;">Bạn có thể chỉnh sửa nhanh tên và giá của 3 thiết bị dụng cụ pha chế tại đây, hoặc bấm link để vào trang chi tiết WooCommerce:</p>
+
+			<div class="quills-step-box">
+				<h4 style="margin: 0 0 10px; color: #663A1E; display: flex; justify-content: space-between; align-items: center;">
+					<span>⚙️ Thiết bị 1: <?php echo esc_html( $p1_title ); ?></span>
+					<a href="<?php echo esc_url( admin_url( 'post.php?post=' . $p1_id . '&action=edit' ) ); ?>" class="button button-small" target="_blank">Chỉnh sửa chi tiết trong WooCommerce ↗</a>
+				</h4>
+				<table class="quills-form-table">
+					<tr>
+						<th style="width: 140px;"><label for="brew_gear_prod_1_title">Tên sản phẩm:</label></th>
+						<td><input type="text" name="brew_gear_prod_1_title" id="brew_gear_prod_1_title" value="<?php echo esc_attr( $p1_title ); ?>"></td>
+					</tr>
+					<tr>
+						<th><label for="brew_gear_prod_1_price">Giá ($):</label></th>
+						<td><input type="text" name="brew_gear_prod_1_price" id="brew_gear_prod_1_price" value="<?php echo esc_attr( $p1_price ); ?>" style="max-width: 180px;"></td>
+					</tr>
+				</table>
+			</div>
+
+			<div class="quills-step-box">
+				<h4 style="margin: 0 0 10px; color: #663A1E; display: flex; justify-content: space-between; align-items: center;">
+					<span>⚙️ Thiết bị 2: <?php echo esc_html( $p2_title ); ?></span>
+					<a href="<?php echo esc_url( admin_url( 'post.php?post=' . $p2_id . '&action=edit' ) ); ?>" class="button button-small" target="_blank">Chỉnh sửa chi tiết trong WooCommerce ↗</a>
+				</h4>
+				<table class="quills-form-table">
+					<tr>
+						<th style="width: 140px;"><label for="brew_gear_prod_2_title">Tên sản phẩm:</label></th>
+						<td><input type="text" name="brew_gear_prod_2_title" id="brew_gear_prod_2_title" value="<?php echo esc_attr( $p2_title ); ?>"></td>
+					</tr>
+					<tr>
+						<th><label for="brew_gear_prod_2_price">Giá ($):</label></th>
+						<td><input type="text" name="brew_gear_prod_2_price" id="brew_gear_prod_2_price" value="<?php echo esc_attr( $p2_price ); ?>" style="max-width: 180px;"></td>
+					</tr>
+				</table>
+			</div>
+
+			<div class="quills-step-box">
+				<h4 style="margin: 0 0 10px; color: #663A1E; display: flex; justify-content: space-between; align-items: center;">
+					<span>⚙️ Thiết bị 3: <?php echo esc_html( $p3_title ); ?></span>
+					<a href="<?php echo esc_url( admin_url( 'post.php?post=' . $p3_id . '&action=edit' ) ); ?>" class="button button-small" target="_blank">Chỉnh sửa chi tiết trong WooCommerce ↗</a>
+				</h4>
+				<table class="quills-form-table">
+					<tr>
+						<th style="width: 140px;"><label for="brew_gear_prod_3_title">Tên sản phẩm:</label></th>
+						<td><input type="text" name="brew_gear_prod_3_title" id="brew_gear_prod_3_title" value="<?php echo esc_attr( $p3_title ); ?>"></td>
+					</tr>
+					<tr>
+						<th><label for="brew_gear_prod_3_price">Giá ($):</label></th>
+						<td><input type="text" name="brew_gear_prod_3_price" id="brew_gear_prod_3_price" value="<?php echo esc_attr( $p3_price ); ?>" style="max-width: 180px;"></td>
+					</tr>
+				</table>
+			</div>
+		</div>
+
+		<script>
+		jQuery(document).ready(function($) {
+			$('.quills-upload-btn').on('click', function(e) {
+				e.preventDefault();
+				var targetInput = $( $(this).data('target') );
+				var previewImg  = $( $(this).data('preview') );
+
+				var frame = wp.media({
+					title: 'Chọn hoặc tải ảnh lên cho Trang Brew Gear',
+					button: { text: 'Sử dụng ảnh này' },
+					multiple: false
+				});
+
+				frame.on('select', function() {
+					var attachment = frame.state().get('selection').first().toJSON();
+					targetInput.val(attachment.url);
+					if (previewImg.length) {
+						previewImg.attr('src', attachment.url);
+					}
+				});
+
+				frame.open();
+			});
+
+			$('.quills-reset-btn').on('click', function(e) {
+				e.preventDefault();
+				var targetInput = $( $(this).data('target') );
+				var previewImg  = $( $(this).data('preview') );
+				var defaultVal  = $(this).data('default');
+				targetInput.val(defaultVal);
+				if (previewImg.length) {
+					previewImg.attr('src', defaultVal);
+				}
+			});
+		});
+		</script>
+		<?php
+	}
+
+	/**
+	 * Handle POST submission from Appearance -> Cài đặt Trang Brew Gear
+	 */
+	public static function handle_brew_gear_settings_save() {
+		add_action( 'admin_post_quills_save_brew_gear_settings', function() {
+			if ( ! isset( $_POST['quills_brew_gear_settings_nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['quills_brew_gear_settings_nonce'] ) ), 'quills_brew_gear_settings_action' ) ) {
+				wp_die( 'Lỗi bảo mật (Invalid nonce).' );
+			}
+
+			if ( ! current_user_can( 'manage_options' ) ) {
+				wp_die( 'Bạn không có quyền thực hiện thao tác này.' );
+			}
+
+			self::save_brew_gear_fields( $_POST );
+
+			wp_safe_redirect( add_query_arg( array( 'page' => 'quills-brew-gear-settings', 'updated' => '1' ), admin_url( 'themes.php' ) ) );
+			exit;
+		} );
+	}
+
+	/**
+	 * Save Brew Gear fields to wp_options and WooCommerce products
+	 */
+	public static function save_brew_gear_fields( $data ) {
+		$text_fields = array(
+			'brew_gear_breadcrumb_home',
+			'brew_gear_breadcrumb_current',
+			'brew_gear_banner_title',
+			'brew_gear_banner_image',
+			'brew_gear_sort_label',
+			'brew_gear_add_to_cart_text',
+			'brew_gear_no_products_text',
+		);
+
+		foreach ( $text_fields as $field ) {
+			if ( isset( $data[ $field ] ) ) {
+				update_option( $field, sanitize_text_field( wp_unslash( $data[ $field ] ) ) );
+			}
+		}
+
+		// Sync with page 27 postmeta
+		$brew_page = get_page_by_path( 'brew-gear' );
+		if ( $brew_page ) {
+			if ( isset( $data['brew_gear_banner_title'] ) ) {
+				update_post_meta( $brew_page->ID, '_brew_gear_banner_title', sanitize_text_field( wp_unslash( $data['brew_gear_banner_title'] ) ) );
+			}
+			if ( isset( $data['brew_gear_banner_image'] ) ) {
+				update_post_meta( $brew_page->ID, '_brew_gear_banner_image', sanitize_text_field( wp_unslash( $data['brew_gear_banner_image'] ) ) );
+			}
+			clean_post_cache( $brew_page->ID );
+		}
+
+		// Sync products
+		$products_sync = array(
+			1 => 'baratza-encore-grinder',
+			2 => 'breville-bambino-espresso-machine',
+			3 => 'breville-luxe-brewer-thermal',
+		);
+
+		foreach ( $products_sync as $idx => $slug ) {
+			$title_key = 'brew_gear_prod_' . $idx . '_title';
+			$price_key = 'brew_gear_prod_' . $idx . '_price';
+
+			$prod = get_page_by_path( $slug, OBJECT, 'product' );
+			if ( $prod ) {
+				$pid = $prod->ID;
+				if ( isset( $data[ $title_key ] ) && ! empty( $data[ $title_key ] ) && $data[ $title_key ] !== $prod->post_title ) {
+					wp_update_post( array(
+						'ID'         => $pid,
+						'post_title' => sanitize_text_field( wp_unslash( $data[ $title_key ] ) ),
+					) );
+				}
+				if ( isset( $data[ $price_key ] ) && ! empty( $data[ $price_key ] ) ) {
+					$clean_price = sanitize_text_field( wp_unslash( $data[ $price_key ] ) );
+					update_post_meta( $pid, '_price', $clean_price );
+					update_post_meta( $pid, '_regular_price', $clean_price );
+				}
+				clean_post_cache( $pid );
+			}
+		}
+
+		// Clear transients & cache
+		delete_transient( 'quills_brew_gear_content' );
+		if ( function_exists( 'wp_cache_flush' ) ) {
+			wp_cache_flush();
+		}
+		self::clear_page_cache();
+	}
+
+	/**
+	 * Render Meta Box for Subscriptions Page (in page 'Subscriptions')
+	 */
+	public static function render_subscriptions_meta_box( $post ) {
+		wp_nonce_field( 'quills_subscriptions_meta_nonce', 'quills_subscriptions_meta_nonce_field' );
+		self::render_subscriptions_form_fields();
+	}
+
+	/**
+	 * Render Standalone Subscriptions Settings Page under Appearance
+	 */
+	public static function render_subscriptions_settings_page() {
+		?>
+		<div class="wrap">
+			<h1 style="display: flex; align-items: center; gap: 10px; margin-bottom: 20px;">
+				<span>📦 Quản lý Toàn Bộ Nội dung Trang Gói Định Kỳ (Subscriptions)</span>
+			</h1>
+
+			<?php if ( isset( $_GET['updated'] ) ) : ?>
+				<div class="notice notice-success is-dismissible">
+					<p><strong>✅ Dữ liệu Trang Gói định kỳ (Subscriptions) đã được lưu thành công vào Database!</strong> Hãy mở trang /subscriptions/ ngoài giao diện và tải lại để xem nội dung mới nhất.</p>
+				</div>
+			<?php endif; ?>
+
+			<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
+				<input type="hidden" name="action" value="quills_save_subscriptions_settings">
+				<?php wp_nonce_field( 'quills_subscriptions_settings_action', 'quills_subscriptions_settings_nonce' ); ?>
+
+				<?php self::render_subscriptions_form_fields(); ?>
+
+				<div style="position: sticky; bottom: 20px; background: #fff; padding: 15px 20px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); border: 1px solid #cbd5e1; z-index: 100; display: flex; justify-content: space-between; align-items: center;">
+					<span style="font-weight: 600; color: #334155;">✨ Nhấn nút Lưu sau khi chỉnh sửa bất kỳ mục nào trên trang Subscriptions:</span>
+					<input type="submit" name="submit" id="submit" class="button button-primary button-large" style="height: 44px; padding: 0 24px; font-size: 15px; font-weight: 700; background: #663A1E; border-color: #4a2812;" value="💾 Lưu Toàn Bộ Thay Đổi Trang Gói Định Kỳ (Save Settings)">
+				</div>
+			</form>
+		</div>
+		<?php
+	}
+
+	/**
+	 * Shared Form Fields for Subscriptions Page
+	 */
+	public static function render_subscriptions_form_fields() {
+		$sub_img_dir = trailingslashit( get_template_directory_uri() ) . 'assets/images/';
+
+		$breadcrumb_home = get_option( 'quills_sub_breadcrumb_home', 'Home' );
+		$breadcrumb_cur  = get_option( 'quills_sub_breadcrumb_current', 'Subscriptions' );
+		$hero_title      = get_option( 'quills_sub_hero_title', 'Subscriptions' );
+		$banner_img      = get_option( 'quills_sub_hero_img', $sub_img_dir . 'subscriptions-banner.png' );
+
+		$intro_title = get_option( 'quills_sub_intro_title', 'Get a free 12oz bag of Inkwell when you subscribe.' );
+		$intro_desc  = get_option( 'quills_sub_intro_desc', 'Experience freshly-roasted coffee delivered right to your door. Choose between crafted blends or a curated rotation of single-origins from around the world.' );
+		$intro_note  = get_option( 'quills_sub_intro_note', '(Free bag offer valid for new subscribers only.)' );
+
+		$top_q1_text   = get_option( 'quills_sub_top_q1_text', '"The smell alone makes you want to rip open the bag and drink it right away. This coffee is THE BEST."' );
+		$top_q1_author = get_option( 'quills_sub_top_q1_author', '— C. Diller' );
+		$top_q2_text   = get_option( 'quills_sub_top_q2_text', '"One cup is all it took, and we were hooked! Now we order online to have our favorite cup on a daily basis."' );
+		$top_q2_author = get_option( 'quills_sub_top_q2_author', '— Brianne E.' );
+		$top_q3_text   = get_option( 'quills_sub_top_q3_text', '"Quills has the best coffee and great customer service! 5 stars!!! We love getting to try a variety of different roasts!"' );
+		$top_q3_author = get_option( 'quills_sub_top_q3_author', '— Kelly Davis' );
+
+		$bottom_heading  = get_option( 'quills_sub_bottom_heading', 'More kind words from customers' );
+		$bottom_q1_text   = get_option( 'quills_sub_bottom_q1_text', '"This is probably the best coffee I\'ve ever had."' );
+		$bottom_q1_author = get_option( 'quills_sub_bottom_q1_author', '— Jamie W.' );
+		$bottom_q2_text   = get_option( 'quills_sub_bottom_q2_text', '"It’s our favorite coffee!! We entertain frequently and everyone seems to enjoy this coffee."' );
+		$bottom_q2_author = get_option( 'quills_sub_bottom_q2_author', '— Lisa Peters' );
+		$bottom_q3_text   = get_option( 'quills_sub_bottom_q3_text', '"Mega delicious! Just sent some to my sister in California to try to get her hooked."' );
+		$bottom_q3_author = get_option( 'quills_sub_bottom_q3_author', '— Sarah R.' );
+		?>
+		<style>
+			.quills-admin-nav { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 20px; background: #fff; padding: 12px 16px; border-radius: 8px; border: 1px solid #cbd5e1; position: sticky; top: 32px; z-index: 99; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+			.quills-admin-nav a { text-decoration: none; font-size: 13px; font-weight: 600; color: #475569; padding: 6px 12px; border-radius: 6px; background: #f1f5f9; transition: all 0.2s; }
+			.quills-admin-nav a:hover { background: #663A1E; color: #fff; }
+			.quills-card { background: #ffffff; border: 1px solid #e2e8f0; border-radius: 8px; padding: 22px; margin-bottom: 24px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
+			.quills-card-title { font-size: 17px; font-weight: 700; color: #1e293b; margin-top: 0; margin-bottom: 18px; border-bottom: 2px solid #663A1E; padding-bottom: 10px; display: flex; align-items: center; gap: 8px; }
+			.quills-form-table { width: 100%; border-collapse: collapse; }
+			.quills-form-table th { width: 230px; text-align: left; vertical-align: top; padding: 12px 15px 12px 0; font-weight: 600; color: #334155; font-size: 13.5px; }
+			.quills-form-table td { padding: 8px 0; }
+			.quills-form-table input[type="text"], .quills-form-table textarea { width: 100%; max-width: 680px; border: 1px solid #cbd5e1; border-radius: 6px; padding: 8px 12px; font-size: 14px; }
+			.quills-img-row { display: flex; gap: 12px; align-items: center; margin-bottom: 6px; flex-wrap: wrap; }
+			.quills-img-preview { max-height: 80px; max-width: 140px; object-fit: contain; border-radius: 4px; border: 1px solid #cbd5e1; background: #fafafa; padding: 2px; }
+			.quills-desc { font-size: 12px; color: #64748b; margin-top: 4px; }
+			.quills-step-box { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 6px; padding: 16px; margin-bottom: 15px; max-width: 700px; }
+		</style>
+
+		<!-- Fast Navigation Jump Bar -->
+		<div class="quills-admin-nav">
+			<a href="#sec-sub-hero">☕ 1. Hero Banner & Breadcrumbs</a>
+			<a href="#sec-sub-intro">🎁 2. Khung Ưu Đãi Túi Quà Tặng</a>
+			<a href="#sec-sub-top-quotes">💬 3. Slider Đánh Giá (Top Reviews)</a>
+			<a href="#sec-sub-bottom-quotes">⭐ 4. Khối Đánh Giá Cuối Trang</a>
+		</div>
+
+		<!-- SECTION 1: HERO BANNER & BREADCRUMBS -->
+		<div class="quills-card" id="sec-sub-hero">
+			<h2 class="quills-card-title">☕ 1. Phần Hero Banner & Điều Hướng (Breadcrumbs)</h2>
+			<table class="quills-form-table">
+				<tr>
+					<th><label for="quills_sub_breadcrumb_home">Chữ liên kết Home (Breadcrumb):</label></th>
+					<td>
+						<input type="text" name="quills_sub_breadcrumb_home" id="quills_sub_breadcrumb_home" value="<?php echo esc_attr( $breadcrumb_home ); ?>">
+						<div class="quills-desc">Mặc định: Home</div>
+					</td>
+				</tr>
+				<tr>
+					<th><label for="quills_sub_breadcrumb_current">Chữ trang hiện tại (Breadcrumb):</label></th>
+					<td>
+						<input type="text" name="quills_sub_breadcrumb_current" id="quills_sub_breadcrumb_current" value="<?php echo esc_attr( $breadcrumb_cur ); ?>">
+						<div class="quills-desc">Mặc định: Subscriptions</div>
+					</td>
+				</tr>
+				<tr>
+					<th><label for="quills_sub_hero_title">Tiêu đề Hero Banner:</label></th>
+					<td>
+						<input type="text" name="quills_sub_hero_title" id="quills_sub_hero_title" value="<?php echo esc_attr( $hero_title ); ?>">
+						<div class="quills-desc">Mặc định: Subscriptions</div>
+					</td>
+				</tr>
+				<tr>
+					<th><label for="quills_sub_hero_img">Ảnh bìa Hero Banner:</label></th>
+					<td>
+						<div class="quills-img-row">
+							<img id="preview_quills_sub_hero_img" src="<?php echo esc_url( $banner_img ); ?>" class="quills-img-preview" alt="Subscriptions Hero Preview" />
+							<input type="text" name="quills_sub_hero_img" id="quills_sub_hero_img" value="<?php echo esc_attr( $banner_img ); ?>" style="max-width: 400px;">
+							<button type="button" class="button quills-upload-btn" data-target="#quills_sub_hero_img" data-preview="#preview_quills_sub_hero_img">📁 Chọn / Tải ảnh lên</button>
+							<button type="button" class="button quills-reset-btn" data-target="#quills_sub_hero_img" data-preview="#preview_quills_sub_hero_img" data-default="<?php echo esc_attr( $sub_img_dir . 'subscriptions-banner.png' ); ?>">Khôi phục</button>
+						</div>
+						<div class="quills-desc">Mặc định: assets/images/subscriptions-banner.png</div>
+					</td>
+				</tr>
+			</table>
+		</div>
+
+		<!-- SECTION 2: FREE BAG INTRO COPY -->
+		<div class="quills-card" id="sec-sub-intro">
+			<h2 class="quills-card-title">🎁 2. Khung Ưu Đãi Túi Quà Tặng (Free Bag Intro)</h2>
+			<table class="quills-form-table">
+				<tr>
+					<th><label for="quills_sub_intro_title">Tiêu đề ưu đãi:</label></th>
+					<td>
+						<input type="text" name="quills_sub_intro_title" id="quills_sub_intro_title" value="<?php echo esc_attr( $intro_title ); ?>">
+						<div class="quills-desc">Mặc định: Get a free 12oz bag of Inkwell when you subscribe.</div>
+					</td>
+				</tr>
+				<tr>
+					<th><label for="quills_sub_intro_desc">Đoạn văn mô tả ưu đãi:</label></th>
+					<td>
+						<textarea name="quills_sub_intro_desc" id="quills_sub_intro_desc" rows="3"><?php echo esc_textarea( $intro_desc ); ?></textarea>
+					</td>
+				</tr>
+				<tr>
+					<th><label for="quills_sub_intro_note">Ghi chú điều kiện ưu đãi:</label></th>
+					<td>
+						<input type="text" name="quills_sub_intro_note" id="quills_sub_intro_note" value="<?php echo esc_attr( $intro_note ); ?>">
+						<div class="quills-desc">Mặc định: (Free bag offer valid for new subscribers only.)</div>
+					</td>
+				</tr>
+			</table>
+		</div>
+
+		<!-- SECTION 3: TOP TESTIMONIAL SLIDER -->
+		<div class="quills-card" id="sec-sub-top-quotes">
+			<h2 class="quills-card-title">💬 3. Slider Đánh Giá Phía Trên (Top Customer Reviews)</h2>
+			<p class="quills-desc" style="margin-bottom: 16px;">Slider xoay vòng 3 đánh giá thực tế của khách hàng kèm 5 sao vàng:</p>
+
+			<div class="quills-step-box">
+				<h4 style="margin: 0 0 10px; color: #663A1E;">⭐ Đánh giá 1:</h4>
+				<table class="quills-form-table">
+					<tr>
+						<th style="width: 140px;"><label for="quills_sub_top_q1_text">Nội dung trích dẫn:</label></th>
+						<td><input type="text" name="quills_sub_top_q1_text" id="quills_sub_top_q1_text" value="<?php echo esc_attr( $top_q1_text ); ?>"></td>
+					</tr>
+					<tr>
+						<th><label for="quills_sub_top_q1_author">Tác giả:</label></th>
+						<td><input type="text" name="quills_sub_top_q1_author" id="quills_sub_top_q1_author" value="<?php echo esc_attr( $top_q1_author ); ?>"></td>
+					</tr>
+				</table>
+			</div>
+
+			<div class="quills-step-box">
+				<h4 style="margin: 0 0 10px; color: #663A1E;">⭐ Đánh giá 2:</h4>
+				<table class="quills-form-table">
+					<tr>
+						<th style="width: 140px;"><label for="quills_sub_top_q2_text">Nội dung trích dẫn:</label></th>
+						<td><input type="text" name="quills_sub_top_q2_text" id="quills_sub_top_q2_text" value="<?php echo esc_attr( $top_q2_text ); ?>"></td>
+					</tr>
+					<tr>
+						<th><label for="quills_sub_top_q2_author">Tác giả:</label></th>
+						<td><input type="text" name="quills_sub_top_q2_author" id="quills_sub_top_q2_author" value="<?php echo esc_attr( $top_q2_author ); ?>"></td>
+					</tr>
+				</table>
+			</div>
+
+			<div class="quills-step-box">
+				<h4 style="margin: 0 0 10px; color: #663A1E;">⭐ Đánh giá 3:</h4>
+				<table class="quills-form-table">
+					<tr>
+						<th style="width: 140px;"><label for="quills_sub_top_q3_text">Nội dung trích dẫn:</label></th>
+						<td><input type="text" name="quills_sub_top_q3_text" id="quills_sub_top_q3_text" value="<?php echo esc_attr( $top_q3_text ); ?>"></td>
+					</tr>
+					<tr>
+						<th><label for="quills_sub_top_q3_author">Tác giả:</label></th>
+						<td><input type="text" name="quills_sub_top_q3_author" id="quills_sub_top_q3_author" value="<?php echo esc_attr( $top_q3_author ); ?>"></td>
+					</tr>
+				</table>
+			</div>
+		</div>
+
+		<!-- SECTION 4: BOTTOM TESTIMONIAL SLIDER -->
+		<div class="quills-card" id="sec-sub-bottom-quotes">
+			<h2 class="quills-card-title">⭐ 4. Khối Đánh Giá Khách Hàng Cuối Trang (Bottom Customer Reviews)</h2>
+			<table class="quills-form-table">
+				<tr>
+					<th><label for="quills_sub_bottom_heading">Tiêu đề khối đánh giá:</label></th>
+					<td>
+						<input type="text" name="quills_sub_bottom_heading" id="quills_sub_bottom_heading" value="<?php echo esc_attr( $bottom_heading ); ?>">
+						<div class="quills-desc">Mặc định: More kind words from customers</div>
+					</td>
+				</tr>
+			</table>
+
+			<div class="quills-step-box" style="margin-top: 15px;">
+				<h4 style="margin: 0 0 10px; color: #663A1E;">⭐ Lời khen 1:</h4>
+				<table class="quills-form-table">
+					<tr>
+						<th style="width: 140px;"><label for="quills_sub_bottom_q1_text">Nội dung trích dẫn:</label></th>
+						<td><input type="text" name="quills_sub_bottom_q1_text" id="quills_sub_bottom_q1_text" value="<?php echo esc_attr( $bottom_q1_text ); ?>"></td>
+					</tr>
+					<tr>
+						<th><label for="quills_sub_bottom_q1_author">Tác giả:</label></th>
+						<td><input type="text" name="quills_sub_bottom_q1_author" id="quills_sub_bottom_q1_author" value="<?php echo esc_attr( $bottom_q1_author ); ?>"></td>
+					</tr>
+				</table>
+			</div>
+
+			<div class="quills-step-box">
+				<h4 style="margin: 0 0 10px; color: #663A1E;">⭐ Lời khen 2:</h4>
+				<table class="quills-form-table">
+					<tr>
+						<th style="width: 140px;"><label for="quills_sub_bottom_q2_text">Nội dung trích dẫn:</label></th>
+						<td><input type="text" name="quills_sub_bottom_q2_text" id="quills_sub_bottom_q2_text" value="<?php echo esc_attr( $bottom_q2_text ); ?>"></td>
+					</tr>
+					<tr>
+						<th><label for="quills_sub_bottom_q2_author">Tác giả:</label></th>
+						<td><input type="text" name="quills_sub_bottom_q2_author" id="quills_sub_bottom_q2_author" value="<?php echo esc_attr( $bottom_q2_author ); ?>"></td>
+					</tr>
+				</table>
+			</div>
+
+			<div class="quills-step-box">
+				<h4 style="margin: 0 0 10px; color: #663A1E;">⭐ Lời khen 3:</h4>
+				<table class="quills-form-table">
+					<tr>
+						<th style="width: 140px;"><label for="quills_sub_bottom_q3_text">Nội dung trích dẫn:</label></th>
+						<td><input type="text" name="quills_sub_bottom_q3_text" id="quills_sub_bottom_q3_text" value="<?php echo esc_attr( $bottom_q3_text ); ?>"></td>
+					</tr>
+					<tr>
+						<th><label for="quills_sub_bottom_q3_author">Tác giả:</label></th>
+						<td><input type="text" name="quills_sub_bottom_q3_author" id="quills_sub_bottom_q3_author" value="<?php echo esc_attr( $bottom_q3_author ); ?>"></td>
+					</tr>
+				</table>
+			</div>
+		</div>
+
+		<script>
+		jQuery(document).ready(function($) {
+			$('.quills-upload-btn').on('click', function(e) {
+				e.preventDefault();
+				var targetInput = $( $(this).data('target') );
+				var previewImg  = $( $(this).data('preview') );
+
+				var frame = wp.media({
+					title: 'Chọn hoặc tải ảnh lên cho Trang Gói Định Kỳ',
+					button: { text: 'Sử dụng ảnh này' },
+					multiple: false
+				});
+
+				frame.on('select', function() {
+					var attachment = frame.state().get('selection').first().toJSON();
+					targetInput.val(attachment.url);
+					if (previewImg.length) {
+						previewImg.attr('src', attachment.url);
+					}
+				});
+
+				frame.open();
+			});
+
+			$('.quills-reset-btn').on('click', function(e) {
+				e.preventDefault();
+				var targetInput = $( $(this).data('target') );
+				var previewImg  = $( $(this).data('preview') );
+				var defaultVal  = $(this).data('default');
+				targetInput.val(defaultVal);
+				if (previewImg.length) {
+					previewImg.attr('src', defaultVal);
+				}
+			});
+		});
+		</script>
+		<?php
+	}
+
+	/**
+	 * Handle POST submission from Appearance -> Cài đặt Gói định kỳ (Subscriptions)
+	 */
+	public static function handle_subscriptions_settings_save() {
+		add_action( 'admin_post_quills_save_subscriptions_settings', function() {
+			if ( ! isset( $_POST['quills_subscriptions_settings_nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['quills_subscriptions_settings_nonce'] ) ), 'quills_subscriptions_settings_action' ) ) {
+				wp_die( 'Lỗi bảo mật (Invalid nonce).' );
+			}
+
+			if ( ! current_user_can( 'manage_options' ) ) {
+				wp_die( 'Bạn không có quyền thực hiện thao tác này.' );
+			}
+
+			self::save_subscriptions_fields( $_POST );
+
+			wp_safe_redirect( add_query_arg( array( 'page' => 'quills-subscriptions-settings', 'updated' => '1' ), admin_url( 'themes.php' ) ) );
+			exit;
+		} );
+	}
+
+	/**
+	 * Save Subscriptions fields to wp_options
+	 */
+	public static function save_subscriptions_fields( $data ) {
+		$text_fields = array(
+			'quills_sub_breadcrumb_home',
+			'quills_sub_breadcrumb_current',
+			'quills_sub_hero_title',
+			'quills_sub_hero_img',
+
+			'quills_sub_intro_title',
+			'quills_sub_intro_note',
+
+			'quills_sub_top_q1_text',
+			'quills_sub_top_q1_author',
+			'quills_sub_top_q2_text',
+			'quills_sub_top_q2_author',
+			'quills_sub_top_q3_text',
+			'quills_sub_top_q3_author',
+
+			'quills_sub_bottom_heading',
+			'quills_sub_bottom_q1_text',
+			'quills_sub_bottom_q1_author',
+			'quills_sub_bottom_q2_text',
+			'quills_sub_bottom_q2_author',
+			'quills_sub_bottom_q3_text',
+			'quills_sub_bottom_q3_author',
+		);
+
+		foreach ( $text_fields as $field ) {
+			if ( isset( $data[ $field ] ) ) {
+				update_option( $field, sanitize_text_field( wp_unslash( $data[ $field ] ) ) );
+			}
+		}
+
+		$textarea_fields = array(
+			'quills_sub_intro_desc',
+		);
+
+		$allowed = array(
+			'br'     => array(),
+			'strong' => array(),
+			'em'     => array(),
+			'p'      => array(),
+			'span'   => array(
+				'class' => array(),
+				'style' => array(),
+			),
+		);
+
+		foreach ( $textarea_fields as $field ) {
+			if ( isset( $data[ $field ] ) ) {
+				update_option( $field, wp_kses( wp_unslash( $data[ $field ] ), $allowed ) );
+			}
+		}
+
+		// Clear transients & cache
+		delete_transient( 'quills_sub_content' );
+		clean_post_cache( 59 );
+		if ( function_exists( 'wp_cache_flush' ) ) {
+			wp_cache_flush();
+		}
+		self::clear_page_cache();
 	}
 }
 

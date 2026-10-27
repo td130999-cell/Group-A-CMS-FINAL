@@ -101,52 +101,62 @@ Nơi quản trị: `wp-admin -> Giao diện -> Cài đặt Trang chủ (Home)`
 
 ### ☕ 2. TRANG CÀ PHÊ (Coffee Collection - `/coffee/`)
 File pattern: `wp-content/themes/coffee-cafe-corner/patterns/coffee.php`  
-Nơi quản trị: `wp-admin -> Pages (Trang) -> Coffee` (qua Custom Meta Box)
+Nơi quản trị: `wp-admin -> Giao diện -> Cài đặt Trang Cà phê (Coffee)` HOẶC `wp-admin -> Pages (Trang) -> Coffee` (qua Custom Meta Box)
 
-- [ ] **Hero Banner:**
-  - [ ] Tiêu đề trang (mặc định: "Coffee").
-  - [ ] Ảnh nền Hero Banner.
-- [ ] **Khung thông báo lịch rang (Roasting Announcement):**
-  - [ ] Tiêu đề thông báo cam kết độ tươi.
-  - [ ] Chi tiết lịch chốt đơn và ngày xuất xưởng (chủ nhật giao thứ 4, thứ ba giao thứ 6).
-- [ ] **Slider đánh giá khách hàng (Top Testimonial Slider):**
-  - [ ] 3 Slide đánh giá: Nội dung trích dẫn, Tên khách hàng, Số sao đánh giá.
-- [ ] **Các tab lọc nhanh (Category Pills):**
-  - [ ] Tùy chỉnh danh sách hoặc nhãn hiển thị: Blends, Single Origin, Espresso, Decaf.
+- [x] **Hero Banner & Breadcrumbs:**
+  - [x] Tiêu đề trang (mặc định: "Coffee").
+  - [x] Ảnh nền Hero Banner qua Media Library + Nút Khôi phục mặc định.
+  - [x] Chữ Breadcrumbs ("Home / Coffee").
+- [x] **Khung thông báo lịch rang (Roasting Announcement):**
+  - [x] Tiêu đề thông báo cam kết độ tươi.
+  - [x] Chi tiết lịch chốt đơn và ngày xuất xưởng (chủ nhật giao thứ 4, thứ ba giao thứ 6 - hỗ trợ `<br>`).
+- [x] **Slider đánh giá khách hàng (Top Testimonial Slider):**
+  - [x] 3 Slide đánh giá: Nội dung trích dẫn & Tên khách hàng (Tracy S., Michael K., Amanda L.).
+  - [x] Đồng bộ tự động với cả mã HTML máy chủ và JavaScript slider (`window.quillsTopQuotes`).
+- [x] **Các tab lọc nhanh (Category Pills):**
+  - [x] Tùy chỉnh 4 nhãn hiển thị: Blends, Single Origin, Espresso, Decaf.
+- [x] **Khối đánh giá khách hàng cuối trang (Bottom Customer Testimonials):**
+  - [x] Tiêu đề mục ("More kind words from customers").
+  - [x] 3 Slide đánh giá: Nội dung trích dẫn & Tên tác giả (Mitchell George, Sarah Jenkins, David R.).
+  - [x] Đồng bộ tự động với JavaScript slider (`window.quillsBottomQuotes`).
 - [x] **Danh sách sản phẩm & Bộ lọc Accordion:** Đã hoạt động tự động từ Database WooCommerce.
 
 ---
 
 ### ⚙️ 3. TRANG DỤNG CỤ PHA (Brew Gear - `/brew-gear/`)
 File pattern: `wp-content/themes/coffee-cafe-corner/patterns/brew-gear.php`  
-Nơi quản trị: `wp-admin -> Pages (Trang) -> Brew Gear` (qua Custom Meta Box)
+Nơi quản trị: `wp-admin -> Giao diện -> Cài đặt Dụng cụ (Brew Gear)` HOẶC `wp-admin -> Pages (Trang) -> Brew Gear` (qua Custom Meta Box)
 
-- [ ] **Hero Banner:**
-  - [ ] Tiêu đề banner (*mặc định: "Brew Gear"*).
-  - [ ] Chọn Ảnh nền banner qua Media Library.
-- [ ] **Thanh công cụ & Nút bấm:**
-  - [ ] Nhãn thanh sắp xếp (*mặc định: "Sort by:"*).
-  - [ ] Chữ trên nút thêm giỏ hàng (*mặc định: "ADD TO CART"*).
+- [x] **Hero Banner & Breadcrumbs:**
+  - [x] Tiêu đề banner (*mặc định: "Brew Gear"*).
+  - [x] Chọn Ảnh nền banner qua Media Library + Nút Khôi phục mặc định.
+  - [x] Chữ Breadcrumbs (*"Home / Brew Gear"*).
+- [x] **Thanh công cụ & Nút bấm:**
+  - [x] Nhãn thanh sắp xếp (*mặc định: "Sort by:"*).
+  - [x] Chữ trên nút thêm giỏ hàng (*mặc định: "ADD TO CART"*).
+  - [x] Thông báo khi không có sản phẩm (*mặc định: "No products found."*).
+- [x] **Quản lý nhanh 3 thiết bị dụng cụ pha:** Cho phép sửa nhanh tên, giá thiết bị và link trực tiếp sang WooCommerce.
 - [x] **Danh sách sản phẩm dụng cụ:** Đã tự động lọc từ danh mục `brew-gear` của WooCommerce.
 
 ---
 
 ### 📦 4. TRANG GÓI ĐỊNG KỲ (Subscriptions - `/subscriptions/`)
 File pattern: `wp-content/themes/coffee-cafe-corner/patterns/subscriptions.php`  
-Nơi quản trị: `wp-admin -> Pages (Trang) -> Subscriptions` (qua Custom Meta Box)
+Nơi quản trị: `wp-admin -> Giao diện -> Cài đặt Gói định kỳ (Subscriptions)` HOẶC `wp-admin -> Pages (Trang) -> Subscriptions` (qua Custom Meta Box)
 
-- [ ] **Hero Banner:**
-  - [ ] Tiêu đề banner (*"Subscriptions"*).
-  - [ ] Chọn Ảnh nền banner qua Media Library.
-- [ ] **Khung ưu đãi túi quà tặng (Free Bag Intro):**
-  - [ ] Tiêu đề ưu đãi (*"Get a free 12oz bag of Inkwell when you subscribe."*).
-  - [ ] Đoạn văn mô tả ưu đãi.
-  - [ ] Dòng ghi chú điều kiện (*"(Free bag offer valid for new subscribers only.)"*).
-- [ ] **Slider đánh giá phía trên (Top Testimonial Slider):**
-  - [ ] Quản lý 3 đánh giá khách hàng (Nội dung trích dẫn, Tác giả, Số sao).
-- [ ] **Mục đánh giá phía dưới ("More kind words from customers"):**
-  - [ ] Tiêu đề mục (*"More kind words from customers"*).
-  - [ ] Quản lý 3 đánh giá khách hàng phía dưới.
+- [x] **Hero Banner & Breadcrumbs:**
+  - [x] Tiêu đề banner (*"Subscriptions"*).
+  - [x] Chọn Ảnh nền banner qua Media Library + Nút Khôi phục mặc định.
+  - [x] Chữ Breadcrumbs (*"Home / Subscriptions"*).
+- [x] **Khung ưu đãi túi quà tặng (Free Bag Intro):**
+  - [x] Tiêu đề ưu đãi (*"Get a free 12oz bag of Inkwell when you subscribe."*).
+  - [x] Đoạn văn mô tả ưu đãi.
+  - [x] Dòng ghi chú điều kiện (*"(Free bag offer valid for new subscribers only.)"*).
+- [x] **Slider đánh giá phía trên (Top Testimonial Slider):**
+  - [x] Quản lý 3 đánh giá khách hàng (Nội dung trích dẫn, Tác giả: C. Diller, Brianne E., Kelly Davis).
+- [x] **Mục đánh giá phía dưới ("More kind words from customers"):**
+  - [x] Tiêu đề mục (*"More kind words from customers"*).
+  - [x] Quản lý 3 đánh giá khách hàng phía dưới (Nội dung trích dẫn, Tác giả: Jamie W., Lisa Peters, Sarah R.).
 - [x] **Danh sách sản phẩm gói định kỳ & Bộ lọc:** Đã kết nối tự động từ WooCommerce.
 
 ---

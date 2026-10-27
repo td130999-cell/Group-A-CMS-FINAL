@@ -68,6 +68,50 @@ $facet_counts   = Coffee_Cafe_Corner_Coffee_DB::get_filter_counts();
 $query          = Coffee_Cafe_Corner_Coffee_DB::get_products_query( $url_types, $url_processes, $url_roasts, $current_sort );
 $total_products = $query->found_posts;
 $total_selected = count( $url_processes ) + count( $url_roasts ) + count( $url_types );
+
+// Dynamic editable options for Coffee Page
+$coffee_img_dir = trailingslashit( get_template_directory_uri() ) . 'assets/images/coffee/';
+$hero_img        = get_option( 'quills_coffee_hero_img', '' );
+$hero_title      = get_option( 'quills_coffee_hero_title', __( 'Coffee', 'coffee-cafe-corner' ) );
+$breadcrumb_home = get_option( 'quills_coffee_breadcrumb_home', __( 'Home', 'coffee-cafe-corner' ) );
+$breadcrumb_cur  = get_option( 'quills_coffee_breadcrumb_current', __( 'Coffee', 'coffee-cafe-corner' ) );
+
+$roast_headline = get_option( 'quills_coffee_roast_headline', __( 'We want your coffee to be as fresh as possible. Therefore, we roast everything to order.', 'coffee-cafe-corner' ) );
+$roast_schedule = get_option( 'quills_coffee_roast_schedule', __( 'Orders placed by midnight Sunday ship by Wednesday.<br />Orders placed by midnight Tuesday ship by Friday.', 'coffee-cafe-corner' ) );
+
+$tab_blend    = get_option( 'quills_coffee_tab_blend', __( 'Blends', 'coffee-cafe-corner' ) );
+$tab_single   = get_option( 'quills_coffee_tab_single', __( 'Single Origin', 'coffee-cafe-corner' ) );
+$tab_espresso = get_option( 'quills_coffee_tab_espresso', __( 'Espresso', 'coffee-cafe-corner' ) );
+$tab_decaf    = get_option( 'quills_coffee_tab_decaf', __( 'Decaf', 'coffee-cafe-corner' ) );
+
+// Top quotes
+$top_quote_1_text   = get_option( 'quills_coffee_top_quote_1_text', '"Heaven in a cup."' );
+$top_quote_1_author = get_option( 'quills_coffee_top_quote_1_author', '— Tracy S.' );
+$top_quote_2_text   = get_option( 'quills_coffee_top_quote_2_text', '"The cleanest pour-over roast in Louisville. Sweet and lively."' );
+$top_quote_2_author = get_option( 'quills_coffee_top_quote_2_author', '— Michael K.' );
+$top_quote_3_text   = get_option( 'quills_coffee_top_quote_3_text', '"Consistently fresh, vibrant and roasted with exceptional care."' );
+$top_quote_3_author = get_option( 'quills_coffee_top_quote_3_author', '— Amanda L.' );
+
+$top_quotes_array = array(
+	array( 'text' => $top_quote_1_text, 'author' => $top_quote_1_author ),
+	array( 'text' => $top_quote_2_text, 'author' => $top_quote_2_author ),
+	array( 'text' => $top_quote_3_text, 'author' => $top_quote_3_author ),
+);
+
+// Bottom quotes
+$bottom_heading        = get_option( 'quills_coffee_bottom_heading', __( 'More kind words from customers', 'coffee-cafe-corner' ) );
+$bottom_quote_1_text   = get_option( 'quills_coffee_bottom_quote_1_text', '"Amazing coffee. Quills is consistently head and shoulders above others."' );
+$bottom_quote_1_author = get_option( 'quills_coffee_bottom_quote_1_author', '— Mitchell George' );
+$bottom_quote_2_text   = get_option( 'quills_coffee_bottom_quote_2_text', '"Their single-origin Ethiopia Bombe is hands-down the best coffee I had this year."' );
+$bottom_quote_2_author = get_option( 'quills_coffee_bottom_quote_2_author', '— Sarah Jenkins' );
+$bottom_quote_3_text   = get_option( 'quills_coffee_bottom_quote_3_text', '"Subscribed to Blacksmith espresso for over 2 years now. Never disappointed."' );
+$bottom_quote_3_author = get_option( 'quills_coffee_bottom_quote_3_author', '— David R.' );
+
+$bottom_quotes_array = array(
+	array( 'text' => $bottom_quote_1_text, 'author' => $bottom_quote_1_author ),
+	array( 'text' => $bottom_quote_2_text, 'author' => $bottom_quote_2_author ),
+	array( 'text' => $bottom_quote_3_text, 'author' => $bottom_quote_3_author ),
+);
 ?>
 
 <div class="quills-coffee-page-wrapper">
@@ -75,15 +119,15 @@ $total_selected = count( $url_processes ) + count( $url_roasts ) + count( $url_t
 
 		<!-- Top Breadcrumb -->
 		<nav class="quills-coffee-breadcrumb" aria-label="<?php esc_attr_e( 'Breadcrumb', 'coffee-cafe-corner' ); ?>">
-			<a href="<?php echo esc_url( home_url( '/' ) ); ?>" class="quills-breadcrumb-link"><?php esc_html_e( 'Home', 'coffee-cafe-corner' ); ?></a>
+			<a href="<?php echo esc_url( home_url( '/' ) ); ?>" class="quills-breadcrumb-link"><?php echo esc_html( $breadcrumb_home ); ?></a>
 			<span class="quills-breadcrumb-sep">/</span>
-			<span class="quills-breadcrumb-current"><?php esc_html_e( 'Coffee', 'coffee-cafe-corner' ); ?></span>
+			<span class="quills-breadcrumb-current"><?php echo esc_html( $breadcrumb_cur ); ?></span>
 		</nav>
 
 		<!-- Hero Banner Box with Coffee Photo & Script Title -->
 		<section class="quills-coffee-hero" aria-label="<?php esc_attr_e( 'Coffee Collection', 'coffee-cafe-corner' ); ?>">
-			<div class="quills-coffee-hero-card">
-				<h1 class="quills-coffee-hero-title"><?php esc_html_e( 'Coffee', 'coffee-cafe-corner' ); ?></h1>
+			<div class="quills-coffee-hero-card"<?php if ( ! empty( $hero_img ) ) : ?> style="background-image: url('<?php echo esc_url( $hero_img ); ?>');"<?php endif; ?>>
+				<h1 class="quills-coffee-hero-title"><?php echo esc_html( $hero_title ); ?></h1>
 			</div>
 		</section>
 
@@ -91,11 +135,10 @@ $total_selected = count( $url_processes ) + count( $url_roasts ) + count( $url_t
 		<section class="quills-coffee-announcement" aria-label="<?php esc_attr_e( 'Roasting Schedule', 'coffee-cafe-corner' ); ?>">
 			<div class="quills-announcement-inner">
 				<p class="quills-announcement-headline">
-					<?php esc_html_e( 'We want your coffee to be as fresh as possible. Therefore, we roast everything to order.', 'coffee-cafe-corner' ); ?>
+					<?php echo wp_kses_post( $roast_headline ); ?>
 				</p>
 				<p class="quills-announcement-schedule">
-					<?php esc_html_e( 'Orders placed by midnight Sunday ship by Wednesday.', 'coffee-cafe-corner' ); ?><br />
-					<?php esc_html_e( 'Orders placed by midnight Tuesday ship by Friday.', 'coffee-cafe-corner' ); ?>
+					<?php echo wp_kses_post( $roast_schedule ); ?>
 				</p>
 			</div>
 		</section>
@@ -117,9 +160,9 @@ $total_selected = count( $url_processes ) + count( $url_roasts ) + count( $url_t
 						<span class="quills-gold-star">★</span>
 					</div>
 					<blockquote class="quills-quote-text" id="quills-quote-text">
-						"Heaven in a cup."
+						<?php echo esc_html( $top_quote_1_text ); ?>
 					</blockquote>
-					<cite class="quills-quote-author" id="quills-quote-author">— Tracy S.</cite>
+					<cite class="quills-quote-author" id="quills-quote-author"><?php echo esc_html( $top_quote_1_author ); ?></cite>
 				</div>
 				<button type="button" class="quills-quote-arrow quills-quote-arrow-next" id="quills-quote-next" aria-label="<?php esc_attr_e( 'Next Quote', 'coffee-cafe-corner' ); ?>">
 					<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
@@ -138,16 +181,16 @@ $total_selected = count( $url_processes ) + count( $url_roasts ) + count( $url_t
 		<!-- Quick Category Filter Pills (Terracotta Red Buttons matching Screenshot 2) -->
 		<div class="quills-category-pills-wrap">
 			<button type="button" class="quills-category-pill <?php echo in_array( 'blend', $url_types, true ) ? 'is-active' : ''; ?>" data-tab="blend">
-				<?php esc_html_e( 'Blends', 'coffee-cafe-corner' ); ?>
+				<?php echo esc_html( $tab_blend ); ?>
 			</button>
 			<button type="button" class="quills-category-pill <?php echo in_array( 'single-origin', $url_types, true ) ? 'is-active' : ''; ?>" data-tab="single-origin">
-				<?php esc_html_e( 'Single Origin', 'coffee-cafe-corner' ); ?>
+				<?php echo esc_html( $tab_single ); ?>
 			</button>
 			<button type="button" class="quills-category-pill <?php echo in_array( 'espresso', $url_types, true ) ? 'is-active' : ''; ?>" data-tab="espresso">
-				<?php esc_html_e( 'Espresso', 'coffee-cafe-corner' ); ?>
+				<?php echo esc_html( $tab_espresso ); ?>
 			</button>
 			<button type="button" class="quills-category-pill <?php echo in_array( 'decaf', $url_types, true ) ? 'is-active' : ''; ?>" data-tab="decaf">
-				<?php esc_html_e( 'Decaf', 'coffee-cafe-corner' ); ?>
+				<?php echo esc_html( $tab_decaf ); ?>
 			</button>
 		</div>
 
@@ -356,7 +399,7 @@ $total_selected = count( $url_processes ) + count( $url_roasts ) + count( $url_t
 		<section class="quills-coffee-testimonials-banner" aria-label="<?php esc_attr_e( 'Customer Testimonials', 'coffee-cafe-corner' ); ?>">
 			<div class="quills-testimonials-inner">
 				<h2 class="quills-testimonials-heading">
-					<?php esc_html_e( 'More kind words from customers', 'coffee-cafe-corner' ); ?>
+					<?php echo esc_html( $bottom_heading ); ?>
 				</h2>
 				<div class="quills-quote-slider-wrapper">
 					<button type="button" class="quills-quote-arrow quills-quote-arrow-prev" id="quills-bottom-quote-prev" aria-label="<?php esc_attr_e( 'Previous Testimonial', 'coffee-cafe-corner' ); ?>">
@@ -371,7 +414,7 @@ $total_selected = count( $url_processes ) + count( $url_roasts ) + count( $url_t
 							<span class="quills-gold-star">★</span>
 						</div>
 						<blockquote class="quills-testimonials-quote" id="quills-bottom-quote-text">
-							"Amazing coffee. Quills is consistently head and shoulders above others."
+							<?php echo esc_html( $bottom_quote_1_text ); ?>
 						</blockquote>
 					</div>
 					<button type="button" class="quills-quote-arrow quills-quote-arrow-next" id="quills-bottom-quote-next" aria-label="<?php esc_attr_e( 'Next Testimonial', 'coffee-cafe-corner' ); ?>">
@@ -386,6 +429,11 @@ $total_selected = count( $url_processes ) + count( $url_roasts ) + count( $url_t
 				</div>
 			</div>
 		</section>
+
+		<script>
+		window.quillsTopQuotes = <?php echo wp_json_encode( $top_quotes_array ); ?>;
+		window.quillsBottomQuotes = <?php echo wp_json_encode( $bottom_quotes_array ); ?>;
+		</script>
 
 	</div>
 </div>
