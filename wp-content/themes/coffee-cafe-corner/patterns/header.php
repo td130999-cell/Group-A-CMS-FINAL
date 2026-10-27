@@ -5,6 +5,11 @@
  * Categories: header
  * Block Types: core/template-part/header
  */
+
+$custom_logo_id  = get_theme_mod( 'custom_logo' );
+$header_logo_url = ( $custom_logo_id )
+  ? wp_get_attachment_image_url( $custom_logo_id, 'full' )
+  : ( get_template_directory_uri() . '/assets/images/gropacoffe.png' );
 ?>
 
 <!-- wp:html -->
@@ -28,7 +33,7 @@
       <!-- Center: Logo -->
       <div class="quills-header-center">
         <a href="<?php echo esc_url( home_url( '/' ) ); ?>" class="quills-logo-link" rel="home">
-          <img src="<?php echo esc_url( get_template_directory_uri() . '/assets/images/gropacoffe.png' ); ?>" alt="<?php bloginfo( 'name' ); ?>" class="quills-logo-img" />
+          <img src="<?php echo esc_url( $header_logo_url ); ?>" alt="<?php bloginfo( 'name' ); ?>" class="quills-logo-img" />
         </a>
       </div>
 
@@ -90,6 +95,17 @@
 
   <!-- Bottom Row: Centered Navigation Menu -->
   <nav class="quills-header-bottom" id="quills-nav-menu" aria-label="<?php esc_attr_e( 'Primary Navigation', 'coffee-cafe-corner' ); ?>">
+    <?php
+    if ( has_nav_menu( 'primary' ) ) {
+      wp_nav_menu( array(
+        'theme_location' => 'primary',
+        'container'      => false,
+        'menu_class'     => 'quills-nav-list',
+        'fallback_cb'    => false,
+        'depth'          => 1,
+      ) );
+    } else {
+    ?>
     <ul class="quills-nav-list">
       <li class="quills-nav-item"><a href="<?php echo esc_url( home_url('/coffee/') ); ?>" class="quills-nav-link">COFFEE</a></li>
       <li class="quills-nav-item"><a href="<?php echo esc_url( home_url('/subscriptions/') ); ?>" class="quills-nav-link">SUBSCRIPTIONS</a></li>
@@ -98,8 +114,10 @@
       <li class="quills-nav-item"><a href="<?php echo esc_url( home_url('/merch/') ); ?>" class="quills-nav-link">MERCH</a></li>
       <li class="quills-nav-item"><a href="<?php echo esc_url( home_url('/gift-cards/') ); ?>" class="quills-nav-link">GIFT CARDS</a></li>
       <li class="quills-nav-item"><a href="<?php echo esc_url( home_url('/visit/') ); ?>" class="quills-nav-link">VISIT</a></li>
-      <li class="quills-nav-item"><a href="<?php echo esc_url( home_url('/about/') ); ?>" class="quills-nav-link">ABOUT</a></li>
+      <li class="quills-nav-item"><a href="<?php echo esc_url( home_url('/about-us/') ); ?>" class="quills-nav-link">ABOUT</a></li>
     </ul>
+    <?php } ?>
   </nav>
+
 </div>
 <!-- /wp:html -->

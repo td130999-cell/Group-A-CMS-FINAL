@@ -205,7 +205,10 @@ class Coffee_Cafe_Corner_Wholesale_DB {
 		$page = get_page_by_path( self::PAGE_SLUG );
 		$page_id = $page ? $page->ID : 0;
 
-		$hero_title = get_theme_mod( 'wholesale_hero_title' );
+		$hero_title = get_option( 'quills_wholesale_hero_title' );
+		if ( empty( $hero_title ) ) {
+			$hero_title = get_theme_mod( 'wholesale_hero_title' );
+		}
 		if ( empty( $hero_title ) && $page_id ) {
 			$hero_title = get_post_meta( $page_id, '_wholesale_hero_title', true );
 		}
@@ -213,7 +216,10 @@ class Coffee_Cafe_Corner_Wholesale_DB {
 			$hero_title = 'Wholesale Coffee Roasting';
 		}
 
-		$intro_heading = get_theme_mod( 'wholesale_intro_heading' );
+		$intro_heading = get_option( 'quills_wholesale_intro_heading' );
+		if ( empty( $intro_heading ) ) {
+			$intro_heading = get_theme_mod( 'wholesale_intro_heading' );
+		}
 		if ( empty( $intro_heading ) && $page_id ) {
 			$intro_heading = get_post_meta( $page_id, '_wholesale_intro_heading', true );
 		}
@@ -221,7 +227,10 @@ class Coffee_Cafe_Corner_Wholesale_DB {
 			$intro_heading = "Hey there! I'm Michael.";
 		}
 
-		$intro_lead = get_theme_mod( 'wholesale_intro_lead' );
+		$intro_lead = get_option( 'quills_wholesale_intro_lead' );
+		if ( empty( $intro_lead ) ) {
+			$intro_lead = get_theme_mod( 'wholesale_intro_lead' );
+		}
 		if ( empty( $intro_lead ) && $page_id ) {
 			$intro_lead = get_post_meta( $page_id, '_wholesale_intro_lead', true );
 		}
@@ -229,7 +238,10 @@ class Coffee_Cafe_Corner_Wholesale_DB {
 			$intro_lead = 'We want to help you build a cafe people love coming back to.';
 		}
 
-		$p1 = get_theme_mod( 'wholesale_paragraph_1' );
+		$p1 = get_option( 'quills_wholesale_paragraph_1' );
+		if ( empty( $p1 ) ) {
+			$p1 = get_theme_mod( 'wholesale_paragraph_1' );
+		}
 		if ( empty( $p1 ) && $page_id ) {
 			$p1 = get_post_meta( $page_id, '_wholesale_paragraph_1', true );
 		}
@@ -237,7 +249,10 @@ class Coffee_Cafe_Corner_Wholesale_DB {
 			$p1 = 'After 19 years and seven cafes of our own, we know what a new owner needs from a coffee partner.';
 		}
 
-		$p2 = get_theme_mod( 'wholesale_paragraph_2' );
+		$p2 = get_option( 'quills_wholesale_paragraph_2' );
+		if ( empty( $p2 ) ) {
+			$p2 = get_theme_mod( 'wholesale_paragraph_2' );
+		}
 		if ( empty( $p2 ) && $page_id ) {
 			$p2 = get_post_meta( $page_id, '_wholesale_paragraph_2', true );
 		}
@@ -245,7 +260,10 @@ class Coffee_Cafe_Corner_Wholesale_DB {
 			$p2 = 'You get coffee we serve in our own cafes, recipes and training for your baristas, and my personal cell for when you need a hand.';
 		}
 
-		$p3 = get_theme_mod( 'wholesale_paragraph_3' );
+		$p3 = get_option( 'quills_wholesale_paragraph_3' );
+		if ( empty( $p3 ) ) {
+			$p3 = get_theme_mod( 'wholesale_paragraph_3' );
+		}
 		if ( empty( $p3 ) && $page_id ) {
 			$p3 = get_post_meta( $page_id, '_wholesale_paragraph_3', true );
 		}
@@ -253,7 +271,10 @@ class Coffee_Cafe_Corner_Wholesale_DB {
 			$p3 = 'Answer a few questions below to get your samples. I\'ll reach out to talk through your coffee program and arrange a free sample box.';
 		}
 
-		$video_id = get_theme_mod( 'wholesale_video_id' );
+		$video_id = get_option( 'quills_wholesale_video_id' );
+		if ( empty( $video_id ) ) {
+			$video_id = get_theme_mod( 'wholesale_video_id' );
+		}
 		if ( empty( $video_id ) && $page_id ) {
 			$video_id = get_post_meta( $page_id, '_wholesale_video_id', true );
 		}
@@ -266,7 +287,10 @@ class Coffee_Cafe_Corner_Wholesale_DB {
 			$video_poster = 'michael-video-poster.jpg';
 		}
 
-		$video_subtitle = get_theme_mod( 'wholesale_video_subtitle' );
+		$video_subtitle = get_option( 'quills_wholesale_video_subtitle' );
+		if ( empty( $video_subtitle ) ) {
+			$video_subtitle = get_theme_mod( 'wholesale_video_subtitle' );
+		}
 		if ( empty( $video_subtitle ) && $page_id ) {
 			$video_subtitle = get_post_meta( $page_id, '_wholesale_video_subtitle', true );
 		}
@@ -274,7 +298,10 @@ class Coffee_Cafe_Corner_Wholesale_DB {
 			$video_subtitle = 'and we would love to help you elevate your coffee game.';
 		}
 
-		$typeform_id = get_theme_mod( 'wholesale_typeform_id' );
+		$typeform_id = get_option( 'quills_wholesale_typeform_id' );
+		if ( empty( $typeform_id ) ) {
+			$typeform_id = get_theme_mod( 'wholesale_typeform_id' );
+		}
 		if ( empty( $typeform_id ) && $page_id ) {
 			$typeform_id = get_post_meta( $page_id, '_wholesale_typeform_id', true );
 		}
@@ -285,7 +312,10 @@ class Coffee_Cafe_Corner_Wholesale_DB {
 		$theme_uri = get_template_directory_uri();
 		$poster_url = $theme_uri . '/assets/images/wholesale/' . $video_poster;
 
-		$form_mode = get_theme_mod( 'wholesale_form_mode' );
+		$form_mode = get_option( 'quills_wholesale_form_mode' );
+		if ( empty( $form_mode ) ) {
+			$form_mode = get_theme_mod( 'wholesale_form_mode' );
+		}
 		if ( empty( $form_mode ) && $page_id ) {
 			$form_mode = get_post_meta( $page_id, '_wholesale_form_mode', true );
 		}
@@ -293,7 +323,10 @@ class Coffee_Cafe_Corner_Wholesale_DB {
 			$form_mode = 'direct';
 		}
 
-		$form_title = get_theme_mod( 'wholesale_form_title' );
+		$form_title = get_option( 'quills_wholesale_form_title' );
+		if ( empty( $form_title ) ) {
+			$form_title = get_theme_mod( 'wholesale_form_title' );
+		}
 		if ( empty( $form_title ) && $page_id ) {
 			$form_title = get_post_meta( $page_id, '_wholesale_form_title', true );
 		}
@@ -301,7 +334,10 @@ class Coffee_Cafe_Corner_Wholesale_DB {
 			$form_title = 'Request your samples';
 		}
 
-		$form_subtitle = get_theme_mod( 'wholesale_form_subtitle' );
+		$form_subtitle = get_option( 'quills_wholesale_form_subtitle' );
+		if ( empty( $form_subtitle ) ) {
+			$form_subtitle = get_theme_mod( 'wholesale_form_subtitle' );
+		}
 		if ( empty( $form_subtitle ) && $page_id ) {
 			$form_subtitle = get_post_meta( $page_id, '_wholesale_form_subtitle', true );
 		}
@@ -309,7 +345,10 @@ class Coffee_Cafe_Corner_Wholesale_DB {
 			$form_subtitle = 'Tell us a little about you and your business';
 		}
 
-		$form_button_text = get_theme_mod( 'wholesale_form_button_text' );
+		$form_button_text = get_option( 'quills_wholesale_form_button_text' );
+		if ( empty( $form_button_text ) ) {
+			$form_button_text = get_theme_mod( 'wholesale_form_button_text' );
+		}
 		if ( empty( $form_button_text ) && $page_id ) {
 			$form_button_text = get_post_meta( $page_id, '_wholesale_form_button_text', true );
 		}
@@ -317,7 +356,10 @@ class Coffee_Cafe_Corner_Wholesale_DB {
 			$form_button_text = 'Get started';
 		}
 
-		$form_time_estimate = get_theme_mod( 'wholesale_form_time_estimate' );
+		$form_time_estimate = get_option( 'quills_wholesale_form_time_estimate' );
+		if ( empty( $form_time_estimate ) ) {
+			$form_time_estimate = get_theme_mod( 'wholesale_form_time_estimate' );
+		}
 		if ( empty( $form_time_estimate ) && $page_id ) {
 			$form_time_estimate = get_post_meta( $page_id, '_wholesale_form_time_estimate', true );
 		}
@@ -325,7 +367,10 @@ class Coffee_Cafe_Corner_Wholesale_DB {
 			$form_time_estimate = 'Takes 1 minute';
 		}
 
-		$form_submit_label = get_theme_mod( 'wholesale_form_submit_label' );
+		$form_submit_label = get_option( 'quills_wholesale_form_submit_label' );
+		if ( empty( $form_submit_label ) ) {
+			$form_submit_label = get_theme_mod( 'wholesale_form_submit_label' );
+		}
 		if ( empty( $form_submit_label ) && $page_id ) {
 			$form_submit_label = get_post_meta( $page_id, '_wholesale_form_submit_label', true );
 		}
@@ -333,7 +378,10 @@ class Coffee_Cafe_Corner_Wholesale_DB {
 			$form_submit_label = 'Send Sample Request';
 		}
 
-		$form_success_message = get_theme_mod( 'wholesale_form_success_message' );
+		$form_success_message = get_option( 'quills_wholesale_form_success_message' );
+		if ( empty( $form_success_message ) ) {
+			$form_success_message = get_theme_mod( 'wholesale_form_success_message' );
+		}
 		if ( empty( $form_success_message ) && $page_id ) {
 			$form_success_message = get_post_meta( $page_id, '_wholesale_form_success_message', true );
 		}

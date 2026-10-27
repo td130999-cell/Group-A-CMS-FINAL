@@ -33,23 +33,35 @@ if ( ! $page_id || ! in_array( get_post_field( 'post_name', $page_id ), $valid_s
 $theme_url = trailingslashit( get_template_directory_uri() );
 $img_dir   = $theme_url . 'assets/images/visit/';
 
-// 3. Fetch Data Dynamically from WordPress Database (wp_postmeta) with robust defaults
-$hero_title = get_post_meta( $page_id, '_visit_hero_title', true );
+// 3. Fetch Data Dynamically from WordPress Database (wp_options or wp_postmeta) with robust defaults
+$hero_title = get_option( 'quills_visit_hero_title' );
 if ( empty( $hero_title ) ) {
-    $hero_title = 'Our Cafes';
+    $hero_title = get_post_meta( $page_id, '_visit_hero_title', true ) ?: 'Our Cafes';
 }
 
-$hero_img_file = get_post_meta( $page_id, '_visit_hero_image', true ) ?: 'our-cafes-hero.jpg';
+$hero_img_file = get_option( 'quills_visit_hero_image' );
+if ( empty( $hero_img_file ) ) {
+    $hero_img_file = get_post_meta( $page_id, '_visit_hero_image', true ) ?: 'our-cafes-hero.jpg';
+}
 $hero_img_url  = filter_var( $hero_img_file, FILTER_VALIDATE_URL ) ? $hero_img_file : $img_dir . $hero_img_file;
 
-$breadcrumb_label = get_post_meta( $page_id, '_visit_breadcrumb', true ) ?: 'Locations & Hours';
+$breadcrumb_label = get_option( 'quills_visit_breadcrumb' );
+if ( empty( $breadcrumb_label ) ) {
+    $breadcrumb_label = get_post_meta( $page_id, '_visit_breadcrumb', true ) ?: 'Locations & Hours';
+}
 
-$intro_text = get_post_meta( $page_id, '_visit_intro_text', true );
+$intro_text = get_option( 'quills_visit_intro_text' );
+if ( empty( $intro_text ) ) {
+    $intro_text = get_post_meta( $page_id, '_visit_intro_text', true );
+}
 if ( empty( $intro_text ) ) {
     $intro_text = "If you happen to be in our neck of the woods, we'd love to see you. This is where it all started after all. While our subscriptions bring our curated coffees to your kitchen, there's something special about serving you in person. Each of our cafes has a little charm of its own. Our in-house team designed each of them to be warm and welcoming in their own ways. We have six cafes in various Louisville neighborhoods, and one in downtown Indianapolis. You can read a bit about each and find our hours and directions below. Stop by for our seasonal menu of espresso drinks, single origin coffees, and baked goods. Fresh bags of our coffees and merch are always available on the shelves as well.";
 }
 
-$section_title = get_post_meta( $page_id, '_visit_section_title', true ) ?: 'LOCATIONS & HOURS';
+$section_title = get_option( 'quills_visit_section_title' );
+if ( empty( $section_title ) ) {
+    $section_title = get_post_meta( $page_id, '_visit_section_title', true ) ?: 'LOCATIONS & HOURS';
+}
 
 $cafes = get_post_meta( $page_id, '_visit_cafes', true );
 

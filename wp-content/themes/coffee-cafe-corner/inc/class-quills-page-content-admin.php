@@ -3,7 +3,7 @@
  * Class Coffee_Cafe_Corner_Page_Content_Admin
  *
  * Provides dedicated WordPress Admin UI for managing page content:
- * - Home Page: Hero Banner Title, Subtitle, CTA Button, Reviews, Team Section ("NO ROBOTS. JUST PEOPLE.")
+ * - Home Page: All 10 sections completely dynamic, synchronized with WordPress Database (wp_options)
  * - About Us Page: Hero Title, History Section ("WHERE WE STARTED"), Values, Quotes
  * - Full synchronization with WordPress Database (wp_options & wp_postmeta)
  *
@@ -18,9 +18,351 @@ class Coffee_Cafe_Corner_Page_Content_Admin {
 
 	public static function init() {
 		add_action( 'admin_menu', array( __CLASS__, 'register_admin_menus' ) );
+		add_action( 'admin_enqueue_scripts', array( __CLASS__, 'enqueue_admin_assets' ) );
 		add_action( 'add_meta_boxes', array( __CLASS__, 'register_page_meta_boxes' ) );
 		add_action( 'save_post_page', array( __CLASS__, 'save_page_meta' ), 10, 2 );
 		add_action( 'admin_init', array( __CLASS__, 'handle_home_settings_save' ) );
+		add_action( 'admin_init', array( __CLASS__, 'handle_coffee_settings_save' ) );
+		add_action( 'admin_init', array( __CLASS__, 'handle_brew_gear_settings_save' ) );
+		add_action( 'admin_init', array( __CLASS__, 'handle_subscriptions_settings_save' ) );
+		add_action( 'admin_init', array( __CLASS__, 'handle_merch_settings_save' ) );
+		add_action( 'admin_init', array( __CLASS__, 'handle_wholesale_settings_save' ) );
+		add_action( 'admin_init', array( __CLASS__, 'handle_gift_cards_settings_save' ) );
+		add_action( 'admin_init', array( __CLASS__, 'handle_about_settings_save' ) );
+		add_action( 'admin_init', array( __CLASS__, 'handle_visit_settings_save' ) );
+		add_action( 'admin_init', array( __CLASS__, 'handle_footer_settings_save' ) );
+		add_action( 'wp', array( __CLASS__, 'refresh_dynamic_patterns' ), 1 );
+		add_filter( 'render_block', array( __CLASS__, 'render_dynamic_patterns' ), 10, 2 );
+	}
+
+	/**
+	 * Dynamically re-evaluate and register patterns on every frontend load
+	 */
+	public static function refresh_dynamic_patterns() {
+		if ( ! class_exists( 'WP_Block_Patterns_Registry' ) ) {
+			return;
+		}
+		$registry = WP_Block_Patterns_Registry::get_instance();
+
+		// Refresh Home Quills
+		if ( $registry->is_registered( 'coffee-cafe-corner/home-quills' ) ) {
+			$registry->unregister( 'coffee-cafe-corner/home-quills' );
+		}
+		$pattern_home = get_template_directory() . '/patterns/home-quills.php';
+		if ( file_exists( $pattern_home ) ) {
+			ob_start();
+			include $pattern_home;
+			$pattern_content = ob_get_clean();
+			$registry->register( 'coffee-cafe-corner/home-quills', array(
+				'title'      => 'Home Quills',
+				'categories' => array( 'featured' ),
+				'content'    => $pattern_content,
+			) );
+		}
+
+		// Refresh Coffee Collection
+		if ( $registry->is_registered( 'coffee-cafe-corner/coffee' ) ) {
+			$registry->unregister( 'coffee-cafe-corner/coffee' );
+		}
+		$pattern_coffee = get_template_directory() . '/patterns/coffee.php';
+		if ( file_exists( $pattern_coffee ) ) {
+			ob_start();
+			include $pattern_coffee;
+			$pattern_coffee_content = ob_get_clean();
+			$registry->register( 'coffee-cafe-corner/coffee', array(
+				'title'      => 'Coffee Collection',
+				'categories' => array( 'coffee-cafe-corner', 'pages' ),
+				'content'    => $pattern_coffee_content,
+			) );
+		}
+
+		// Refresh Brew Gear
+		if ( $registry->is_registered( 'coffee-cafe-corner/brew-gear' ) ) {
+			$registry->unregister( 'coffee-cafe-corner/brew-gear' );
+		}
+		$pattern_brew = get_template_directory() . '/patterns/brew-gear.php';
+		if ( file_exists( $pattern_brew ) ) {
+			ob_start();
+			include $pattern_brew;
+			$pattern_brew_content = ob_get_clean();
+			$registry->register( 'coffee-cafe-corner/brew-gear', array(
+				'title'      => 'Brew Gear',
+				'categories' => array( 'coffee-cafe-corner', 'pages' ),
+				'content'    => $pattern_brew_content,
+			) );
+		}
+
+		// Refresh Subscriptions
+		if ( $registry->is_registered( 'coffee-cafe-corner/subscriptions' ) ) {
+			$registry->unregister( 'coffee-cafe-corner/subscriptions' );
+		}
+		$pattern_sub = get_template_directory() . '/patterns/subscriptions.php';
+		if ( file_exists( $pattern_sub ) ) {
+			ob_start();
+			include $pattern_sub;
+			$pattern_sub_content = ob_get_clean();
+			$registry->register( 'coffee-cafe-corner/subscriptions', array(
+				'title'      => 'Subscriptions',
+				'categories' => array( 'coffee-cafe-corner', 'pages' ),
+				'content'    => $pattern_sub_content,
+			) );
+		}
+
+		// Refresh Merch
+		if ( $registry->is_registered( 'coffee-cafe-corner/merch' ) ) {
+			$registry->unregister( 'coffee-cafe-corner/merch' );
+		}
+		$pattern_merch = get_template_directory() . '/patterns/merch.php';
+		if ( file_exists( $pattern_merch ) ) {
+			ob_start();
+			include $pattern_merch;
+			$pattern_merch_content = ob_get_clean();
+			$registry->register( 'coffee-cafe-corner/merch', array(
+				'title'      => 'Merch',
+				'categories' => array( 'coffee-cafe-corner' ),
+				'content'    => $pattern_merch_content,
+			) );
+		}
+
+		// Refresh Wholesale
+		if ( $registry->is_registered( 'coffee-cafe-corner/wholesale' ) ) {
+			$registry->unregister( 'coffee-cafe-corner/wholesale' );
+		}
+		$pattern_wholesale = get_template_directory() . '/patterns/wholesale.php';
+		if ( file_exists( $pattern_wholesale ) ) {
+			ob_start();
+			include $pattern_wholesale;
+			$pattern_wholesale_content = ob_get_clean();
+			$registry->register( 'coffee-cafe-corner/wholesale', array(
+				'title'      => 'Wholesale Coffee Roasting',
+				'categories' => array( 'coffee-cafe-corner', 'pages' ),
+				'content'    => $pattern_wholesale_content,
+			) );
+		}
+
+		// Refresh Gift Cards
+		if ( $registry->is_registered( 'coffee-cafe-corner/gift-cards' ) ) {
+			$registry->unregister( 'coffee-cafe-corner/gift-cards' );
+		}
+		$pattern_gift_cards = get_template_directory() . '/patterns/gift-cards.php';
+		if ( file_exists( $pattern_gift_cards ) ) {
+			ob_start();
+			include $pattern_gift_cards;
+			$pattern_gift_cards_content = ob_get_clean();
+			$registry->register( 'coffee-cafe-corner/gift-cards', array(
+				'title'      => 'Gift Cards',
+				'categories' => array( 'coffee-cafe-corner', 'pages' ),
+				'content'    => $pattern_gift_cards_content,
+			) );
+		}
+
+		// Refresh About Us
+		if ( $registry->is_registered( 'coffee-cafe-corner/about' ) ) {
+			$registry->unregister( 'coffee-cafe-corner/about' );
+		}
+		$pattern_about = get_template_directory() . '/patterns/about.php';
+		if ( file_exists( $pattern_about ) ) {
+			ob_start();
+			include $pattern_about;
+			$pattern_about_content = ob_get_clean();
+			$registry->register( 'coffee-cafe-corner/about', array(
+				'title'      => 'About Us',
+				'categories' => array( 'coffee-cafe-corner', 'pages' ),
+				'content'    => $pattern_about_content,
+			) );
+		}
+
+		// Refresh Visit
+		if ( $registry->is_registered( 'coffee-cafe-corner/visit' ) ) {
+			$registry->unregister( 'coffee-cafe-corner/visit' );
+		}
+		$pattern_visit = get_template_directory() . '/patterns/visit.php';
+		if ( file_exists( $pattern_visit ) ) {
+			ob_start();
+			include $pattern_visit;
+			$pattern_visit_content = ob_get_clean();
+			$registry->register( 'coffee-cafe-corner/visit', array(
+				'title'      => 'Visit',
+				'categories' => array( 'coffee-cafe-corner', 'pages' ),
+				'content'    => $pattern_visit_content,
+			) );
+		}
+
+		// Refresh Cafe Detail
+		if ( $registry->is_registered( 'coffee-cafe-corner/cafe-detail' ) ) {
+			$registry->unregister( 'coffee-cafe-corner/cafe-detail' );
+		}
+		$pattern_cafe_detail = get_template_directory() . '/patterns/cafe-detail.php';
+		if ( file_exists( $pattern_cafe_detail ) ) {
+			ob_start();
+			include $pattern_cafe_detail;
+			$pattern_cafe_detail_content = ob_get_clean();
+			$registry->register( 'coffee-cafe-corner/cafe-detail', array(
+				'title'      => 'Cafe Detail',
+				'categories' => array( 'coffee-cafe-corner', 'pages' ),
+				'content'    => $pattern_cafe_detail_content,
+			) );
+		}
+
+		// Refresh Footer
+		if ( $registry->is_registered( 'coffee-cafe-corner/footer' ) ) {
+			$registry->unregister( 'coffee-cafe-corner/footer' );
+		}
+		$pattern_footer = get_template_directory() . '/patterns/footer.php';
+		if ( file_exists( $pattern_footer ) ) {
+			ob_start();
+			include $pattern_footer;
+			$pattern_footer_content = ob_get_clean();
+			$registry->register( 'coffee-cafe-corner/footer', array(
+				'title'      => 'Footer',
+				'categories' => array( 'footer' ),
+				'content'    => $pattern_footer_content,
+			) );
+		}
+
+		// Refresh Header
+		if ( $registry->is_registered( 'coffee-cafe-corner/header' ) ) {
+			$registry->unregister( 'coffee-cafe-corner/header' );
+		}
+		$pattern_header = get_template_directory() . '/patterns/header.php';
+		if ( file_exists( $pattern_header ) ) {
+			ob_start();
+			include $pattern_header;
+			$pattern_header_content = ob_get_clean();
+			$registry->register( 'coffee-cafe-corner/header', array(
+				'title'      => 'Header',
+				'categories' => array( 'header' ),
+				'content'    => $pattern_header_content,
+			) );
+		}
+	}
+
+	public static function refresh_home_pattern() {
+		self::refresh_dynamic_patterns();
+	}
+
+	/**
+	 * Ensure patterns evaluate dynamically at runtime on frontend
+	 */
+	public static function render_dynamic_patterns( $block_content, $block ) {
+		if ( isset( $block['blockName'] ) && 'core/pattern' === $block['blockName'] ) {
+			if ( isset( $block['attrs']['slug'] ) ) {
+				$slug = $block['attrs']['slug'];
+				if ( 'coffee-cafe-corner/home-quills' === $slug ) {
+					$pattern_file = get_template_directory() . '/patterns/home-quills.php';
+					if ( file_exists( $pattern_file ) ) {
+						ob_start();
+						include $pattern_file;
+						return ob_get_clean();
+					}
+				} elseif ( 'coffee-cafe-corner/coffee' === $slug ) {
+					$pattern_file = get_template_directory() . '/patterns/coffee.php';
+					if ( file_exists( $pattern_file ) ) {
+						ob_start();
+						include $pattern_file;
+						return ob_get_clean();
+					}
+				} elseif ( 'coffee-cafe-corner/brew-gear' === $slug ) {
+					$pattern_file = get_template_directory() . '/patterns/brew-gear.php';
+					if ( file_exists( $pattern_file ) ) {
+						ob_start();
+						include $pattern_file;
+						return ob_get_clean();
+					}
+				} elseif ( 'coffee-cafe-corner/subscriptions' === $slug ) {
+					$pattern_file = get_template_directory() . '/patterns/subscriptions.php';
+					if ( file_exists( $pattern_file ) ) {
+						ob_start();
+						include $pattern_file;
+						return ob_get_clean();
+					}
+				} elseif ( 'coffee-cafe-corner/merch' === $slug ) {
+					$pattern_file = get_template_directory() . '/patterns/merch.php';
+					if ( file_exists( $pattern_file ) ) {
+						ob_start();
+						include $pattern_file;
+						return ob_get_clean();
+					}
+				} elseif ( 'coffee-cafe-corner/wholesale' === $slug ) {
+					$pattern_file = get_template_directory() . '/patterns/wholesale.php';
+					if ( file_exists( $pattern_file ) ) {
+						ob_start();
+						include $pattern_file;
+						return ob_get_clean();
+					}
+				} elseif ( 'coffee-cafe-corner/gift-cards' === $slug ) {
+					$pattern_file = get_template_directory() . '/patterns/gift-cards.php';
+					if ( file_exists( $pattern_file ) ) {
+						ob_start();
+						include $pattern_file;
+						return ob_get_clean();
+					}
+				} elseif ( 'coffee-cafe-corner/about' === $slug ) {
+					$pattern_file = get_template_directory() . '/patterns/about.php';
+					if ( file_exists( $pattern_file ) ) {
+						ob_start();
+						include $pattern_file;
+						return ob_get_clean();
+					}
+				} elseif ( 'coffee-cafe-corner/visit' === $slug ) {
+					$pattern_file = get_template_directory() . '/patterns/visit.php';
+					if ( file_exists( $pattern_file ) ) {
+						ob_start();
+						include $pattern_file;
+						return ob_get_clean();
+					}
+				} elseif ( 'coffee-cafe-corner/cafe-detail' === $slug ) {
+					$pattern_file = get_template_directory() . '/patterns/cafe-detail.php';
+					if ( file_exists( $pattern_file ) ) {
+						ob_start();
+						include $pattern_file;
+						return ob_get_clean();
+					}
+				} elseif ( 'coffee-cafe-corner/footer' === $slug ) {
+					$pattern_file = get_template_directory() . '/patterns/footer.php';
+					if ( file_exists( $pattern_file ) ) {
+						ob_start();
+						include $pattern_file;
+						return ob_get_clean();
+					}
+				} elseif ( 'coffee-cafe-corner/header' === $slug ) {
+					$pattern_file = get_template_directory() . '/patterns/header.php';
+					if ( file_exists( $pattern_file ) ) {
+						ob_start();
+						include $pattern_file;
+						return ob_get_clean();
+					}
+				}
+			}
+		}
+		return $block_content;
+	}
+
+	public static function render_dynamic_home_pattern( $block_content, $block ) {
+		return self::render_dynamic_patterns( $block_content, $block );
+	}
+
+	/**
+	 * Enqueue WordPress Media Library scripts
+	 */
+	public static function enqueue_admin_assets( $hook ) {
+		if ( false !== strpos( $hook, 'quills-home-settings' ) || false !== strpos( $hook, 'quills-coffee-settings' ) || false !== strpos( $hook, 'quills-brew-gear-settings' ) || false !== strpos( $hook, 'quills-subscriptions-settings' ) || false !== strpos( $hook, 'quills-merch-settings' ) || false !== strpos( $hook, 'quills-wholesale-settings' ) || false !== strpos( $hook, 'quills-gift-cards-settings' ) || false !== strpos( $hook, 'quills-about-settings' ) || false !== strpos( $hook, 'quills-visit-settings' ) || false !== strpos( $hook, 'quills-footer-settings' ) || 'post.php' === $hook || 'post-new.php' === $hook ) {
+			wp_enqueue_media();
+		}
+	}
+
+	/**
+	 * Helper to resolve image URL with default fallback
+	 */
+	public static function get_image_url( $val, $default_filename ) {
+		$img_dir = trailingslashit( get_template_directory_uri() ) . 'assets/images/home/';
+		if ( empty( $val ) ) {
+			return $img_dir . $default_filename;
+		}
+		if ( strpos( $val, 'http://' ) === 0 || strpos( $val, 'https://' ) === 0 || strpos( $val, '//' ) === 0 ) {
+			return $val;
+		}
+		return $img_dir . ltrim( $val, '/' );
 	}
 
 	/**
@@ -29,10 +371,73 @@ class Coffee_Cafe_Corner_Page_Content_Admin {
 	public static function register_admin_menus() {
 		add_theme_page(
 			__( 'Cài đặt Trang chủ (Home Page)', 'coffee-cafe-corner' ),
-			__( 'Cài đặt Trang chủ (Home)', 'coffee-cafe-corner' ),
+			__( 'Home', 'coffee-cafe-corner' ),
 			'manage_options',
 			'quills-home-settings',
 			array( __CLASS__, 'render_home_settings_page' )
+		);
+		add_theme_page(
+			__( 'Cài đặt Trang Cà phê (Coffee)', 'coffee-cafe-corner' ),
+			__( 'Coffee', 'coffee-cafe-corner' ),
+			'manage_options',
+			'quills-coffee-settings',
+			array( __CLASS__, 'render_coffee_settings_page' )
+		);
+		add_theme_page(
+			__( 'Cài đặt Trang Dụng cụ (Brew Gear)', 'coffee-cafe-corner' ),
+			__( 'Brew Gear', 'coffee-cafe-corner' ),
+			'manage_options',
+			'quills-brew-gear-settings',
+			array( __CLASS__, 'render_brew_gear_settings_page' )
+		);
+		add_theme_page(
+			__( 'Cài đặt Gói định kỳ (Subscriptions)', 'coffee-cafe-corner' ),
+			__( 'Subscriptions', 'coffee-cafe-corner' ),
+			'manage_options',
+			'quills-subscriptions-settings',
+			array( __CLASS__, 'render_subscriptions_settings_page' )
+		);
+		add_theme_page(
+			__( 'Cài đặt Hàng lưu niệm (Merch)', 'coffee-cafe-corner' ),
+			__( 'Merch', 'coffee-cafe-corner' ),
+			'manage_options',
+			'quills-merch-settings',
+			array( __CLASS__, 'render_merch_settings_page' )
+		);
+		add_theme_page(
+			__( 'Cài đặt Bán buôn (Wholesale)', 'coffee-cafe-corner' ),
+			__( 'Wholesale', 'coffee-cafe-corner' ),
+			'manage_options',
+			'quills-wholesale-settings',
+			array( __CLASS__, 'render_wholesale_settings_page' )
+		);
+		add_theme_page(
+			__( 'Cài đặt Thẻ quà tặng (Gift Cards)', 'coffee-cafe-corner' ),
+			__( 'Gift Cards', 'coffee-cafe-corner' ),
+			'manage_options',
+			'quills-gift-cards-settings',
+			array( __CLASS__, 'render_gift_cards_settings_page' )
+		);
+		add_theme_page(
+			__( 'Cài đặt Trang Giới thiệu (About Us)', 'coffee-cafe-corner' ),
+			__( 'About', 'coffee-cafe-corner' ),
+			'manage_options',
+			'quills-about-settings',
+			array( __CLASS__, 'render_about_settings_page' )
+		);
+		add_theme_page(
+			__( 'Cài đặt Chi nhánh & Giờ mở cửa (Visit)', 'coffee-cafe-corner' ),
+			__( 'Visit', 'coffee-cafe-corner' ),
+			'manage_options',
+			'quills-visit-settings',
+			array( __CLASS__, 'render_visit_settings_page' )
+		);
+		add_theme_page(
+			__( 'Cài đặt Chân trang (Footer Settings)', 'coffee-cafe-corner' ),
+			__( 'Footer', 'coffee-cafe-corner' ),
+			'manage_options',
+			'quills-footer-settings',
+			array( __CLASS__, 'render_footer_settings_page' )
 		);
 	}
 
@@ -67,8 +472,92 @@ class Coffee_Cafe_Corner_Page_Content_Admin {
 		if ( in_array( $slug, array( 'home', 'trang-chu' ), true ) ) {
 			add_meta_box(
 				'quills_home_content_meta',
-				__( '🏠 Quản lý Nội dung Trang Chủ (Home Banner & Team Section)', 'coffee-cafe-corner' ),
+				__( '🏠 Quản lý Toàn Bộ Nội dung Trang Chủ (Quills Home Page)', 'coffee-cafe-corner' ),
 				array( __CLASS__, 'render_home_meta_box' ),
+				'page',
+				'normal',
+				'high'
+			);
+		}
+
+		// Coffee Page Meta Box
+		if ( in_array( $slug, array( 'coffee', 'ca-phe' ), true ) ) {
+			add_meta_box(
+				'quills_coffee_content_meta',
+				__( '☕ Quản lý Toàn Bộ Nội dung Trang Cà Phê (Coffee Page Content)', 'coffee-cafe-corner' ),
+				array( __CLASS__, 'render_coffee_meta_box' ),
+				'page',
+				'normal',
+				'high'
+			);
+		}
+
+		// Brew Gear Page Meta Box
+		if ( in_array( $slug, array( 'brew-gear', 'dung-cu-pha' ), true ) ) {
+			add_meta_box(
+				'quills_brew_gear_content_meta',
+				__( '⚙️ Quản lý Toàn Bộ Nội dung Trang Dụng Cụ Pha (Brew Gear Content)', 'coffee-cafe-corner' ),
+				array( __CLASS__, 'render_brew_gear_meta_box' ),
+				'page',
+				'normal',
+				'high'
+			);
+		}
+
+		// Subscriptions Page Meta Box
+		if ( in_array( $slug, array( 'subscriptions', 'ca-phe-dinh-ky' ), true ) ) {
+			add_meta_box(
+				'quills_subscriptions_content_meta',
+				__( '📦 Quản lý Toàn Bộ Nội dung Trang Gói Định Kỳ (Subscriptions Content)', 'coffee-cafe-corner' ),
+				array( __CLASS__, 'render_subscriptions_meta_box' ),
+				'page',
+				'normal',
+				'high'
+			);
+		}
+
+		// Merch Page Meta Box
+		if ( in_array( $slug, array( 'merch', 'hang-luu-niem' ), true ) ) {
+			add_meta_box(
+				'quills_merch_content_meta',
+				__( '👕 Quản lý Toàn Bộ Nội dung Trang Hàng Lưu Niệm (Merch Content)', 'coffee-cafe-corner' ),
+				array( __CLASS__, 'render_merch_meta_box' ),
+				'page',
+				'normal',
+				'high'
+			);
+		}
+
+		// Wholesale Page Meta Box
+		if ( in_array( $slug, array( 'wholesale', 'ban-buon' ), true ) ) {
+			add_meta_box(
+				'quills_wholesale_content_meta',
+				__( '🤝 Quản lý Toàn Bộ Nội dung Trang Bán Buôn (Wholesale Content)', 'coffee-cafe-corner' ),
+				array( __CLASS__, 'render_wholesale_meta_box' ),
+				'page',
+				'normal',
+				'high'
+			);
+		}
+
+		// Gift Cards Page Meta Box
+		if ( in_array( $slug, array( 'gift-cards', 'the-qua-tang' ), true ) ) {
+			add_meta_box(
+				'quills_gift_cards_content_meta',
+				__( '🎁 Quản lý Toàn Bộ Nội dung Trang Thẻ Quà Tặng (Gift Cards Content)', 'coffee-cafe-corner' ),
+				array( __CLASS__, 'render_gift_cards_meta_box' ),
+				'page',
+				'normal',
+				'high'
+			);
+		}
+
+		// Visit & Our Cafes Page Meta Box
+		if ( in_array( $slug, array( 'visit', 'our-cafes', 'locations', 'locations-hours' ), true ) ) {
+			add_meta_box(
+				'quills_visit_content_meta',
+				__( '📍 Quản lý Nội dung Trang Chi Nhánh & Giờ Mở Cửa (Locations & Hours)', 'coffee-cafe-corner' ),
+				array( __CLASS__, 'render_visit_meta_box' ),
 				'page',
 				'normal',
 				'high'
@@ -79,89 +568,9 @@ class Coffee_Cafe_Corner_Page_Content_Admin {
 	/**
 	 * Render Meta Box for About Us
 	 */
-	public static function render_about_meta_box( $post ) {
+		public static function render_about_meta_box( $post ) {
 		wp_nonce_field( 'quills_about_meta_nonce', 'quills_about_meta_nonce_field' );
-
-		$id = $post->ID;
-
-		$hero_title = get_post_meta( $id, '_quills_hero_title', true ) ?: 'About Us';
-		$where_started_title = get_post_meta( $id, '_quills_where_we_started_title', true ) ?: 'WHERE WE STARTED';
-
-		$paragraphs = get_post_meta( $id, '_quills_where_we_started_paragraphs', true );
-		if ( empty( $paragraphs ) || ! is_array( $paragraphs ) ) {
-			$paragraphs_text = "In the early 2000s, many people drank coffee without thinking much about it. I couldn't stop thinking about it.\n\nDuring my time as a social worker, I was meeting with students in local coffeehouses. I found myself constantly talking about what makes exceptional coffee.\n\nHow it's sourced, roasted, how it's brewed. And why doing it right matters.\n\nIn 2007, we took a pair of hammers to an old rundown building in the Germantown neighborhood of Louisville, Kentucky.\n\nAfter a lot of love and elbow grease, we opened the first Quills. That first shop taught us everything. We learned that great coffee can create the kind of spaces where people can connect.\n\nWe learned that when you blend fine coffee with a touch of southern hospitality, when you prioritize connection over speed, something special happens.\n\nYou make places where strangers can become friends. Where a writer finds her words in a warm corner seat. Where a company might be founded on the back of a napkin. Where first dates can turn into something more.\n\nWhen our first building was about to be sold and we had to move, our regular customer Tommy O'Shea helped us find a new home in the Highlands. That shop on Baxter Avenue runs to this day.\n\nWe've grown since then. Today, we roast our coffee in small batches right here in Louisville. Because we wanted better control over the whole experience we were creating. Today we have six cafes here and one in downtown Indianapolis. But at the heart of it all, the vision hasn't changed: Great coffee. Great spaces. Great hospitality.\n\nWe work with our producers and sourcing partners around the world who care deeply about quality. The close work we do with them means that every cup you drink is connected to real people, real farms, and a commitment to doing things the right way.";
-		} else {
-			$paragraphs_text = implode( "\n\n", $paragraphs );
-		}
-
-		$why_here_title   = get_post_meta( $id, '_quills_why_were_here_title', true ) ?: "WHY WE'RE HERE";
-		$why_here_content = get_post_meta( $id, '_quills_why_were_here_content', true ) ?: "Quills Coffee is here to deliver a coffee that connects people. Between the barista behind the counter and the customer in front of it. Between strangers at neighboring tables. Between all of us and the farmers who picked the coffee we're enjoying. We believe delivering great coffee is a chance to make memorable human experiences. It's a chance for us to be together, to pause, to talk, to connect.";
-
-		$how_work_title   = get_post_meta( $id, '_quills_how_we_work_title', true ) ?: 'HOW WE WORK';
-		$how_work_content = get_post_meta( $id, '_quills_how_we_work_content', true ) ?: "The French have a word: terroir. It means \"the taste of the place itself.\" The soil where something grows. The climate that shapes it. The hands that tend it. It's why a coffee cherry from Guatemala tastes different from one grown in Ethiopia. The earth was different, the rain was different, and so the taste is different. At Quills, we celebrate our own kind of \"terroir\" with three core values: Genuine Care, Continuous Craft, and Creative Education.";
-
-		$quote_text   = get_post_meta( $id, '_quills_where_were_going_quote', true ) ?: "Like soil worked for years, our roots merely grow richer with time. We're not trying to be the biggest coffee company, or the fastest. We're building a place where quality lives, where every cup honors the taste of each dear sight, and most importantly—where people strive to connect with other people.";
-		$quote_author = get_post_meta( $id, '_quills_where_were_going_author', true ) ?: '— Nathan Quillo, Founder';
-		?>
-		<style>
-			.quills-admin-box { background: #fafafa; border: 1px solid #e2e8f0; border-radius: 8px; padding: 20px; margin-top: 10px; }
-			.quills-field-group { margin-bottom: 20px; }
-			.quills-field-group label { display: block; font-weight: 600; margin-bottom: 6px; font-size: 13.5px; color: #1e293b; }
-			.quills-field-group input[type="text"], .quills-field-group textarea { width: 100%; border: 1px solid #cbd5e1; border-radius: 6px; padding: 8px 12px; font-size: 14px; }
-			.quills-field-group textarea { line-height: 1.6; min-height: 180px; }
-			.quills-field-desc { font-size: 12px; color: #64748b; margin-top: 4px; }
-			.quills-badge { background: #663A1E; color: #fff; padding: 3px 8px; border-radius: 4px; font-size: 11px; font-weight: 600; text-transform: uppercase; }
-		</style>
-		<div class="quills-admin-box">
-			<p><em>Chỉnh sửa các trường dưới đây và bấm nút <strong>Cập nhật (Update)</strong> bên cột phải để lưu vào Database. Dữ liệu sẽ cập nhật ngay trên trang <strong>/about-us/</strong>.</em></p>
-
-			<div class="quills-field-group">
-				<label><span class="quills-badge">Hero Banner</span> Tiêu đề chính trang About Us:</label>
-				<input type="text" name="quills_hero_title" value="<?php echo esc_attr( $hero_title ); ?>">
-			</div>
-
-			<div class="quills-field-group">
-				<label><span class="quills-badge">Lịch sử</span> Tiêu đề mục câu chuyện:</label>
-				<input type="text" name="quills_where_started_title" value="<?php echo esc_attr( $where_started_title ); ?>">
-			</div>
-
-			<div class="quills-field-group">
-				<label>Nội dung câu chuyện lịch sử hình thành ("Where We Started"):</label>
-				<textarea name="quills_where_started_text" rows="12"><?php echo esc_textarea( $paragraphs_text ); ?></textarea>
-				<div class="quills-field-desc">Mỗi đoạn văn cách nhau bằng 2 lần xuống dòng (Enter 2 lần). Hệ thống sẽ tự động tách thành các đoạn văn riêng biệt.</div>
-			</div>
-
-			<div class="quills-field-group">
-				<label><span class="quills-badge">Sứ mệnh</span> Tiêu đề mục sứ mệnh:</label>
-				<input type="text" name="quills_why_here_title" value="<?php echo esc_attr( $why_here_title ); ?>">
-			</div>
-
-			<div class="quills-field-group">
-				<label>Nội dung sứ mệnh ("Why We're Here"):</label>
-				<textarea name="quills_why_here_content" rows="4"><?php echo esc_textarea( $why_here_content ); ?></textarea>
-			</div>
-
-			<div class="quills-field-group">
-				<label><span class="quills-badge">Giá trị</span> Tiêu đề phương thức hoạt động:</label>
-				<input type="text" name="quills_how_work_title" value="<?php echo esc_attr( $how_work_title ); ?>">
-			</div>
-
-			<div class="quills-field-group">
-				<label>Nội dung phương thức hoạt động ("How We Work"):</label>
-				<textarea name="quills_how_work_content" rows="4"><?php echo esc_textarea( $how_work_content ); ?></textarea>
-			</div>
-
-			<div class="quills-field-group">
-				<label><span class="quills-badge">Tầm nhìn</span> Lời trích dẫn kết trang ("Where We're Going"):</label>
-				<textarea name="quills_quote_text" rows="3"><?php echo esc_textarea( $quote_text ); ?></textarea>
-			</div>
-
-			<div class="quills-field-group">
-				<label>Tác giả trích dẫn:</label>
-				<input type="text" name="quills_quote_author" value="<?php echo esc_attr( $quote_author ); ?>">
-			</div>
-		</div>
-		<?php
+		self::render_about_form_fields( $post->ID );
 	}
 
 	/**
@@ -178,54 +587,52 @@ class Coffee_Cafe_Corner_Page_Content_Admin {
 
 		// Save About Us Meta
 		if ( isset( $_POST['quills_about_meta_nonce_field'] ) && wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['quills_about_meta_nonce_field'] ) ), 'quills_about_meta_nonce' ) ) {
-			if ( isset( $_POST['quills_hero_title'] ) ) {
-				update_post_meta( $post_id, '_quills_hero_title', sanitize_text_field( wp_unslash( $_POST['quills_hero_title'] ) ) );
-			}
-			if ( isset( $_POST['quills_where_started_title'] ) ) {
-				update_post_meta( $post_id, '_quills_where_we_started_title', sanitize_text_field( wp_unslash( $_POST['quills_where_started_title'] ) ) );
-			}
-			if ( isset( $_POST['quills_where_started_text'] ) ) {
-				$raw_text = wp_unslash( $_POST['quills_where_started_text'] ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput
-				$raw_parts = preg_split( '/\r\n\r\n|\n\n/', $raw_text );
-				$cleaned_paragraphs = array();
-				foreach ( $raw_parts as $part ) {
-					$trimmed = trim( $part );
-					if ( ! empty( $trimmed ) ) {
-						$cleaned_paragraphs[] = sanitize_textarea_field( $trimmed );
-					}
-				}
-				if ( ! empty( $cleaned_paragraphs ) ) {
-					update_post_meta( $post_id, '_quills_where_we_started_paragraphs', $cleaned_paragraphs );
-				}
-			}
-			if ( isset( $_POST['quills_why_here_title'] ) ) {
-				update_post_meta( $post_id, '_quills_why_were_here_title', sanitize_text_field( wp_unslash( $_POST['quills_why_here_title'] ) ) );
-			}
-			if ( isset( $_POST['quills_why_here_content'] ) ) {
-				update_post_meta( $post_id, '_quills_why_were_here_content', sanitize_textarea_field( wp_unslash( $_POST['quills_why_here_content'] ) ) );
-			}
-			if ( isset( $_POST['quills_how_work_title'] ) ) {
-				update_post_meta( $post_id, '_quills_how_we_work_title', sanitize_text_field( wp_unslash( $_POST['quills_how_work_title'] ) ) );
-			}
-			if ( isset( $_POST['quills_how_work_content'] ) ) {
-				update_post_meta( $post_id, '_quills_how_we_work_content', sanitize_textarea_field( wp_unslash( $_POST['quills_how_work_content'] ) ) );
-			}
-			if ( isset( $_POST['quills_quote_text'] ) ) {
-				update_post_meta( $post_id, '_quills_where_were_going_quote', sanitize_textarea_field( wp_unslash( $_POST['quills_quote_text'] ) ) );
-			}
-			if ( isset( $_POST['quills_quote_author'] ) ) {
-				update_post_meta( $post_id, '_quills_where_were_going_author', sanitize_text_field( wp_unslash( $_POST['quills_quote_author'] ) ) );
-			}
+			self::save_about_fields( $_POST );
 		}
 
 		// Save Home Meta if editing Home page
 		if ( isset( $_POST['quills_home_meta_nonce_field'] ) && wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['quills_home_meta_nonce_field'] ) ), 'quills_home_meta_nonce' ) ) {
 			self::save_home_fields( $_POST );
 		}
+
+		// Save Coffee Meta if editing Coffee page
+		if ( isset( $_POST['quills_coffee_meta_nonce_field'] ) && wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['quills_coffee_meta_nonce_field'] ) ), 'quills_coffee_meta_nonce' ) ) {
+			self::save_coffee_fields( $_POST );
+		}
+
+		// Save Brew Gear Meta if editing Brew Gear page
+		if ( isset( $_POST['quills_brew_gear_meta_nonce_field'] ) && wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['quills_brew_gear_meta_nonce_field'] ) ), 'quills_brew_gear_meta_nonce' ) ) {
+			self::save_brew_gear_fields( $_POST );
+		}
+
+		// Save Subscriptions Meta if editing Subscriptions page
+		if ( isset( $_POST['quills_subscriptions_meta_nonce_field'] ) && wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['quills_subscriptions_meta_nonce_field'] ) ), 'quills_subscriptions_meta_nonce' ) ) {
+			self::save_subscriptions_fields( $_POST );
+		}
+
+		// Save Merch Meta if editing Merch page
+		if ( isset( $_POST['quills_merch_meta_nonce_field'] ) && wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['quills_merch_meta_nonce_field'] ) ), 'quills_merch_meta_nonce' ) ) {
+			self::save_merch_fields( $_POST );
+		}
+
+		// Save Wholesale Meta if editing Wholesale page
+		if ( isset( $_POST['quills_wholesale_meta_nonce_field'] ) && wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['quills_wholesale_meta_nonce_field'] ) ), 'quills_wholesale_meta_nonce' ) ) {
+			self::save_wholesale_fields( $_POST );
+		}
+
+		// Save Gift Cards Meta if editing Gift Cards page
+		if ( isset( $_POST['quills_gift_cards_meta_nonce_field'] ) && wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['quills_gift_cards_meta_nonce_field'] ) ), 'quills_gift_cards_meta_nonce' ) ) {
+			self::save_gift_cards_fields( $_POST );
+		}
+
+		// Save Visit Meta if editing Visit page
+		if ( isset( $_POST['quills_visit_meta_nonce_field'] ) && wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['quills_visit_meta_nonce_field'] ) ), 'quills_visit_meta_nonce' ) ) {
+			self::save_visit_fields( $_POST );
+		}
 	}
 
 	/**
-	 * Render Meta Box for Home Page (in page 12 'Home')
+	 * Render Meta Box for Home Page (in page 'Home')
 	 */
 	public static function render_home_meta_box( $post ) {
 		wp_nonce_field( 'quills_home_meta_nonce', 'quills_home_meta_nonce_field' );
@@ -238,10 +645,13 @@ class Coffee_Cafe_Corner_Page_Content_Admin {
 	public static function render_home_settings_page() {
 		?>
 		<div class="wrap">
-			<h1>🏠 Quản lý Nội dung Trang Chủ (Quills Home Page)</h1>
+			<h1 style="display: flex; align-items: center; gap: 10px; margin-bottom: 20px;">
+				<span>🏠 Quản lý Toàn Bộ Nội dung Trang Chủ (Home Page)</span>
+			</h1>
+
 			<?php if ( isset( $_GET['updated'] ) ) : ?>
 				<div class="notice notice-success is-dismissible">
-					<p><strong>Dữ liệu Trang chủ đã được lưu thành công vào Database!</strong> Hãy tải lại trang chủ để xem thay đổi.</p>
+					<p><strong>✅ Dữ liệu Trang chủ đã được lưu thành công vào Database!</strong> Hãy mở trang chủ ngoài giao diện và tải lại để xem nội dung mới nhất.</p>
 				</div>
 			<?php endif; ?>
 
@@ -251,9 +661,10 @@ class Coffee_Cafe_Corner_Page_Content_Admin {
 
 				<?php self::render_home_form_fields(); ?>
 
-				<p class="submit">
-					<input type="submit" name="submit" id="submit" class="button button-primary button-large" value="💾 Lưu Thay Đổi Trang Chủ (Save Settings)">
-				</p>
+				<div style="position: sticky; bottom: 20px; background: #fff; padding: 15px 20px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); border: 1px solid #cbd5e1; z-index: 100; display: flex; justify-content: space-between; align-items: center;">
+					<span style="font-weight: 600; color: #334155;">✨ Nhấn nút Lưu sau khi chỉnh sửa bất kỳ mục nào trên trang chủ:</span>
+					<input type="submit" name="submit" id="submit" class="button button-primary button-large" style="height: 44px; padding: 0 24px; font-size: 15px; font-weight: 700; background: #663A1E; border-color: #4a2812;" value="💾 Lưu Toàn Bộ Thay Đổi Trang Chủ (Save Settings)">
+				</div>
 			</form>
 		</div>
 		<?php
@@ -263,13 +674,25 @@ class Coffee_Cafe_Corner_Page_Content_Admin {
 	 * Shared Form Fields for Home Page
 	 */
 	public static function render_home_form_fields() {
-		$hero_title    = get_option( 'quills_home_hero_title', "We find them, we roast them, you<br>just enjoy them." );
-		$hero_subtitle = get_option( 'quills_home_hero_subtitle', "Get new delicious coffees that you and your guests will love, delivered<br>to your door on your schedule." );
-		$hero_cta_text = get_option( 'quills_home_hero_cta_text', "START YOUR SUBSCRIPTION" );
-		$hero_cta_link = get_option( 'quills_home_hero_cta_link', home_url( '/subscriptions/' ) );
-		$hero_rating   = get_option( 'quills_home_rating_text', "4.62 stars across 13,082 reviews" );
-		$hero_quote    = get_option( 'quills_home_hero_quote', "“I’ve searched far and wide and this is the place to get your cup or bag of greatness if you happen to be a true coffee aficionado.” — Jacob Y." );
+		$img_dir = trailingslashit( get_template_directory_uri() ) . 'assets/images/home/';
 
+		// 1. Hero Banner
+		$hero_img          = get_option( 'quills_home_hero_img', $img_dir . 'home.webp' );
+		$hero_title        = get_option( 'quills_home_hero_title', "We find them, we roast them, you<br>just enjoy them." );
+		$hero_subtitle     = get_option( 'quills_home_hero_subtitle', "Get new delicious coffees that you and your guests will love, delivered<br>to your door on your schedule." );
+		$hero_cta_text     = get_option( 'quills_home_hero_cta_text', "START YOUR SUBSCRIPTION" );
+		$hero_cta_link     = get_option( 'quills_home_hero_cta_link', home_url( '/subscriptions/' ) );
+		$hero_stars_img    = get_option( 'quills_home_hero_stars_img', $img_dir . 'hero-stars.png' );
+		$hero_rating       = get_option( 'quills_home_rating_text', "4.62 stars across 13,082 reviews" );
+		$hero_press_label  = get_option( 'quills_home_press_label', "Featured in" );
+		$press_logo_1      = get_option( 'quills_home_press_logo_1', $img_dir . 'logo-garden-and-gun.png' );
+		$press_logo_2      = get_option( 'quills_home_press_logo_2', $img_dir . 'logo-cosmopolitan.png' );
+		$press_logo_3      = get_option( 'quills_home_press_logo_3', $img_dir . 'logo-food-and-wine.png' );
+		$press_logo_4      = get_option( 'quills_home_press_logo_4', $img_dir . 'logo-courier-journal.png' );
+		$hero_quote        = get_option( 'quills_home_hero_quote', "“I’ve searched far and wide and this is the place to get your cup or bag of greatness if you happen to be a true coffee aficionado.” — Jacob Y." );
+
+		// 2. Team
+		$team_img      = get_option( 'quills_home_team_img', $img_dir . 'team-nathan.jpg' );
 		$team_title    = get_option( 'quills_home_team_title', "NO ROBOTS. JUST PEOPLE." );
 		$team_p1       = get_option( 'quills_home_team_p1', "You should know who's choosing and roasting your coffee. No algorithms here." );
 		$team_p2       = get_option( 'quills_home_team_p2', "It’s a small group of real people in the heart of Louisville, Kentucky who love finding and making great coffee and care about sharing it with you." );
@@ -279,27 +702,138 @@ class Coffee_Cafe_Corner_Page_Content_Admin {
 		$team_cta_text = get_option( 'quills_home_team_cta_text', "SHOW ME THE COFFEE" );
 		$team_cta_link = get_option( 'quills_home_team_cta_link', home_url( '/coffee/' ) );
 		$team_quote    = get_option( 'quills_home_team_quote', "“The best tasting pour over coffee on this planet.” — Kelsey B." );
+
+		// 3. Features Banner (Subscriptions)
+		$feat_title        = get_option( 'quills_home_feat_title', "Coffee subscriptions. Change, pause, or cancel anytime." );
+		$feat_icon_1       = get_option( 'quills_home_feat_icon_1', $img_dir . 'icon-coffee-bag.png' );
+		$feat_step1_title  = get_option( 'quills_home_feat_step1_title', "1. PICK YOUR SUBSCRIPTION" );
+		$feat_step1_desc   = get_option( 'quills_home_feat_step1_desc', "Want a favorite on repeat or something new every month? Maybe a mixed bundle? Pick what you like or let us curate your morning for you." );
+		$feat_icon_2       = get_option( 'quills_home_feat_icon_2', $img_dir . 'icon-calendar.png' );
+		$feat_step2_title  = get_option( 'quills_home_feat_step2_title', "2. PICK HOW OFTEN" );
+		$feat_step2_desc   = get_option( 'quills_home_feat_step2_desc', "Every week? Every 2 weeks? How fast are you downing it? If you're not sure, we'll help you get a close guess. You can always change it later." );
+		$feat_icon_3       = get_option( 'quills_home_feat_icon_3', $img_dir . 'icon-fingerprint-cup.png' );
+		$feat_step3_title  = get_option( 'quills_home_feat_step3_title', "3. ENJOY IT FROM NOW ON" );
+		$feat_step3_desc   = get_option( 'quills_home_feat_step3_desc', "Start peeping out the window. We roast 4 days a week. You'll have a fresh new bag of coffee showing up just as you finish the last one." );
+		$feat_cta_text     = get_option( 'quills_home_feat_cta_text', "FIND THE SUBSCRIPTION FOR YOU" );
+		$feat_cta_link     = get_option( 'quills_home_feat_cta_link', home_url( '/subscriptions/' ) );
+		$feat_quote        = get_option( 'quills_home_feat_quote', "“The coffee is absolutely fabulous.”<br>— Athena S." );
+
+		// 4. Roasting
+		$roast_img      = get_option( 'quills_home_roast_img', $img_dir . 'roaster-justin.jpg' );
+		$roast_title    = get_option( 'quills_home_roast_title', "ROASTED LOCALLY BY US" );
+		$roast_p1       = get_option( 'quills_home_roast_p1', "We roast all of our coffee ourselves, right here on Main Street in Louisville, Kentucky." );
+		$roast_p2       = get_option( 'quills_home_roast_p2', "Our roasters arrive before dawn, when it’s still cool and quiet. They know the difference between a good cup of coffee and an exceptional one lives in hundreds of small decisions." );
+		$roast_p3       = get_option( 'quills_home_roast_p3', "Roasting in small 45-pound batches by hand means each batch gets the kind of attention that big commercial coffee companies simply can't afford to give." );
+		$roast_p4       = get_option( 'quills_home_roast_p4', "Justin, our head roaster, and his team of four are paying attention to the temperature, airflow, and the smell." );
+		$roast_p5       = get_option( 'quills_home_roast_p5', "They’re listening for a distinctive “crack” of the beans that tells them right when to stop to lock in the best flavors for your coffee." );
+		$roast_cta_text = get_option( 'quills_home_roast_cta_text', "SEARCH BY ROAST" );
+		$roast_cta_link = get_option( 'quills_home_roast_cta_link', home_url( '/coffee/' ) );
+		$roast_quote    = get_option( 'quills_home_roast_quote', "“One of the best coffee roasters in the country and beautiful shops. Worth a visit.”— Crema Guru" );
+
+		// 5. Sourcing
+		$source_img      = get_option( 'quills_home_source_img', $img_dir . 'sourcing-farm.jpg' );
+		$source_title    = get_option( 'quills_home_source_title', "HAND-PICKED BY FARMERS, HAND SELECTED BY US" );
+		$source_p1       = get_option( 'quills_home_source_p1', "Over 11 million tons of coffee is grown every year across the world. Less than 15% of that meets premium specialty grade coffee standards. A fancy way of saying the best of the best. (And the only kind we buy.)" );
+		$source_p2       = get_option( 'quills_home_source_p2', "From that rare tier of 15%, we source and sample over 100 exceptional coffees every year." );
+		$source_p3       = get_option( 'quills_home_source_p3', "And from those 100, we pick around 20 of the best to serve and ship to our customers." );
+		$source_p4       = get_option( 'quills_home_source_p4', "It's like having your own personal coffee sommelier." );
+		$source_p5       = get_option( 'quills_home_source_p5', "We do all this so you can enjoy exceptional coffee every single day." );
+		$source_cta_text = get_option( 'quills_home_source_cta_text', "SEE WHAT WE FOUND FOR YOU" );
+		$source_cta_link = get_option( 'quills_home_source_cta_link', home_url( '/coffee/' ) );
+		$source_quote    = get_option( 'quills_home_source_quote', "“Excellent coffee and excellent sourcing. A place that loves wonderful coffees, the best the world has to offer.”<br>— Preston S." );
+
+		// 6. Circular Badge
+		$badge_img = get_option( 'quills_home_badge_img', $img_dir . 'badge-coffee-connect-people.png' );
+
+		// 7. Bestsellers Title
+		$bestsellers_title    = get_option( 'quills_home_bestsellers_title', "Our Bestsellers" );
+		$bestsellers_subtitle = get_option( 'quills_home_bestsellers_subtitle', "The ones people keep coming back for." );
+
+		// 8. Cupping (Taste-tested twice a week)
+		$cupping_img      = get_option( 'quills_home_cupping_img', $img_dir . 'cupping-tasting.jpg' );
+		$cupping_title    = get_option( 'quills_home_cupping_title', "TASTE-TESTED TWICE A WEEK" );
+		$cupping_p1       = get_option( 'quills_home_cupping_p1', "Every coffee gets tested, tweaked, and perfected every week until we run out of it." );
+		$cupping_p2       = get_option( 'quills_home_cupping_p2', "When we find something wrong — and we do — we dump the whole batch and start over." );
+		$cupping_p3       = get_option( 'quills_home_cupping_p3', "We do this to make sure you get the absolute best flavors and aromas from every coffee you get from us." );
+		$cupping_cta_text = get_option( 'quills_home_cupping_cta_text', "SHOW ME THE COFFEE" );
+		$cupping_cta_link = get_option( 'quills_home_cupping_cta_link', home_url( '/coffee/' ) );
+		$cupping_quote    = get_option( 'quills_home_cupping_quote', "“If you love regular ol coffee but not the regular ol taste - you will love Quills!”<br>— Amie M" );
+
+		// 9. FAQ Accordion
+		$faq_title = get_option( 'quills_home_faq_title', "FAQ" );
+		$faq_q1    = get_option( 'quills_home_faq_q1', "How fresh is the coffee I get?" );
+		$faq_a1    = get_option( 'quills_home_faq_a1', "All coffee is roasted to order. Our small roastery team of four guys roasts 4 days a week.\n\nWe ship coffee orders at peak freshness, after an initial resting period to degas. This way you receive your order as it's beginning to approach peak freshness, so you can get the best flavors from every bag of coffee you receive." );
+		$faq_q2    = get_option( 'quills_home_faq_q2', "When will my coffee ship?" );
+		$faq_a2    = get_option( 'quills_home_faq_a2', "If you order by midnight Sunday, your order will ship on Wednesday.\n\nIf you order by midnight Tuesday, your order will ship on Friday." );
+		$faq_q3    = get_option( 'quills_home_faq_q3', "I’d like to work at Quills. How do I apply?" );
+		$faq_a3    = get_option( 'quills_home_faq_a3', "We hire baristas often! You can <a href=\"https://form.jotform.com/quillscoffee/new-customer-registration-form\" target=\"_blank\" rel=\"noopener noreferrer\">apply here.</a>" );
+		$faq_q4    = get_option( 'quills_home_faq_q4', "My question is about something else" );
+		$faq_a4    = get_option( 'quills_home_faq_a4', "Go ahead and reach out to <a href=\"mailto:hello@quillscoffee.com\">hello@quillscoffee.com</a>. You're gonna talk to one of us, not a bot." );
+
+		// 10. The Hoot
+		$hoot_heading   = get_option( 'quills_home_hoot_heading', "THE HOOT" );
+		$hoot_icon      = get_option( 'quills_home_hoot_icon', $img_dir . 'hoot-icon.png' );
+		$hoot_p1        = get_option( 'quills_home_hoot_p1', "The Hoot is one short email from us sent every Friday morning. It takes about 5 minutes to read. It’s less of a 'newsletter' and more like an actual letter." );
+		$hoot_p2        = get_option( 'quills_home_hoot_p2', "We sometimes send readers links to secret coffees and exclusive reader-only merch." );
+		$hoot_highlight = get_option( 'quills_home_hoot_highlight', "8,212 kind folks" );
+		$hoot_p3        = get_option( 'quills_home_hoot_p3', "currently get it sent to their inbox." );
+		$hoot_p4        = get_option( 'quills_home_hoot_p4', "We share what the people behind your coffee have been up to that week. You may hear about some wild coffee our head roaster Justin has tasted. Or behind-the-scenes on the new seasonal drinks our beverage director Jess is whipping up." );
+		$hoot_p5        = get_option( 'quills_home_hoot_p5', "And we always add a little something fun in the PS." );
+		$hoot_cf7_id    = get_option( 'quills_home_hoot_cf7_id', "141" );
+		$hoot_btn_text  = get_option( 'quills_home_hoot_btn_text', "TRY IT" );
 		?>
 		<style>
-			.quills-card { background: #fff; border: 1px solid #ccd0d4; border-radius: 8px; padding: 22px; margin-bottom: 25px; box-shadow: 0 1px 3px rgba(0,0,0,0.04); }
-			.quills-card-title { font-size: 16px; font-weight: 700; color: #1e293b; margin-top: 0; margin-bottom: 15px; border-bottom: 2px solid #663A1E; padding-bottom: 8px; display: flex; align-items: center; gap: 8px; }
+			.quills-admin-nav { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 25px; background: #fff; padding: 12px; border-radius: 8px; border: 1px solid #cbd5e1; }
+			.quills-admin-nav a { text-decoration: none; font-size: 13px; font-weight: 600; padding: 6px 12px; border-radius: 6px; background: #f1f5f9; color: #334155; transition: all .2s; }
+			.quills-admin-nav a:hover { background: #663A1E; color: #fff; }
+			.quills-card { background: #fff; border: 1px solid #ccd0d4; border-radius: 8px; padding: 24px; margin-bottom: 30px; box-shadow: 0 1px 3px rgba(0,0,0,0.04); }
+			.quills-card-title { font-size: 17px; font-weight: 700; color: #1e293b; margin-top: 0; margin-bottom: 18px; border-bottom: 2px solid #663A1E; padding-bottom: 10px; display: flex; align-items: center; gap: 8px; }
 			.quills-form-table { width: 100%; border-collapse: collapse; }
-			.quills-form-table th { width: 220px; text-align: left; vertical-align: top; padding: 12px 15px 12px 0; font-weight: 600; color: #334155; font-size: 13.5px; }
+			.quills-form-table th { width: 230px; text-align: left; vertical-align: top; padding: 12px 15px 12px 0; font-weight: 600; color: #334155; font-size: 13.5px; }
 			.quills-form-table td { padding: 8px 0; }
-			.quills-form-table input[type="text"], .quills-form-table textarea { width: 100%; max-width: 650px; border: 1px solid #cbd5e1; border-radius: 6px; padding: 8px 12px; font-size: 14px; }
+			.quills-form-table input[type="text"], .quills-form-table textarea { width: 100%; max-width: 680px; border: 1px solid #cbd5e1; border-radius: 6px; padding: 8px 12px; font-size: 14px; }
+			.quills-img-row { display: flex; gap: 12px; align-items: center; margin-bottom: 6px; flex-wrap: wrap; }
+			.quills-img-preview { max-height: 80px; max-width: 140px; object-fit: contain; border-radius: 4px; border: 1px solid #cbd5e1; background: #fafafa; padding: 2px; }
 			.quills-desc { font-size: 12px; color: #64748b; margin-top: 4px; }
-			.quills-info-banner { background: #eff6ff; border-left: 4px solid #3b82f6; padding: 12px 16px; margin-bottom: 20px; border-radius: 0 6px 6px 0; font-size: 13px; color: #1e3a8a; }
+			.quills-info-banner { background: #eff6ff; border-left: 4px solid #3b82f6; padding: 14px 18px; margin-bottom: 10px; border-radius: 0 6px 6px 0; font-size: 13px; color: #1e3a8a; line-height: 1.6; }
+			.quills-step-box { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 6px; padding: 16px; margin-bottom: 15px; max-width: 700px; }
 		</style>
 
+		<!-- Fast Navigation Jump Bar -->
+		<div class="quills-admin-nav">
+			<a href="#sec-hero">☕ 1. Hero Banner</a>
+			<a href="#sec-team">👥 2. Đội ngũ (Team)</a>
+			<a href="#sec-feat">📦 3. Gói Đăng Ký 3 Bước</a>
+			<a href="#sec-roast">♨️ 4. Xưởng Rang</a>
+			<a href="#sec-source">🌱 5. Tuyển Chọn Hạt</a>
+			<a href="#sec-badge">🏷️ 6. Huy Hiệu Tròn</a>
+			<a href="#sec-bestsellers">⭐ 7. Bestsellers</a>
+			<a href="#sec-cupping">🧪 8. Thử Nếm Cà Phê</a>
+			<a href="#sec-faq">❓ 9. Câu Hỏi FAQ</a>
+			<a href="#sec-hoot">🦉 10. Bản Tin The Hoot</a>
+		</div>
+
 		<!-- SECTION 1: HERO BANNER -->
-		<div class="quills-card">
+		<div class="quills-card" id="sec-hero">
 			<h2 class="quills-card-title">☕ 1. Phần Hero Banner (Đầu trang chủ)</h2>
 			<table class="quills-form-table">
+				<tr>
+					<th><label for="quills_home_hero_img">Ảnh nền Hero Banner:</label></th>
+					<td>
+						<div class="quills-img-row">
+							<img id="preview_quills_home_hero_img" src="<?php echo esc_url( self::get_image_url( $hero_img, 'home.webp' ) ); ?>" class="quills-img-preview" alt="Hero Preview" />
+							<input type="text" name="quills_home_hero_img" id="quills_home_hero_img" value="<?php echo esc_attr( $hero_img ); ?>" style="max-width: 400px;">
+							<button type="button" class="button quills-upload-btn" data-target="#quills_home_hero_img" data-preview="#preview_quills_home_hero_img">📁 Chọn / Tải ảnh lên</button>
+							<button type="button" class="button quills-reset-btn" data-target="#quills_home_hero_img" data-preview="#preview_quills_home_hero_img" data-default="<?php echo esc_attr( $img_dir . 'home.webp' ); ?>">Khôi phục</button>
+						</div>
+						<div class="quills-desc">Mặc định: assets/images/home/home.webp.</div>
+					</td>
+				</tr>
 				<tr>
 					<th><label for="quills_home_hero_title">Tiêu đề Hero Banner:</label></th>
 					<td>
 						<textarea name="quills_home_hero_title" id="quills_home_hero_title" rows="2"><?php echo esc_textarea( $hero_title ); ?></textarea>
-						<div class="quills-desc">Hỗ trợ thẻ &lt;br&gt; để ngắt dòng.</div>
+						<div class="quills-desc">Hỗ trợ thẻ &lt;br&gt; để ngắt dòng đẹp mắt.</div>
 					</td>
 				</tr>
 				<tr>
@@ -327,6 +861,51 @@ class Coffee_Cafe_Corner_Page_Content_Admin {
 					</td>
 				</tr>
 				<tr>
+					<th><label for="quills_home_press_label">Nhãn báo chí đối tác:</label></th>
+					<td>
+						<input type="text" name="quills_home_press_label" id="quills_home_press_label" value="<?php echo esc_attr( $hero_press_label ); ?>">
+					</td>
+				</tr>
+				<tr>
+					<th><label>4 Logo Báo Chí Đối Tác:</label></th>
+					<td>
+						<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; max-width: 680px;">
+							<div>
+								<span style="font-size: 11px; font-weight: 600;">Logo 1 (Garden & Gun):</span>
+								<div class="quills-img-row">
+									<img id="preview_logo1" src="<?php echo esc_url( self::get_image_url( $press_logo_1, 'logo-garden-and-gun.png' ) ); ?>" class="quills-img-preview" style="max-height: 40px;" />
+									<input type="text" name="quills_home_press_logo_1" id="quills_home_press_logo_1" value="<?php echo esc_attr( $press_logo_1 ); ?>">
+									<button type="button" class="button quills-upload-btn" data-target="#quills_home_press_logo_1" data-preview="#preview_logo1">Chọn</button>
+								</div>
+							</div>
+							<div>
+								<span style="font-size: 11px; font-weight: 600;">Logo 2 (Cosmopolitan):</span>
+								<div class="quills-img-row">
+									<img id="preview_logo2" src="<?php echo esc_url( self::get_image_url( $press_logo_2, 'logo-cosmopolitan.png' ) ); ?>" class="quills-img-preview" style="max-height: 40px;" />
+									<input type="text" name="quills_home_press_logo_2" id="quills_home_press_logo_2" value="<?php echo esc_attr( $press_logo_2 ); ?>">
+									<button type="button" class="button quills-upload-btn" data-target="#quills_home_press_logo_2" data-preview="#preview_logo2">Chọn</button>
+								</div>
+							</div>
+							<div>
+								<span style="font-size: 11px; font-weight: 600;">Logo 3 (Food & Wine):</span>
+								<div class="quills-img-row">
+									<img id="preview_logo3" src="<?php echo esc_url( self::get_image_url( $press_logo_3, 'logo-food-and-wine.png' ) ); ?>" class="quills-img-preview" style="max-height: 40px;" />
+									<input type="text" name="quills_home_press_logo_3" id="quills_home_press_logo_3" value="<?php echo esc_attr( $press_logo_3 ); ?>">
+									<button type="button" class="button quills-upload-btn" data-target="#quills_home_press_logo_3" data-preview="#preview_logo3">Chọn</button>
+								</div>
+							</div>
+							<div>
+								<span style="font-size: 11px; font-weight: 600;">Logo 4 (Courier Journal):</span>
+								<div class="quills-img-row">
+									<img id="preview_logo4" src="<?php echo esc_url( self::get_image_url( $press_logo_4, 'logo-courier-journal.png' ) ); ?>" class="quills-img-preview" style="max-height: 40px;" />
+									<input type="text" name="quills_home_press_logo_4" id="quills_home_press_logo_4" value="<?php echo esc_attr( $press_logo_4 ); ?>">
+									<button type="button" class="button quills-upload-btn" data-target="#quills_home_press_logo_4" data-preview="#preview_logo4">Chọn</button>
+								</div>
+							</div>
+						</div>
+					</td>
+				</tr>
+				<tr>
 					<th><label for="quills_home_hero_quote">Câu trích dẫn khách hàng:</label></th>
 					<td>
 						<textarea name="quills_home_hero_quote" id="quills_home_hero_quote" rows="2"><?php echo esc_textarea( $hero_quote ); ?></textarea>
@@ -336,9 +915,20 @@ class Coffee_Cafe_Corner_Page_Content_Admin {
 		</div>
 
 		<!-- SECTION 2: TEAM (NO ROBOTS. JUST PEOPLE.) -->
-		<div class="quills-card">
+		<div class="quills-card" id="sec-team">
 			<h2 class="quills-card-title">👥 2. Phần Đội Ngũ ("NO ROBOTS. JUST PEOPLE.")</h2>
 			<table class="quills-form-table">
+				<tr>
+					<th><label for="quills_home_team_img">Ảnh đội ngũ (Nathan):</label></th>
+					<td>
+						<div class="quills-img-row">
+							<img id="preview_quills_home_team_img" src="<?php echo esc_url( self::get_image_url( $team_img, 'team-nathan.jpg' ) ); ?>" class="quills-img-preview" alt="Team Preview" />
+							<input type="text" name="quills_home_team_img" id="quills_home_team_img" value="<?php echo esc_attr( $team_img ); ?>" style="max-width: 400px;">
+							<button type="button" class="button quills-upload-btn" data-target="#quills_home_team_img" data-preview="#preview_quills_home_team_img">📁 Chọn / Tải ảnh lên</button>
+							<button type="button" class="button quills-reset-btn" data-target="#quills_home_team_img" data-preview="#preview_quills_home_team_img" data-default="<?php echo esc_attr( $img_dir . 'team-nathan.jpg' ); ?>">Khôi phục</button>
+						</div>
+					</td>
+				</tr>
 				<tr>
 					<th><label for="quills_home_team_title">Tiêu đề mục:</label></th>
 					<td>
@@ -347,58 +937,245 @@ class Coffee_Cafe_Corner_Page_Content_Admin {
 				</tr>
 				<tr>
 					<th><label for="quills_home_team_p1">Đoạn văn 1:</label></th>
-					<td>
-						<textarea name="quills_home_team_p1" id="quills_home_team_p1" rows="2"><?php echo esc_textarea( $team_p1 ); ?></textarea>
-					</td>
+					<td><textarea name="quills_home_team_p1" id="quills_home_team_p1" rows="2"><?php echo esc_textarea( $team_p1 ); ?></textarea></td>
 				</tr>
 				<tr>
 					<th><label for="quills_home_team_p2">Đoạn văn 2:</label></th>
-					<td>
-						<textarea name="quills_home_team_p2" id="quills_home_team_p2" rows="2"><?php echo esc_textarea( $team_p2 ); ?></textarea>
-					</td>
+					<td><textarea name="quills_home_team_p2" id="quills_home_team_p2" rows="2"><?php echo esc_textarea( $team_p2 ); ?></textarea></td>
 				</tr>
 				<tr>
 					<th><label for="quills_home_team_p3">Đoạn văn 3:</label></th>
-					<td>
-						<textarea name="quills_home_team_p3" id="quills_home_team_p3" rows="2"><?php echo esc_textarea( $team_p3 ); ?></textarea>
-					</td>
+					<td><textarea name="quills_home_team_p3" id="quills_home_team_p3" rows="2"><?php echo esc_textarea( $team_p3 ); ?></textarea></td>
 				</tr>
 				<tr>
 					<th><label for="quills_home_team_p4">Đoạn văn 4:</label></th>
-					<td>
-						<textarea name="quills_home_team_p4" id="quills_home_team_p4" rows="2"><?php echo esc_textarea( $team_p4 ); ?></textarea>
-					</td>
+					<td><textarea name="quills_home_team_p4" id="quills_home_team_p4" rows="2"><?php echo esc_textarea( $team_p4 ); ?></textarea></td>
 				</tr>
 				<tr>
 					<th><label for="quills_home_team_p5">Đoạn văn 5:</label></th>
-					<td>
-						<textarea name="quills_home_team_p5" id="quills_home_team_p5" rows="2"><?php echo esc_textarea( $team_p5 ); ?></textarea>
-					</td>
+					<td><textarea name="quills_home_team_p5" id="quills_home_team_p5" rows="2"><?php echo esc_textarea( $team_p5 ); ?></textarea></td>
 				</tr>
 				<tr>
 					<th><label for="quills_home_team_cta_text">Chữ trên nút Team CTA:</label></th>
-					<td>
-						<input type="text" name="quills_home_team_cta_text" id="quills_home_team_cta_text" value="<?php echo esc_attr( $team_cta_text ); ?>">
-					</td>
+					<td><input type="text" name="quills_home_team_cta_text" id="quills_home_team_cta_text" value="<?php echo esc_attr( $team_cta_text ); ?>"></td>
 				</tr>
 				<tr>
 					<th><label for="quills_home_team_cta_link">Đường dẫn nút Team CTA:</label></th>
-					<td>
-						<input type="text" name="quills_home_team_cta_link" id="quills_home_team_cta_link" value="<?php echo esc_attr( $team_cta_link ); ?>">
-					</td>
+					<td><input type="text" name="quills_home_team_cta_link" id="quills_home_team_cta_link" value="<?php echo esc_attr( $team_cta_link ); ?>"></td>
 				</tr>
 				<tr>
 					<th><label for="quills_home_team_quote">Trích dẫn đánh giá:</label></th>
+					<td><input type="text" name="quills_home_team_quote" id="quills_home_team_quote" value="<?php echo esc_attr( $team_quote ); ?>"></td>
+				</tr>
+			</table>
+		</div>
+
+		<!-- SECTION 3: FEATURES BANNER (SUBSCRIPTION 3 STEPS) -->
+		<div class="quills-card" id="sec-feat">
+			<h2 class="quills-card-title">📦 3. Mục Đăng Ký Định Kỳ 3 Bước (Subscriptions Features)</h2>
+			<table class="quills-form-table">
+				<tr>
+					<th><label for="quills_home_feat_title">Tiêu đề chính mục:</label></th>
 					<td>
-						<input type="text" name="quills_home_team_quote" id="quills_home_team_quote" value="<?php echo esc_attr( $team_quote ); ?>">
+						<input type="text" name="quills_home_feat_title" id="quills_home_feat_title" value="<?php echo esc_attr( $feat_title ); ?>">
+					</td>
+				</tr>
+				<tr>
+					<th><label>Bước 1 (Pick Subscription):</label></th>
+					<td>
+						<div class="quills-step-box">
+							<div class="quills-img-row">
+								<img id="preview_feat1" src="<?php echo esc_url( self::get_image_url( $feat_icon_1, 'icon-coffee-bag.png' ) ); ?>" class="quills-img-preview" style="max-height: 48px;" />
+								<input type="text" name="quills_home_feat_icon_1" id="quills_home_feat_icon_1" value="<?php echo esc_attr( $feat_icon_1 ); ?>" placeholder="Icon URL">
+								<button type="button" class="button quills-upload-btn" data-target="#quills_home_feat_icon_1" data-preview="#preview_feat1">Chọn Icon</button>
+							</div>
+							<input type="text" name="quills_home_feat_step1_title" value="<?php echo esc_attr( $feat_step1_title ); ?>" placeholder="Tiêu đề bước 1" style="margin-bottom: 8px;">
+							<textarea name="quills_home_feat_step1_desc" rows="2" placeholder="Mô tả bước 1"><?php echo esc_textarea( $feat_step1_desc ); ?></textarea>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<th><label>Bước 2 (Pick How Often):</label></th>
+					<td>
+						<div class="quills-step-box">
+							<div class="quills-img-row">
+								<img id="preview_feat2" src="<?php echo esc_url( self::get_image_url( $feat_icon_2, 'icon-calendar.png' ) ); ?>" class="quills-img-preview" style="max-height: 48px;" />
+								<input type="text" name="quills_home_feat_icon_2" id="quills_home_feat_icon_2" value="<?php echo esc_attr( $feat_icon_2 ); ?>" placeholder="Icon URL">
+								<button type="button" class="button quills-upload-btn" data-target="#quills_home_feat_icon_2" data-preview="#preview_feat2">Chọn Icon</button>
+							</div>
+							<input type="text" name="quills_home_feat_step2_title" value="<?php echo esc_attr( $feat_step2_title ); ?>" placeholder="Tiêu đề bước 2" style="margin-bottom: 8px;">
+							<textarea name="quills_home_feat_step2_desc" rows="2" placeholder="Mô tả bước 2"><?php echo esc_textarea( $feat_step2_desc ); ?></textarea>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<th><label>Bước 3 (Enjoy From Now On):</label></th>
+					<td>
+						<div class="quills-step-box">
+							<div class="quills-img-row">
+								<img id="preview_feat3" src="<?php echo esc_url( self::get_image_url( $feat_icon_3, 'icon-fingerprint-cup.png' ) ); ?>" class="quills-img-preview" style="max-height: 48px;" />
+								<input type="text" name="quills_home_feat_icon_3" id="quills_home_feat_icon_3" value="<?php echo esc_attr( $feat_icon_3 ); ?>" placeholder="Icon URL">
+								<button type="button" class="button quills-upload-btn" data-target="#quills_home_feat_icon_3" data-preview="#preview_feat3">Chọn Icon</button>
+							</div>
+							<input type="text" name="quills_home_feat_step3_title" value="<?php echo esc_attr( $feat_step3_title ); ?>" placeholder="Tiêu đề bước 3" style="margin-bottom: 8px;">
+							<textarea name="quills_home_feat_step3_desc" rows="2" placeholder="Mô tả bước 3"><?php echo esc_textarea( $feat_step3_desc ); ?></textarea>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<th><label for="quills_home_feat_cta_text">Chữ trên nút CTA:</label></th>
+					<td><input type="text" name="quills_home_feat_cta_text" id="quills_home_feat_cta_text" value="<?php echo esc_attr( $feat_cta_text ); ?>"></td>
+				</tr>
+				<tr>
+					<th><label for="quills_home_feat_cta_link">Đường dẫn nút CTA:</label></th>
+					<td><input type="text" name="quills_home_feat_cta_link" id="quills_home_feat_cta_link" value="<?php echo esc_attr( $feat_cta_link ); ?>"></td>
+				</tr>
+				<tr>
+					<th><label for="quills_home_feat_quote">Lời trích dẫn:</label></th>
+					<td><textarea name="quills_home_feat_quote" id="quills_home_feat_quote" rows="2"><?php echo esc_textarea( $feat_quote ); ?></textarea></td>
+				</tr>
+			</table>
+		</div>
+
+		<!-- SECTION 4: ROASTED LOCALLY BY US -->
+		<div class="quills-card" id="sec-roast">
+			<h2 class="quills-card-title">♨️ 4. Phần Xưởng Rang ("ROASTED LOCALLY BY US")</h2>
+			<table class="quills-form-table">
+				<tr>
+					<th><label for="quills_home_roast_img">Ảnh thợ rang (Justin):</label></th>
+					<td>
+						<div class="quills-img-row">
+							<img id="preview_quills_home_roast_img" src="<?php echo esc_url( self::get_image_url( $roast_img, 'roaster-justin.jpg' ) ); ?>" class="quills-img-preview" alt="Roast Preview" />
+							<input type="text" name="quills_home_roast_img" id="quills_home_roast_img" value="<?php echo esc_attr( $roast_img ); ?>" style="max-width: 400px;">
+							<button type="button" class="button quills-upload-btn" data-target="#quills_home_roast_img" data-preview="#preview_quills_home_roast_img">📁 Chọn / Tải ảnh lên</button>
+							<button type="button" class="button quills-reset-btn" data-target="#quills_home_roast_img" data-preview="#preview_quills_home_roast_img" data-default="<?php echo esc_attr( $img_dir . 'roaster-justin.jpg' ); ?>">Khôi phục</button>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<th><label for="quills_home_roast_title">Tiêu đề mục:</label></th>
+					<td><input type="text" name="quills_home_roast_title" id="quills_home_roast_title" value="<?php echo esc_attr( $roast_title ); ?>"></td>
+				</tr>
+				<tr>
+					<th><label for="quills_home_roast_p1">Đoạn văn 1:</label></th>
+					<td><textarea name="quills_home_roast_p1" id="quills_home_roast_p1" rows="2"><?php echo esc_textarea( $roast_p1 ); ?></textarea></td>
+				</tr>
+				<tr>
+					<th><label for="quills_home_roast_p2">Đoạn văn 2:</label></th>
+					<td><textarea name="quills_home_roast_p2" id="quills_home_roast_p2" rows="2"><?php echo esc_textarea( $roast_p2 ); ?></textarea></td>
+				</tr>
+				<tr>
+					<th><label for="quills_home_roast_p3">Đoạn văn 3:</label></th>
+					<td><textarea name="quills_home_roast_p3" id="quills_home_roast_p3" rows="2"><?php echo esc_textarea( $roast_p3 ); ?></textarea></td>
+				</tr>
+				<tr>
+					<th><label for="quills_home_roast_p4">Đoạn văn 4:</label></th>
+					<td><textarea name="quills_home_roast_p4" id="quills_home_roast_p4" rows="2"><?php echo esc_textarea( $roast_p4 ); ?></textarea></td>
+				</tr>
+				<tr>
+					<th><label for="quills_home_roast_p5">Đoạn văn 5:</label></th>
+					<td><textarea name="quills_home_roast_p5" id="quills_home_roast_p5" rows="2"><?php echo esc_textarea( $roast_p5 ); ?></textarea></td>
+				</tr>
+				<tr>
+					<th><label for="quills_home_roast_cta_text">Chữ trên nút CTA:</label></th>
+					<td><input type="text" name="quills_home_roast_cta_text" id="quills_home_roast_cta_text" value="<?php echo esc_attr( $roast_cta_text ); ?>"></td>
+				</tr>
+				<tr>
+					<th><label for="quills_home_roast_cta_link">Đường dẫn nút CTA:</label></th>
+					<td><input type="text" name="quills_home_roast_cta_link" id="quills_home_roast_cta_link" value="<?php echo esc_attr( $roast_cta_link ); ?>"></td>
+				</tr>
+				<tr>
+					<th><label for="quills_home_roast_quote">Trích dẫn đánh giá:</label></th>
+					<td><textarea name="quills_home_roast_quote" id="quills_home_roast_quote" rows="2"><?php echo esc_textarea( $roast_quote ); ?></textarea></td>
+				</tr>
+			</table>
+		</div>
+
+		<!-- SECTION 5: HAND-PICKED BY FARMERS -->
+		<div class="quills-card" id="sec-source">
+			<h2 class="quills-card-title">🌱 5. Phần Nguồn Gốc Hạt Tuyển Chọn ("HAND-PICKED BY FARMERS")</h2>
+			<table class="quills-form-table">
+				<tr>
+					<th><label for="quills_home_source_img">Ảnh nông trại:</label></th>
+					<td>
+						<div class="quills-img-row">
+							<img id="preview_quills_home_source_img" src="<?php echo esc_url( self::get_image_url( $source_img, 'sourcing-farm.jpg' ) ); ?>" class="quills-img-preview" alt="Source Preview" />
+							<input type="text" name="quills_home_source_img" id="quills_home_source_img" value="<?php echo esc_attr( $source_img ); ?>" style="max-width: 400px;">
+							<button type="button" class="button quills-upload-btn" data-target="#quills_home_source_img" data-preview="#preview_quills_home_source_img">📁 Chọn / Tải ảnh lên</button>
+							<button type="button" class="button quills-reset-btn" data-target="#quills_home_source_img" data-preview="#preview_quills_home_source_img" data-default="<?php echo esc_attr( $img_dir . 'sourcing-farm.jpg' ); ?>">Khôi phục</button>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<th><label for="quills_home_source_title">Tiêu đề mục:</label></th>
+					<td><input type="text" name="quills_home_source_title" id="quills_home_source_title" value="<?php echo esc_attr( $source_title ); ?>"></td>
+				</tr>
+				<tr>
+					<th><label for="quills_home_source_p1">Đoạn văn 1:</label></th>
+					<td><textarea name="quills_home_source_p1" id="quills_home_source_p1" rows="2"><?php echo esc_textarea( $source_p1 ); ?></textarea></td>
+				</tr>
+				<tr>
+					<th><label for="quills_home_source_p2">Đoạn văn 2:</label></th>
+					<td><textarea name="quills_home_source_p2" id="quills_home_source_p2" rows="2"><?php echo esc_textarea( $source_p2 ); ?></textarea></td>
+				</tr>
+				<tr>
+					<th><label for="quills_home_source_p3">Đoạn văn 3:</label></th>
+					<td><textarea name="quills_home_source_p3" id="quills_home_source_p3" rows="2"><?php echo esc_textarea( $source_p3 ); ?></textarea></td>
+				</tr>
+				<tr>
+					<th><label for="quills_home_source_p4">Đoạn văn 4:</label></th>
+					<td><textarea name="quills_home_source_p4" id="quills_home_source_p4" rows="2"><?php echo esc_textarea( $source_p4 ); ?></textarea></td>
+				</tr>
+				<tr>
+					<th><label for="quills_home_source_p5">Đoạn văn 5:</label></th>
+					<td><textarea name="quills_home_source_p5" id="quills_home_source_p5" rows="2"><?php echo esc_textarea( $source_p5 ); ?></textarea></td>
+				</tr>
+				<tr>
+					<th><label for="quills_home_source_cta_text">Chữ trên nút CTA:</label></th>
+					<td><input type="text" name="quills_home_source_cta_text" id="quills_home_source_cta_text" value="<?php echo esc_attr( $source_cta_text ); ?>"></td>
+				</tr>
+				<tr>
+					<th><label for="quills_home_source_cta_link">Đường dẫn nút CTA:</label></th>
+					<td><input type="text" name="quills_home_source_cta_link" id="quills_home_source_cta_link" value="<?php echo esc_attr( $source_cta_link ); ?>"></td>
+				</tr>
+				<tr>
+					<th><label for="quills_home_source_quote">Trích dẫn đánh giá:</label></th>
+					<td><textarea name="quills_home_source_quote" id="quills_home_source_quote" rows="2"><?php echo esc_textarea( $source_quote ); ?></textarea></td>
+				</tr>
+			</table>
+		</div>
+
+		<!-- SECTION 6: CIRCULAR BADGE -->
+		<div class="quills-card" id="sec-badge">
+			<h2 class="quills-card-title">🏷️ 6. Phần Huy Hiệu Tròn ("COFFEE CONNECT PEOPLE")</h2>
+			<table class="quills-form-table">
+				<tr>
+					<th><label for="quills_home_badge_img">Ảnh huy hiệu tròn:</label></th>
+					<td>
+						<div class="quills-img-row">
+							<img id="preview_quills_home_badge_img" src="<?php echo esc_url( self::get_image_url( $badge_img, 'badge-coffee-connect-people.png' ) ); ?>" class="quills-img-preview" alt="Badge Preview" />
+							<input type="text" name="quills_home_badge_img" id="quills_home_badge_img" value="<?php echo esc_attr( $badge_img ); ?>" style="max-width: 400px;">
+							<button type="button" class="button quills-upload-btn" data-target="#quills_home_badge_img" data-preview="#preview_quills_home_badge_img">📁 Chọn / Tải ảnh lên</button>
+							<button type="button" class="button quills-reset-btn" data-target="#quills_home_badge_img" data-preview="#preview_quills_home_badge_img" data-default="<?php echo esc_attr( $img_dir . 'badge-coffee-connect-people.png' ); ?>">Khôi phục</button>
+						</div>
 					</td>
 				</tr>
 			</table>
 		</div>
 
-		<!-- SECTION 3: BESTSELLERS INFO -->
-		<div class="quills-card">
-			<h2 class="quills-card-title">⭐ 3. Sản Phẩm Bestsellers Trang Chủ</h2>
+		<!-- SECTION 7: BESTSELLERS INFO & HEADER -->
+		<div class="quills-card" id="sec-bestsellers">
+			<h2 class="quills-card-title">⭐ 7. Sản Phẩm Bestsellers Trang Chủ</h2>
+			<table class="quills-form-table" style="margin-bottom: 20px;">
+				<tr>
+					<th><label for="quills_home_bestsellers_title">Tiêu đề mục:</label></th>
+					<td><input type="text" name="quills_home_bestsellers_title" id="quills_home_bestsellers_title" value="<?php echo esc_attr( $bestsellers_title ); ?>"></td>
+				</tr>
+				<tr>
+					<th><label for="quills_home_bestsellers_subtitle">Phụ đề mục:</label></th>
+					<td><input type="text" name="quills_home_bestsellers_subtitle" id="quills_home_bestsellers_subtitle" value="<?php echo esc_attr( $bestsellers_subtitle ); ?>"></td>
+				</tr>
+			</table>
 			<div class="quills-info-banner">
 				<strong>ℹ️ Lưu ý quan trọng:</strong> 3 sản phẩm bán chạy nhất hiển thị trên Trang Chủ (<strong>Blacksmith</strong>, <strong>Inkwell</strong>, và <strong>Southern Gothic</strong>) được quản lý 100% tự động từ menu <strong>Products (Sản phẩm)</strong>.
 				<br><br>
@@ -411,6 +1188,188 @@ class Coffee_Cafe_Corner_Page_Content_Admin {
 				Tất cả thay đổi sẽ đồng bộ hiển thị ngay lập tức trên trang chủ!
 			</div>
 		</div>
+
+		<!-- SECTION 8: CUPPING (TASTE-TESTED TWICE A WEEK) -->
+		<div class="quills-card" id="sec-cupping">
+			<h2 class="quills-card-title">🧪 8. Phần Thử Nếm Cà Phê ("TASTE-TESTED TWICE A WEEK")</h2>
+			<table class="quills-form-table">
+				<tr>
+					<th><label for="quills_home_cupping_img">Ảnh buổi thử nếm:</label></th>
+					<td>
+						<div class="quills-img-row">
+							<img id="preview_quills_home_cupping_img" src="<?php echo esc_url( self::get_image_url( $cupping_img, 'cupping-tasting.jpg' ) ); ?>" class="quills-img-preview" alt="Cupping Preview" />
+							<input type="text" name="quills_home_cupping_img" id="quills_home_cupping_img" value="<?php echo esc_attr( $cupping_img ); ?>" style="max-width: 400px;">
+							<button type="button" class="button quills-upload-btn" data-target="#quills_home_cupping_img" data-preview="#preview_quills_home_cupping_img">📁 Chọn / Tải ảnh lên</button>
+							<button type="button" class="button quills-reset-btn" data-target="#quills_home_cupping_img" data-preview="#preview_quills_home_cupping_img" data-default="<?php echo esc_attr( $img_dir . 'cupping-tasting.jpg' ); ?>">Khôi phục</button>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<th><label for="quills_home_cupping_title">Tiêu đề mục:</label></th>
+					<td><input type="text" name="quills_home_cupping_title" id="quills_home_cupping_title" value="<?php echo esc_attr( $cupping_title ); ?>"></td>
+				</tr>
+				<tr>
+					<th><label for="quills_home_cupping_p1">Đoạn văn 1:</label></th>
+					<td><textarea name="quills_home_cupping_p1" id="quills_home_cupping_p1" rows="2"><?php echo esc_textarea( $cupping_p1 ); ?></textarea></td>
+				</tr>
+				<tr>
+					<th><label for="quills_home_cupping_p2">Đoạn văn 2:</label></th>
+					<td><textarea name="quills_home_cupping_p2" id="quills_home_cupping_p2" rows="2"><?php echo esc_textarea( $cupping_p2 ); ?></textarea></td>
+				</tr>
+				<tr>
+					<th><label for="quills_home_cupping_p3">Đoạn văn 3:</label></th>
+					<td><textarea name="quills_home_cupping_p3" id="quills_home_cupping_p3" rows="2"><?php echo esc_textarea( $cupping_p3 ); ?></textarea></td>
+				</tr>
+				<tr>
+					<th><label for="quills_home_cupping_cta_text">Chữ trên nút CTA:</label></th>
+					<td><input type="text" name="quills_home_cupping_cta_text" id="quills_home_cupping_cta_text" value="<?php echo esc_attr( $cupping_cta_text ); ?>"></td>
+				</tr>
+				<tr>
+					<th><label for="quills_home_cupping_cta_link">Đường dẫn nút CTA:</label></th>
+					<td><input type="text" name="quills_home_cupping_cta_link" id="quills_home_cupping_cta_link" value="<?php echo esc_attr( $cupping_cta_link ); ?>"></td>
+				</tr>
+				<tr>
+					<th><label for="quills_home_cupping_quote">Trích dẫn đánh giá:</label></th>
+					<td><textarea name="quills_home_cupping_quote" id="quills_home_cupping_quote" rows="2"><?php echo esc_textarea( $cupping_quote ); ?></textarea></td>
+				</tr>
+			</table>
+		</div>
+
+		<!-- SECTION 9: FAQ ACCORDION -->
+		<div class="quills-card" id="sec-faq">
+			<h2 class="quills-card-title">❓ 9. Phần Câu Hỏi Thường Gặp (FAQ Accordion)</h2>
+			<table class="quills-form-table">
+				<tr>
+					<th><label for="quills_home_faq_title">Tiêu đề mục FAQ:</label></th>
+					<td><input type="text" name="quills_home_faq_title" id="quills_home_faq_title" value="<?php echo esc_attr( $faq_title ); ?>"></td>
+				</tr>
+				<tr>
+					<th><label>Câu hỏi 1:</label></th>
+					<td>
+						<input type="text" name="quills_home_faq_q1" value="<?php echo esc_attr( $faq_q1 ); ?>" style="margin-bottom: 6px;" placeholder="Câu hỏi 1">
+						<textarea name="quills_home_faq_a1" rows="3" placeholder="Câu trả lời 1"><?php echo esc_textarea( $faq_a1 ); ?></textarea>
+					</td>
+				</tr>
+				<tr>
+					<th><label>Câu hỏi 2:</label></th>
+					<td>
+						<input type="text" name="quills_home_faq_q2" value="<?php echo esc_attr( $faq_q2 ); ?>" style="margin-bottom: 6px;" placeholder="Câu hỏi 2">
+						<textarea name="quills_home_faq_a2" rows="3" placeholder="Câu trả lời 2"><?php echo esc_textarea( $faq_a2 ); ?></textarea>
+					</td>
+				</tr>
+				<tr>
+					<th><label>Câu hỏi 3:</label></th>
+					<td>
+						<input type="text" name="quills_home_faq_q3" value="<?php echo esc_attr( $faq_q3 ); ?>" style="margin-bottom: 6px;" placeholder="Câu hỏi 3">
+						<textarea name="quills_home_faq_a3" rows="3" placeholder="Câu trả lời 3"><?php echo esc_textarea( $faq_a3 ); ?></textarea>
+					</td>
+				</tr>
+				<tr>
+					<th><label>Câu hỏi 4:</label></th>
+					<td>
+						<input type="text" name="quills_home_faq_q4" value="<?php echo esc_attr( $faq_q4 ); ?>" style="margin-bottom: 6px;" placeholder="Câu hỏi 4">
+						<textarea name="quills_home_faq_a4" rows="3" placeholder="Câu trả lời 4"><?php echo esc_textarea( $faq_a4 ); ?></textarea>
+					</td>
+				</tr>
+			</table>
+		</div>
+
+		<!-- SECTION 10: THE HOOT (NEWSLETTER) -->
+		<div class="quills-card" id="sec-hoot">
+			<h2 class="quills-card-title">🦉 10. Phần Đăng Ký Bản Tin (The Hoot Newsletter)</h2>
+			<table class="quills-form-table">
+				<tr>
+					<th><label for="quills_home_hoot_heading">Tiêu đề chính:</label></th>
+					<td><input type="text" name="quills_home_hoot_heading" id="quills_home_hoot_heading" value="<?php echo esc_attr( $hoot_heading ); ?>"></td>
+				</tr>
+				<tr>
+					<th><label for="quills_home_hoot_icon">Icon con cú (The Hoot):</label></th>
+					<td>
+						<div class="quills-img-row">
+							<img id="preview_quills_home_hoot_icon" src="<?php echo esc_url( self::get_image_url( $hoot_icon, 'hoot-icon.png' ) ); ?>" class="quills-img-preview" style="max-height: 48px;" alt="Hoot Icon" />
+							<input type="text" name="quills_home_hoot_icon" id="quills_home_hoot_icon" value="<?php echo esc_attr( $hoot_icon ); ?>" style="max-width: 400px;">
+							<button type="button" class="button quills-upload-btn" data-target="#quills_home_hoot_icon" data-preview="#preview_quills_home_hoot_icon">📁 Chọn</button>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<th><label for="quills_home_hoot_p1">Đoạn văn 1:</label></th>
+					<td><textarea name="quills_home_hoot_p1" id="quills_home_hoot_p1" rows="2"><?php echo esc_textarea( $hoot_p1 ); ?></textarea></td>
+				</tr>
+				<tr>
+					<th><label for="quills_home_hoot_p2">Đoạn văn 2:</label></th>
+					<td><textarea name="quills_home_hoot_p2" id="quills_home_hoot_p2" rows="2"><?php echo esc_textarea( $hoot_p2 ); ?></textarea></td>
+				</tr>
+				<tr>
+					<th><label for="quills_home_hoot_highlight">Chữ số người đăng ký nổi bật:</label></th>
+					<td>
+						<input type="text" name="quills_home_hoot_highlight" id="quills_home_hoot_highlight" value="<?php echo esc_attr( $hoot_highlight ); ?>" style="max-width: 300px;">
+						<span style="color: #64748b; font-size: 13px; margin-left: 10px;">(Hiển thị màu cam nổi bật)</span>
+					</td>
+				</tr>
+				<tr>
+					<th><label for="quills_home_hoot_p3">Đoạn văn 3 (vế sau số người):</label></th>
+					<td><input type="text" name="quills_home_hoot_p3" id="quills_home_hoot_p3" value="<?php echo esc_attr( $hoot_p3 ); ?>"></td>
+				</tr>
+				<tr>
+					<th><label for="quills_home_hoot_p4">Đoạn văn 4:</label></th>
+					<td><textarea name="quills_home_hoot_p4" id="quills_home_hoot_p4" rows="2"><?php echo esc_textarea( $hoot_p4 ); ?></textarea></td>
+				</tr>
+				<tr>
+					<th><label for="quills_home_hoot_p5">Đoạn văn 5:</label></th>
+					<td><textarea name="quills_home_hoot_p5" id="quills_home_hoot_p5" rows="2"><?php echo esc_textarea( $hoot_p5 ); ?></textarea></td>
+				</tr>
+				<tr>
+					<th><label for="quills_home_hoot_cf7_id">ID Form Contact Form 7:</label></th>
+					<td>
+						<input type="text" name="quills_home_hoot_cf7_id" id="quills_home_hoot_cf7_id" value="<?php echo esc_attr( $hoot_cf7_id ); ?>" style="max-width: 150px;">
+						<div class="quills-desc">Mặc định: 141. Nhập ID form Contact Form 7 để tích hợp gửi email.</div>
+					</td>
+				</tr>
+				<tr>
+					<th><label for="quills_home_hoot_btn_text">Chữ trên nút (Form dự phòng):</label></th>
+					<td><input type="text" name="quills_home_hoot_btn_text" id="quills_home_hoot_btn_text" value="<?php echo esc_attr( $hoot_btn_text ); ?>" style="max-width: 200px;"></td>
+				</tr>
+			</table>
+		</div>
+
+		<!-- Script for Media Uploader & Reset -->
+		<script>
+		jQuery(document).ready(function($) {
+			$('.quills-upload-btn').on('click', function(e) {
+				e.preventDefault();
+				var targetInput = $( $(this).data('target') );
+				var previewImg  = $( $(this).data('preview') );
+
+				var frame = wp.media({
+					title: 'Chọn hoặc tải ảnh lên cho Trang Chủ',
+					button: { text: 'Sử dụng ảnh này' },
+					multiple: false
+				});
+
+				frame.on('select', function() {
+					var attachment = frame.state().get('selection').first().toJSON();
+					targetInput.val(attachment.url);
+					if (previewImg.length) {
+						previewImg.attr('src', attachment.url);
+					}
+				});
+
+				frame.open();
+			});
+
+			$('.quills-reset-btn').on('click', function(e) {
+				e.preventDefault();
+				var targetInput = $( $(this).data('target') );
+				var previewImg  = $( $(this).data('preview') );
+				var defaultVal  = $(this).data('default');
+				targetInput.val(defaultVal);
+				if (previewImg.length) {
+					previewImg.attr('src', defaultVal);
+				}
+			});
+		});
+		</script>
 		<?php
 	}
 
@@ -439,13 +1398,75 @@ class Coffee_Cafe_Corner_Page_Content_Admin {
 	 */
 	public static function save_home_fields( $data ) {
 		$text_fields = array(
+			// Section 1: Hero
+			'quills_home_hero_img',
 			'quills_home_hero_cta_text',
 			'quills_home_hero_cta_link',
+			'quills_home_hero_stars_img',
 			'quills_home_rating_text',
+			'quills_home_press_label',
+			'quills_home_press_logo_1',
+			'quills_home_press_logo_2',
+			'quills_home_press_logo_3',
+			'quills_home_press_logo_4',
+
+			// Section 2: Team
+			'quills_home_team_img',
 			'quills_home_team_title',
 			'quills_home_team_cta_text',
 			'quills_home_team_cta_link',
 			'quills_home_team_quote',
+
+			// Section 3: Features
+			'quills_home_feat_title',
+			'quills_home_feat_icon_1',
+			'quills_home_feat_step1_title',
+			'quills_home_feat_icon_2',
+			'quills_home_feat_step2_title',
+			'quills_home_feat_icon_3',
+			'quills_home_feat_step3_title',
+			'quills_home_feat_cta_text',
+			'quills_home_feat_cta_link',
+
+			// Section 4: Roasting
+			'quills_home_roast_img',
+			'quills_home_roast_title',
+			'quills_home_roast_cta_text',
+			'quills_home_roast_cta_link',
+
+			// Section 5: Sourcing
+			'quills_home_source_img',
+			'quills_home_source_title',
+			'quills_home_source_cta_text',
+			'quills_home_source_cta_link',
+
+			// Section 6: Badge
+			'quills_home_badge_img',
+
+			// Section 7: Bestsellers Header
+			'quills_home_bestsellers_title',
+			'quills_home_bestsellers_subtitle',
+
+			// Section 8: Cupping
+			'quills_home_cupping_img',
+			'quills_home_cupping_title',
+			'quills_home_cupping_cta_text',
+			'quills_home_cupping_cta_link',
+
+			// Section 9: FAQ
+			'quills_home_faq_title',
+			'quills_home_faq_q1',
+			'quills_home_faq_q2',
+			'quills_home_faq_q3',
+			'quills_home_faq_q4',
+
+			// Section 10: The Hoot
+			'quills_home_hoot_heading',
+			'quills_home_hoot_icon',
+			'quills_home_hoot_highlight',
+			'quills_home_hoot_p3',
+			'quills_home_hoot_cf7_id',
+			'quills_home_hoot_btn_text',
 		);
 
 		foreach ( $text_fields as $field ) {
@@ -458,21 +1479,3216 @@ class Coffee_Cafe_Corner_Page_Content_Admin {
 			'quills_home_hero_title',
 			'quills_home_hero_subtitle',
 			'quills_home_hero_quote',
+
 			'quills_home_team_p1',
 			'quills_home_team_p2',
 			'quills_home_team_p3',
 			'quills_home_team_p4',
 			'quills_home_team_p5',
+
+			'quills_home_feat_step1_desc',
+			'quills_home_feat_step2_desc',
+			'quills_home_feat_step3_desc',
+			'quills_home_feat_quote',
+
+			'quills_home_roast_p1',
+			'quills_home_roast_p2',
+			'quills_home_roast_p3',
+			'quills_home_roast_p4',
+			'quills_home_roast_p5',
+			'quills_home_roast_quote',
+
+			'quills_home_source_p1',
+			'quills_home_source_p2',
+			'quills_home_source_p3',
+			'quills_home_source_p4',
+			'quills_home_source_p5',
+			'quills_home_source_quote',
+
+			'quills_home_cupping_p1',
+			'quills_home_cupping_p2',
+			'quills_home_cupping_p3',
+			'quills_home_cupping_quote',
+
+			'quills_home_faq_a1',
+			'quills_home_faq_a2',
+			'quills_home_faq_a3',
+			'quills_home_faq_a4',
+
+			'quills_home_hoot_p1',
+			'quills_home_hoot_p2',
+			'quills_home_hoot_p4',
+			'quills_home_hoot_p5',
+		);
+
+		$allowed = array(
+			'br'     => array(),
+			'strong' => array(),
+			'em'     => array(),
+			'p'      => array(),
+			'a'      => array(
+				'href'   => array(),
+				'target' => array(),
+				'rel'    => array(),
+				'class'  => array(),
+			),
+			'span'   => array(
+				'class' => array(),
+				'style' => array(),
+			),
 		);
 
 		foreach ( $textarea_fields as $field ) {
 			if ( isset( $data[ $field ] ) ) {
-				// Allow br, strong, em
-				$allowed = array( 'br' => array(), 'strong' => array(), 'em' => array() );
 				update_option( $field, wp_kses( wp_unslash( $data[ $field ] ), $allowed ) );
 			}
 		}
+
+		// Clear transients & cache
+		delete_transient( 'quills_home_content' );
+		clean_post_cache( 0 );
+		if ( function_exists( 'wp_cache_flush' ) ) {
+			wp_cache_flush();
+		}
+		self::clear_page_cache();
 	}
+
+	/**
+	 * Invalidate high-speed RAM and disk page cache
+	 */
+	public static function clear_page_cache() {
+		$dirs = array( '/dev/shm/quills_page_cache', WP_CONTENT_DIR . '/cache/quills_page_cache' );
+		foreach ( $dirs as $d ) {
+			if ( is_dir( $d ) ) {
+				$files = glob( $d . '/*.html' );
+				if ( $files ) {
+					foreach ( $files as $f ) {
+						@unlink( $f );
+					}
+				}
+			}
+		}
+	}
+
+	/**
+	 * Render Meta Box for Coffee Page (in page 'Coffee')
+	 */
+	public static function render_coffee_meta_box( $post ) {
+		wp_nonce_field( 'quills_coffee_meta_nonce', 'quills_coffee_meta_nonce_field' );
+		self::render_coffee_form_fields();
+	}
+
+	/**
+	 * Render Standalone Coffee Settings Page under Appearance
+	 */
+	public static function render_coffee_settings_page() {
+		?>
+		<div class="wrap">
+			<h1 style="display: flex; align-items: center; gap: 10px; margin-bottom: 20px;">
+				<span>☕ Quản lý Toàn Bộ Nội dung Trang Cà Phê (Coffee Collection)</span>
+			</h1>
+
+			<?php if ( isset( $_GET['updated'] ) ) : ?>
+				<div class="notice notice-success is-dismissible">
+					<p><strong>✅ Dữ liệu Trang Cà phê đã được lưu thành công vào Database!</strong> Hãy mở trang /coffee/ ngoài giao diện và tải lại để xem nội dung mới nhất.</p>
+				</div>
+			<?php endif; ?>
+
+			<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
+				<input type="hidden" name="action" value="quills_save_coffee_settings">
+				<?php wp_nonce_field( 'quills_coffee_settings_action', 'quills_coffee_settings_nonce' ); ?>
+
+				<?php self::render_coffee_form_fields(); ?>
+
+				<div style="position: sticky; bottom: 20px; background: #fff; padding: 15px 20px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); border: 1px solid #cbd5e1; z-index: 100; display: flex; justify-content: space-between; align-items: center;">
+					<span style="font-weight: 600; color: #334155;">✨ Nhấn nút Lưu sau khi chỉnh sửa bất kỳ mục nào trên trang Cà phê:</span>
+					<input type="submit" name="submit" id="submit" class="button button-primary button-large" style="height: 44px; padding: 0 24px; font-size: 15px; font-weight: 700; background: #663A1E; border-color: #4a2812;" value="💾 Lưu Toàn Bộ Thay Đổi Trang Cà Phê (Save Coffee Settings)">
+				</div>
+			</form>
+		</div>
+		<?php
+	}
+
+	/**
+	 * Shared Form Fields for Coffee Page
+	 */
+	public static function render_coffee_form_fields() {
+		$coffee_img_dir = trailingslashit( get_template_directory_uri() ) . 'assets/images/coffee/';
+
+		$breadcrumb_home = get_option( 'quills_coffee_breadcrumb_home', 'Home' );
+		$breadcrumb_cur  = get_option( 'quills_coffee_breadcrumb_current', 'Coffee' );
+		$hero_title      = get_option( 'quills_coffee_hero_title', 'Coffee' );
+		$hero_img        = get_option( 'quills_coffee_hero_img', $coffee_img_dir . 'coffee-hero-barista.jpg' );
+
+		$roast_headline = get_option( 'quills_coffee_roast_headline', 'We want your coffee to be as fresh as possible. Therefore, we roast everything to order.' );
+		$roast_schedule = get_option( 'quills_coffee_roast_schedule', "Orders placed by midnight Sunday ship by Wednesday.<br />\nOrders placed by midnight Tuesday ship by Friday." );
+
+		$top_quote_1_text   = get_option( 'quills_coffee_top_quote_1_text', '"Heaven in a cup."' );
+		$top_quote_1_author = get_option( 'quills_coffee_top_quote_1_author', '— Tracy S.' );
+		$top_quote_2_text   = get_option( 'quills_coffee_top_quote_2_text', '"The cleanest pour-over roast in Louisville. Sweet and lively."' );
+		$top_quote_2_author = get_option( 'quills_coffee_top_quote_2_author', '— Michael K.' );
+		$top_quote_3_text   = get_option( 'quills_coffee_top_quote_3_text', '"Consistently fresh, vibrant and roasted with exceptional care."' );
+		$top_quote_3_author = get_option( 'quills_coffee_top_quote_3_author', '— Amanda L.' );
+
+		$tab_blend    = get_option( 'quills_coffee_tab_blend', 'Blends' );
+		$tab_single   = get_option( 'quills_coffee_tab_single', 'Single Origin' );
+		$tab_espresso = get_option( 'quills_coffee_tab_espresso', 'Espresso' );
+		$tab_decaf    = get_option( 'quills_coffee_tab_decaf', 'Decaf' );
+
+		$bottom_heading        = get_option( 'quills_coffee_bottom_heading', 'More kind words from customers' );
+		$bottom_quote_1_text   = get_option( 'quills_coffee_bottom_quote_1_text', '"Amazing coffee. Quills is consistently head and shoulders above others."' );
+		$bottom_quote_1_author = get_option( 'quills_coffee_bottom_quote_1_author', '— Mitchell George' );
+		$bottom_quote_2_text   = get_option( 'quills_coffee_bottom_quote_2_text', '"Their single-origin Ethiopia Bombe is hands-down the best coffee I had this year."' );
+		$bottom_quote_2_author = get_option( 'quills_coffee_bottom_quote_2_author', '— Sarah Jenkins' );
+		$bottom_quote_3_text   = get_option( 'quills_coffee_bottom_quote_3_text', '"Subscribed to Blacksmith espresso for over 2 years now. Never disappointed."' );
+		$bottom_quote_3_author = get_option( 'quills_coffee_bottom_quote_3_author', '— David R.' );
+		?>
+		<style>
+			.quills-admin-nav { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 20px; background: #fff; padding: 12px 16px; border-radius: 8px; border: 1px solid #cbd5e1; position: sticky; top: 32px; z-index: 99; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+			.quills-admin-nav a { text-decoration: none; font-size: 13px; font-weight: 600; color: #475569; padding: 6px 12px; border-radius: 6px; background: #f1f5f9; transition: all 0.2s; }
+			.quills-admin-nav a:hover { background: #663A1E; color: #fff; }
+			.quills-card { background: #ffffff; border: 1px solid #e2e8f0; border-radius: 8px; padding: 22px; margin-bottom: 24px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
+			.quills-card-title { font-size: 17px; font-weight: 700; color: #1e293b; margin-top: 0; margin-bottom: 18px; border-bottom: 2px solid #663A1E; padding-bottom: 10px; display: flex; align-items: center; gap: 8px; }
+			.quills-form-table { width: 100%; border-collapse: collapse; }
+			.quills-form-table th { width: 230px; text-align: left; vertical-align: top; padding: 12px 15px 12px 0; font-weight: 600; color: #334155; font-size: 13.5px; }
+			.quills-form-table td { padding: 8px 0; }
+			.quills-form-table input[type="text"], .quills-form-table textarea { width: 100%; max-width: 680px; border: 1px solid #cbd5e1; border-radius: 6px; padding: 8px 12px; font-size: 14px; }
+			.quills-img-row { display: flex; gap: 12px; align-items: center; margin-bottom: 6px; flex-wrap: wrap; }
+			.quills-img-preview { max-height: 80px; max-width: 140px; object-fit: contain; border-radius: 4px; border: 1px solid #cbd5e1; background: #fafafa; padding: 2px; }
+			.quills-desc { font-size: 12px; color: #64748b; margin-top: 4px; }
+			.quills-step-box { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 6px; padding: 16px; margin-bottom: 15px; max-width: 700px; }
+		</style>
+
+		<!-- Fast Navigation Jump Bar -->
+		<div class="quills-admin-nav">
+			<a href="#sec-coffee-hero">☕ 1. Hero Banner & Điều Hướng</a>
+			<a href="#sec-coffee-roast">♨️ 2. Thông Báo Lịch Rang</a>
+			<a href="#sec-coffee-top-quotes">💬 3. Slider Đánh Giá (Top Quotes)</a>
+			<a href="#sec-coffee-pills">🏷️ 4. 4 Tab Nút Lọc Danh Mục</a>
+			<a href="#sec-coffee-bottom-quotes">⭐ 5. Khối Đánh Giá Cuối Trang</a>
+		</div>
+
+		<!-- SECTION 1: HERO BANNER & BREADCRUMBS -->
+		<div class="quills-card" id="sec-coffee-hero">
+			<h2 class="quills-card-title">☕ 1. Phần Hero Banner & Điều Hướng (Breadcrumbs)</h2>
+			<table class="quills-form-table">
+				<tr>
+					<th><label for="quills_coffee_breadcrumb_home">Chữ liên kết Home (Breadcrumb):</label></th>
+					<td>
+						<input type="text" name="quills_coffee_breadcrumb_home" id="quills_coffee_breadcrumb_home" value="<?php echo esc_attr( $breadcrumb_home ); ?>">
+						<div class="quills-desc">Mặc định: Home</div>
+					</td>
+				</tr>
+				<tr>
+					<th><label for="quills_coffee_breadcrumb_current">Chữ trang hiện tại (Breadcrumb):</label></th>
+					<td>
+						<input type="text" name="quills_coffee_breadcrumb_current" id="quills_coffee_breadcrumb_current" value="<?php echo esc_attr( $breadcrumb_cur ); ?>">
+						<div class="quills-desc">Mặc định: Coffee</div>
+					</td>
+				</tr>
+				<tr>
+					<th><label for="quills_coffee_hero_title">Tiêu đề Hero Banner:</label></th>
+					<td>
+						<input type="text" name="quills_coffee_hero_title" id="quills_coffee_hero_title" value="<?php echo esc_attr( $hero_title ); ?>">
+						<div class="quills-desc">Kiểu chữ nghệ thuật (Script Font) hiển thị giữa banner. Mặc định: Coffee</div>
+					</td>
+				</tr>
+				<tr>
+					<th><label for="quills_coffee_hero_img">Ảnh bìa Hero Banner:</label></th>
+					<td>
+						<div class="quills-img-row">
+							<img id="preview_quills_coffee_hero_img" src="<?php echo esc_url( $hero_img ); ?>" class="quills-img-preview" alt="Coffee Hero Preview" />
+							<input type="text" name="quills_coffee_hero_img" id="quills_coffee_hero_img" value="<?php echo esc_attr( $hero_img ); ?>" style="max-width: 400px;">
+							<button type="button" class="button quills-upload-btn" data-target="#quills_coffee_hero_img" data-preview="#preview_quills_coffee_hero_img">📁 Chọn / Tải ảnh lên</button>
+							<button type="button" class="button quills-reset-btn" data-target="#quills_coffee_hero_img" data-preview="#preview_quills_coffee_hero_img" data-default="<?php echo esc_attr( $coffee_img_dir . 'coffee-hero-barista.jpg' ); ?>">Khôi phục</button>
+						</div>
+						<div class="quills-desc">Mặc định: assets/images/coffee/coffee-hero-barista.jpg</div>
+					</td>
+				</tr>
+			</table>
+		</div>
+
+		<!-- SECTION 2: ROASTING SCHEDULE ANNOUNCEMENT -->
+		<div class="quills-card" id="sec-coffee-roast">
+			<h2 class="quills-card-title">♨️ 2. Thông Báo Lịch Rang & Cam Kết Độ Tươi</h2>
+			<table class="quills-form-table">
+				<tr>
+					<th><label for="quills_coffee_roast_headline">Tiêu đề cam kết độ tươi:</label></th>
+					<td>
+						<textarea name="quills_coffee_roast_headline" id="quills_coffee_roast_headline" rows="2"><?php echo esc_textarea( $roast_headline ); ?></textarea>
+						<div class="quills-desc">Mặc định: We want your coffee to be as fresh as possible. Therefore, we roast everything to order.</div>
+					</td>
+				</tr>
+				<tr>
+					<th><label for="quills_coffee_roast_schedule">Chi tiết lịch rang & gửi hàng:</label></th>
+					<td>
+						<textarea name="quills_coffee_roast_schedule" id="quills_coffee_roast_schedule" rows="3"><?php echo esc_textarea( $roast_schedule ); ?></textarea>
+						<div class="quills-desc">Hỗ trợ &lt;br&gt; để xuống dòng giữa các ngày.</div>
+					</td>
+				</tr>
+			</table>
+		</div>
+
+		<!-- SECTION 3: TOP TESTIMONIAL QUOTES SLIDER -->
+		<div class="quills-card" id="sec-coffee-top-quotes">
+			<h2 class="quills-card-title">💬 3. Slider Trích Dẫn Đánh Giá Phía Trên (Top Customer Quotes)</h2>
+			<p class="quills-desc" style="margin-bottom: 16px;">Slider chạy xoay vòng 3 đánh giá kèm 5 sao vàng và mũi tên trái/phải:</p>
+
+			<div class="quills-step-box">
+				<h4 style="margin: 0 0 10px; color: #663A1E;">⭐ Đánh giá 1:</h4>
+				<table class="quills-form-table">
+					<tr>
+						<th style="width: 140px;"><label for="quills_coffee_top_quote_1_text">Nội dung trích dẫn:</label></th>
+						<td><input type="text" name="quills_coffee_top_quote_1_text" id="quills_coffee_top_quote_1_text" value="<?php echo esc_attr( $top_quote_1_text ); ?>"></td>
+					</tr>
+					<tr>
+						<th><label for="quills_coffee_top_quote_1_author">Tác giả:</label></th>
+						<td><input type="text" name="quills_coffee_top_quote_1_author" id="quills_coffee_top_quote_1_author" value="<?php echo esc_attr( $top_quote_1_author ); ?>"></td>
+					</tr>
+				</table>
+			</div>
+
+			<div class="quills-step-box">
+				<h4 style="margin: 0 0 10px; color: #663A1E;">⭐ Đánh giá 2:</h4>
+				<table class="quills-form-table">
+					<tr>
+						<th style="width: 140px;"><label for="quills_coffee_top_quote_2_text">Nội dung trích dẫn:</label></th>
+						<td><input type="text" name="quills_coffee_top_quote_2_text" id="quills_coffee_top_quote_2_text" value="<?php echo esc_attr( $top_quote_2_text ); ?>"></td>
+					</tr>
+					<tr>
+						<th><label for="quills_coffee_top_quote_2_author">Tác giả:</label></th>
+						<td><input type="text" name="quills_coffee_top_quote_2_author" id="quills_coffee_top_quote_2_author" value="<?php echo esc_attr( $top_quote_2_author ); ?>"></td>
+					</tr>
+				</table>
+			</div>
+
+			<div class="quills-step-box">
+				<h4 style="margin: 0 0 10px; color: #663A1E;">⭐ Đánh giá 3:</h4>
+				<table class="quills-form-table">
+					<tr>
+						<th style="width: 140px;"><label for="quills_coffee_top_quote_3_text">Nội dung trích dẫn:</label></th>
+						<td><input type="text" name="quills_coffee_top_quote_3_text" id="quills_coffee_top_quote_3_text" value="<?php echo esc_attr( $top_quote_3_text ); ?>"></td>
+					</tr>
+					<tr>
+						<th><label for="quills_coffee_top_quote_3_author">Tác giả:</label></th>
+						<td><input type="text" name="quills_coffee_top_quote_3_author" id="quills_coffee_top_quote_3_author" value="<?php echo esc_attr( $top_quote_3_author ); ?>"></td>
+					</tr>
+				</table>
+			</div>
+		</div>
+
+		<!-- SECTION 4: QUICK CATEGORY FILTER PILLS -->
+		<div class="quills-card" id="sec-coffee-pills">
+			<h2 class="quills-card-title">🏷️ 4. Bốn Nút Lọc Danh Mục Nhanh (Category Pills)</h2>
+			<table class="quills-form-table">
+				<tr>
+					<th><label for="quills_coffee_tab_blend">Nút 1 (Blend):</label></th>
+					<td>
+						<input type="text" name="quills_coffee_tab_blend" id="quills_coffee_tab_blend" value="<?php echo esc_attr( $tab_blend ); ?>">
+						<div class="quills-desc">Mặc định: Blends</div>
+					</td>
+				</tr>
+				<tr>
+					<th><label for="quills_coffee_tab_single">Nút 2 (Single Origin):</label></th>
+					<td>
+						<input type="text" name="quills_coffee_tab_single" id="quills_coffee_tab_single" value="<?php echo esc_attr( $tab_single ); ?>">
+						<div class="quills-desc">Mặc định: Single Origin</div>
+					</td>
+				</tr>
+				<tr>
+					<th><label for="quills_coffee_tab_espresso">Nút 3 (Espresso):</label></th>
+					<td>
+						<input type="text" name="quills_coffee_tab_espresso" id="quills_coffee_tab_espresso" value="<?php echo esc_attr( $tab_espresso ); ?>">
+						<div class="quills-desc">Mặc định: Espresso</div>
+					</td>
+				</tr>
+				<tr>
+					<th><label for="quills_coffee_tab_decaf">Nút 4 (Decaf):</label></th>
+					<td>
+						<input type="text" name="quills_coffee_tab_decaf" id="quills_coffee_tab_decaf" value="<?php echo esc_attr( $tab_decaf ); ?>">
+						<div class="quills-desc">Mặc định: Decaf</div>
+					</td>
+				</tr>
+			</table>
+		</div>
+
+		<!-- SECTION 5: CUSTOMER TESTIMONIALS BOTTOM BANNER -->
+		<div class="quills-card" id="sec-coffee-bottom-quotes">
+			<h2 class="quills-card-title">⭐ 5. Khối Đánh Giá Khách Hàng Cuối Trang (Bottom Customer Testimonials)</h2>
+			<table class="quills-form-table">
+				<tr>
+					<th><label for="quills_coffee_bottom_heading">Tiêu đề khối đánh giá:</label></th>
+					<td>
+						<input type="text" name="quills_coffee_bottom_heading" id="quills_coffee_bottom_heading" value="<?php echo esc_attr( $bottom_heading ); ?>">
+						<div class="quills-desc">Mặc định: More kind words from customers</div>
+					</td>
+				</tr>
+			</table>
+
+			<div class="quills-step-box" style="margin-top: 15px;">
+				<h4 style="margin: 0 0 10px; color: #663A1E;">⭐ Lời khen 1:</h4>
+				<table class="quills-form-table">
+					<tr>
+						<th style="width: 140px;"><label for="quills_coffee_bottom_quote_1_text">Nội dung trích dẫn:</label></th>
+						<td><input type="text" name="quills_coffee_bottom_quote_1_text" id="quills_coffee_bottom_quote_1_text" value="<?php echo esc_attr( $bottom_quote_1_text ); ?>"></td>
+					</tr>
+					<tr>
+						<th><label for="quills_coffee_bottom_quote_1_author">Tác giả:</label></th>
+						<td><input type="text" name="quills_coffee_bottom_quote_1_author" id="quills_coffee_bottom_quote_1_author" value="<?php echo esc_attr( $bottom_quote_1_author ); ?>"></td>
+					</tr>
+				</table>
+			</div>
+
+			<div class="quills-step-box">
+				<h4 style="margin: 0 0 10px; color: #663A1E;">⭐ Lời khen 2:</h4>
+				<table class="quills-form-table">
+					<tr>
+						<th style="width: 140px;"><label for="quills_coffee_bottom_quote_2_text">Nội dung trích dẫn:</label></th>
+						<td><input type="text" name="quills_coffee_bottom_quote_2_text" id="quills_coffee_bottom_quote_2_text" value="<?php echo esc_attr( $bottom_quote_2_text ); ?>"></td>
+					</tr>
+					<tr>
+						<th><label for="quills_coffee_bottom_quote_2_author">Tác giả:</label></th>
+						<td><input type="text" name="quills_coffee_bottom_quote_2_author" id="quills_coffee_bottom_quote_2_author" value="<?php echo esc_attr( $bottom_quote_2_author ); ?>"></td>
+					</tr>
+				</table>
+			</div>
+
+			<div class="quills-step-box">
+				<h4 style="margin: 0 0 10px; color: #663A1E;">⭐ Lời khen 3:</h4>
+				<table class="quills-form-table">
+					<tr>
+						<th style="width: 140px;"><label for="quills_coffee_bottom_quote_3_text">Nội dung trích dẫn:</label></th>
+						<td><input type="text" name="quills_coffee_bottom_quote_3_text" id="quills_coffee_bottom_quote_3_text" value="<?php echo esc_attr( $bottom_quote_3_text ); ?>"></td>
+					</tr>
+					<tr>
+						<th><label for="quills_coffee_bottom_quote_3_author">Tác giả:</label></th>
+						<td><input type="text" name="quills_coffee_bottom_quote_3_author" id="quills_coffee_bottom_quote_3_author" value="<?php echo esc_attr( $bottom_quote_3_author ); ?>"></td>
+					</tr>
+				</table>
+			</div>
+		</div>
+
+		<script>
+		jQuery(document).ready(function($) {
+			$('.quills-upload-btn').on('click', function(e) {
+				e.preventDefault();
+				var targetInput = $( $(this).data('target') );
+				var previewImg  = $( $(this).data('preview') );
+
+				var frame = wp.media({
+					title: 'Chọn hoặc tải ảnh lên cho Trang Cà phê',
+					button: { text: 'Sử dụng ảnh này' },
+					multiple: false
+				});
+
+				frame.on('select', function() {
+					var attachment = frame.state().get('selection').first().toJSON();
+					targetInput.val(attachment.url);
+					if (previewImg.length) {
+						previewImg.attr('src', attachment.url);
+					}
+				});
+
+				frame.open();
+			});
+
+			$('.quills-reset-btn').on('click', function(e) {
+				e.preventDefault();
+				var targetInput = $( $(this).data('target') );
+				var previewImg  = $( $(this).data('preview') );
+				var defaultVal  = $(this).data('default');
+				targetInput.val(defaultVal);
+				if (previewImg.length) {
+					previewImg.attr('src', defaultVal);
+				}
+			});
+		});
+		</script>
+		<?php
+	}
+
+	/**
+	 * Handle POST submission from Appearance -> Cài đặt Trang Cà phê
+	 */
+	public static function handle_coffee_settings_save() {
+		add_action( 'admin_post_quills_save_coffee_settings', function() {
+			if ( ! isset( $_POST['quills_coffee_settings_nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['quills_coffee_settings_nonce'] ) ), 'quills_coffee_settings_action' ) ) {
+				wp_die( 'Lỗi bảo mật (Invalid nonce).' );
+			}
+
+			if ( ! current_user_can( 'manage_options' ) ) {
+				wp_die( 'Bạn không có quyền thực hiện thao tác này.' );
+			}
+
+			self::save_coffee_fields( $_POST );
+
+			wp_safe_redirect( add_query_arg( array( 'page' => 'quills-coffee-settings', 'updated' => '1' ), admin_url( 'themes.php' ) ) );
+			exit;
+		} );
+	}
+
+	/**
+	 * Save Coffee fields to wp_options
+	 */
+	public static function save_coffee_fields( $data ) {
+		$text_fields = array(
+			'quills_coffee_breadcrumb_home',
+			'quills_coffee_breadcrumb_current',
+			'quills_coffee_hero_title',
+			'quills_coffee_hero_img',
+
+			'quills_coffee_top_quote_1_text',
+			'quills_coffee_top_quote_1_author',
+			'quills_coffee_top_quote_2_text',
+			'quills_coffee_top_quote_2_author',
+			'quills_coffee_top_quote_3_text',
+			'quills_coffee_top_quote_3_author',
+
+			'quills_coffee_tab_blend',
+			'quills_coffee_tab_single',
+			'quills_coffee_tab_espresso',
+			'quills_coffee_tab_decaf',
+
+			'quills_coffee_bottom_heading',
+			'quills_coffee_bottom_quote_1_text',
+			'quills_coffee_bottom_quote_1_author',
+			'quills_coffee_bottom_quote_2_text',
+			'quills_coffee_bottom_quote_2_author',
+			'quills_coffee_bottom_quote_3_text',
+			'quills_coffee_bottom_quote_3_author',
+		);
+
+		foreach ( $text_fields as $field ) {
+			if ( isset( $data[ $field ] ) ) {
+				update_option( $field, sanitize_text_field( wp_unslash( $data[ $field ] ) ) );
+			}
+		}
+
+		$textarea_fields = array(
+			'quills_coffee_roast_headline',
+			'quills_coffee_roast_schedule',
+		);
+
+		$allowed = array(
+			'br'     => array(),
+			'strong' => array(),
+			'em'     => array(),
+			'p'      => array(),
+			'span'   => array(
+				'class' => array(),
+				'style' => array(),
+			),
+		);
+
+		foreach ( $textarea_fields as $field ) {
+			if ( isset( $data[ $field ] ) ) {
+				update_option( $field, wp_kses( wp_unslash( $data[ $field ] ), $allowed ) );
+			}
+		}
+
+		// Clear transients & cache
+		delete_transient( 'quills_coffee_content' );
+		delete_transient( 'quills_coffee_filter_counts' );
+		clean_post_cache( 43 );
+		if ( function_exists( 'wp_cache_flush' ) ) {
+			wp_cache_flush();
+		}
+		self::clear_page_cache();
+	}
+
+	/**
+	 * Render Meta Box for Brew Gear Page (in page 'Brew Gear')
+	 */
+	public static function render_brew_gear_meta_box( $post ) {
+		wp_nonce_field( 'quills_brew_gear_meta_nonce', 'quills_brew_gear_meta_nonce_field' );
+		self::render_brew_gear_form_fields();
+	}
+
+	/**
+	 * Render Standalone Brew Gear Settings Page under Appearance
+	 */
+	public static function render_brew_gear_settings_page() {
+		?>
+		<div class="wrap">
+			<h1 style="display: flex; align-items: center; gap: 10px; margin-bottom: 20px;">
+				<span>⚙️ Quản lý Toàn Bộ Nội dung Trang Dụng Cụ Pha (Brew Gear)</span>
+			</h1>
+
+			<?php if ( isset( $_GET['updated'] ) ) : ?>
+				<div class="notice notice-success is-dismissible">
+					<p><strong>✅ Dữ liệu Trang Dụng cụ pha (Brew Gear) đã được lưu thành công vào Database!</strong> Hãy mở trang /brew-gear/ ngoài giao diện và tải lại để xem nội dung mới nhất.</p>
+				</div>
+			<?php endif; ?>
+
+			<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
+				<input type="hidden" name="action" value="quills_save_brew_gear_settings">
+				<?php wp_nonce_field( 'quills_brew_gear_settings_action', 'quills_brew_gear_settings_nonce' ); ?>
+
+				<?php self::render_brew_gear_form_fields(); ?>
+
+				<div style="position: sticky; bottom: 20px; background: #fff; padding: 15px 20px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); border: 1px solid #cbd5e1; z-index: 100; display: flex; justify-content: space-between; align-items: center;">
+					<span style="font-weight: 600; color: #334155;">✨ Nhấn nút Lưu sau khi chỉnh sửa bất kỳ mục nào trên trang Brew Gear:</span>
+					<input type="submit" name="submit" id="submit" class="button button-primary button-large" style="height: 44px; padding: 0 24px; font-size: 15px; font-weight: 700; background: #663A1E; border-color: #4a2812;" value="💾 Lưu Toàn Bộ Thay Đổi Trang Brew Gear (Save Brew Gear Settings)">
+				</div>
+			</form>
+		</div>
+		<?php
+	}
+
+	/**
+	 * Shared Form Fields for Brew Gear Page
+	 */
+	public static function render_brew_gear_form_fields() {
+		$brew_img_dir = trailingslashit( get_template_directory_uri() ) . 'assets/images/brew-gear/';
+
+		$breadcrumb_home = get_option( 'brew_gear_breadcrumb_home', 'Home' );
+		$banner_title    = get_option( 'brew_gear_banner_title', 'Brew Gear' );
+		$breadcrumb_cur  = get_option( 'brew_gear_breadcrumb_current', $banner_title );
+		$banner_img      = get_option( 'brew_gear_banner_image', $brew_img_dir . 'brew-gear-banner.jpg' );
+
+		$sort_label       = get_option( 'brew_gear_sort_label', 'Sort by:' );
+		$add_to_cart_text = get_option( 'brew_gear_add_to_cart_text', 'ADD TO CART' );
+		$no_products_text = get_option( 'brew_gear_no_products_text', 'No products found.' );
+
+		// Equipment products for quick editing
+		$p1 = get_page_by_path( 'baratza-encore-grinder', OBJECT, 'product' );
+		$p1_id = $p1 ? $p1->ID : 28;
+		$p1_title = $p1 ? $p1->post_title : 'Baratza Encore Grinder';
+		$p1_price = $p1 ? get_post_meta( $p1_id, '_price', true ) : '149.00';
+
+		$p2 = get_page_by_path( 'breville-bambino-espresso-machine', OBJECT, 'product' );
+		$p2_id = $p2 ? $p2->ID : 29;
+		$p2_title = $p2 ? $p2->post_title : 'Breville Bambino Espresso Machine';
+		$p2_price = $p2 ? get_post_meta( $p2_id, '_price', true ) : '299.00';
+
+		$p3 = get_page_by_path( 'breville-luxe-brewer-thermal', OBJECT, 'product' );
+		$p3_id = $p3 ? $p3->ID : 30;
+		$p3_title = $p3 ? $p3->post_title : 'Breville Luxe Brewer™ Thermal';
+		$p3_price = $p3 ? get_post_meta( $p3_id, '_price', true ) : '349.00';
+		?>
+		<style>
+			.quills-admin-nav { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 20px; background: #fff; padding: 12px 16px; border-radius: 8px; border: 1px solid #cbd5e1; position: sticky; top: 32px; z-index: 99; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+			.quills-admin-nav a { text-decoration: none; font-size: 13px; font-weight: 600; color: #475569; padding: 6px 12px; border-radius: 6px; background: #f1f5f9; transition: all 0.2s; }
+			.quills-admin-nav a:hover { background: #663A1E; color: #fff; }
+			.quills-card { background: #ffffff; border: 1px solid #e2e8f0; border-radius: 8px; padding: 22px; margin-bottom: 24px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
+			.quills-card-title { font-size: 17px; font-weight: 700; color: #1e293b; margin-top: 0; margin-bottom: 18px; border-bottom: 2px solid #663A1E; padding-bottom: 10px; display: flex; align-items: center; gap: 8px; }
+			.quills-form-table { width: 100%; border-collapse: collapse; }
+			.quills-form-table th { width: 230px; text-align: left; vertical-align: top; padding: 12px 15px 12px 0; font-weight: 600; color: #334155; font-size: 13.5px; }
+			.quills-form-table td { padding: 8px 0; }
+			.quills-form-table input[type="text"], .quills-form-table textarea { width: 100%; max-width: 680px; border: 1px solid #cbd5e1; border-radius: 6px; padding: 8px 12px; font-size: 14px; }
+			.quills-img-row { display: flex; gap: 12px; align-items: center; margin-bottom: 6px; flex-wrap: wrap; }
+			.quills-img-preview { max-height: 80px; max-width: 140px; object-fit: contain; border-radius: 4px; border: 1px solid #cbd5e1; background: #fafafa; padding: 2px; }
+			.quills-desc { font-size: 12px; color: #64748b; margin-top: 4px; }
+			.quills-step-box { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 6px; padding: 16px; margin-bottom: 15px; max-width: 700px; }
+		</style>
+
+		<!-- Fast Navigation Jump Bar -->
+		<div class="quills-admin-nav">
+			<a href="#sec-brew-hero">☕ 1. Hero Banner & Breadcrumbs</a>
+			<a href="#sec-brew-toolbar">🔧 2. Thanh Công Cụ & Nhãn Nút</a>
+			<a href="#sec-brew-products">⚙️ 3. Danh Sách Dụng Cụ Pha Chế</a>
+		</div>
+
+		<!-- SECTION 1: HERO BANNER & BREADCRUMBS -->
+		<div class="quills-card" id="sec-brew-hero">
+			<h2 class="quills-card-title">☕ 1. Phần Hero Banner & Điều Hướng (Breadcrumbs)</h2>
+			<table class="quills-form-table">
+				<tr>
+					<th><label for="brew_gear_breadcrumb_home">Chữ liên kết Home (Breadcrumb):</label></th>
+					<td>
+						<input type="text" name="brew_gear_breadcrumb_home" id="brew_gear_breadcrumb_home" value="<?php echo esc_attr( $breadcrumb_home ); ?>">
+						<div class="quills-desc">Mặc định: Home</div>
+					</td>
+				</tr>
+				<tr>
+					<th><label for="brew_gear_breadcrumb_current">Chữ trang hiện tại (Breadcrumb):</label></th>
+					<td>
+						<input type="text" name="brew_gear_breadcrumb_current" id="brew_gear_breadcrumb_current" value="<?php echo esc_attr( $breadcrumb_cur ); ?>">
+						<div class="quills-desc">Mặc định: Brew Gear</div>
+					</td>
+				</tr>
+				<tr>
+					<th><label for="brew_gear_banner_title">Tiêu đề Hero Banner:</label></th>
+					<td>
+						<input type="text" name="brew_gear_banner_title" id="brew_gear_banner_title" value="<?php echo esc_attr( $banner_title ); ?>">
+						<div class="quills-desc">Tiêu đề in hoa hiển thị giữa banner. Mặc định: Brew Gear</div>
+					</td>
+				</tr>
+				<tr>
+					<th><label for="brew_gear_banner_image">Ảnh bìa Hero Banner:</label></th>
+					<td>
+						<div class="quills-img-row">
+							<img id="preview_brew_gear_banner_image" src="<?php echo esc_url( $banner_img ); ?>" class="quills-img-preview" alt="Brew Gear Hero Preview" />
+							<input type="text" name="brew_gear_banner_image" id="brew_gear_banner_image" value="<?php echo esc_attr( $banner_img ); ?>" style="max-width: 400px;">
+							<button type="button" class="button quills-upload-btn" data-target="#brew_gear_banner_image" data-preview="#preview_brew_gear_banner_image">📁 Chọn / Tải ảnh lên</button>
+							<button type="button" class="button quills-reset-btn" data-target="#brew_gear_banner_image" data-preview="#preview_brew_gear_banner_image" data-default="<?php echo esc_attr( $brew_img_dir . 'brew-gear-banner.jpg' ); ?>">Khôi phục</button>
+						</div>
+						<div class="quills-desc">Mặc định: assets/images/brew-gear/brew-gear-banner.jpg</div>
+					</td>
+				</tr>
+			</table>
+		</div>
+
+		<!-- SECTION 2: TOOLBAR & LABELS -->
+		<div class="quills-card" id="sec-brew-toolbar">
+			<h2 class="quills-card-title">🔧 2. Thanh Công Cụ & Nhãn Nút Bấm</h2>
+			<table class="quills-form-table">
+				<tr>
+					<th><label for="brew_gear_sort_label">Nhãn sắp xếp (Sort by label):</label></th>
+					<td>
+						<input type="text" name="brew_gear_sort_label" id="brew_gear_sort_label" value="<?php echo esc_attr( $sort_label ); ?>">
+						<div class="quills-desc">Mặc định: Sort by:</div>
+					</td>
+				</tr>
+				<tr>
+					<th><label for="brew_gear_add_to_cart_text">Chữ trên nút thêm vào giỏ:</label></th>
+					<td>
+						<input type="text" name="brew_gear_add_to_cart_text" id="brew_gear_add_to_cart_text" value="<?php echo esc_attr( $add_to_cart_text ); ?>">
+						<div class="quills-desc">Mặc định: ADD TO CART</div>
+					</td>
+				</tr>
+				<tr>
+					<th><label for="brew_gear_no_products_text">Thông báo khi không có sản phẩm:</label></th>
+					<td>
+						<input type="text" name="brew_gear_no_products_text" id="brew_gear_no_products_text" value="<?php echo esc_attr( $no_products_text ); ?>">
+						<div class="quills-desc">Mặc định: No products found.</div>
+					</td>
+				</tr>
+			</table>
+		</div>
+
+		<!-- SECTION 3: PRODUCTS QUICK EDIT -->
+		<div class="quills-card" id="sec-brew-products">
+			<h2 class="quills-card-title">⚙️ 3. Quản Lý Nhanh 3 Sản Phẩm Dụng Cụ Pha Chế</h2>
+			<p class="quills-desc" style="margin-bottom: 16px;">Bạn có thể chỉnh sửa nhanh tên và giá của 3 thiết bị dụng cụ pha chế tại đây, hoặc bấm link để vào trang chi tiết WooCommerce:</p>
+
+			<div class="quills-step-box">
+				<h4 style="margin: 0 0 10px; color: #663A1E; display: flex; justify-content: space-between; align-items: center;">
+					<span>⚙️ Thiết bị 1: <?php echo esc_html( $p1_title ); ?></span>
+					<a href="<?php echo esc_url( admin_url( 'post.php?post=' . $p1_id . '&action=edit' ) ); ?>" class="button button-small" target="_blank">Chỉnh sửa chi tiết trong WooCommerce ↗</a>
+				</h4>
+				<table class="quills-form-table">
+					<tr>
+						<th style="width: 140px;"><label for="brew_gear_prod_1_title">Tên sản phẩm:</label></th>
+						<td><input type="text" name="brew_gear_prod_1_title" id="brew_gear_prod_1_title" value="<?php echo esc_attr( $p1_title ); ?>"></td>
+					</tr>
+					<tr>
+						<th><label for="brew_gear_prod_1_price">Giá ($):</label></th>
+						<td><input type="text" name="brew_gear_prod_1_price" id="brew_gear_prod_1_price" value="<?php echo esc_attr( $p1_price ); ?>" style="max-width: 180px;"></td>
+					</tr>
+				</table>
+			</div>
+
+			<div class="quills-step-box">
+				<h4 style="margin: 0 0 10px; color: #663A1E; display: flex; justify-content: space-between; align-items: center;">
+					<span>⚙️ Thiết bị 2: <?php echo esc_html( $p2_title ); ?></span>
+					<a href="<?php echo esc_url( admin_url( 'post.php?post=' . $p2_id . '&action=edit' ) ); ?>" class="button button-small" target="_blank">Chỉnh sửa chi tiết trong WooCommerce ↗</a>
+				</h4>
+				<table class="quills-form-table">
+					<tr>
+						<th style="width: 140px;"><label for="brew_gear_prod_2_title">Tên sản phẩm:</label></th>
+						<td><input type="text" name="brew_gear_prod_2_title" id="brew_gear_prod_2_title" value="<?php echo esc_attr( $p2_title ); ?>"></td>
+					</tr>
+					<tr>
+						<th><label for="brew_gear_prod_2_price">Giá ($):</label></th>
+						<td><input type="text" name="brew_gear_prod_2_price" id="brew_gear_prod_2_price" value="<?php echo esc_attr( $p2_price ); ?>" style="max-width: 180px;"></td>
+					</tr>
+				</table>
+			</div>
+
+			<div class="quills-step-box">
+				<h4 style="margin: 0 0 10px; color: #663A1E; display: flex; justify-content: space-between; align-items: center;">
+					<span>⚙️ Thiết bị 3: <?php echo esc_html( $p3_title ); ?></span>
+					<a href="<?php echo esc_url( admin_url( 'post.php?post=' . $p3_id . '&action=edit' ) ); ?>" class="button button-small" target="_blank">Chỉnh sửa chi tiết trong WooCommerce ↗</a>
+				</h4>
+				<table class="quills-form-table">
+					<tr>
+						<th style="width: 140px;"><label for="brew_gear_prod_3_title">Tên sản phẩm:</label></th>
+						<td><input type="text" name="brew_gear_prod_3_title" id="brew_gear_prod_3_title" value="<?php echo esc_attr( $p3_title ); ?>"></td>
+					</tr>
+					<tr>
+						<th><label for="brew_gear_prod_3_price">Giá ($):</label></th>
+						<td><input type="text" name="brew_gear_prod_3_price" id="brew_gear_prod_3_price" value="<?php echo esc_attr( $p3_price ); ?>" style="max-width: 180px;"></td>
+					</tr>
+				</table>
+			</div>
+		</div>
+
+		<script>
+		jQuery(document).ready(function($) {
+			$('.quills-upload-btn').on('click', function(e) {
+				e.preventDefault();
+				var targetInput = $( $(this).data('target') );
+				var previewImg  = $( $(this).data('preview') );
+
+				var frame = wp.media({
+					title: 'Chọn hoặc tải ảnh lên cho Trang Brew Gear',
+					button: { text: 'Sử dụng ảnh này' },
+					multiple: false
+				});
+
+				frame.on('select', function() {
+					var attachment = frame.state().get('selection').first().toJSON();
+					targetInput.val(attachment.url);
+					if (previewImg.length) {
+						previewImg.attr('src', attachment.url);
+					}
+				});
+
+				frame.open();
+			});
+
+			$('.quills-reset-btn').on('click', function(e) {
+				e.preventDefault();
+				var targetInput = $( $(this).data('target') );
+				var previewImg  = $( $(this).data('preview') );
+				var defaultVal  = $(this).data('default');
+				targetInput.val(defaultVal);
+				if (previewImg.length) {
+					previewImg.attr('src', defaultVal);
+				}
+			});
+		});
+		</script>
+		<?php
+	}
+
+	/**
+	 * Handle POST submission from Appearance -> Cài đặt Trang Brew Gear
+	 */
+	public static function handle_brew_gear_settings_save() {
+		add_action( 'admin_post_quills_save_brew_gear_settings', function() {
+			if ( ! isset( $_POST['quills_brew_gear_settings_nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['quills_brew_gear_settings_nonce'] ) ), 'quills_brew_gear_settings_action' ) ) {
+				wp_die( 'Lỗi bảo mật (Invalid nonce).' );
+			}
+
+			if ( ! current_user_can( 'manage_options' ) ) {
+				wp_die( 'Bạn không có quyền thực hiện thao tác này.' );
+			}
+
+			self::save_brew_gear_fields( $_POST );
+
+			wp_safe_redirect( add_query_arg( array( 'page' => 'quills-brew-gear-settings', 'updated' => '1' ), admin_url( 'themes.php' ) ) );
+			exit;
+		} );
+	}
+
+	/**
+	 * Save Brew Gear fields to wp_options and WooCommerce products
+	 */
+	public static function save_brew_gear_fields( $data ) {
+		$text_fields = array(
+			'brew_gear_breadcrumb_home',
+			'brew_gear_breadcrumb_current',
+			'brew_gear_banner_title',
+			'brew_gear_banner_image',
+			'brew_gear_sort_label',
+			'brew_gear_add_to_cart_text',
+			'brew_gear_no_products_text',
+		);
+
+		foreach ( $text_fields as $field ) {
+			if ( isset( $data[ $field ] ) ) {
+				update_option( $field, sanitize_text_field( wp_unslash( $data[ $field ] ) ) );
+			}
+		}
+
+		// Sync with page 27 postmeta
+		$brew_page = get_page_by_path( 'brew-gear' );
+		if ( $brew_page ) {
+			if ( isset( $data['brew_gear_banner_title'] ) ) {
+				update_post_meta( $brew_page->ID, '_brew_gear_banner_title', sanitize_text_field( wp_unslash( $data['brew_gear_banner_title'] ) ) );
+			}
+			if ( isset( $data['brew_gear_banner_image'] ) ) {
+				update_post_meta( $brew_page->ID, '_brew_gear_banner_image', sanitize_text_field( wp_unslash( $data['brew_gear_banner_image'] ) ) );
+			}
+			clean_post_cache( $brew_page->ID );
+		}
+
+		// Sync products
+		$products_sync = array(
+			1 => 'baratza-encore-grinder',
+			2 => 'breville-bambino-espresso-machine',
+			3 => 'breville-luxe-brewer-thermal',
+		);
+
+		foreach ( $products_sync as $idx => $slug ) {
+			$title_key = 'brew_gear_prod_' . $idx . '_title';
+			$price_key = 'brew_gear_prod_' . $idx . '_price';
+
+			$prod = get_page_by_path( $slug, OBJECT, 'product' );
+			if ( $prod ) {
+				$pid = $prod->ID;
+				if ( isset( $data[ $title_key ] ) && ! empty( $data[ $title_key ] ) && $data[ $title_key ] !== $prod->post_title ) {
+					wp_update_post( array(
+						'ID'         => $pid,
+						'post_title' => sanitize_text_field( wp_unslash( $data[ $title_key ] ) ),
+					) );
+				}
+				if ( isset( $data[ $price_key ] ) && ! empty( $data[ $price_key ] ) ) {
+					$clean_price = sanitize_text_field( wp_unslash( $data[ $price_key ] ) );
+					update_post_meta( $pid, '_price', $clean_price );
+					update_post_meta( $pid, '_regular_price', $clean_price );
+				}
+				clean_post_cache( $pid );
+			}
+		}
+
+		// Clear transients & cache
+		delete_transient( 'quills_brew_gear_content' );
+		if ( function_exists( 'wp_cache_flush' ) ) {
+			wp_cache_flush();
+		}
+		self::clear_page_cache();
+	}
+
+	/**
+	 * Render Meta Box for Subscriptions Page (in page 'Subscriptions')
+	 */
+	public static function render_subscriptions_meta_box( $post ) {
+		wp_nonce_field( 'quills_subscriptions_meta_nonce', 'quills_subscriptions_meta_nonce_field' );
+		self::render_subscriptions_form_fields();
+	}
+
+	/**
+	 * Render Standalone Subscriptions Settings Page under Appearance
+	 */
+	public static function render_subscriptions_settings_page() {
+		?>
+		<div class="wrap">
+			<h1 style="display: flex; align-items: center; gap: 10px; margin-bottom: 20px;">
+				<span>📦 Quản lý Toàn Bộ Nội dung Trang Gói Định Kỳ (Subscriptions)</span>
+			</h1>
+
+			<?php if ( isset( $_GET['updated'] ) ) : ?>
+				<div class="notice notice-success is-dismissible">
+					<p><strong>✅ Dữ liệu Trang Gói định kỳ (Subscriptions) đã được lưu thành công vào Database!</strong> Hãy mở trang /subscriptions/ ngoài giao diện và tải lại để xem nội dung mới nhất.</p>
+				</div>
+			<?php endif; ?>
+
+			<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
+				<input type="hidden" name="action" value="quills_save_subscriptions_settings">
+				<?php wp_nonce_field( 'quills_subscriptions_settings_action', 'quills_subscriptions_settings_nonce' ); ?>
+
+				<?php self::render_subscriptions_form_fields(); ?>
+
+				<div style="position: sticky; bottom: 20px; background: #fff; padding: 15px 20px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); border: 1px solid #cbd5e1; z-index: 100; display: flex; justify-content: space-between; align-items: center;">
+					<span style="font-weight: 600; color: #334155;">✨ Nhấn nút Lưu sau khi chỉnh sửa bất kỳ mục nào trên trang Subscriptions:</span>
+					<input type="submit" name="submit" id="submit" class="button button-primary button-large" style="height: 44px; padding: 0 24px; font-size: 15px; font-weight: 700; background: #663A1E; border-color: #4a2812;" value="💾 Lưu Toàn Bộ Thay Đổi Trang Gói Định Kỳ (Save Settings)">
+				</div>
+			</form>
+		</div>
+		<?php
+	}
+
+	/**
+	 * Shared Form Fields for Subscriptions Page
+	 */
+	public static function render_subscriptions_form_fields() {
+		$sub_img_dir = trailingslashit( get_template_directory_uri() ) . 'assets/images/';
+
+		$breadcrumb_home = get_option( 'quills_sub_breadcrumb_home', 'Home' );
+		$breadcrumb_cur  = get_option( 'quills_sub_breadcrumb_current', 'Subscriptions' );
+		$hero_title      = get_option( 'quills_sub_hero_title', 'Subscriptions' );
+		$banner_img      = get_option( 'quills_sub_hero_img', $sub_img_dir . 'subscriptions-banner.png' );
+
+		$intro_title = get_option( 'quills_sub_intro_title', 'Get a free 12oz bag of Inkwell when you subscribe.' );
+		$intro_desc  = get_option( 'quills_sub_intro_desc', 'Experience freshly-roasted coffee delivered right to your door. Choose between crafted blends or a curated rotation of single-origins from around the world.' );
+		$intro_note  = get_option( 'quills_sub_intro_note', '(Free bag offer valid for new subscribers only.)' );
+
+		$top_q1_text   = get_option( 'quills_sub_top_q1_text', '"The smell alone makes you want to rip open the bag and drink it right away. This coffee is THE BEST."' );
+		$top_q1_author = get_option( 'quills_sub_top_q1_author', '— C. Diller' );
+		$top_q2_text   = get_option( 'quills_sub_top_q2_text', '"One cup is all it took, and we were hooked! Now we order online to have our favorite cup on a daily basis."' );
+		$top_q2_author = get_option( 'quills_sub_top_q2_author', '— Brianne E.' );
+		$top_q3_text   = get_option( 'quills_sub_top_q3_text', '"Quills has the best coffee and great customer service! 5 stars!!! We love getting to try a variety of different roasts!"' );
+		$top_q3_author = get_option( 'quills_sub_top_q3_author', '— Kelly Davis' );
+
+		$bottom_heading  = get_option( 'quills_sub_bottom_heading', 'More kind words from customers' );
+		$bottom_q1_text   = get_option( 'quills_sub_bottom_q1_text', '"This is probably the best coffee I\'ve ever had."' );
+		$bottom_q1_author = get_option( 'quills_sub_bottom_q1_author', '— Jamie W.' );
+		$bottom_q2_text   = get_option( 'quills_sub_bottom_q2_text', '"It’s our favorite coffee!! We entertain frequently and everyone seems to enjoy this coffee."' );
+		$bottom_q2_author = get_option( 'quills_sub_bottom_q2_author', '— Lisa Peters' );
+		$bottom_q3_text   = get_option( 'quills_sub_bottom_q3_text', '"Mega delicious! Just sent some to my sister in California to try to get her hooked."' );
+		$bottom_q3_author = get_option( 'quills_sub_bottom_q3_author', '— Sarah R.' );
+		?>
+		<style>
+			.quills-admin-nav { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 20px; background: #fff; padding: 12px 16px; border-radius: 8px; border: 1px solid #cbd5e1; position: sticky; top: 32px; z-index: 99; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+			.quills-admin-nav a { text-decoration: none; font-size: 13px; font-weight: 600; color: #475569; padding: 6px 12px; border-radius: 6px; background: #f1f5f9; transition: all 0.2s; }
+			.quills-admin-nav a:hover { background: #663A1E; color: #fff; }
+			.quills-card { background: #ffffff; border: 1px solid #e2e8f0; border-radius: 8px; padding: 22px; margin-bottom: 24px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
+			.quills-card-title { font-size: 17px; font-weight: 700; color: #1e293b; margin-top: 0; margin-bottom: 18px; border-bottom: 2px solid #663A1E; padding-bottom: 10px; display: flex; align-items: center; gap: 8px; }
+			.quills-form-table { width: 100%; border-collapse: collapse; }
+			.quills-form-table th { width: 230px; text-align: left; vertical-align: top; padding: 12px 15px 12px 0; font-weight: 600; color: #334155; font-size: 13.5px; }
+			.quills-form-table td { padding: 8px 0; }
+			.quills-form-table input[type="text"], .quills-form-table textarea { width: 100%; max-width: 680px; border: 1px solid #cbd5e1; border-radius: 6px; padding: 8px 12px; font-size: 14px; }
+			.quills-img-row { display: flex; gap: 12px; align-items: center; margin-bottom: 6px; flex-wrap: wrap; }
+			.quills-img-preview { max-height: 80px; max-width: 140px; object-fit: contain; border-radius: 4px; border: 1px solid #cbd5e1; background: #fafafa; padding: 2px; }
+			.quills-desc { font-size: 12px; color: #64748b; margin-top: 4px; }
+			.quills-step-box { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 6px; padding: 16px; margin-bottom: 15px; max-width: 700px; }
+		</style>
+
+		<!-- Fast Navigation Jump Bar -->
+		<div class="quills-admin-nav">
+			<a href="#sec-sub-hero">☕ 1. Hero Banner & Breadcrumbs</a>
+			<a href="#sec-sub-intro">🎁 2. Khung Ưu Đãi Túi Quà Tặng</a>
+			<a href="#sec-sub-top-quotes">💬 3. Slider Đánh Giá (Top Reviews)</a>
+			<a href="#sec-sub-bottom-quotes">⭐ 4. Khối Đánh Giá Cuối Trang</a>
+		</div>
+
+		<!-- SECTION 1: HERO BANNER & BREADCRUMBS -->
+		<div class="quills-card" id="sec-sub-hero">
+			<h2 class="quills-card-title">☕ 1. Phần Hero Banner & Điều Hướng (Breadcrumbs)</h2>
+			<table class="quills-form-table">
+				<tr>
+					<th><label for="quills_sub_breadcrumb_home">Chữ liên kết Home (Breadcrumb):</label></th>
+					<td>
+						<input type="text" name="quills_sub_breadcrumb_home" id="quills_sub_breadcrumb_home" value="<?php echo esc_attr( $breadcrumb_home ); ?>">
+						<div class="quills-desc">Mặc định: Home</div>
+					</td>
+				</tr>
+				<tr>
+					<th><label for="quills_sub_breadcrumb_current">Chữ trang hiện tại (Breadcrumb):</label></th>
+					<td>
+						<input type="text" name="quills_sub_breadcrumb_current" id="quills_sub_breadcrumb_current" value="<?php echo esc_attr( $breadcrumb_cur ); ?>">
+						<div class="quills-desc">Mặc định: Subscriptions</div>
+					</td>
+				</tr>
+				<tr>
+					<th><label for="quills_sub_hero_title">Tiêu đề Hero Banner:</label></th>
+					<td>
+						<input type="text" name="quills_sub_hero_title" id="quills_sub_hero_title" value="<?php echo esc_attr( $hero_title ); ?>">
+						<div class="quills-desc">Mặc định: Subscriptions</div>
+					</td>
+				</tr>
+				<tr>
+					<th><label for="quills_sub_hero_img">Ảnh bìa Hero Banner:</label></th>
+					<td>
+						<div class="quills-img-row">
+							<img id="preview_quills_sub_hero_img" src="<?php echo esc_url( $banner_img ); ?>" class="quills-img-preview" alt="Subscriptions Hero Preview" />
+							<input type="text" name="quills_sub_hero_img" id="quills_sub_hero_img" value="<?php echo esc_attr( $banner_img ); ?>" style="max-width: 400px;">
+							<button type="button" class="button quills-upload-btn" data-target="#quills_sub_hero_img" data-preview="#preview_quills_sub_hero_img">📁 Chọn / Tải ảnh lên</button>
+							<button type="button" class="button quills-reset-btn" data-target="#quills_sub_hero_img" data-preview="#preview_quills_sub_hero_img" data-default="<?php echo esc_attr( $sub_img_dir . 'subscriptions-banner.png' ); ?>">Khôi phục</button>
+						</div>
+						<div class="quills-desc">Mặc định: assets/images/subscriptions-banner.png</div>
+					</td>
+				</tr>
+			</table>
+		</div>
+
+		<!-- SECTION 2: FREE BAG INTRO COPY -->
+		<div class="quills-card" id="sec-sub-intro">
+			<h2 class="quills-card-title">🎁 2. Khung Ưu Đãi Túi Quà Tặng (Free Bag Intro)</h2>
+			<table class="quills-form-table">
+				<tr>
+					<th><label for="quills_sub_intro_title">Tiêu đề ưu đãi:</label></th>
+					<td>
+						<input type="text" name="quills_sub_intro_title" id="quills_sub_intro_title" value="<?php echo esc_attr( $intro_title ); ?>">
+						<div class="quills-desc">Mặc định: Get a free 12oz bag of Inkwell when you subscribe.</div>
+					</td>
+				</tr>
+				<tr>
+					<th><label for="quills_sub_intro_desc">Đoạn văn mô tả ưu đãi:</label></th>
+					<td>
+						<textarea name="quills_sub_intro_desc" id="quills_sub_intro_desc" rows="3"><?php echo esc_textarea( $intro_desc ); ?></textarea>
+					</td>
+				</tr>
+				<tr>
+					<th><label for="quills_sub_intro_note">Ghi chú điều kiện ưu đãi:</label></th>
+					<td>
+						<input type="text" name="quills_sub_intro_note" id="quills_sub_intro_note" value="<?php echo esc_attr( $intro_note ); ?>">
+						<div class="quills-desc">Mặc định: (Free bag offer valid for new subscribers only.)</div>
+					</td>
+				</tr>
+			</table>
+		</div>
+
+		<!-- SECTION 3: TOP TESTIMONIAL SLIDER -->
+		<div class="quills-card" id="sec-sub-top-quotes">
+			<h2 class="quills-card-title">💬 3. Slider Đánh Giá Phía Trên (Top Customer Reviews)</h2>
+			<p class="quills-desc" style="margin-bottom: 16px;">Slider xoay vòng 3 đánh giá thực tế của khách hàng kèm 5 sao vàng:</p>
+
+			<div class="quills-step-box">
+				<h4 style="margin: 0 0 10px; color: #663A1E;">⭐ Đánh giá 1:</h4>
+				<table class="quills-form-table">
+					<tr>
+						<th style="width: 140px;"><label for="quills_sub_top_q1_text">Nội dung trích dẫn:</label></th>
+						<td><input type="text" name="quills_sub_top_q1_text" id="quills_sub_top_q1_text" value="<?php echo esc_attr( $top_q1_text ); ?>"></td>
+					</tr>
+					<tr>
+						<th><label for="quills_sub_top_q1_author">Tác giả:</label></th>
+						<td><input type="text" name="quills_sub_top_q1_author" id="quills_sub_top_q1_author" value="<?php echo esc_attr( $top_q1_author ); ?>"></td>
+					</tr>
+				</table>
+			</div>
+
+			<div class="quills-step-box">
+				<h4 style="margin: 0 0 10px; color: #663A1E;">⭐ Đánh giá 2:</h4>
+				<table class="quills-form-table">
+					<tr>
+						<th style="width: 140px;"><label for="quills_sub_top_q2_text">Nội dung trích dẫn:</label></th>
+						<td><input type="text" name="quills_sub_top_q2_text" id="quills_sub_top_q2_text" value="<?php echo esc_attr( $top_q2_text ); ?>"></td>
+					</tr>
+					<tr>
+						<th><label for="quills_sub_top_q2_author">Tác giả:</label></th>
+						<td><input type="text" name="quills_sub_top_q2_author" id="quills_sub_top_q2_author" value="<?php echo esc_attr( $top_q2_author ); ?>"></td>
+					</tr>
+				</table>
+			</div>
+
+			<div class="quills-step-box">
+				<h4 style="margin: 0 0 10px; color: #663A1E;">⭐ Đánh giá 3:</h4>
+				<table class="quills-form-table">
+					<tr>
+						<th style="width: 140px;"><label for="quills_sub_top_q3_text">Nội dung trích dẫn:</label></th>
+						<td><input type="text" name="quills_sub_top_q3_text" id="quills_sub_top_q3_text" value="<?php echo esc_attr( $top_q3_text ); ?>"></td>
+					</tr>
+					<tr>
+						<th><label for="quills_sub_top_q3_author">Tác giả:</label></th>
+						<td><input type="text" name="quills_sub_top_q3_author" id="quills_sub_top_q3_author" value="<?php echo esc_attr( $top_q3_author ); ?>"></td>
+					</tr>
+				</table>
+			</div>
+		</div>
+
+		<!-- SECTION 4: BOTTOM TESTIMONIAL SLIDER -->
+		<div class="quills-card" id="sec-sub-bottom-quotes">
+			<h2 class="quills-card-title">⭐ 4. Khối Đánh Giá Khách Hàng Cuối Trang (Bottom Customer Reviews)</h2>
+			<table class="quills-form-table">
+				<tr>
+					<th><label for="quills_sub_bottom_heading">Tiêu đề khối đánh giá:</label></th>
+					<td>
+						<input type="text" name="quills_sub_bottom_heading" id="quills_sub_bottom_heading" value="<?php echo esc_attr( $bottom_heading ); ?>">
+						<div class="quills-desc">Mặc định: More kind words from customers</div>
+					</td>
+				</tr>
+			</table>
+
+			<div class="quills-step-box" style="margin-top: 15px;">
+				<h4 style="margin: 0 0 10px; color: #663A1E;">⭐ Lời khen 1:</h4>
+				<table class="quills-form-table">
+					<tr>
+						<th style="width: 140px;"><label for="quills_sub_bottom_q1_text">Nội dung trích dẫn:</label></th>
+						<td><input type="text" name="quills_sub_bottom_q1_text" id="quills_sub_bottom_q1_text" value="<?php echo esc_attr( $bottom_q1_text ); ?>"></td>
+					</tr>
+					<tr>
+						<th><label for="quills_sub_bottom_q1_author">Tác giả:</label></th>
+						<td><input type="text" name="quills_sub_bottom_q1_author" id="quills_sub_bottom_q1_author" value="<?php echo esc_attr( $bottom_q1_author ); ?>"></td>
+					</tr>
+				</table>
+			</div>
+
+			<div class="quills-step-box">
+				<h4 style="margin: 0 0 10px; color: #663A1E;">⭐ Lời khen 2:</h4>
+				<table class="quills-form-table">
+					<tr>
+						<th style="width: 140px;"><label for="quills_sub_bottom_q2_text">Nội dung trích dẫn:</label></th>
+						<td><input type="text" name="quills_sub_bottom_q2_text" id="quills_sub_bottom_q2_text" value="<?php echo esc_attr( $bottom_q2_text ); ?>"></td>
+					</tr>
+					<tr>
+						<th><label for="quills_sub_bottom_q2_author">Tác giả:</label></th>
+						<td><input type="text" name="quills_sub_bottom_q2_author" id="quills_sub_bottom_q2_author" value="<?php echo esc_attr( $bottom_q2_author ); ?>"></td>
+					</tr>
+				</table>
+			</div>
+
+			<div class="quills-step-box">
+				<h4 style="margin: 0 0 10px; color: #663A1E;">⭐ Lời khen 3:</h4>
+				<table class="quills-form-table">
+					<tr>
+						<th style="width: 140px;"><label for="quills_sub_bottom_q3_text">Nội dung trích dẫn:</label></th>
+						<td><input type="text" name="quills_sub_bottom_q3_text" id="quills_sub_bottom_q3_text" value="<?php echo esc_attr( $bottom_q3_text ); ?>"></td>
+					</tr>
+					<tr>
+						<th><label for="quills_sub_bottom_q3_author">Tác giả:</label></th>
+						<td><input type="text" name="quills_sub_bottom_q3_author" id="quills_sub_bottom_q3_author" value="<?php echo esc_attr( $bottom_q3_author ); ?>"></td>
+					</tr>
+				</table>
+			</div>
+		</div>
+
+		<script>
+		jQuery(document).ready(function($) {
+			$('.quills-upload-btn').on('click', function(e) {
+				e.preventDefault();
+				var targetInput = $( $(this).data('target') );
+				var previewImg  = $( $(this).data('preview') );
+
+				var frame = wp.media({
+					title: 'Chọn hoặc tải ảnh lên cho Trang Gói Định Kỳ',
+					button: { text: 'Sử dụng ảnh này' },
+					multiple: false
+				});
+
+				frame.on('select', function() {
+					var attachment = frame.state().get('selection').first().toJSON();
+					targetInput.val(attachment.url);
+					if (previewImg.length) {
+						previewImg.attr('src', attachment.url);
+					}
+				});
+
+				frame.open();
+			});
+
+			$('.quills-reset-btn').on('click', function(e) {
+				e.preventDefault();
+				var targetInput = $( $(this).data('target') );
+				var previewImg  = $( $(this).data('preview') );
+				var defaultVal  = $(this).data('default');
+				targetInput.val(defaultVal);
+				if (previewImg.length) {
+					previewImg.attr('src', defaultVal);
+				}
+			});
+		});
+		</script>
+		<?php
+	}
+
+	/**
+	 * Handle POST submission from Appearance -> Cài đặt Gói định kỳ (Subscriptions)
+	 */
+	public static function handle_subscriptions_settings_save() {
+		add_action( 'admin_post_quills_save_subscriptions_settings', function() {
+			if ( ! isset( $_POST['quills_subscriptions_settings_nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['quills_subscriptions_settings_nonce'] ) ), 'quills_subscriptions_settings_action' ) ) {
+				wp_die( 'Lỗi bảo mật (Invalid nonce).' );
+			}
+
+			if ( ! current_user_can( 'manage_options' ) ) {
+				wp_die( 'Bạn không có quyền thực hiện thao tác này.' );
+			}
+
+			self::save_subscriptions_fields( $_POST );
+
+			wp_safe_redirect( add_query_arg( array( 'page' => 'quills-subscriptions-settings', 'updated' => '1' ), admin_url( 'themes.php' ) ) );
+			exit;
+		} );
+	}
+
+	/**
+	 * Save Subscriptions fields to wp_options
+	 */
+	public static function save_subscriptions_fields( $data ) {
+		$text_fields = array(
+			'quills_sub_breadcrumb_home',
+			'quills_sub_breadcrumb_current',
+			'quills_sub_hero_title',
+			'quills_sub_hero_img',
+
+			'quills_sub_intro_title',
+			'quills_sub_intro_note',
+
+			'quills_sub_top_q1_text',
+			'quills_sub_top_q1_author',
+			'quills_sub_top_q2_text',
+			'quills_sub_top_q2_author',
+			'quills_sub_top_q3_text',
+			'quills_sub_top_q3_author',
+
+			'quills_sub_bottom_heading',
+			'quills_sub_bottom_q1_text',
+			'quills_sub_bottom_q1_author',
+			'quills_sub_bottom_q2_text',
+			'quills_sub_bottom_q2_author',
+			'quills_sub_bottom_q3_text',
+			'quills_sub_bottom_q3_author',
+		);
+
+		foreach ( $text_fields as $field ) {
+			if ( isset( $data[ $field ] ) ) {
+				update_option( $field, sanitize_text_field( wp_unslash( $data[ $field ] ) ) );
+			}
+		}
+
+		$textarea_fields = array(
+			'quills_sub_intro_desc',
+		);
+
+		$allowed = array(
+			'br'     => array(),
+			'strong' => array(),
+			'em'     => array(),
+			'p'      => array(),
+			'span'   => array(
+				'class' => array(),
+				'style' => array(),
+			),
+		);
+
+		foreach ( $textarea_fields as $field ) {
+			if ( isset( $data[ $field ] ) ) {
+				update_option( $field, wp_kses( wp_unslash( $data[ $field ] ), $allowed ) );
+			}
+		}
+
+		// Clear transients & cache
+		delete_transient( 'quills_sub_content' );
+		clean_post_cache( 59 );
+		if ( function_exists( 'wp_cache_flush' ) ) {
+			wp_cache_flush();
+		}
+		self::clear_page_cache();
+	}
+
+	/**
+	 * Render Meta Box for Merch Page (in page 'Merch')
+	 */
+	public static function render_merch_meta_box( $post ) {
+		wp_nonce_field( 'quills_merch_meta_nonce', 'quills_merch_meta_nonce_field' );
+		self::render_merch_form_fields();
+	}
+
+	/**
+	 * Render Standalone Merch Settings Page under Appearance
+	 */
+	public static function render_merch_settings_page() {
+		?>
+		<div class="wrap">
+			<h1 style="display: flex; align-items: center; gap: 10px; margin-bottom: 20px;">
+				<span>👕 Quản lý Toàn Bộ Nội dung Trang Hàng Lưu Niệm (Merch)</span>
+			</h1>
+
+			<?php if ( isset( $_GET['updated'] ) ) : ?>
+				<div class="notice notice-success is-dismissible">
+					<p><strong>✅ Dữ liệu Trang Hàng lưu niệm (Merch) đã được lưu thành công vào Database!</strong> Hãy mở trang /merch/ ngoài giao diện và tải lại để xem nội dung mới nhất.</p>
+				</div>
+			<?php endif; ?>
+
+			<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
+				<input type="hidden" name="action" value="quills_save_merch_settings">
+				<?php wp_nonce_field( 'quills_merch_settings_action', 'quills_merch_settings_nonce' ); ?>
+
+				<?php self::render_merch_form_fields(); ?>
+
+				<div style="position: sticky; bottom: 20px; background: #fff; padding: 15px 20px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); border: 1px solid #cbd5e1; z-index: 100; display: flex; justify-content: space-between; align-items: center;">
+					<span style="font-weight: 600; color: #334155;">✨ Nhấn nút Lưu sau khi chỉnh sửa bất kỳ mục nào trên trang Merch:</span>
+					<input type="submit" name="submit" id="submit" class="button button-primary button-large" style="height: 44px; padding: 0 24px; font-size: 15px; font-weight: 700; background: #663A1E; border-color: #4a2812;" value="💾 Lưu Toàn Bộ Thay Đổi Trang Hàng Lưu Niệm (Save Merch Settings)">
+				</div>
+			</form>
+		</div>
+		<?php
+	}
+
+	/**
+	 * Shared Form Fields for Merch Page
+	 */
+	public static function render_merch_form_fields() {
+		$merch_img_dir = trailingslashit( get_template_directory_uri() ) . 'assets/images/merch/';
+
+		$breadcrumb_home = get_option( 'quills_merch_breadcrumb_home', 'Home' );
+		$breadcrumb_cur  = get_option( 'quills_merch_breadcrumb_current', 'Merch' );
+		$banner_title    = get_option( 'quills_merch_banner_title', 'Merch' );
+		$banner_img      = get_option( 'quills_merch_banner_image', $merch_img_dir . 'banner-merch.jpg' );
+
+		$sort_label       = get_option( 'quills_merch_sort_label', 'Sort by:' );
+		$add_to_cart_text = get_option( 'quills_merch_add_to_cart_text', 'ADD TO CART' );
+		$sold_out_text    = get_option( 'quills_merch_sold_out_text', 'SOLD OUT' );
+		$no_products_text = get_option( 'quills_merch_no_products_text', 'No products found.' );
+		?>
+		<style>
+			.quills-admin-nav { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 20px; background: #fff; padding: 12px 16px; border-radius: 8px; border: 1px solid #cbd5e1; position: sticky; top: 32px; z-index: 99; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+			.quills-admin-nav a { text-decoration: none; font-size: 13px; font-weight: 600; color: #475569; padding: 6px 12px; border-radius: 6px; background: #f1f5f9; transition: all 0.2s; }
+			.quills-admin-nav a:hover { background: #663A1E; color: #fff; }
+			.quills-card { background: #ffffff; border: 1px solid #e2e8f0; border-radius: 8px; padding: 22px; margin-bottom: 24px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
+			.quills-card-title { font-size: 17px; font-weight: 700; color: #1e293b; margin-top: 0; margin-bottom: 18px; border-bottom: 2px solid #663A1E; padding-bottom: 10px; display: flex; align-items: center; gap: 8px; }
+			.quills-form-table { width: 100%; border-collapse: collapse; }
+			.quills-form-table th { width: 230px; text-align: left; vertical-align: top; padding: 12px 15px 12px 0; font-weight: 600; color: #334155; font-size: 13.5px; }
+			.quills-form-table td { padding: 8px 0; }
+			.quills-form-table input[type="text"], .quills-form-table textarea { width: 100%; max-width: 680px; border: 1px solid #cbd5e1; border-radius: 6px; padding: 8px 12px; font-size: 14px; }
+			.quills-img-row { display: flex; gap: 12px; align-items: center; margin-bottom: 6px; flex-wrap: wrap; }
+			.quills-img-preview { max-height: 80px; max-width: 140px; object-fit: contain; border-radius: 4px; border: 1px solid #cbd5e1; background: #fafafa; padding: 2px; }
+			.quills-desc { font-size: 12px; color: #64748b; margin-top: 4px; }
+		</style>
+
+		<!-- Fast Navigation Jump Bar -->
+		<div class="quills-admin-nav">
+			<a href="#sec-merch-hero">👕 1. Hero Banner & Điều Hướng</a>
+			<a href="#sec-merch-toolbar">🔧 2. Thanh Công Cụ & Nhãn Nút</a>
+		</div>
+
+		<!-- SECTION 1: HERO BANNER & BREADCRUMBS -->
+		<div class="quills-card" id="sec-merch-hero">
+			<h2 class="quills-card-title">👕 1. Phần Hero Banner & Điều Hướng (Breadcrumbs)</h2>
+			<table class="quills-form-table">
+				<tr>
+					<th><label for="quills_merch_breadcrumb_home">Chữ liên kết Home (Breadcrumb):</label></th>
+					<td>
+						<input type="text" name="quills_merch_breadcrumb_home" id="quills_merch_breadcrumb_home" value="<?php echo esc_attr( $breadcrumb_home ); ?>">
+						<div class="quills-desc">Mặc định: Home</div>
+					</td>
+				</tr>
+				<tr>
+					<th><label for="quills_merch_breadcrumb_current">Chữ trang hiện tại (Breadcrumb):</label></th>
+					<td>
+						<input type="text" name="quills_merch_breadcrumb_current" id="quills_merch_breadcrumb_current" value="<?php echo esc_attr( $breadcrumb_cur ); ?>">
+						<div class="quills-desc">Mặc định: Merch</div>
+					</td>
+				</tr>
+				<tr>
+					<th><label for="quills_merch_banner_title">Tiêu đề Hero Banner:</label></th>
+					<td>
+						<input type="text" name="quills_merch_banner_title" id="quills_merch_banner_title" value="<?php echo esc_attr( $banner_title ); ?>">
+						<div class="quills-desc">Mặc định: Merch</div>
+					</td>
+				</tr>
+				<tr>
+					<th><label for="quills_merch_banner_image">Ảnh bìa Hero Banner:</label></th>
+					<td>
+						<div class="quills-img-row">
+							<img id="preview_quills_merch_banner_image" src="<?php echo esc_url( $banner_img ); ?>" class="quills-img-preview" alt="Merch Hero Preview" />
+							<input type="text" name="quills_merch_banner_image" id="quills_merch_banner_image" value="<?php echo esc_attr( $banner_img ); ?>" style="max-width: 400px;">
+							<button type="button" class="button quills-upload-btn" data-target="#quills_merch_banner_image" data-preview="#preview_quills_merch_banner_image">📁 Chọn / Tải ảnh lên</button>
+							<button type="button" class="button quills-reset-btn" data-target="#quills_merch_banner_image" data-preview="#preview_quills_merch_banner_image" data-default="<?php echo esc_attr( $merch_img_dir . 'banner-merch.jpg' ); ?>">Khôi phục</button>
+						</div>
+						<div class="quills-desc">Mặc định: assets/images/merch/banner-merch.jpg</div>
+					</td>
+				</tr>
+			</table>
+		</div>
+
+		<!-- SECTION 2: TOOLBAR & BUTTON LABELS -->
+		<div class="quills-card" id="sec-merch-toolbar">
+			<h2 class="quills-card-title">🔧 2. Thanh Công Cụ & Nhãn Nút Bấm</h2>
+			<table class="quills-form-table">
+				<tr>
+					<th><label for="quills_merch_sort_label">Nhãn sắp xếp (Sort by label):</label></th>
+					<td>
+						<input type="text" name="quills_merch_sort_label" id="quills_merch_sort_label" value="<?php echo esc_attr( $sort_label ); ?>">
+						<div class="quills-desc">Mặc định: Sort by:</div>
+					</td>
+				</tr>
+				<tr>
+					<th><label for="quills_merch_add_to_cart_text">Chữ trên nút thêm vào giỏ:</label></th>
+					<td>
+						<input type="text" name="quills_merch_add_to_cart_text" id="quills_merch_add_to_cart_text" value="<?php echo esc_attr( $add_to_cart_text ); ?>">
+						<div class="quills-desc">Mặc định: ADD TO CART</div>
+					</td>
+				</tr>
+				<tr>
+					<th><label for="quills_merch_sold_out_text">Chữ khi sản phẩm hết hàng:</label></th>
+					<td>
+						<input type="text" name="quills_merch_sold_out_text" id="quills_merch_sold_out_text" value="<?php echo esc_attr( $sold_out_text ); ?>">
+						<div class="quills-desc">Mặc định: SOLD OUT</div>
+					</td>
+				</tr>
+				<tr>
+					<th><label for="quills_merch_no_products_text">Thông báo khi không có sản phẩm:</label></th>
+					<td>
+						<input type="text" name="quills_merch_no_products_text" id="quills_merch_no_products_text" value="<?php echo esc_attr( $no_products_text ); ?>">
+						<div class="quills-desc">Mặc định: No products found.</div>
+					</td>
+				</tr>
+			</table>
+		</div>
+
+		<script>
+		jQuery(document).ready(function($) {
+			$('.quills-upload-btn').on('click', function(e) {
+				e.preventDefault();
+				var targetInput = $( $(this).data('target') );
+				var previewImg  = $( $(this).data('preview') );
+
+				var frame = wp.media({
+					title: 'Chọn hoặc tải ảnh lên cho Trang Hàng Lưu Niệm',
+					button: { text: 'Sử dụng ảnh này' },
+					multiple: false
+				});
+
+				frame.on('select', function() {
+					var attachment = frame.state().get('selection').first().toJSON();
+					targetInput.val(attachment.url);
+					if (previewImg.length) {
+						previewImg.attr('src', attachment.url);
+					}
+				});
+
+				frame.open();
+			});
+
+			$('.quills-reset-btn').on('click', function(e) {
+				e.preventDefault();
+				var targetInput = $( $(this).data('target') );
+				var previewImg  = $( $(this).data('preview') );
+				var defaultVal  = $(this).data('default');
+				targetInput.val(defaultVal);
+				if (previewImg.length) {
+					previewImg.attr('src', defaultVal);
+				}
+			});
+		});
+		</script>
+		<?php
+	}
+
+	/**
+	 * Handle POST submission from Appearance -> Cài đặt Hàng lưu niệm (Merch)
+	 */
+	public static function handle_merch_settings_save() {
+		add_action( 'admin_post_quills_save_merch_settings', function() {
+			if ( ! isset( $_POST['quills_merch_settings_nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['quills_merch_settings_nonce'] ) ), 'quills_merch_settings_action' ) ) {
+				wp_die( 'Lỗi bảo mật (Invalid nonce).' );
+			}
+
+			if ( ! current_user_can( 'manage_options' ) ) {
+				wp_die( 'Bạn không có quyền thực hiện thao tác này.' );
+			}
+
+			self::save_merch_fields( $_POST );
+
+			wp_safe_redirect( add_query_arg( array( 'page' => 'quills-merch-settings', 'updated' => '1' ), admin_url( 'themes.php' ) ) );
+			exit;
+		} );
+	}
+
+	/**
+	 * Save Merch fields to wp_options
+	 */
+	public static function save_merch_fields( $data ) {
+		$text_fields = array(
+			'quills_merch_breadcrumb_home',
+			'quills_merch_breadcrumb_current',
+			'quills_merch_banner_title',
+			'quills_merch_banner_image',
+			'quills_merch_sort_label',
+			'quills_merch_add_to_cart_text',
+			'quills_merch_sold_out_text',
+			'quills_merch_no_products_text',
+		);
+
+		foreach ( $text_fields as $field ) {
+			if ( isset( $data[ $field ] ) ) {
+				update_option( $field, sanitize_text_field( wp_unslash( $data[ $field ] ) ) );
+			}
+		}
+
+		// Clear transients & cache
+		delete_transient( 'quills_merch_content' );
+		clean_post_cache( 69 );
+		if ( function_exists( 'wp_cache_flush' ) ) {
+			wp_cache_flush();
+		}
+		self::clear_page_cache();
+	}
+
+	/**
+	 * Render Meta Box for Wholesale Page (in page 'Wholesale')
+	 */
+	public static function render_wholesale_meta_box( $post ) {
+		wp_nonce_field( 'quills_wholesale_meta_nonce', 'quills_wholesale_meta_nonce_field' );
+		self::render_wholesale_form_fields();
+	}
+
+	/**
+	 * Render Standalone Wholesale Settings Page under Appearance
+	 */
+	public static function render_wholesale_settings_page() {
+		?>
+		<div class="wrap">
+			<h1 style="display: flex; align-items: center; gap: 10px; margin-bottom: 20px;">
+				<span>🤝 Quản lý Toàn Bộ Nội dung Trang Bán Buôn (Wholesale)</span>
+			</h1>
+
+			<?php if ( isset( $_GET['updated'] ) ) : ?>
+				<div class="notice notice-success is-dismissible">
+					<p><strong>✅ Dữ liệu Trang Bán buôn (Wholesale) đã được lưu thành công vào Database!</strong> Hãy mở trang /wholesale/ ngoài giao diện và tải lại để xem nội dung mới nhất.</p>
+				</div>
+			<?php endif; ?>
+
+			<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
+				<input type="hidden" name="action" value="quills_save_wholesale_settings">
+				<?php wp_nonce_field( 'quills_wholesale_settings_action', 'quills_wholesale_settings_nonce' ); ?>
+
+				<?php self::render_wholesale_form_fields(); ?>
+
+				<div style="position: sticky; bottom: 20px; background: #fff; padding: 15px 20px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); border: 1px solid #cbd5e1; z-index: 100; display: flex; justify-content: space-between; align-items: center;">
+					<span style="font-weight: 600; color: #334155;">✨ Nhấn nút Lưu sau khi chỉnh sửa bất kỳ mục nào trên trang Bán buôn:</span>
+					<input type="submit" name="submit" id="submit" class="button button-primary button-large" style="height: 44px; padding: 0 24px; font-size: 15px; font-weight: 700; background: #663A1E; border-color: #4a2812;" value="💾 Lưu Toàn Bộ Thay Đổi Trang Bán Buôn (Save Wholesale Settings)">
+				</div>
+			</form>
+		</div>
+		<?php
+	}
+
+	/**
+	 * Shared Form Fields for Wholesale Page
+	 */
+	public static function render_wholesale_form_fields() {
+		$data = class_exists( 'Coffee_Cafe_Corner_Wholesale_DB' ) ? Coffee_Cafe_Corner_Wholesale_DB::get_wholesale_data() : array();
+
+		$hero_title        = $data['hero_title'] ?? 'Wholesale Coffee Roasting';
+		$intro_heading     = $data['intro_heading'] ?? "Hey there! I'm Michael.";
+		$intro_lead        = $data['intro_lead'] ?? 'We want to help you build a cafe people love coming back to.';
+		$paragraphs        = $data['paragraphs'] ?? array();
+		$p1                = $paragraphs[0] ?? 'After 19 years and seven cafes of our own, we know what a new owner needs from a coffee partner.';
+		$p2                = $paragraphs[1] ?? 'You get coffee we serve in our own cafes, recipes and training for your baristas, and my personal cell for when you need a hand.';
+		$p3                = $paragraphs[2] ?? 'Answer a few questions below to get your samples. I\'ll reach out to talk through your coffee program and arrange a free sample box.';
+		$video_id          = $data['video_id'] ?? 'zihbfybcjm';
+		$video_subtitle    = $data['video_subtitle'] ?? 'and we would love to help you elevate your coffee game.';
+		$form_mode         = $data['form_mode'] ?? 'direct';
+		$typeform_id       = $data['typeform_id'] ?? '01KTS8WAR0STGANR36ZWT3PJAP';
+		$form_title        = $data['form_title'] ?? 'Request your samples';
+		$form_subtitle     = $data['form_subtitle'] ?? 'Tell us a little about you and your business';
+		$form_button_text  = $data['form_button_text'] ?? 'Get started';
+		$form_time_estimate= $data['form_time_estimate'] ?? 'Takes 1 minute';
+		$form_submit_label = $data['form_submit_label'] ?? 'Send Sample Request';
+		$form_success_message = $data['form_success_message'] ?? 'Thank you! Michael will review your details and reach out soon with sample box arrangements.';
+		?>
+		<style>
+			.quills-admin-nav { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 20px; background: #fff; padding: 12px 16px; border-radius: 8px; border: 1px solid #cbd5e1; position: sticky; top: 32px; z-index: 99; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+			.quills-admin-nav a { text-decoration: none; font-size: 13px; font-weight: 600; color: #475569; padding: 6px 12px; border-radius: 6px; background: #f1f5f9; transition: all 0.2s; }
+			.quills-admin-nav a:hover { background: #663A1E; color: #fff; }
+			.quills-card { background: #ffffff; border: 1px solid #e2e8f0; border-radius: 8px; padding: 22px; margin-bottom: 24px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
+			.quills-card-title { font-size: 17px; font-weight: 700; color: #1e293b; margin-top: 0; margin-bottom: 18px; border-bottom: 2px solid #663A1E; padding-bottom: 10px; display: flex; align-items: center; gap: 8px; }
+			.quills-form-table { width: 100%; border-collapse: collapse; }
+			.quills-form-table th { width: 230px; text-align: left; vertical-align: top; padding: 12px 15px 12px 0; font-weight: 600; color: #334155; font-size: 13.5px; }
+			.quills-form-table td { padding: 8px 0; }
+			.quills-form-table input[type="text"], .quills-form-table textarea, .quills-form-table select { width: 100%; max-width: 680px; border: 1px solid #cbd5e1; border-radius: 6px; padding: 8px 12px; font-size: 14px; }
+			.quills-desc { font-size: 12px; color: #64748b; margin-top: 4px; }
+		</style>
+
+		<!-- Fast Navigation Jump Bar -->
+		<div class="quills-admin-nav">
+			<a href="#sec-wholesale-hero">☕ 1. Hero Banner</a>
+			<a href="#sec-wholesale-video">📹 2. Video Wistia & Michael</a>
+			<a href="#sec-wholesale-story">📝 3. Câu Chuyện & Đoạn Văn</a>
+			<a href="#sec-wholesale-form">📋 4. Form Nhận Mẫu Thử (Sample Request)</a>
+		</div>
+
+		<!-- SECTION 1: HERO BANNER -->
+		<div class="quills-card" id="sec-wholesale-hero">
+			<h2 class="quills-card-title">☕ 1. Tiêu Đề Hero Banner</h2>
+			<table class="quills-form-table">
+				<tr>
+					<th><label for="quills_wholesale_hero_title">Tiêu đề Hero Banner:</label></th>
+					<td>
+						<input type="text" name="quills_wholesale_hero_title" id="quills_wholesale_hero_title" value="<?php echo esc_attr( $hero_title ); ?>">
+						<div class="quills-desc">Mặc định: Wholesale Coffee Roasting</div>
+					</td>
+				</tr>
+			</table>
+		</div>
+
+		<!-- SECTION 2: VIDEO WISTIA -->
+		<div class="quills-card" id="sec-wholesale-video">
+			<h2 class="quills-card-title">📹 2. Cấu Hình Video Wistia & Phụ Đề</h2>
+			<table class="quills-form-table">
+				<tr>
+					<th><label for="quills_wholesale_video_id">Mã ID Video Wistia:</label></th>
+					<td>
+						<input type="text" name="quills_wholesale_video_id" id="quills_wholesale_video_id" value="<?php echo esc_attr( $video_id ); ?>" style="max-width: 320px;">
+						<div class="quills-desc">Mã định danh media trên Wistia (ví dụ: <code>zihbfybcjm</code>).</div>
+					</td>
+				</tr>
+				<tr>
+					<th><label for="quills_wholesale_video_subtitle">Phụ đề dưới video:</label></th>
+					<td>
+						<input type="text" name="quills_wholesale_video_subtitle" id="quills_wholesale_video_subtitle" value="<?php echo esc_attr( $video_subtitle ); ?>">
+						<div class="quills-desc">Mặc định: and we would love to help you elevate your coffee game.</div>
+					</td>
+				</tr>
+			</table>
+		</div>
+
+		<!-- SECTION 3: STORY & PARAGRAPHS -->
+		<div class="quills-card" id="sec-wholesale-story">
+			<h2 class="quills-card-title">📝 3. Câu Chuyện Giới Thiệu Của Michael</h2>
+			<table class="quills-form-table">
+				<tr>
+					<th><label for="quills_wholesale_intro_heading">Tiêu đề chào đón (Heading):</label></th>
+					<td>
+						<input type="text" name="quills_wholesale_intro_heading" id="quills_wholesale_intro_heading" value="<?php echo esc_attr( $intro_heading ); ?>">
+						<div class="quills-desc">Mặc định: Hey there! I'm Michael.</div>
+					</td>
+				</tr>
+				<tr>
+					<th><label for="quills_wholesale_intro_lead">Lời mở đầu in đậm (Lead paragraph):</label></th>
+					<td>
+						<textarea name="quills_wholesale_intro_lead" id="quills_wholesale_intro_lead" rows="2"><?php echo esc_textarea( $intro_lead ); ?></textarea>
+						<div class="quills-desc">Mặc định: We want to help you build a cafe people love coming back to.</div>
+					</td>
+				</tr>
+				<tr>
+					<th><label for="quills_wholesale_paragraph_1">Đoạn văn 1 (Kinh nghiệm 19 năm):</label></th>
+					<td>
+						<textarea name="quills_wholesale_paragraph_1" id="quills_wholesale_paragraph_1" rows="3"><?php echo esc_textarea( $p1 ); ?></textarea>
+					</td>
+				</tr>
+				<tr>
+					<th><label for="quills_wholesale_paragraph_2">Đoạn văn 2 (Đào tạo & hotline):</label></th>
+					<td>
+						<textarea name="quills_wholesale_paragraph_2" id="quills_wholesale_paragraph_2" rows="3"><?php echo esc_textarea( $p2 ); ?></textarea>
+					</td>
+				</tr>
+				<tr>
+					<th><label for="quills_wholesale_paragraph_3">Đoạn văn 3 (Gợi ý nhận mẫu thử):</label></th>
+					<td>
+						<textarea name="quills_wholesale_paragraph_3" id="quills_wholesale_paragraph_3" rows="3"><?php echo esc_textarea( $p3 ); ?></textarea>
+					</td>
+				</tr>
+			</table>
+		</div>
+
+		<!-- SECTION 4: SAMPLE REQUEST FORM -->
+		<div class="quills-card" id="sec-wholesale-form">
+			<h2 class="quills-card-title">📋 4. Biểu Mẫu Nhận Mẫu Thử (Sample Request Form)</h2>
+			<table class="quills-form-table">
+				<tr>
+					<th><label for="quills_wholesale_form_mode">Chế độ biểu mẫu:</label></th>
+					<td>
+						<select name="quills_wholesale_form_mode" id="quills_wholesale_form_mode" style="max-width: 240px;">
+							<option value="direct" <?php selected( $form_mode, 'direct' ); ?>>Biểu mẫu trực tiếp (Direct Form)</option>
+							<option value="typeform" <?php selected( $form_mode, 'typeform' ); ?>>Nhúng Typeform (Typeform Embed)</option>
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th><label for="quills_wholesale_typeform_id">ID Typeform (nếu chọn Typeform):</label></th>
+					<td>
+						<input type="text" name="quills_wholesale_typeform_id" id="quills_wholesale_typeform_id" value="<?php echo esc_attr( $typeform_id ); ?>" style="max-width: 320px;">
+					</td>
+				</tr>
+				<tr>
+					<th><label for="quills_wholesale_form_title">Tiêu đề Form:</label></th>
+					<td>
+						<input type="text" name="quills_wholesale_form_title" id="quills_wholesale_form_title" value="<?php echo esc_attr( $form_title ); ?>">
+						<div class="quills-desc">Mặc định: Request your samples</div>
+					</td>
+				</tr>
+				<tr>
+					<th><label for="quills_wholesale_form_subtitle">Phụ đề Form:</label></th>
+					<td>
+						<input type="text" name="quills_wholesale_form_subtitle" id="quills_wholesale_form_subtitle" value="<?php echo esc_attr( $form_subtitle ); ?>">
+						<div class="quills-desc">Mặc định: Tell us a little about you and your business</div>
+					</td>
+				</tr>
+				<tr>
+					<th><label for="quills_wholesale_form_button_text">Chữ trên nút mở Form:</label></th>
+					<td>
+						<input type="text" name="quills_wholesale_form_button_text" id="quills_wholesale_form_button_text" value="<?php echo esc_attr( $form_button_text ); ?>" style="max-width: 240px;">
+						<div class="quills-desc">Mặc định: Get started</div>
+					</td>
+				</tr>
+				<tr>
+					<th><label for="quills_wholesale_form_time_estimate">Dòng thời gian ước tính:</label></th>
+					<td>
+						<input type="text" name="quills_wholesale_form_time_estimate" id="quills_wholesale_form_time_estimate" value="<?php echo esc_attr( $form_time_estimate ); ?>" style="max-width: 240px;">
+						<div class="quills-desc">Mặc định: Takes 1 minute</div>
+					</td>
+				</tr>
+				<tr>
+					<th><label for="quills_wholesale_form_submit_label">Chữ nút gửi thông tin:</label></th>
+					<td>
+						<input type="text" name="quills_wholesale_form_submit_label" id="quills_wholesale_form_submit_label" value="<?php echo esc_attr( $form_submit_label ); ?>" style="max-width: 240px;">
+						<div class="quills-desc">Mặc định: Send Sample Request</div>
+					</td>
+				</tr>
+				<tr>
+					<th><label for="quills_wholesale_form_success_message">Thông báo khi gửi thành công:</label></th>
+					<td>
+						<textarea name="quills_wholesale_form_success_message" id="quills_wholesale_form_success_message" rows="2"><?php echo esc_textarea( $form_success_message ); ?></textarea>
+					</td>
+				</tr>
+			</table>
+		</div>
+		<?php
+	}
+
+	/**
+	 * Handle POST submission from Appearance -> Cài đặt Bán buôn (Wholesale)
+	 */
+	public static function handle_wholesale_settings_save() {
+		add_action( 'admin_post_quills_save_wholesale_settings', function() {
+			if ( ! isset( $_POST['quills_wholesale_settings_nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['quills_wholesale_settings_nonce'] ) ), 'quills_wholesale_settings_action' ) ) {
+				wp_die( 'Lỗi bảo mật (Invalid nonce).' );
+			}
+
+			if ( ! current_user_can( 'manage_options' ) ) {
+				wp_die( 'Bạn không có quyền thực hiện thao tác này.' );
+			}
+
+			self::save_wholesale_fields( $_POST );
+
+			wp_safe_redirect( add_query_arg( array( 'page' => 'quills-wholesale-settings', 'updated' => '1' ), admin_url( 'themes.php' ) ) );
+			exit;
+		} );
+	}
+
+	/**
+	 * Save Wholesale fields to wp_options and postmeta
+	 */
+	public static function save_wholesale_fields( $data ) {
+		$text_fields = array(
+			'quills_wholesale_hero_title',
+			'quills_wholesale_intro_heading',
+			'quills_wholesale_video_id',
+			'quills_wholesale_video_subtitle',
+			'quills_wholesale_form_mode',
+			'quills_wholesale_typeform_id',
+			'quills_wholesale_form_title',
+			'quills_wholesale_form_subtitle',
+			'quills_wholesale_form_button_text',
+			'quills_wholesale_form_time_estimate',
+			'quills_wholesale_form_submit_label',
+		);
+
+		foreach ( $text_fields as $field ) {
+			if ( isset( $data[ $field ] ) ) {
+				update_option( $field, sanitize_text_field( wp_unslash( $data[ $field ] ) ) );
+			}
+		}
+
+		$textarea_fields = array(
+			'quills_wholesale_intro_lead',
+			'quills_wholesale_paragraph_1',
+			'quills_wholesale_paragraph_2',
+			'quills_wholesale_paragraph_3',
+			'quills_wholesale_form_success_message',
+		);
+
+		foreach ( $textarea_fields as $field ) {
+			if ( isset( $data[ $field ] ) ) {
+				update_option( $field, sanitize_textarea_field( wp_unslash( $data[ $field ] ) ) );
+			}
+		}
+
+		// Also sync to page 31 postmeta
+		$wholesale_page = get_page_by_path( 'wholesale' );
+		if ( $wholesale_page ) {
+			$pid = $wholesale_page->ID;
+			$meta_mapping = array(
+				'quills_wholesale_hero_title'           => '_wholesale_hero_title',
+				'quills_wholesale_intro_heading'        => '_wholesale_intro_heading',
+				'quills_wholesale_intro_lead'           => '_wholesale_intro_lead',
+				'quills_wholesale_paragraph_1'          => '_wholesale_paragraph_1',
+				'quills_wholesale_paragraph_2'          => '_wholesale_paragraph_2',
+				'quills_wholesale_paragraph_3'          => '_wholesale_paragraph_3',
+				'quills_wholesale_video_id'             => '_wholesale_video_id',
+				'quills_wholesale_video_subtitle'       => '_wholesale_video_subtitle',
+				'quills_wholesale_form_mode'            => '_wholesale_form_mode',
+				'quills_wholesale_typeform_id'          => '_wholesale_typeform_id',
+				'quills_wholesale_form_title'           => '_wholesale_form_title',
+				'quills_wholesale_form_subtitle'        => '_wholesale_form_subtitle',
+				'quills_wholesale_form_button_text'     => '_wholesale_form_button_text',
+				'quills_wholesale_form_time_estimate'   => '_wholesale_form_time_estimate',
+				'quills_wholesale_form_submit_label'    => '_wholesale_form_submit_label',
+				'quills_wholesale_form_success_message' => '_wholesale_form_success_message',
+			);
+
+			foreach ( $meta_mapping as $opt_key => $meta_key ) {
+				if ( isset( $data[ $opt_key ] ) ) {
+					update_post_meta( $pid, $meta_key, wp_unslash( $data[ $opt_key ] ) );
+				}
+			}
+			clean_post_cache( $pid );
+		}
+
+		// Clear transients & cache
+		delete_transient( 'quills_wholesale_content' );
+		if ( function_exists( 'wp_cache_flush' ) ) {
+			wp_cache_flush();
+		}
+		self::clear_page_cache();
+	}
+
+	/**
+	 * Handle Gift Cards Settings Save from Appearance Submenu
+	 */
+	public static function handle_gift_cards_settings_save() {
+		add_action( 'admin_post_quills_save_gift_cards_settings', function() {
+			if ( ! current_user_can( 'manage_options' ) ) {
+				wp_die( esc_html__( 'Bạn không có quyền thực hiện hành động này.', 'coffee-cafe-corner' ) );
+			}
+
+			check_admin_referer( 'quills_gift_cards_settings_action', 'quills_gift_cards_settings_nonce' );
+
+			self::save_gift_cards_fields( $_POST );
+
+			wp_safe_redirect( add_query_arg( array( 'page' => 'quills-gift-cards-settings', 'updated' => '1' ), admin_url( 'themes.php' ) ) );
+			exit;
+		} );
+	}
+
+	/**
+	 * Save Gift Cards fields to wp_options and postmeta of page 86
+	 */
+	public static function save_gift_cards_fields( $data ) {
+		$text_fields = array(
+			'quills_giftcards_title',
+			'quills_giftcards_online_title',
+			'quills_giftcards_online_img',
+			'quills_giftcards_online_btn_text',
+			'quills_giftcards_online_btn_url',
+			'quills_giftcards_cafe_title',
+			'quills_giftcards_cafe_img',
+			'quills_giftcards_cafe_btn_text',
+			'quills_giftcards_cafe_btn_url',
+		);
+
+		foreach ( $text_fields as $field ) {
+			if ( isset( $data[ $field ] ) ) {
+				update_option( $field, sanitize_text_field( wp_unslash( $data[ $field ] ) ) );
+			}
+		}
+
+		$rich_fields = array(
+			'quills_giftcards_intro_p1',
+			'quills_giftcards_intro_p2',
+			'quills_giftcards_online_desc_1',
+			'quills_giftcards_online_desc_2',
+			'quills_giftcards_cafe_desc_1',
+			'quills_giftcards_cafe_desc_2',
+		);
+
+		foreach ( $rich_fields as $field ) {
+			if ( isset( $data[ $field ] ) ) {
+				update_option( $field, wp_kses_post( wp_unslash( $data[ $field ] ) ) );
+			}
+		}
+
+		// Also sync to page postmeta if page exists
+		$giftcards_page = get_page_by_path( 'gift-cards' );
+		if ( $giftcards_page ) {
+			$pid = $giftcards_page->ID;
+			foreach ( array_merge( $text_fields, $rich_fields ) as $field ) {
+				if ( isset( $data[ $field ] ) ) {
+					update_post_meta( $pid, '_' . $field, wp_unslash( $data[ $field ] ) );
+				}
+			}
+			clean_post_cache( $pid );
+		}
+
+		// Clear transients & cache
+		delete_transient( 'quills_gift_cards_content' );
+		if ( function_exists( 'wp_cache_flush' ) ) {
+			wp_cache_flush();
+		}
+		self::clear_page_cache();
+	}
+
+	/**
+	 * Render Meta Box for Gift Cards Page
+	 */
+	public static function render_gift_cards_meta_box( $post ) {
+		wp_nonce_field( 'quills_gift_cards_meta_nonce', 'quills_gift_cards_meta_nonce_field' );
+		self::render_gift_cards_form_fields();
+	}
+
+	/**
+	 * Render Standalone Gift Cards Settings Page under Appearance
+	 */
+	public static function render_gift_cards_settings_page() {
+		?>
+		<div class="wrap">
+			<h1 style="display: flex; align-items: center; gap: 10px; margin-bottom: 20px;">
+				<span>🎁 Quản lý Toàn Bộ Nội dung Trang Thẻ Quà Tặng (Gift Cards)</span>
+			</h1>
+
+			<?php if ( isset( $_GET['updated'] ) ) : ?>
+				<div class="notice notice-success is-dismissible">
+					<p><strong>✅ Dữ liệu Trang Thẻ quà tặng (Gift Cards) đã được lưu thành công vào Database!</strong> Hãy mở trang /gift-cards/ ngoài giao diện và tải lại để xem nội dung mới nhất.</p>
+				</div>
+			<?php endif; ?>
+
+			<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
+				<input type="hidden" name="action" value="quills_save_gift_cards_settings">
+				<?php wp_nonce_field( 'quills_gift_cards_settings_action', 'quills_gift_cards_settings_nonce' ); ?>
+
+				<?php self::render_gift_cards_form_fields(); ?>
+
+				<div style="position: sticky; bottom: 20px; background: #fff; padding: 15px 20px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); border: 1px solid #cbd5e1; z-index: 100; display: flex; justify-content: space-between; align-items: center;">
+					<span style="font-weight: 600; color: #334155;">✨ Nhấn nút Lưu sau khi chỉnh sửa bất kỳ mục nào trên trang Thẻ quà tặng:</span>
+					<input type="submit" name="submit" id="submit" class="button button-primary button-large" style="height: 44px; padding: 0 24px; font-size: 15px; font-weight: 700; background: #663A1E; border-color: #4a2812;" value="💾 Lưu Toàn Bộ Thay Đổi Trang Thẻ Quà Tặng (Save Gift Cards Settings)">
+				</div>
+			</form>
+		</div>
+		<?php
+	}
+
+	/**
+	 * Shared Form Fields for Gift Cards Page
+	 */
+	public static function render_gift_cards_form_fields() {
+		$img_dir = trailingslashit( get_template_directory_uri() ) . 'assets/images/gift-cards/';
+
+		$gift_card_prod = class_exists( 'Coffee_Cafe_Corner_Quills_Products_DB' )
+			? Coffee_Cafe_Corner_Quills_Products_DB::get_gift_card_product()
+			: null;
+
+		$default_online_url = $gift_card_prod ? get_permalink( $gift_card_prod->get_id() ) : home_url( '/product/gift-card/' );
+		$default_online_img = ( $gift_card_prod && $gift_card_prod->get_image_id() )
+			? ( wp_get_attachment_image_url( $gift_card_prod->get_image_id(), 'full' ) ?: ( $img_dir . 'online-gift-card.png' ) )
+			: ( $img_dir . 'online-gift-card.png' );
+
+		$default_cafe_url   = 'https://app.squareup.com/gift/YYF6MF7Z4KF6C/order';
+		$default_cafe_img   = $img_dir . 'cafe-gift-card.png';
+
+		$title              = get_option( 'quills_giftcards_title', 'Gift Cards' );
+		$intro_p1           = get_option( 'quills_giftcards_intro_p1', 'We sell two different types of gift cards: one for the online store, and the other for use in our cafes.' );
+		$intro_p2           = get_option( 'quills_giftcards_intro_p2', 'Please make sure choose the right gift card for your lucky recipient, as they are not interchangeable.' );
+
+		$online_title       = get_option( 'quills_giftcards_online_title', 'ONLINE STORE GIFT CARD' );
+		$online_img         = get_option( 'quills_giftcards_online_img', '' );
+		$online_desc_1      = get_option( 'quills_giftcards_online_desc_1', 'A gift card that can be used to order whole bean coffee, merchandise, and more <strong>from our website.</strong>' );
+		$online_desc_2      = get_option( 'quills_giftcards_online_desc_2', '<strong>This type of gift card is not valid in our cafes.</strong>' );
+		$online_btn_text    = get_option( 'quills_giftcards_online_btn_text', 'CLICK HERE TO PURCHASE' );
+		$online_btn_url     = get_option( 'quills_giftcards_online_btn_url', '' );
+
+		$cafe_title         = get_option( 'quills_giftcards_cafe_title', 'CAFE / IN STORE GIFT CARD' );
+		$cafe_img           = get_option( 'quills_giftcards_cafe_img', '' );
+		$cafe_desc_1        = get_option( 'quills_giftcards_cafe_desc_1', 'A gift card that can be used in any of our <strong>cafe locations</strong> towards drinks, food, whole bean coffee, and more.' );
+		$cafe_desc_2        = get_option( 'quills_giftcards_cafe_desc_2', '<strong>This type of gift card is not valid for the online store.</strong>' );
+		$cafe_btn_text      = get_option( 'quills_giftcards_cafe_btn_text', 'CLICK HERE TO PURCHASE' );
+		$cafe_btn_url       = get_option( 'quills_giftcards_cafe_btn_url', '' );
+		?>
+		<style>
+			.quills-admin-nav { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 20px; background: #fff; padding: 12px 16px; border-radius: 8px; border: 1px solid #cbd5e1; position: sticky; top: 32px; z-index: 99; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+			.quills-admin-nav a { text-decoration: none; padding: 6px 12px; background: #f1f5f9; color: #334155; border-radius: 4px; font-weight: 500; font-size: 13px; transition: all 0.2s; border: 1px solid #e2e8f0; }
+			.quills-admin-nav a:hover { background: #663A1E; color: #fff; border-color: #663A1E; }
+			.quills-card { background: #fff; border: 1px solid #cbd5e1; border-radius: 8px; padding: 24px; margin-bottom: 24px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
+			.quills-card-title { font-size: 18px; font-weight: 700; color: #1e293b; margin-top: 0; margin-bottom: 16px; padding-bottom: 12px; border-bottom: 2px solid #f1f5f9; display: flex; align-items: center; gap: 8px; }
+			.quills-form-table { width: 100%; border-collapse: collapse; }
+			.quills-form-table th { width: 220px; text-align: left; vertical-align: top; padding: 12px 16px 12px 0; font-weight: 600; color: #475569; font-size: 14px; }
+			.quills-form-table td { vertical-align: top; padding: 12px 0; }
+			.quills-form-table input[type="text"], .quills-form-table textarea { width: 100%; max-width: 680px; padding: 8px 12px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 14px; box-sizing: border-box; }
+			.quills-form-table textarea { font-family: inherit; line-height: 1.5; }
+			.quills-desc { font-size: 12px; color: #64748b; margin-top: 6px; }
+			.quills-img-preview { max-width: 280px; max-height: 180px; object-fit: contain; border-radius: 6px; border: 1px solid #cbd5e1; margin-top: 8px; display: block; background: #faf7f2; padding: 4px; }
+		</style>
+
+		<!-- QUICK JUMP NAVIGATION -->
+		<div class="quills-admin-nav">
+			<a href="#sec-giftcards-header">📌 1. Tiêu Đề & Giới Thiệu Chung</a>
+			<a href="#sec-giftcards-online">🛒 2. Thẻ Quà Tặng Trực Tuyến (Online Store)</a>
+			<a href="#sec-giftcards-cafe">☕ 3. Thẻ Quà Tặng Tại Quán (Cafe / In Store)</a>
+		</div>
+
+		<!-- SECTION 1: HEADER & INTRO -->
+		<div class="quills-card" id="sec-giftcards-header">
+			<h2 class="quills-card-title">📌 1. Tiêu Đề & Lời Dẫn Chung</h2>
+			<table class="quills-form-table">
+				<tr>
+					<th><label for="quills_giftcards_title">Tiêu đề chính trang:</label></th>
+					<td>
+						<input type="text" name="quills_giftcards_title" id="quills_giftcards_title" value="<?php echo esc_attr( $title ); ?>">
+						<div class="quills-desc">Mặc định: Gift Cards</div>
+					</td>
+				</tr>
+				<tr>
+					<th><label for="quills_giftcards_intro_p1">Đoạn giới thiệu 1:</label></th>
+					<td>
+						<textarea name="quills_giftcards_intro_p1" id="quills_giftcards_intro_p1" rows="2"><?php echo esc_textarea( $intro_p1 ); ?></textarea>
+						<div class="quills-desc">Mặc định: We sell two different types of gift cards: one for the online store, and the other for use in our cafes.</div>
+					</td>
+				</tr>
+				<tr>
+					<th><label for="quills_giftcards_intro_p2">Đoạn giới thiệu 2:</label></th>
+					<td>
+						<textarea name="quills_giftcards_intro_p2" id="quills_giftcards_intro_p2" rows="2"><?php echo esc_textarea( $intro_p2 ); ?></textarea>
+						<div class="quills-desc">Mặc định: Please make sure choose the right gift card for your lucky recipient, as they are not interchangeable.</div>
+					</td>
+				</tr>
+			</table>
+		</div>
+
+		<!-- SECTION 2: ONLINE STORE GIFT CARD -->
+		<div class="quills-card" id="sec-giftcards-online">
+			<h2 class="quills-card-title">🛒 2. Thẻ Quà Tặng Trực Tuyến (Online Store Gift Card)</h2>
+			<table class="quills-form-table">
+				<tr>
+					<th><label for="quills_giftcards_online_title">Tiêu đề loại thẻ:</label></th>
+					<td>
+						<input type="text" name="quills_giftcards_online_title" id="quills_giftcards_online_title" value="<?php echo esc_attr( $online_title ); ?>">
+						<div class="quills-desc">Mặc định: ONLINE STORE GIFT CARD</div>
+					</td>
+				</tr>
+				<tr>
+					<th><label>Ảnh đại diện thẻ online:</label></th>
+					<td>
+						<div style="display: flex; gap: 8px; max-width: 680px; align-items: center;">
+							<input type="text" name="quills_giftcards_online_img" id="quills_giftcards_online_img" value="<?php echo esc_attr( $online_img ); ?>" placeholder="Để trống để dùng ảnh mặc định">
+							<button type="button" class="button quills-upload-btn" data-target="#quills_giftcards_online_img" data-preview="#preview_giftcards_online_img">Chọn ảnh</button>
+							<button type="button" class="button quills-reset-btn" data-target="#quills_giftcards_online_img" data-preview="#preview_giftcards_online_img" data-default="">Khôi phục</button>
+						</div>
+						<img id="preview_giftcards_online_img" class="quills-img-preview" src="<?php echo esc_url( ! empty( $online_img ) ? $online_img : $default_online_img ); ?>" alt="Preview">
+					</td>
+				</tr>
+				<tr>
+					<th><label for="quills_giftcards_online_desc_1">Mô tả dòng 1:</label></th>
+					<td>
+						<textarea name="quills_giftcards_online_desc_1" id="quills_giftcards_online_desc_1" rows="2"><?php echo esc_textarea( $online_desc_1 ); ?></textarea>
+						<div class="quills-desc">Hỗ trợ thẻ HTML như &lt;strong&gt;. Mặc định: A gift card that can be used to order whole bean coffee, merchandise, and more &lt;strong&gt;from our website.&lt;/strong&gt;</div>
+					</td>
+				</tr>
+				<tr>
+					<th><label for="quills_giftcards_online_desc_2">Mô tả dòng 2:</label></th>
+					<td>
+						<textarea name="quills_giftcards_online_desc_2" id="quills_giftcards_online_desc_2" rows="2"><?php echo esc_textarea( $online_desc_2 ); ?></textarea>
+						<div class="quills-desc">Mặc định: &lt;strong&gt;This type of gift card is not valid in our cafes.&lt;/strong&gt;</div>
+					</td>
+				</tr>
+				<tr>
+					<th><label for="quills_giftcards_online_btn_text">Chữ trên nút bấm:</label></th>
+					<td>
+						<input type="text" name="quills_giftcards_online_btn_text" id="quills_giftcards_online_btn_text" value="<?php echo esc_attr( $online_btn_text ); ?>" style="max-width: 320px;">
+						<div class="quills-desc">Mặc định: CLICK HERE TO PURCHASE</div>
+					</td>
+				</tr>
+				<tr>
+					<th><label for="quills_giftcards_online_btn_url">Liên kết nút bấm:</label></th>
+					<td>
+						<input type="text" name="quills_giftcards_online_btn_url" id="quills_giftcards_online_btn_url" value="<?php echo esc_attr( $online_btn_url ); ?>" placeholder="<?php echo esc_attr( $default_online_url ); ?>">
+						<div class="quills-desc">Để trống để liên kết tự động tới sản phẩm Gift Card trên WooCommerce (<?php echo esc_html( $default_online_url ); ?>).</div>
+					</td>
+				</tr>
+			</table>
+		</div>
+
+		<!-- SECTION 3: CAFE / IN STORE GIFT CARD -->
+		<div class="quills-card" id="sec-giftcards-cafe">
+			<h2 class="quills-card-title">☕ 3. Thẻ Quà Tặng Tại Quán (Cafe / In Store Gift Card)</h2>
+			<table class="quills-form-table">
+				<tr>
+					<th><label for="quills_giftcards_cafe_title">Tiêu đề loại thẻ:</label></th>
+					<td>
+						<input type="text" name="quills_giftcards_cafe_title" id="quills_giftcards_cafe_title" value="<?php echo esc_attr( $cafe_title ); ?>">
+						<div class="quills-desc">Mặc định: CAFE / IN STORE GIFT CARD</div>
+					</td>
+				</tr>
+				<tr>
+					<th><label>Ảnh đại diện thẻ tại quán:</label></th>
+					<td>
+						<div style="display: flex; gap: 8px; max-width: 680px; align-items: center;">
+							<input type="text" name="quills_giftcards_cafe_img" id="quills_giftcards_cafe_img" value="<?php echo esc_attr( $cafe_img ); ?>" placeholder="Để trống để dùng ảnh mặc định">
+							<button type="button" class="button quills-upload-btn" data-target="#quills_giftcards_cafe_img" data-preview="#preview_giftcards_cafe_img">Chọn ảnh</button>
+							<button type="button" class="button quills-reset-btn" data-target="#quills_giftcards_cafe_img" data-preview="#preview_giftcards_cafe_img" data-default="">Khôi phục</button>
+						</div>
+						<img id="preview_giftcards_cafe_img" class="quills-img-preview" src="<?php echo esc_url( ! empty( $cafe_img ) ? $cafe_img : $default_cafe_img ); ?>" alt="Preview">
+					</td>
+				</tr>
+				<tr>
+					<th><label for="quills_giftcards_cafe_desc_1">Mô tả dòng 1:</label></th>
+					<td>
+						<textarea name="quills_giftcards_cafe_desc_1" id="quills_giftcards_cafe_desc_1" rows="2"><?php echo esc_textarea( $cafe_desc_1 ); ?></textarea>
+						<div class="quills-desc">Hỗ trợ thẻ HTML như &lt;strong&gt;. Mặc định: A gift card that can be used in any of our &lt;strong&gt;cafe locations&lt;/strong&gt; towards drinks, food, whole bean coffee, and more.</div>
+					</td>
+				</tr>
+				<tr>
+					<th><label for="quills_giftcards_cafe_desc_2">Mô tả dòng 2:</label></th>
+					<td>
+						<textarea name="quills_giftcards_cafe_desc_2" id="quills_giftcards_cafe_desc_2" rows="2"><?php echo esc_textarea( $cafe_desc_2 ); ?></textarea>
+						<div class="quills-desc">Mặc định: &lt;strong&gt;This type of gift card is not valid for the online store.&lt;/strong&gt;</div>
+					</td>
+				</tr>
+				<tr>
+					<th><label for="quills_giftcards_cafe_btn_text">Chữ trên nút bấm:</label></th>
+					<td>
+						<input type="text" name="quills_giftcards_cafe_btn_text" id="quills_giftcards_cafe_btn_text" value="<?php echo esc_attr( $cafe_btn_text ); ?>" style="max-width: 320px;">
+						<div class="quills-desc">Mặc định: CLICK HERE TO PURCHASE</div>
+					</td>
+				</tr>
+				<tr>
+					<th><label for="quills_giftcards_cafe_btn_url">Liên kết nút bấm:</label></th>
+					<td>
+						<input type="text" name="quills_giftcards_cafe_btn_url" id="quills_giftcards_cafe_btn_url" value="<?php echo esc_attr( $cafe_btn_url ); ?>" placeholder="<?php echo esc_attr( $default_cafe_url ); ?>">
+						<div class="quills-desc">Mặc định: <?php echo esc_html( $default_cafe_url ); ?></div>
+					</td>
+				</tr>
+			</table>
+		</div>
+
+		<script>
+		jQuery(document).ready(function($) {
+			$('.quills-upload-btn').on('click', function(e) {
+				e.preventDefault();
+				var targetInput = $( $(this).data('target') );
+				var previewImg  = $( $(this).data('preview') );
+
+				var frame = wp.media({
+					title: 'Chọn hoặc tải ảnh lên cho Thẻ quà tặng',
+					button: { text: 'Sử dụng ảnh này' },
+					multiple: false
+				});
+
+				frame.on('select', function() {
+					var attachment = frame.state().get('selection').first().toJSON();
+					targetInput.val(attachment.url);
+					if (previewImg.length) {
+						previewImg.attr('src', attachment.url);
+					}
+				});
+
+				frame.open();
+			});
+
+			$('.quills-reset-btn').on('click', function(e) {
+				e.preventDefault();
+				var targetInput = $( $(this).data('target') );
+				var previewImg  = $( $(this).data('preview') );
+				var defaultVal  = $(this).data('default');
+				targetInput.val(defaultVal);
+				if (previewImg.length) {
+					previewImg.attr('src', defaultVal);
+				}
+			});
+		});
+		</script>
+		<?php
+	}
+
+
+	/* ==========================================================================
+	   ABOUT US PAGE MANAGEMENT
+	   ========================================================================== */
+
+	/**
+	 * Handle About Us Settings Save from Appearance Submenu
+	 */
+	public static function handle_about_settings_save() {
+		add_action( 'admin_post_quills_save_about_settings', function() {
+			if ( ! current_user_can( 'manage_options' ) ) {
+				wp_die( esc_html__( 'Bạn không có quyền thực hiện hành động này.', 'coffee-cafe-corner' ) );
+			}
+
+			check_admin_referer( 'quills_about_settings_action', 'quills_about_settings_nonce' );
+
+			self::save_about_fields( $_POST );
+
+			wp_safe_redirect( add_query_arg( array( 'page' => 'quills-about-settings', 'updated' => '1' ), admin_url( 'themes.php' ) ) );
+			exit;
+		} );
+	}
+
+	/**
+	 * Save About Us fields to wp_options and postmeta
+	 */
+	public static function save_about_fields( $data ) {
+		$text_fields = array(
+			'quills_about_hero_title',
+			'quills_about_hero_image',
+			'quills_about_where_started_title',
+			'quills_about_why_here_title',
+			'quills_about_why_here_image',
+			'quills_about_how_work_title',
+			'quills_about_terroir_title',
+			'quills_about_terroir_phonetic',
+			'quills_about_terroir_pos',
+			'quills_about_terroir_def_1',
+			'quills_about_terroir_def_2',
+			'quills_about_terroir_image',
+			'quills_about_genuine_care_title',
+			'quills_about_genuine_care_image',
+			'quills_about_continuous_craft_title',
+			'quills_about_continuous_craft_image',
+			'quills_about_creative_education_title',
+			'quills_about_creative_education_image',
+			'quills_about_where_going_title',
+			'quills_about_where_going_author',
+			'quills_about_where_going_image',
+		);
+
+		foreach ( $text_fields as $field ) {
+			if ( isset( $data[ $field ] ) ) {
+				update_option( $field, sanitize_text_field( wp_unslash( $data[ $field ] ) ) );
+			}
+		}
+
+		$textarea_fields = array(
+			'quills_about_why_here_content',
+			'quills_about_how_work_content',
+			'quills_about_genuine_care_content',
+			'quills_about_continuous_craft_content',
+			'quills_about_creative_education_content',
+			'quills_about_where_going_quote',
+		);
+
+		foreach ( $textarea_fields as $field ) {
+			if ( isset( $data[ $field ] ) ) {
+				update_option( $field, sanitize_textarea_field( wp_unslash( $data[ $field ] ) ) );
+			}
+		}
+
+		// Where we started paragraphs
+		if ( isset( $data['quills_about_where_started_paragraphs'] ) ) {
+			$raw_text = wp_unslash( $data['quills_about_where_started_paragraphs'] );
+			$raw_parts = preg_split( '/\r\n\r\n|\n\n/', $raw_text );
+			$cleaned_paragraphs = array();
+			foreach ( $raw_parts as $part ) {
+				$trimmed = trim( $part );
+				if ( ! empty( $trimmed ) ) {
+					$cleaned_paragraphs[] = sanitize_textarea_field( $trimmed );
+				}
+			}
+			if ( ! empty( $cleaned_paragraphs ) ) {
+				update_option( 'quills_about_where_started_paragraphs', $cleaned_paragraphs );
+			}
+		}
+
+		// Sync to pages 'about' and 'about-us' postmeta
+		$about_pages = array();
+		$p1 = get_page_by_path( 'about-us' );
+		if ( $p1 ) { $about_pages[] = $p1; }
+		$p2 = get_page_by_path( 'about' );
+		if ( $p2 ) { $about_pages[] = $p2; }
+
+		foreach ( $about_pages as $page_obj ) {
+			$pid = $page_obj->ID;
+			if ( isset( $data['quills_about_hero_title'] ) ) {
+				update_post_meta( $pid, '_quills_hero_title', sanitize_text_field( wp_unslash( $data['quills_about_hero_title'] ) ) );
+			}
+			if ( isset( $data['quills_about_hero_image'] ) ) {
+				update_post_meta( $pid, '_quills_hero_image', sanitize_text_field( wp_unslash( $data['quills_about_hero_image'] ) ) );
+			}
+			if ( isset( $data['quills_about_where_started_title'] ) ) {
+				update_post_meta( $pid, '_quills_where_we_started_title', sanitize_text_field( wp_unslash( $data['quills_about_where_started_title'] ) ) );
+			}
+			if ( isset( $cleaned_paragraphs ) && ! empty( $cleaned_paragraphs ) ) {
+				update_post_meta( $pid, '_quills_where_we_started_paragraphs', $cleaned_paragraphs );
+			}
+			if ( isset( $data['quills_about_why_here_title'] ) ) {
+				update_post_meta( $pid, '_quills_why_were_here_title', sanitize_text_field( wp_unslash( $data['quills_about_why_here_title'] ) ) );
+			}
+			if ( isset( $data['quills_about_why_here_image'] ) ) {
+				update_post_meta( $pid, '_quills_why_were_here_image', sanitize_text_field( wp_unslash( $data['quills_about_why_here_image'] ) ) );
+			}
+			if ( isset( $data['quills_about_why_here_content'] ) ) {
+				update_post_meta( $pid, '_quills_why_were_here_content', sanitize_textarea_field( wp_unslash( $data['quills_about_why_here_content'] ) ) );
+			}
+			if ( isset( $data['quills_about_how_work_title'] ) ) {
+				update_post_meta( $pid, '_quills_how_we_work_title', sanitize_text_field( wp_unslash( $data['quills_about_how_work_title'] ) ) );
+			}
+			if ( isset( $data['quills_about_how_work_content'] ) ) {
+				update_post_meta( $pid, '_quills_how_we_work_content', sanitize_textarea_field( wp_unslash( $data['quills_about_how_work_content'] ) ) );
+			}
+			if ( isset( $data['quills_about_terroir_title'] ) ) {
+				update_post_meta( $pid, '_quills_terroir_title', sanitize_text_field( wp_unslash( $data['quills_about_terroir_title'] ) ) );
+			}
+			if ( isset( $data['quills_about_terroir_phonetic'] ) ) {
+				update_post_meta( $pid, '_quills_terroir_phonetic', sanitize_text_field( wp_unslash( $data['quills_about_terroir_phonetic'] ) ) );
+			}
+			if ( isset( $data['quills_about_terroir_pos'] ) ) {
+				update_post_meta( $pid, '_quills_terroir_pos', sanitize_text_field( wp_unslash( $data['quills_about_terroir_pos'] ) ) );
+			}
+			if ( isset( $data['quills_about_terroir_def_1'] ) ) {
+				update_post_meta( $pid, '_quills_terroir_def_1', sanitize_text_field( wp_unslash( $data['quills_about_terroir_def_1'] ) ) );
+			}
+			if ( isset( $data['quills_about_terroir_def_2'] ) ) {
+				update_post_meta( $pid, '_quills_terroir_def_2', sanitize_text_field( wp_unslash( $data['quills_about_terroir_def_2'] ) ) );
+			}
+			if ( isset( $data['quills_about_terroir_image'] ) ) {
+				update_post_meta( $pid, '_quills_terroir_image', sanitize_text_field( wp_unslash( $data['quills_about_terroir_image'] ) ) );
+			}
+			if ( isset( $data['quills_about_genuine_care_title'] ) ) {
+				update_post_meta( $pid, '_quills_genuine_care_title', sanitize_text_field( wp_unslash( $data['quills_about_genuine_care_title'] ) ) );
+			}
+			if ( isset( $data['quills_about_genuine_care_image'] ) ) {
+				update_post_meta( $pid, '_quills_genuine_care_image', sanitize_text_field( wp_unslash( $data['quills_about_genuine_care_image'] ) ) );
+			}
+			if ( isset( $data['quills_about_genuine_care_content'] ) ) {
+				update_post_meta( $pid, '_quills_genuine_care_content', sanitize_textarea_field( wp_unslash( $data['quills_about_genuine_care_content'] ) ) );
+			}
+			if ( isset( $data['quills_about_continuous_craft_title'] ) ) {
+				update_post_meta( $pid, '_quills_continuous_craft_title', sanitize_text_field( wp_unslash( $data['quills_about_continuous_craft_title'] ) ) );
+			}
+			if ( isset( $data['quills_about_continuous_craft_image'] ) ) {
+				update_post_meta( $pid, '_quills_continuous_craft_image', sanitize_text_field( wp_unslash( $data['quills_about_continuous_craft_image'] ) ) );
+			}
+			if ( isset( $data['quills_about_continuous_craft_content'] ) ) {
+				update_post_meta( $pid, '_quills_continuous_craft_content', sanitize_textarea_field( wp_unslash( $data['quills_about_continuous_craft_content'] ) ) );
+			}
+			if ( isset( $data['quills_about_creative_education_title'] ) ) {
+				update_post_meta( $pid, '_quills_creative_education_title', sanitize_text_field( wp_unslash( $data['quills_about_creative_education_title'] ) ) );
+			}
+			if ( isset( $data['quills_about_creative_education_image'] ) ) {
+				update_post_meta( $pid, '_quills_creative_education_image', sanitize_text_field( wp_unslash( $data['quills_about_creative_education_image'] ) ) );
+			}
+			if ( isset( $data['quills_about_creative_education_content'] ) ) {
+				update_post_meta( $pid, '_quills_creative_education_content', sanitize_textarea_field( wp_unslash( $data['quills_about_creative_education_content'] ) ) );
+			}
+			if ( isset( $data['quills_about_where_going_title'] ) ) {
+				update_post_meta( $pid, '_quills_where_were_going_title', sanitize_text_field( wp_unslash( $data['quills_about_where_going_title'] ) ) );
+			}
+			if ( isset( $data['quills_about_where_going_quote'] ) ) {
+				update_post_meta( $pid, '_quills_where_were_going_quote', sanitize_textarea_field( wp_unslash( $data['quills_about_where_going_quote'] ) ) );
+			}
+			if ( isset( $data['quills_about_where_going_author'] ) ) {
+				update_post_meta( $pid, '_quills_where_were_going_author', sanitize_text_field( wp_unslash( $data['quills_about_where_going_author'] ) ) );
+			}
+			if ( isset( $data['quills_about_where_going_image'] ) ) {
+				update_post_meta( $pid, '_quills_where_were_going_image', sanitize_text_field( wp_unslash( $data['quills_about_where_going_image'] ) ) );
+			}
+			clean_post_cache( $pid );
+		}
+
+		delete_transient( 'quills_about_content' );
+		if ( function_exists( 'wp_cache_flush' ) ) {
+			wp_cache_flush();
+		}
+		self::clear_page_cache();
+	}
+
+	/**
+	 * Render Standalone About Us Settings Page under Appearance
+	 */
+	public static function render_about_settings_page() {
+		?>
+		<div class="wrap">
+			<h1 style="display: flex; align-items: center; gap: 10px; margin-bottom: 20px;">
+				<span>📖 Quản lý Toàn Bộ Nội dung Trang Giới thiệu (About Us)</span>
+			</h1>
+
+			<?php if ( isset( $_GET['updated'] ) ) : ?>
+				<div class="notice notice-success is-dismissible">
+					<p><strong>✅ Dữ liệu Trang Giới thiệu (About Us) đã được lưu thành công vào Database!</strong> Hãy mở trang /about-us/ ngoài giao diện và tải lại để xem nội dung mới nhất.</p>
+				</div>
+			<?php endif; ?>
+
+			<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
+				<input type="hidden" name="action" value="quills_save_about_settings">
+				<?php wp_nonce_field( 'quills_about_settings_action', 'quills_about_settings_nonce' ); ?>
+
+				<?php self::render_about_form_fields(); ?>
+
+				<div style="position: sticky; bottom: 20px; background: #fff; padding: 15px 20px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); border: 1px solid #cbd5e1; z-index: 100; display: flex; justify-content: space-between; align-items: center;">
+					<span style="font-weight: 600; color: #334155;">✨ Nhấn nút Lưu sau khi chỉnh sửa bất kỳ mục nào trên trang Giới thiệu:</span>
+					<input type="submit" name="submit" id="submit" class="button button-primary button-large" style="height: 44px; padding: 0 24px; font-size: 15px; font-weight: 700; background: #663A1E; border-color: #4a2812;" value="💾 Lưu Toàn Bộ Thay Đổi Trang Giới Thiệu (Save About Us Settings)">
+				</div>
+			</form>
+		</div>
+		<?php
+	}
+
+	/**
+	 * Shared Form Fields for About Us Page
+	 */
+	public static function render_about_form_fields( $post_id = 0 ) {
+		$theme_url = trailingslashit( get_template_directory_uri() );
+		$img_dir   = $theme_url . 'assets/images/about/';
+
+		$hero_title = get_option( 'quills_about_hero_title' ) ?: ( $post_id ? get_post_meta( $post_id, '_quills_hero_title', true ) : '' ) ?: 'About Us';
+		$hero_img   = get_option( 'quills_about_hero_image' ) ?: ( $post_id ? get_post_meta( $post_id, '_quills_hero_image', true ) : '' );
+		$default_hero_img = $img_dir . 'about-hero.jpg';
+
+		$where_started_title = get_option( 'quills_about_where_started_title' ) ?: ( $post_id ? get_post_meta( $post_id, '_quills_where_we_started_title', true ) : '' ) ?: 'WHERE WE STARTED';
+		$where_started_p = get_option( 'quills_about_where_started_paragraphs' ) ?: ( $post_id ? get_post_meta( $post_id, '_quills_where_we_started_paragraphs', true ) : '' );
+		if ( is_array( $where_started_p ) ) {
+			$paragraphs_text = implode( "\n\n", $where_started_p );
+		} elseif ( is_string( $where_started_p ) && ! empty( $where_started_p ) ) {
+			$paragraphs_text = $where_started_p;
+		} else {
+			$paragraphs_text = "In the early 2000s, many people drank coffee without thinking much about it. I couldn't stop thinking about it.\n\nDuring my time as a social worker, I was meeting with students in local coffeehouses. I found myself constantly talking about what makes exceptional coffee.\n\nHow it's sourced, roasted, how it's brewed. And why doing it right matters.\n\nIn 2007, we took a pair of hammers to an old rundown building in the Germantown neighborhood of Louisville, Kentucky.\n\nAfter a lot of love and elbow grease, we opened the first Quills. That first shop taught us everything. We learned that great coffee can create the kind of spaces where people can connect.\n\nWe learned that when you blend fine coffee with a touch of southern hospitality, when you prioritize connection over speed, something special happens.\n\nYou make places where strangers can become friends. Where a writer finds her words in a warm corner seat. Where a company might be founded on the back of a napkin. Where first dates can turn into something more.\n\nWhen our first building was about to be sold and we had to move, our regular customer Tommy O'Shea helped us find a new home in the Highlands. That shop on Baxter Avenue runs to this day.\n\nWe've grown since then. Today, we roast our coffee in small batches right here in Louisville. Because we wanted better control over the whole experience we were creating. Today we have six cafes here and one in downtown Indianapolis. But at the heart of it all, the vision hasn't changed: Great coffee. Great spaces. Great hospitality.\n\nWe work with our producers and sourcing partners around the world who care deeply about quality. The close work we do with them means that every cup you drink is connected to real people, real farms, and a commitment to doing things the right way.";
+		}
+
+		$why_here_title   = get_option( 'quills_about_why_here_title' ) ?: ( $post_id ? get_post_meta( $post_id, '_quills_why_were_here_title', true ) : '' ) ?: "WHY WE'RE HERE";
+		$why_here_img     = get_option( 'quills_about_why_here_image' ) ?: ( $post_id ? get_post_meta( $post_id, '_quills_why_were_here_image', true ) : '' );
+		$default_why_img  = $img_dir . 'why-were-here.jpg';
+		$why_here_content = get_option( 'quills_about_why_here_content' ) ?: ( $post_id ? get_post_meta( $post_id, '_quills_why_were_here_content', true ) : '' ) ?: "Quills Coffee is here to deliver a coffee that connects people. Between the barista behind the counter and the customer in front of it. Between strangers at neighboring tables. Between all of us and the farmers who picked the coffee we're enjoying. We believe delivering great coffee is a chance to make memorable human experiences. It's a chance for us to be together, to pause, to talk, to connect.";
+
+		$how_work_title   = get_option( 'quills_about_how_work_title' ) ?: ( $post_id ? get_post_meta( $post_id, '_quills_how_we_work_title', true ) : '' ) ?: 'HOW WE WORK';
+		$how_work_content = get_option( 'quills_about_how_work_content' ) ?: ( $post_id ? get_post_meta( $post_id, '_quills_how_we_work_content', true ) : '' ) ?: "The French have a word: terroir. It means \"the taste of the place itself.\" The soil where something grows. The climate that shapes it. The hands that tend it. It's why a coffee cherry from Guatemala tastes different from one grown in Ethiopia. The earth was different, the rain was different, and so the taste is different. At Quills, we celebrate our own kind of \"terroir\" with three core values: Genuine Care, Continuous Craft, and Creative Education.";
+
+		$terroir_title    = get_option( 'quills_about_terroir_title' ) ?: ( $post_id ? get_post_meta( $post_id, '_quills_terroir_title', true ) : '' ) ?: 'terroir';
+		$terroir_phonetic = get_option( 'quills_about_terroir_phonetic' ) ?: ( $post_id ? get_post_meta( $post_id, '_quills_terroir_phonetic', true ) : '' ) ?: '/tɛrˈwɑːr/ • French';
+		$terroir_pos      = get_option( 'quills_about_terroir_pos' ) ?: ( $post_id ? get_post_meta( $post_id, '_quills_terroir_pos', true ) : '' ) ?: 'noun';
+		$terroir_def_1    = get_option( 'quills_about_terroir_def_1' ) ?: ( $post_id ? get_post_meta( $post_id, '_quills_terroir_def_1', true ) : '' ) ?: '1. the combination of factors including soil, climate, and sunlight that gives wine grapes and coffee cherries their distinctive character';
+		$terroir_def_2    = get_option( 'quills_about_terroir_def_2' ) ?: ( $post_id ? get_post_meta( $post_id, '_quills_terroir_def_2', true ) : '' ) ?: '2. the combination of people, values, and daily practices that give our spaces their distinctive character';
+		$terroir_img      = get_option( 'quills_about_terroir_image' ) ?: ( $post_id ? get_post_meta( $post_id, '_quills_terroir_image', true ) : '' );
+		$default_terroir_img = $img_dir . 'terroir.png';
+
+		$genuine_care_title   = get_option( 'quills_about_genuine_care_title' ) ?: ( $post_id ? get_post_meta( $post_id, '_quills_genuine_care_title', true ) : '' ) ?: 'GENUINE CARE';
+		$genuine_care_img     = get_option( 'quills_about_genuine_care_image' ) ?: ( $post_id ? get_post_meta( $post_id, '_quills_genuine_care_image', true ) : '' );
+		$default_care_img     = $img_dir . 'genuine-care.png';
+		$genuine_care_content = get_option( 'quills_about_genuine_care_content' ) ?: ( $post_id ? get_post_meta( $post_id, '_quills_genuine_care_content', true ) : '' ) ?: "We serve with warmth, hospitality, and attentiveness to the people around us. The barista knows your name. She asks how you are. He's there with you. She polishes tables not because her manager watches, but because she knows someone's going to sit there with their morning coffee. The roastery team works hard to find new and exciting coffees, because they care about curating a delightful solution for every customer. Managers work to make their cafes places where people want to gather and come back to. Whether it's behind the bar, in the roastery, or in the training lab, the team is never here just for people who want to create a place for connection.";
+
+		$craft_title   = get_option( 'quills_about_continuous_craft_title' ) ?: ( $post_id ? get_post_meta( $post_id, '_quills_continuous_craft_title', true ) : '' ) ?: 'CONTINUOUS CRAFT';
+		$craft_img     = get_option( 'quills_about_continuous_craft_image' ) ?: ( $post_id ? get_post_meta( $post_id, '_quills_continuous_craft_image', true ) : '' );
+		$default_craft_img = $img_dir . 'continuous-craft.jpg';
+		$craft_content = get_option( 'quills_about_continuous_craft_content' ) ?: ( $post_id ? get_post_meta( $post_id, '_quills_continuous_craft_content', true ) : '' ) ?: "Excellence is not an accident. It's hundreds of small decisions made correctly every day. Water temperature, grind size, the timing of every shot. It's about constant improvement. We test, we taste, we tweak. Because coffee is a craft worth perfecting. It's the barista who continues to develop his palate, textures his milk to silk, to create a beautiful presentation every time. The manager who continues to hone our hospitality. The roaster improves their skill batch after batch. We're committed to an excellence and beauty in our craft.";
+
+		$edu_title   = get_option( 'quills_about_creative_education_title' ) ?: ( $post_id ? get_post_meta( $post_id, '_quills_creative_education_title', true ) : '' ) ?: 'CREATIVE EDUCATION';
+		$edu_img     = get_option( 'quills_about_creative_education_image' ) ?: ( $post_id ? get_post_meta( $post_id, '_quills_creative_education_image', true ) : '' );
+		$default_edu_img = $img_dir . 'creative-education.jpg';
+		$edu_content = get_option( 'quills_about_creative_education_content' ) ?: ( $post_id ? get_post_meta( $post_id, '_quills_creative_education_content', true ) : '' ) ?: "Knowledge belongs to anyone who wants it. The customer who asks why this coffee tastes like chocolate gets a real answer from our team—about the processing, the roast, the origin. They adjust their language and make learning feel safe and exciting, never intimidating. A new barista learning to pull shots gets the time to understand, not just run through the motions. We light up when we share knowledge. And we share it freely because we want you to love coffee as much as we do. Because we believe knowledge can deepen every coffee experience.";
+
+		$where_going_title  = get_option( 'quills_about_where_going_title' ) ?: ( $post_id ? get_post_meta( $post_id, '_quills_where_were_going_title', true ) : '' ) ?: "Where We're Going";
+		$where_going_quote  = get_option( 'quills_about_where_going_quote' ) ?: ( $post_id ? get_post_meta( $post_id, '_quills_where_were_going_quote', true ) : '' ) ?: "Like soil worked for years, our roots merely grow richer with time. We're not trying to be the biggest coffee company, or the fastest. We're building a place where quality lives, where every cup honors the taste of each dear sight, and most importantly—where people strive to connect with other people.";
+		$where_going_author = get_option( 'quills_about_where_going_author' ) ?: ( $post_id ? get_post_meta( $post_id, '_quills_where_were_going_author', true ) : '' ) ?: '— Nathan Quillo, Founder';
+		$where_going_img    = get_option( 'quills_about_where_going_image' ) ?: ( $post_id ? get_post_meta( $post_id, '_quills_where_were_going_image', true ) : '' );
+		$default_going_img  = $img_dir . 'where-were-going.jpg';
+		?>
+		<style>
+			.quills-admin-nav { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 20px; background: #fff; padding: 12px 16px; border-radius: 8px; border: 1px solid #cbd5e1; position: sticky; top: 32px; z-index: 99; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+			.quills-admin-nav a { text-decoration: none; padding: 6px 12px; background: #f1f5f9; color: #334155; border-radius: 4px; font-weight: 500; font-size: 13px; transition: all 0.2s; border: 1px solid #e2e8f0; }
+			.quills-admin-nav a:hover { background: #663A1E; color: #fff; border-color: #663A1E; }
+			.quills-card { background: #fff; border: 1px solid #cbd5e1; border-radius: 8px; padding: 24px; margin-bottom: 24px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
+			.quills-card-title { font-size: 18px; font-weight: 700; color: #1e293b; margin-top: 0; margin-bottom: 16px; padding-bottom: 12px; border-bottom: 2px solid #f1f5f9; display: flex; align-items: center; gap: 8px; }
+			.quills-form-table { width: 100%; border-collapse: collapse; }
+			.quills-form-table th { width: 220px; text-align: left; vertical-align: top; padding: 12px 16px 12px 0; font-weight: 600; color: #475569; font-size: 14px; }
+			.quills-form-table td { vertical-align: top; padding: 12px 0; }
+			.quills-form-table input[type="text"], .quills-form-table textarea { width: 100%; max-width: 680px; padding: 8px 12px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 14px; box-sizing: border-box; }
+			.quills-form-table textarea { font-family: inherit; line-height: 1.5; }
+			.quills-desc { font-size: 12px; color: #64748b; margin-top: 6px; }
+			.quills-img-preview { max-width: 280px; max-height: 180px; object-fit: contain; border-radius: 6px; border: 1px solid #cbd5e1; margin-top: 8px; display: block; background: #faf7f2; padding: 4px; }
+		</style>
+
+		<!-- QUICK JUMP NAVIGATION -->
+		<div class="quills-admin-nav">
+			<a href="#sec-about-hero">🚩 1. Hero Banner</a>
+			<a href="#sec-about-started">📖 2. Where We Started</a>
+			<a href="#sec-about-why">❤️ 3. Why We're Here</a>
+			<a href="#sec-about-work">🤝 4. How We Work</a>
+			<a href="#sec-about-terroir">🌱 5. Terroir Definition</a>
+			<a href="#sec-about-values">✨ 6. Ba Giá Trị Cốt Lõi</a>
+			<a href="#sec-about-going">🚀 7. Where We're Going</a>
+		</div>
+
+		<!-- SECTION 1: HERO BANNER -->
+		<div class="quills-card" id="sec-about-hero">
+			<h2 class="quills-card-title">🚩 1. Hero Banner</h2>
+			<table class="quills-form-table">
+				<tr>
+					<th><label for="quills_about_hero_title">Tiêu đề Hero Banner:</label></th>
+					<td>
+						<input type="text" name="quills_about_hero_title" id="quills_about_hero_title" value="<?php echo esc_attr( $hero_title ); ?>">
+						<div class="quills-desc">Mặc định: About Us</div>
+					</td>
+				</tr>
+				<tr>
+					<th><label>Ảnh nền Hero Banner:</label></th>
+					<td>
+						<div style="display: flex; gap: 8px; max-width: 680px; align-items: center;">
+							<input type="text" name="quills_about_hero_image" id="quills_about_hero_image" value="<?php echo esc_attr( $hero_img ); ?>" placeholder="Để trống để dùng ảnh mặc định">
+							<button type="button" class="button quills-upload-btn" data-target="#quills_about_hero_image" data-preview="#preview_about_hero_image">Chọn ảnh</button>
+							<button type="button" class="button quills-reset-btn" data-target="#quills_about_hero_image" data-preview="#preview_about_hero_image" data-default="">Khôi phục</button>
+						</div>
+						<img id="preview_about_hero_image" class="quills-img-preview" src="<?php echo esc_url( ! empty( $hero_img ) ? ( filter_var( $hero_img, FILTER_VALIDATE_URL ) ? $hero_img : $img_dir . $hero_img ) : $default_hero_img ); ?>" alt="Preview">
+					</td>
+				</tr>
+			</table>
+		</div>
+
+		<!-- SECTION 2: WHERE WE STARTED -->
+		<div class="quills-card" id="sec-about-started">
+			<h2 class="quills-card-title">📖 2. Lịch Sử Hình Thành ("Where We Started")</h2>
+			<table class="quills-form-table">
+				<tr>
+					<th><label for="quills_about_where_started_title">Tiêu đề mục:</label></th>
+					<td>
+						<input type="text" name="quills_about_where_started_title" id="quills_about_where_started_title" value="<?php echo esc_attr( $where_started_title ); ?>">
+						<div class="quills-desc">Mặc định: WHERE WE STARTED</div>
+					</td>
+				</tr>
+				<tr>
+					<th><label for="quills_about_where_started_paragraphs">Nội dung câu chuyện:</label></th>
+					<td>
+						<textarea name="quills_about_where_started_paragraphs" id="quills_about_where_started_paragraphs" rows="12"><?php echo esc_textarea( $paragraphs_text ); ?></textarea>
+						<div class="quills-desc">Mỗi đoạn văn cách nhau bằng 2 lần Enter. Hệ thống sẽ tự động phân tách thành các đoạn văn riêng biệt.</div>
+					</td>
+				</tr>
+			</table>
+		</div>
+
+		<!-- SECTION 3: WHY WE'RE HERE -->
+		<div class="quills-card" id="sec-about-why">
+			<h2 class="quills-card-title">❤️ 3. Sứ Mệnh Kết Nối ("Why We're Here")</h2>
+			<table class="quills-form-table">
+				<tr>
+					<th><label for="quills_about_why_here_title">Tiêu đề mục:</label></th>
+					<td>
+						<input type="text" name="quills_about_why_here_title" id="quills_about_why_here_title" value="<?php echo esc_attr( $why_here_title ); ?>">
+						<div class="quills-desc">Mặc định: WHY WE'RE HERE</div>
+					</td>
+				</tr>
+				<tr>
+					<th><label>Ảnh minh họa:</label></th>
+					<td>
+						<div style="display: flex; gap: 8px; max-width: 680px; align-items: center;">
+							<input type="text" name="quills_about_why_here_image" id="quills_about_why_here_image" value="<?php echo esc_attr( $why_here_img ); ?>" placeholder="Để trống để dùng ảnh mặc định">
+							<button type="button" class="button quills-upload-btn" data-target="#quills_about_why_here_image" data-preview="#preview_about_why_here_image">Chọn ảnh</button>
+							<button type="button" class="button quills-reset-btn" data-target="#quills_about_why_here_image" data-preview="#preview_about_why_here_image" data-default="">Khôi phục</button>
+						</div>
+						<img id="preview_about_why_here_image" class="quills-img-preview" src="<?php echo esc_url( ! empty( $why_here_img ) ? ( filter_var( $why_here_img, FILTER_VALIDATE_URL ) ? $why_here_img : $img_dir . $why_here_img ) : $default_why_img ); ?>" alt="Preview">
+					</td>
+				</tr>
+				<tr>
+					<th><label for="quills_about_why_here_content">Nội dung đoạn văn:</label></th>
+					<td>
+						<textarea name="quills_about_why_here_content" id="quills_about_why_here_content" rows="4"><?php echo esc_textarea( $why_here_content ); ?></textarea>
+					</td>
+				</tr>
+			</table>
+		</div>
+
+		<!-- SECTION 4: HOW WE WORK -->
+		<div class="quills-card" id="sec-about-work">
+			<h2 class="quills-card-title">🤝 4. Phương Thức Làm Việc ("How We Work")</h2>
+			<table class="quills-form-table">
+				<tr>
+					<th><label for="quills_about_how_work_title">Tiêu đề mục:</label></th>
+					<td>
+						<input type="text" name="quills_about_how_work_title" id="quills_about_how_work_title" value="<?php echo esc_attr( $how_work_title ); ?>">
+						<div class="quills-desc">Mặc định: HOW WE WORK</div>
+					</td>
+				</tr>
+				<tr>
+					<th><label for="quills_about_how_work_content">Nội dung đoạn văn:</label></th>
+					<td>
+						<textarea name="quills_about_how_work_content" id="quills_about_how_work_content" rows="4"><?php echo esc_textarea( $how_work_content ); ?></textarea>
+					</td>
+				</tr>
+			</table>
+		</div>
+
+		<!-- SECTION 5: TERROIR DEFINITION CARD -->
+		<div class="quills-card" id="sec-about-terroir">
+			<h2 class="quills-card-title">🌱 5. Định Nghĩa Terroir ("Terroir Definition Card")</h2>
+			<table class="quills-form-table">
+				<tr>
+					<th><label for="quills_about_terroir_title">Từ khóa (Word):</label></th>
+					<td><input type="text" name="quills_about_terroir_title" id="quills_about_terroir_title" value="<?php echo esc_attr( $terroir_title ); ?>"></td>
+				</tr>
+				<tr>
+					<th><label for="quills_about_terroir_phonetic">Phiên âm & Nguồn gốc:</label></th>
+					<td><input type="text" name="quills_about_terroir_phonetic" id="quills_about_terroir_phonetic" value="<?php echo esc_attr( $terroir_phonetic ); ?>"></td>
+				</tr>
+				<tr>
+					<th><label for="quills_about_terroir_pos">Từ loại (Part of speech):</label></th>
+					<td><input type="text" name="quills_about_terroir_pos" id="quills_about_terroir_pos" value="<?php echo esc_attr( $terroir_pos ); ?>" style="max-width: 200px;"></td>
+				</tr>
+				<tr>
+					<th><label for="quills_about_terroir_def_1">Định nghĩa 1:</label></th>
+					<td><textarea name="quills_about_terroir_def_1" id="quills_about_terroir_def_1" rows="2"><?php echo esc_textarea( $terroir_def_1 ); ?></textarea></td>
+				</tr>
+				<tr>
+					<th><label for="quills_about_terroir_def_2">Định nghĩa 2:</label></th>
+					<td><textarea name="quills_about_terroir_def_2" id="quills_about_terroir_def_2" rows="2"><?php echo esc_textarea( $terroir_def_2 ); ?></textarea></td>
+				</tr>
+				<tr>
+					<th><label>Ảnh thẻ Terroir:</label></th>
+					<td>
+						<div style="display: flex; gap: 8px; max-width: 680px; align-items: center;">
+							<input type="text" name="quills_about_terroir_image" id="quills_about_terroir_image" value="<?php echo esc_attr( $terroir_img ); ?>" placeholder="Để trống để dùng ảnh mặc định">
+							<button type="button" class="button quills-upload-btn" data-target="#quills_about_terroir_image" data-preview="#preview_about_terroir_image">Chọn ảnh</button>
+							<button type="button" class="button quills-reset-btn" data-target="#quills_about_terroir_image" data-preview="#preview_about_terroir_image" data-default="">Khôi phục</button>
+						</div>
+						<img id="preview_about_terroir_image" class="quills-img-preview" src="<?php echo esc_url( ! empty( $terroir_img ) ? ( filter_var( $terroir_img, FILTER_VALIDATE_URL ) ? $terroir_img : $img_dir . $terroir_img ) : $default_terroir_img ); ?>" alt="Preview">
+					</td>
+				</tr>
+			</table>
+		</div>
+
+		<!-- SECTION 6: THREE CORE VALUES -->
+		<div class="quills-card" id="sec-about-values">
+			<h2 class="quills-card-title">✨ 6. Ba Giá Trị Cốt Lõi (Core Values)</h2>
+			
+			<h3 style="font-size: 15px; font-weight: 700; color: #663A1E; margin-top: 15px; margin-bottom: 10px;">🌟 Giá trị 1: Genuine Care</h3>
+			<table class="quills-form-table">
+				<tr>
+					<th><label for="quills_about_genuine_care_title">Tiêu đề:</label></th>
+					<td><input type="text" name="quills_about_genuine_care_title" id="quills_about_genuine_care_title" value="<?php echo esc_attr( $genuine_care_title ); ?>"></td>
+				</tr>
+				<tr>
+					<th><label>Ảnh minh họa:</label></th>
+					<td>
+						<div style="display: flex; gap: 8px; max-width: 680px; align-items: center;">
+							<input type="text" name="quills_about_genuine_care_image" id="quills_about_genuine_care_image" value="<?php echo esc_attr( $genuine_care_img ); ?>" placeholder="Để trống để dùng ảnh mặc định">
+							<button type="button" class="button quills-upload-btn" data-target="#quills_about_genuine_care_image" data-preview="#preview_about_care_img">Chọn ảnh</button>
+							<button type="button" class="button quills-reset-btn" data-target="#quills_about_genuine_care_image" data-preview="#preview_about_care_img" data-default="">Khôi phục</button>
+						</div>
+						<img id="preview_about_care_img" class="quills-img-preview" src="<?php echo esc_url( ! empty( $genuine_care_img ) ? ( filter_var( $genuine_care_img, FILTER_VALIDATE_URL ) ? $genuine_care_img : $img_dir . $genuine_care_img ) : $default_care_img ); ?>" alt="Preview">
+					</td>
+				</tr>
+				<tr>
+					<th><label for="quills_about_genuine_care_content">Nội dung:</label></th>
+					<td><textarea name="quills_about_genuine_care_content" id="quills_about_genuine_care_content" rows="4"><?php echo esc_textarea( $genuine_care_content ); ?></textarea></td>
+				</tr>
+			</table>
+
+			<hr style="margin: 25px 0; border: 0; border-top: 1px dashed #cbd5e1;">
+
+			<h3 style="font-size: 15px; font-weight: 700; color: #663A1E; margin-top: 15px; margin-bottom: 10px;">☕ Giá trị 2: Continuous Craft</h3>
+			<table class="quills-form-table">
+				<tr>
+					<th><label for="quills_about_continuous_craft_title">Tiêu đề:</label></th>
+					<td><input type="text" name="quills_about_continuous_craft_title" id="quills_about_continuous_craft_title" value="<?php echo esc_attr( $craft_title ); ?>"></td>
+				</tr>
+				<tr>
+					<th><label>Ảnh minh họa:</label></th>
+					<td>
+						<div style="display: flex; gap: 8px; max-width: 680px; align-items: center;">
+							<input type="text" name="quills_about_continuous_craft_image" id="quills_about_continuous_craft_image" value="<?php echo esc_attr( $craft_img ); ?>" placeholder="Để trống để dùng ảnh mặc định">
+							<button type="button" class="button quills-upload-btn" data-target="#quills_about_continuous_craft_image" data-preview="#preview_about_craft_img">Chọn ảnh</button>
+							<button type="button" class="button quills-reset-btn" data-target="#quills_about_continuous_craft_image" data-preview="#preview_about_craft_img" data-default="">Khôi phục</button>
+						</div>
+						<img id="preview_about_craft_img" class="quills-img-preview" src="<?php echo esc_url( ! empty( $craft_img ) ? ( filter_var( $craft_img, FILTER_VALIDATE_URL ) ? $craft_img : $img_dir . $craft_img ) : $default_craft_img ); ?>" alt="Preview">
+					</td>
+				</tr>
+				<tr>
+					<th><label for="quills_about_continuous_craft_content">Nội dung:</label></th>
+					<td><textarea name="quills_about_continuous_craft_content" id="quills_about_continuous_craft_content" rows="4"><?php echo esc_textarea( $craft_content ); ?></textarea></td>
+				</tr>
+			</table>
+
+			<hr style="margin: 25px 0; border: 0; border-top: 1px dashed #cbd5e1;">
+
+			<h3 style="font-size: 15px; font-weight: 700; color: #663A1E; margin-top: 15px; margin-bottom: 10px;">🎓 Giá trị 3: Creative Education</h3>
+			<table class="quills-form-table">
+				<tr>
+					<th><label for="quills_about_creative_education_title">Tiêu đề:</label></th>
+					<td><input type="text" name="quills_about_creative_education_title" id="quills_about_creative_education_title" value="<?php echo esc_attr( $edu_title ); ?>"></td>
+				</tr>
+				<tr>
+					<th><label>Ảnh minh họa:</label></th>
+					<td>
+						<div style="display: flex; gap: 8px; max-width: 680px; align-items: center;">
+							<input type="text" name="quills_about_creative_education_image" id="quills_about_creative_education_image" value="<?php echo esc_attr( $edu_img ); ?>" placeholder="Để trống để dùng ảnh mặc định">
+							<button type="button" class="button quills-upload-btn" data-target="#quills_about_creative_education_image" data-preview="#preview_about_edu_img">Chọn ảnh</button>
+							<button type="button" class="button quills-reset-btn" data-target="#quills_about_creative_education_image" data-preview="#preview_about_edu_img" data-default="">Khôi phục</button>
+						</div>
+						<img id="preview_about_edu_img" class="quills-img-preview" src="<?php echo esc_url( ! empty( $edu_img ) ? ( filter_var( $edu_img, FILTER_VALIDATE_URL ) ? $edu_img : $img_dir . $edu_img ) : $default_edu_img ); ?>" alt="Preview">
+					</td>
+				</tr>
+				<tr>
+					<th><label for="quills_about_creative_education_content">Nội dung:</label></th>
+					<td><textarea name="quills_about_creative_education_content" id="quills_about_creative_education_content" rows="4"><?php echo esc_textarea( $edu_content ); ?></textarea></td>
+				</tr>
+			</table>
+		</div>
+
+		<!-- SECTION 7: WHERE WE'RE GOING & BOTTOM BANNER -->
+		<div class="quills-card" id="sec-about-going">
+			<h2 class="quills-card-title">🚀 7. Tầm Nhìn & Trích Dẫn ("Where We're Going")</h2>
+			<table class="quills-form-table">
+				<tr>
+					<th><label for="quills_about_where_going_title">Tiêu đề mục:</label></th>
+					<td><input type="text" name="quills_about_where_going_title" id="quills_about_where_going_title" value="<?php echo esc_attr( $where_going_title ); ?>"></td>
+				</tr>
+				<tr>
+					<th><label for="quills_about_where_going_quote">Lời trích dẫn nhà sáng lập:</label></th>
+					<td><textarea name="quills_about_where_going_quote" id="quills_about_where_going_quote" rows="4"><?php echo esc_textarea( $where_going_quote ); ?></textarea></td>
+				</tr>
+				<tr>
+					<th><label for="quills_about_where_going_author">Tác giả trích dẫn:</label></th>
+					<td><input type="text" name="quills_about_where_going_author" id="quills_about_where_going_author" value="<?php echo esc_attr( $where_going_author ); ?>" style="max-width: 320px;"></td>
+				</tr>
+				<tr>
+					<th><label>Ảnh chụp đội ngũ cuối trang:</label></th>
+					<td>
+						<div style="display: flex; gap: 8px; max-width: 680px; align-items: center;">
+							<input type="text" name="quills_about_where_going_image" id="quills_about_where_going_image" value="<?php echo esc_attr( $where_going_img ); ?>" placeholder="Để trống để dùng ảnh mặc định">
+							<button type="button" class="button quills-upload-btn" data-target="#quills_about_where_going_image" data-preview="#preview_about_going_img">Chọn ảnh</button>
+							<button type="button" class="button quills-reset-btn" data-target="#quills_about_where_going_image" data-preview="#preview_about_going_img" data-default="">Khôi phục</button>
+						</div>
+						<img id="preview_about_going_img" class="quills-img-preview" src="<?php echo esc_url( ! empty( $where_going_img ) ? ( filter_var( $where_going_img, FILTER_VALIDATE_URL ) ? $where_going_img : $img_dir . $where_going_img ) : $default_going_img ); ?>" alt="Preview">
+					</td>
+				</tr>
+			</table>
+		</div>
+
+		<script>
+		jQuery(document).ready(function($) {
+			$('.quills-upload-btn').on('click', function(e) {
+				e.preventDefault();
+				var targetInput = $( $(this).data('target') );
+				var previewImg  = $( $(this).data('preview') );
+
+				var frame = wp.media({
+					title: 'Chọn hoặc tải ảnh lên cho Trang Giới thiệu',
+					button: { text: 'Sử dụng ảnh này' },
+					multiple: false
+				});
+
+				frame.on('select', function() {
+					var attachment = frame.state().get('selection').first().toJSON();
+					targetInput.val(attachment.url);
+					if (previewImg.length) {
+						previewImg.attr('src', attachment.url);
+					}
+				});
+
+				frame.open();
+			});
+
+			$('.quills-reset-btn').on('click', function(e) {
+				e.preventDefault();
+				var targetInput = $( $(this).data('target') );
+				var previewImg  = $( $(this).data('preview') );
+				var defaultVal  = $(this).data('default');
+				targetInput.val(defaultVal);
+				if (previewImg.length) {
+					previewImg.attr('src', defaultVal);
+				}
+			});
+		});
+		</script>
+		<?php
+	}
+
+	/* ==========================================================================
+	   VISIT / OUR CAFES PAGE MANAGEMENT
+	   ========================================================================== */
+
+	/**
+	 * Handle Visit Settings Save from Appearance Submenu
+	 */
+	public static function handle_visit_settings_save() {
+		add_action( 'admin_post_quills_save_visit_settings', function() {
+			if ( ! current_user_can( 'manage_options' ) ) {
+				wp_die( esc_html__( 'Bạn không có quyền thực hiện hành động này.', 'coffee-cafe-corner' ) );
+			}
+
+			check_admin_referer( 'quills_visit_settings_action', 'quills_visit_settings_nonce' );
+
+			self::save_visit_fields( $_POST );
+
+			wp_safe_redirect( add_query_arg( array( 'page' => 'quills-visit-settings', 'updated' => '1' ), admin_url( 'themes.php' ) ) );
+			exit;
+		} );
+	}
+
+	/**
+	 * Save Visit fields to wp_options and postmeta
+	 */
+	public static function save_visit_fields( $data ) {
+		$text_fields = array(
+			'quills_visit_breadcrumb',
+			'quills_visit_hero_title',
+			'quills_visit_hero_image',
+			'quills_visit_section_title',
+		);
+
+		foreach ( $text_fields as $field ) {
+			if ( isset( $data[ $field ] ) ) {
+				update_option( $field, sanitize_text_field( wp_unslash( $data[ $field ] ) ) );
+			}
+		}
+
+		if ( isset( $data['quills_visit_intro_text'] ) ) {
+			update_option( 'quills_visit_intro_text', sanitize_textarea_field( wp_unslash( $data['quills_visit_intro_text'] ) ) );
+		}
+
+		// Sync to pages 'visit' and 'our-cafes' postmeta
+		$visit_pages = array();
+		$v1 = get_page_by_path( 'visit' );
+		if ( $v1 ) { $visit_pages[] = $v1; }
+		$v2 = get_page_by_path( 'our-cafes' );
+		if ( $v2 ) { $visit_pages[] = $v2; }
+
+		foreach ( $visit_pages as $vp ) {
+			$pid = $vp->ID;
+			if ( isset( $data['quills_visit_breadcrumb'] ) ) {
+				update_post_meta( $pid, '_visit_breadcrumb', sanitize_text_field( wp_unslash( $data['quills_visit_breadcrumb'] ) ) );
+			}
+			if ( isset( $data['quills_visit_hero_title'] ) ) {
+				update_post_meta( $pid, '_visit_hero_title', sanitize_text_field( wp_unslash( $data['quills_visit_hero_title'] ) ) );
+			}
+			if ( isset( $data['quills_visit_hero_image'] ) ) {
+				update_post_meta( $pid, '_visit_hero_image', sanitize_text_field( wp_unslash( $data['quills_visit_hero_image'] ) ) );
+			}
+			if ( isset( $data['quills_visit_intro_text'] ) ) {
+				update_post_meta( $pid, '_visit_intro_text', sanitize_textarea_field( wp_unslash( $data['quills_visit_intro_text'] ) ) );
+			}
+			if ( isset( $data['quills_visit_section_title'] ) ) {
+				update_post_meta( $pid, '_visit_section_title', sanitize_text_field( wp_unslash( $data['quills_visit_section_title'] ) ) );
+			}
+			clean_post_cache( $pid );
+		}
+
+		delete_transient( 'quills_visit_content' );
+		if ( function_exists( 'wp_cache_flush' ) ) {
+			wp_cache_flush();
+		}
+		self::clear_page_cache();
+	}
+
+	/**
+	 * Render Meta Box for Visit & Our Cafes
+	 */
+	public static function render_visit_meta_box( $post ) {
+		wp_nonce_field( 'quills_visit_meta_nonce', 'quills_visit_meta_nonce_field' );
+		self::render_visit_form_fields( $post->ID );
+	}
+
+	/**
+	 * Render Standalone Visit Settings Page under Appearance
+	 */
+	public static function render_visit_settings_page() {
+		?>
+		<div class="wrap">
+			<h1 style="display: flex; align-items: center; gap: 10px; margin-bottom: 20px;">
+				<span>📍 Quản lý Nội dung Trang Chi Nhánh & Giờ Mở Cửa (Visit / Locations & Hours)</span>
+			</h1>
+
+			<?php if ( isset( $_GET['updated'] ) ) : ?>
+				<div class="notice notice-success is-dismissible">
+					<p><strong>✅ Dữ liệu Trang Chi nhánh (Visit) đã được lưu thành công vào Database!</strong> Hãy mở trang /visit/ ngoài giao diện và tải lại để xem nội dung mới nhất.</p>
+				</div>
+			<?php endif; ?>
+
+			<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
+				<input type="hidden" name="action" value="quills_save_visit_settings">
+				<?php wp_nonce_field( 'quills_visit_settings_action', 'quills_visit_settings_nonce' ); ?>
+
+				<?php self::render_visit_form_fields(); ?>
+
+				<div style="position: sticky; bottom: 20px; background: #fff; padding: 15px 20px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); border: 1px solid #cbd5e1; z-index: 100; display: flex; justify-content: space-between; align-items: center;">
+					<span style="font-weight: 600; color: #334155;">✨ Nhấn nút Lưu sau khi chỉnh sửa bất kỳ mục nào trên trang Chi nhánh:</span>
+					<input type="submit" name="submit" id="submit" class="button button-primary button-large" style="height: 44px; padding: 0 24px; font-size: 15px; font-weight: 700; background: #663A1E; border-color: #4a2812;" value="💾 Lưu Toàn Bộ Thay Đổi Trang Chi Nhánh (Save Visit Settings)">
+				</div>
+			</form>
+		</div>
+		<?php
+	}
+
+	/**
+	 * Shared Form Fields for Visit Page
+	 */
+	public static function render_visit_form_fields( $post_id = 0 ) {
+		$theme_url = trailingslashit( get_template_directory_uri() );
+		$img_dir   = $theme_url . 'assets/images/visit/';
+
+		$breadcrumb    = get_option( 'quills_visit_breadcrumb' ) ?: ( $post_id ? get_post_meta( $post_id, '_visit_breadcrumb', true ) : '' ) ?: 'Locations & Hours';
+		$hero_title    = get_option( 'quills_visit_hero_title' ) ?: ( $post_id ? get_post_meta( $post_id, '_visit_hero_title', true ) : '' ) ?: 'Our Cafes';
+		$hero_img      = get_option( 'quills_visit_hero_image' ) ?: ( $post_id ? get_post_meta( $post_id, '_visit_hero_image', true ) : '' );
+		$default_hero  = $img_dir . 'our-cafes-hero.jpg';
+		$intro_text    = get_option( 'quills_visit_intro_text' ) ?: ( $post_id ? get_post_meta( $post_id, '_visit_intro_text', true ) : '' );
+		if ( empty( $intro_text ) ) {
+			$intro_text = "If you happen to be in our neck of the woods, we'd love to see you. This is where it all started after all. While our subscriptions bring our curated coffees to your kitchen, there's something special about serving you in person. Each of our cafes has a little charm of its own. Our in-house team designed each of them to be warm and welcoming in their own ways. We have six cafes in various Louisville neighborhoods, and one in downtown Indianapolis. You can read a bit about each and find our hours and directions below. Stop by for our seasonal menu of espresso drinks, single origin coffees, and baked goods. Fresh bags of our coffees and merch are always available on the shelves as well.";
+		}
+		$section_title = get_option( 'quills_visit_section_title' ) ?: ( $post_id ? get_post_meta( $post_id, '_visit_section_title', true ) : '' ) ?: 'LOCATIONS & HOURS';
+		?>
+		<style>
+			.quills-card { background: #fff; border: 1px solid #cbd5e1; border-radius: 8px; padding: 24px; margin-bottom: 24px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
+			.quills-card-title { font-size: 18px; font-weight: 700; color: #1e293b; margin-top: 0; margin-bottom: 16px; padding-bottom: 12px; border-bottom: 2px solid #f1f5f9; display: flex; align-items: center; gap: 8px; }
+			.quills-form-table { width: 100%; border-collapse: collapse; }
+			.quills-form-table th { width: 220px; text-align: left; vertical-align: top; padding: 12px 16px 12px 0; font-weight: 600; color: #475569; font-size: 14px; }
+			.quills-form-table td { vertical-align: top; padding: 12px 0; }
+			.quills-form-table input[type="text"], .quills-form-table textarea { width: 100%; max-width: 680px; padding: 8px 12px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 14px; box-sizing: border-box; }
+			.quills-form-table textarea { font-family: inherit; line-height: 1.5; }
+			.quills-desc { font-size: 12px; color: #64748b; margin-top: 6px; }
+			.quills-img-preview { max-width: 280px; max-height: 180px; object-fit: contain; border-radius: 6px; border: 1px solid #cbd5e1; margin-top: 8px; display: block; background: #faf7f2; padding: 4px; }
+		</style>
+
+		<!-- BANNER TO EDIT CAFES -->
+		<div style="background: #fef3c7; border: 1px solid #fcd34d; border-radius: 8px; padding: 16px 20px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center;">
+			<div>
+				<strong style="color: #92400e; font-size: 15px;">☕ Quản lý 7 Chi nhánh Quán Cafe cụ thể (Địa chỉ, Giờ mở cửa, Ảnh gallery):</strong>
+				<p style="margin: 4px 0 0 0; color: #78350f; font-size: 13px;">Để chỉnh sửa chi tiết từng quán (Nulu, Highlands, Indianapolis, St. Matthews, J-Town, Norton Commons, Frankfort Avenue), vui lòng sử dụng trang Quán Cafe riêng biệt.</p>
+			</div>
+			<a href="<?php echo esc_url( admin_url( 'admin.php?page=quills-cafes' ) ); ?>" class="button button-primary" style="background: #b45309; border-color: #92400e; font-weight: 700; white-space: nowrap;">
+				Mở Quản Lý 7 Quán Cafe &rarr;
+			</a>
+		</div>
+
+		<!-- SECTION 1: HEADER & HERO -->
+		<div class="quills-card">
+			<h2 class="quills-card-title">🚩 1. Tiêu Đề Banner & Breadcrumbs</h2>
+			<table class="quills-form-table">
+				<tr>
+					<th><label for="quills_visit_breadcrumb">Chữ Breadcrumb:</label></th>
+					<td>
+						<input type="text" name="quills_visit_breadcrumb" id="quills_visit_breadcrumb" value="<?php echo esc_attr( $breadcrumb ); ?>">
+						<div class="quills-desc">Mặc định: Locations &amp; Hours</div>
+					</td>
+				</tr>
+				<tr>
+					<th><label for="quills_visit_hero_title">Tiêu đề Banner chính:</label></th>
+					<td>
+						<input type="text" name="quills_visit_hero_title" id="quills_visit_hero_title" value="<?php echo esc_attr( $hero_title ); ?>">
+						<div class="quills-desc">Mặc định: Our Cafes</div>
+					</td>
+				</tr>
+				<tr>
+					<th><label>Ảnh nền Hero Banner:</label></th>
+					<td>
+						<div style="display: flex; gap: 8px; max-width: 680px; align-items: center;">
+							<input type="text" name="quills_visit_hero_image" id="quills_visit_hero_image" value="<?php echo esc_attr( $hero_img ); ?>" placeholder="Để trống để dùng ảnh mặc định">
+							<button type="button" class="button quills-upload-btn" data-target="#quills_visit_hero_image" data-preview="#preview_visit_hero_image">Chọn ảnh</button>
+							<button type="button" class="button quills-reset-btn" data-target="#quills_visit_hero_image" data-preview="#preview_visit_hero_image" data-default="">Khôi phục</button>
+						</div>
+						<img id="preview_visit_hero_image" class="quills-img-preview" src="<?php echo esc_url( ! empty( $hero_img ) ? ( filter_var( $hero_img, FILTER_VALIDATE_URL ) ? $hero_img : $img_dir . $hero_img ) : $default_hero ); ?>" alt="Preview">
+					</td>
+				</tr>
+			</table>
+		</div>
+
+		<!-- SECTION 2: INTRO & SECTION HEADING -->
+		<div class="quills-card">
+			<h2 class="quills-card-title">📝 2. Lời Dẫn & Tiêu Đề Danh Sách Quán</h2>
+			<table class="quills-form-table">
+				<tr>
+					<th><label for="quills_visit_intro_text">Đoạn văn giới thiệu chung:</label></th>
+					<td>
+						<textarea name="quills_visit_intro_text" id="quills_visit_intro_text" rows="5"><?php echo esc_textarea( $intro_text ); ?></textarea>
+					</td>
+				</tr>
+				<tr>
+					<th><label for="quills_visit_section_title">Tiêu đề danh sách quán:</label></th>
+					<td>
+						<input type="text" name="quills_visit_section_title" id="quills_visit_section_title" value="<?php echo esc_attr( $section_title ); ?>">
+						<div class="quills-desc">Mặc định: LOCATIONS &amp; HOURS</div>
+					</td>
+				</tr>
+			</table>
+		</div>
+
+		<script>
+		jQuery(document).ready(function($) {
+			$('.quills-upload-btn').on('click', function(e) {
+				e.preventDefault();
+				var targetInput = $( $(this).data('target') );
+				var previewImg  = $( $(this).data('preview') );
+
+				var frame = wp.media({
+					title: 'Chọn hoặc tải ảnh lên cho Trang Chi nhánh',
+					button: { text: 'Sử dụng ảnh này' },
+					multiple: false
+				});
+
+				frame.on('select', function() {
+					var attachment = frame.state().get('selection').first().toJSON();
+					targetInput.val(attachment.url);
+					if (previewImg.length) {
+						previewImg.attr('src', attachment.url);
+					}
+				});
+
+				frame.open();
+			});
+
+			$('.quills-reset-btn').on('click', function(e) {
+				e.preventDefault();
+				var targetInput = $( $(this).data('target') );
+				var previewImg  = $( $(this).data('preview') );
+				var defaultVal  = $(this).data('default');
+				targetInput.val(defaultVal);
+				if (previewImg.length) {
+					previewImg.attr('src', defaultVal);
+				}
+			});
+		});
+		</script>
+		<?php
+	}
+
+	/* ==========================================================================
+	   FOOTER SETTINGS MANAGEMENT
+	   ========================================================================== */
+
+	/**
+	 * Handle Footer Settings Save from Appearance Submenu
+	 */
+	public static function handle_footer_settings_save() {
+		add_action( 'admin_post_quills_save_footer_settings', function() {
+			if ( ! current_user_can( 'manage_options' ) ) {
+				wp_die( esc_html__( 'Bạn không có quyền thực hiện hành động này.', 'coffee-cafe-corner' ) );
+			}
+
+			check_admin_referer( 'quills_footer_settings_action', 'quills_footer_settings_nonce' );
+
+			self::save_footer_fields( $_POST );
+
+			wp_safe_redirect( add_query_arg( array( 'page' => 'quills-footer-settings', 'updated' => '1' ), admin_url( 'themes.php' ) ) );
+			exit;
+		} );
+	}
+
+	/**
+	 * Save Footer fields to wp_options
+	 */
+	public static function save_footer_fields( $data ) {
+		$text_fields = array(
+			'footer_brand_name',
+			'footer_address_street',
+			'footer_address_city',
+			'footer_phone',
+			'footer_email',
+			'footer_currency',
+			'footer_lang',
+			'footer_social_facebook',
+			'footer_social_instagram',
+		);
+
+		foreach ( $text_fields as $field ) {
+			if ( isset( $data[ $field ] ) ) {
+				update_option( $field, sanitize_text_field( wp_unslash( $data[ $field ] ) ) );
+			}
+		}
+
+		if ( isset( $data['footer_copyright'] ) ) {
+			update_option( 'footer_copyright', wp_kses_post( wp_unslash( $data['footer_copyright'] ) ) );
+		}
+
+		delete_transient( 'quills_footer_content' );
+		if ( function_exists( 'wp_cache_flush' ) ) {
+			wp_cache_flush();
+		}
+		self::clear_page_cache();
+	}
+
+	/**
+	 * Render Standalone Footer Settings Page under Appearance
+	 */
+	public static function render_footer_settings_page() {
+		?>
+		<div class="wrap">
+			<h1 style="display: flex; align-items: center; gap: 10px; margin-bottom: 20px;">
+				<span>🌐 Quản lý Toàn Bộ Nội dung Chân Trang Toàn Website (Footer Settings)</span>
+			</h1>
+
+			<?php if ( isset( $_GET['updated'] ) ) : ?>
+				<div class="notice notice-success is-dismissible">
+					<p><strong>✅ Dữ liệu Chân trang (Footer) đã được lưu thành công vào Database!</strong> Mọi trang trên website sẽ phản ánh ngay lập tức nội dung mới.</p>
+				</div>
+			<?php endif; ?>
+
+			<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
+				<input type="hidden" name="action" value="quills_save_footer_settings">
+				<?php wp_nonce_field( 'quills_footer_settings_action', 'quills_footer_settings_nonce' ); ?>
+
+				<?php self::render_footer_form_fields(); ?>
+
+				<div style="position: sticky; bottom: 20px; background: #fff; padding: 15px 20px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); border: 1px solid #cbd5e1; z-index: 100; display: flex; justify-content: space-between; align-items: center;">
+					<span style="font-weight: 600; color: #334155;">✨ Nhấn nút Lưu sau khi chỉnh sửa bất kỳ mục nào trên chân trang:</span>
+					<input type="submit" name="submit" id="submit" class="button button-primary button-large" style="height: 44px; padding: 0 24px; font-size: 15px; font-weight: 700; background: #663A1E; border-color: #4a2812;" value="💾 Lưu Toàn Bộ Thay Đổi Chân Trang (Save Footer Settings)">
+				</div>
+			</form>
+		</div>
+		<?php
+	}
+
+	/**
+	 * Shared Form Fields for Footer
+	 */
+	public static function render_footer_form_fields() {
+		$brand_name      = get_option( 'footer_brand_name', 'QUILLS COFFEE' );
+		$address_street  = get_option( 'footer_address_street', '800 E Main Street' );
+		$address_city    = get_option( 'footer_address_city', 'Louisville, KY 40206' );
+		$phone           = get_option( 'footer_phone', '502-861-5844' );
+		$email           = get_option( 'footer_email', 'hello@quillscoffee.com' );
+		$currency        = get_option( 'footer_currency', function_exists( 'get_woocommerce_currency' ) ? get_woocommerce_currency() : 'USD' );
+		$lang            = get_option( 'footer_lang', 'EN' );
+		$facebook_url    = get_option( 'footer_social_facebook', 'https://www.facebook.com/quillscoffee' );
+		$instagram_url   = get_option( 'footer_social_instagram', 'https://www.instagram.com/quillscoffee' );
+		$copyright_text  = get_option( 'footer_copyright', '© {year} Group CMS A' );
+		?>
+		<style>
+			.quills-card { background: #fff; border: 1px solid #cbd5e1; border-radius: 8px; padding: 24px; margin-bottom: 24px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
+			.quills-card-title { font-size: 18px; font-weight: 700; color: #1e293b; margin-top: 0; margin-bottom: 16px; padding-bottom: 12px; border-bottom: 2px solid #f1f5f9; display: flex; align-items: center; gap: 8px; }
+			.quills-form-table { width: 100%; border-collapse: collapse; }
+			.quills-form-table th { width: 220px; text-align: left; vertical-align: top; padding: 12px 16px 12px 0; font-weight: 600; color: #475569; font-size: 14px; }
+			.quills-form-table td { vertical-align: top; padding: 12px 0; }
+			.quills-form-table input[type="text"], .quills-form-table textarea { width: 100%; max-width: 680px; padding: 8px 12px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 14px; box-sizing: border-box; }
+			.quills-desc { font-size: 12px; color: #64748b; margin-top: 6px; }
+		</style>
+
+		<!-- SECTION 1: BRAND & CONTACT INFO -->
+		<div class="quills-card">
+			<h2 class="quills-card-title">🏢 1. Tên Thương Hiệu & Thông Tin Trụ Sở Liên Hệ (Cột 1)</h2>
+			<table class="quills-form-table">
+				<tr>
+					<th><label for="footer_brand_name">Tên thương hiệu:</label></th>
+					<td>
+						<input type="text" name="footer_brand_name" id="footer_brand_name" value="<?php echo esc_attr( $brand_name ); ?>">
+						<div class="quills-desc">Mặc định: QUILLS COFFEE</div>
+					</td>
+				</tr>
+				<tr>
+					<th><label for="footer_address_street">Địa chỉ dòng 1 (Tên đường / Số nhà):</label></th>
+					<td>
+						<input type="text" name="footer_address_street" id="footer_address_street" value="<?php echo esc_attr( $address_street ); ?>">
+						<div class="quills-desc">Mặc định: 800 E Main Street</div>
+					</td>
+				</tr>
+				<tr>
+					<th><label for="footer_address_city">Địa chỉ dòng 2 (Thành phố, Bang, Zip):</label></th>
+					<td>
+						<input type="text" name="footer_address_city" id="footer_address_city" value="<?php echo esc_attr( $address_city ); ?>">
+						<div class="quills-desc">Mặc định: Louisville, KY 40206</div>
+					</td>
+				</tr>
+				<tr>
+					<th><label for="footer_phone">Số điện thoại liên hệ:</label></th>
+					<td>
+						<input type="text" name="footer_phone" id="footer_phone" value="<?php echo esc_attr( $phone ); ?>" style="max-width: 320px;">
+						<div class="quills-desc">Mặc định: 502-861-5844</div>
+					</td>
+				</tr>
+				<tr>
+					<th><label for="footer_email">Email hỗ trợ khách hàng:</label></th>
+					<td>
+						<input type="text" name="footer_email" id="footer_email" value="<?php echo esc_attr( $email ); ?>" style="max-width: 320px;">
+						<div class="quills-desc">Mặc định: hello@quillscoffee.com</div>
+					</td>
+				</tr>
+			</table>
+		</div>
+
+		<!-- SECTION 2: CURRENCY & SOCIALS -->
+		<div class="quills-card">
+			<h2 class="quills-card-title">🌐 2. Tiền Tệ, Ngôn Ngữ & Mạng Xã Hội</h2>
+			<table class="quills-form-table">
+				<tr>
+					<th><label for="footer_currency">Mã tiền tệ hiển thị:</label></th>
+					<td>
+						<input type="text" name="footer_currency" id="footer_currency" value="<?php echo esc_attr( $currency ); ?>" style="max-width: 160px;">
+						<div class="quills-desc">Mặc định: USD</div>
+					</td>
+				</tr>
+				<tr>
+					<th><label for="footer_lang">Ngôn ngữ mặc định:</label></th>
+					<td>
+						<input type="text" name="footer_lang" id="footer_lang" value="<?php echo esc_attr( $lang ); ?>" style="max-width: 160px;">
+						<div class="quills-desc">Mặc định: EN (Có dropdown chuyển đổi song ngữ EN / VI)</div>
+					</td>
+				</tr>
+				<tr>
+					<th><label for="footer_social_facebook">Đường dẫn Facebook:</label></th>
+					<td>
+						<input type="text" name="footer_social_facebook" id="footer_social_facebook" value="<?php echo esc_attr( $facebook_url ); ?>">
+					</td>
+				</tr>
+				<tr>
+					<th><label for="footer_social_instagram">Đường dẫn Instagram:</label></th>
+					<td>
+						<input type="text" name="footer_social_instagram" id="footer_social_instagram" value="<?php echo esc_attr( $instagram_url ); ?>">
+					</td>
+				</tr>
+			</table>
+		</div>
+
+		<!-- SECTION 3: COPYRIGHT -->
+		<div class="quills-card">
+			<h2 class="quills-card-title">⚖️ 3. Dòng Bản Quyền Cuối Trang (Copyright)</h2>
+			<table class="quills-form-table">
+				<tr>
+					<th><label for="footer_copyright">Nội dung bản quyền:</label></th>
+					<td>
+						<input type="text" name="footer_copyright" id="footer_copyright" value="<?php echo esc_attr( $copyright_text ); ?>">
+						<div class="quills-desc">Mẹo: Bạn có thể dùng <code>{year}</code> để hệ thống tự động chèn năm hiện tại (ví dụ: &copy; {year} Group CMS A).</div>
+					</td>
+				</tr>
+			</table>
+		</div>
+
+		<!-- SECTION 4: MENU LINKS GUIDE -->
+		<div class="quills-card" style="background: #f8fafc; border-color: #cbd5e1;">
+			<h2 class="quills-card-title">🔗 4. Các Cột Liên Kết Menu Chân Trang (Quick Links &amp; Company)</h2>
+			<p style="color: #475569; font-size: 14px; line-height: 1.6;">
+				Hai cột liên kết <strong>QUICK LINKS</strong> (Cột 2) và <strong>COMPANY</strong> (Cột 3) được quản lý linh hoạt qua hệ thống WordPress Menu tiêu chuẩn:
+			</p>
+			<ul style="list-style: disc; padding-left: 20px; color: #334155; font-size: 14px; line-height: 1.8;">
+				<li><strong>Vị trí Menu:</strong> <code>footer-quick-links</code> hoặc Menu tên <code>Quick Links</code></li>
+				<li><strong>Vị trí Menu:</strong> <code>footer-company</code> hoặc Menu tên <code>Company</code></li>
+			</ul>
+			<p style="margin-top: 15px;">
+				<a href="<?php echo esc_url( admin_url( 'nav-menus.php' ) ); ?>" class="button button-secondary" style="font-weight: 600;">
+					👉 Chuyển đến Quản lý Menu (Appearance &rarr; Menus) để thêm / sửa liên kết chân trang
+				</a>
+			</p>
+		</div>
+		<?php
+	}
+
 }
 
 Coffee_Cafe_Corner_Page_Content_Admin::init();

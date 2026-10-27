@@ -31,18 +31,38 @@ if ( ! $page_id || ! in_array( get_post_field( 'post_name', $page_id ), array( '
 $theme_url = trailingslashit( get_template_directory_uri() );
 $img_dir   = $theme_url . 'assets/images/about/';
 
+$resolve_about_img = function( $val, $default_file ) use ( $img_dir ) {
+    if ( empty( $val ) ) {
+        return $img_dir . $default_file;
+    }
+    if ( strpos( $val, 'http://' ) === 0 || strpos( $val, 'https://' ) === 0 || strpos( $val, '//' ) === 0 ) {
+        return $val;
+    }
+    return $img_dir . ltrim( $val, '/' );
+};
+
 // 3. Fetch Data dynamically from Database with defaults
-$hero_title = get_post_meta( $page_id, '_quills_hero_title', true );
+$hero_title = get_option( 'quills_about_hero_title' );
 if ( empty( $hero_title ) ) {
-    $hero_title = get_the_title( $page_id ) ?: 'About Us';
+    $hero_title = get_post_meta( $page_id, '_quills_hero_title', true ) ?: ( get_the_title( $page_id ) ?: 'About Us' );
 }
 
-$hero_img_file = get_post_meta( $page_id, '_quills_hero_image', true ) ?: 'about-hero.jpg';
-$hero_img_url  = $img_dir . $hero_img_file;
+$hero_img_val = get_option( 'quills_about_hero_image' );
+if ( empty( $hero_img_val ) ) {
+    $hero_img_val = get_post_meta( $page_id, '_quills_hero_image', true ) ?: 'about-hero.jpg';
+}
+$hero_img_url  = $resolve_about_img( $hero_img_val, 'about-hero.jpg' );
 
 // Section: Where We Started
-$where_started_title = get_post_meta( $page_id, '_quills_where_we_started_title', true ) ?: 'WHERE WE STARTED';
-$where_started_paragraphs = get_post_meta( $page_id, '_quills_where_we_started_paragraphs', true );
+$where_started_title = get_option( 'quills_about_where_started_title' );
+if ( empty( $where_started_title ) ) {
+    $where_started_title = get_post_meta( $page_id, '_quills_where_we_started_title', true ) ?: 'WHERE WE STARTED';
+}
+
+$where_started_paragraphs = get_option( 'quills_about_where_started_paragraphs' );
+if ( empty( $where_started_paragraphs ) ) {
+    $where_started_paragraphs = get_post_meta( $page_id, '_quills_where_we_started_paragraphs', true );
+}
 if ( is_string( $where_started_paragraphs ) && ! empty( $where_started_paragraphs ) ) {
     $where_started_paragraphs = array_filter( array_map( 'trim', preg_split( '/\r\n\r\n|\n\n/', $where_started_paragraphs ) ) );
 }
@@ -62,42 +82,137 @@ if ( empty( $where_started_paragraphs ) || ! is_array( $where_started_paragraphs
 }
 
 // Section: Why We're Here
-$why_here_title   = get_post_meta( $page_id, '_quills_why_were_here_title', true ) ?: "WHY WE'RE HERE";
-$why_here_img     = $img_dir . ( get_post_meta( $page_id, '_quills_why_were_here_image', true ) ?: 'why-were-here.jpg' );
-$why_here_content = get_post_meta( $page_id, '_quills_why_were_here_content', true ) ?: "Quills Coffee is here to deliver a coffee that connects people. Between the barista behind the counter and the customer in front of it. Between strangers at neighboring tables. Between all of us and the farmers who picked the coffee we're enjoying. We believe delivering great coffee is a chance to make memorable human experiences. It's a chance for us to be together, to pause, to talk, to connect.";
+$why_here_title = get_option( 'quills_about_why_here_title' );
+if ( empty( $why_here_title ) ) {
+    $why_here_title = get_post_meta( $page_id, '_quills_why_were_here_title', true ) ?: "WHY WE'RE HERE";
+}
+
+$why_here_img_val = get_option( 'quills_about_why_here_image' );
+if ( empty( $why_here_img_val ) ) {
+    $why_here_img_val = get_post_meta( $page_id, '_quills_why_were_here_image', true ) ?: 'why-were-here.jpg';
+}
+$why_here_img = $resolve_about_img( $why_here_img_val, 'why-were-here.jpg' );
+
+$why_here_content = get_option( 'quills_about_why_here_content' );
+if ( empty( $why_here_content ) ) {
+    $why_here_content = get_post_meta( $page_id, '_quills_why_were_here_content', true ) ?: "Quills Coffee is here to deliver a coffee that connects people. Between the barista behind the counter and the customer in front of it. Between strangers at neighboring tables. Between all of us and the farmers who picked the coffee we're enjoying. We believe delivering great coffee is a chance to make memorable human experiences. It's a chance for us to be together, to pause, to talk, to connect.";
+}
 
 // Section: How We Work
-$how_work_title   = get_post_meta( $page_id, '_quills_how_we_work_title', true ) ?: 'HOW WE WORK';
-$how_work_content = get_post_meta( $page_id, '_quills_how_we_work_content', true ) ?: "The French have a word: terroir. It means \"the taste of the place itself.\" The soil where something grows. The climate that shapes it. The hands that tend it. It's why a coffee cherry from Guatemala tastes different from one grown in Ethiopia. The earth was different, the rain was different, and so the taste is different. At Quills, we celebrate our own kind of \"terroir\" with three core values: Genuine Care, Continuous Craft, and Creative Education.";
+$how_work_title = get_option( 'quills_about_how_work_title' );
+if ( empty( $how_work_title ) ) {
+    $how_work_title = get_post_meta( $page_id, '_quills_how_we_work_title', true ) ?: 'HOW WE WORK';
+}
+
+$how_work_content = get_option( 'quills_about_how_work_content' );
+if ( empty( $how_work_content ) ) {
+    $how_work_content = get_post_meta( $page_id, '_quills_how_we_work_content', true ) ?: "The French have a word: terroir. It means \"the taste of the place itself.\" The soil where something grows. The climate that shapes it. The hands that tend it. It's why a coffee cherry from Guatemala tastes different from one grown in Ethiopia. The earth was different, the rain was different, and so the taste is different. At Quills, we celebrate our own kind of \"terroir\" with three core values: Genuine Care, Continuous Craft, and Creative Education.";
+}
 
 // Section: Terroir Definition Card
-$terroir_title    = get_post_meta( $page_id, '_quills_terroir_title', true ) ?: 'terroir';
-$terroir_phonetic = get_post_meta( $page_id, '_quills_terroir_phonetic', true ) ?: '/tɛrˈwɑːr/ • French';
-$terroir_pos      = get_post_meta( $page_id, '_quills_terroir_pos', true ) ?: 'noun';
-$terroir_def_1    = get_post_meta( $page_id, '_quills_terroir_def_1', true ) ?: '1. the combination of factors including soil, climate, and sunlight that gives wine grapes and coffee cherries their distinctive character';
-$terroir_def_2    = get_post_meta( $page_id, '_quills_terroir_def_2', true ) ?: '2. the combination of people, values, and daily practices that give our spaces their distinctive character';
-$terroir_bg_img   = $img_dir . ( get_post_meta( $page_id, '_quills_terroir_image', true ) ?: 'terroir.png' );
+$terroir_title = get_option( 'quills_about_terroir_title' );
+if ( empty( $terroir_title ) ) {
+    $terroir_title = get_post_meta( $page_id, '_quills_terroir_title', true ) ?: 'terroir';
+}
+
+$terroir_phonetic = get_option( 'quills_about_terroir_phonetic' );
+if ( empty( $terroir_phonetic ) ) {
+    $terroir_phonetic = get_post_meta( $page_id, '_quills_terroir_phonetic', true ) ?: '/tɛrˈwɑːr/ • French';
+}
+
+$terroir_pos = get_option( 'quills_about_terroir_pos' );
+if ( empty( $terroir_pos ) ) {
+    $terroir_pos = get_post_meta( $page_id, '_quills_terroir_pos', true ) ?: 'noun';
+}
+
+$terroir_def_1 = get_option( 'quills_about_terroir_def_1' );
+if ( empty( $terroir_def_1 ) ) {
+    $terroir_def_1 = get_post_meta( $page_id, '_quills_terroir_def_1', true ) ?: '1. the combination of factors including soil, climate, and sunlight that gives wine grapes and coffee cherries their distinctive character';
+}
+
+$terroir_def_2 = get_option( 'quills_about_terroir_def_2' );
+if ( empty( $terroir_def_2 ) ) {
+    $terroir_def_2 = get_post_meta( $page_id, '_quills_terroir_def_2', true ) ?: '2. the combination of people, values, and daily practices that give our spaces their distinctive character';
+}
+
+$terroir_img_val = get_option( 'quills_about_terroir_image' );
+if ( empty( $terroir_img_val ) ) {
+    $terroir_img_val = get_post_meta( $page_id, '_quills_terroir_image', true ) ?: 'terroir.png';
+}
+$terroir_bg_img = $resolve_about_img( $terroir_img_val, 'terroir.png' );
 
 // Section: Genuine Care
-$genuine_care_title   = get_post_meta( $page_id, '_quills_genuine_care_title', true ) ?: 'GENUINE CARE';
-$genuine_care_img     = $img_dir . ( get_post_meta( $page_id, '_quills_genuine_care_image', true ) ?: 'genuine-care.png' );
-$genuine_care_content = get_post_meta( $page_id, '_quills_genuine_care_content', true ) ?: "We serve with warmth, hospitality, and attentiveness to the people around us. The barista knows your name. She asks how you are. He's there with you. She polishes tables not because her manager watches, but because she knows someone's going to sit there with their morning coffee. The roastery team works hard to find new and exciting coffees, because they care about curating a delightful solution for every customer. Managers work to make their cafes places where people want to gather and come back to. Whether it's behind the bar, in the roastery, or in the training lab, the team is never here just for people who want to create a place for connection.";
+$genuine_care_title = get_option( 'quills_about_genuine_care_title' );
+if ( empty( $genuine_care_title ) ) {
+    $genuine_care_title = get_post_meta( $page_id, '_quills_genuine_care_title', true ) ?: 'GENUINE CARE';
+}
+
+$genuine_care_img_val = get_option( 'quills_about_genuine_care_image' );
+if ( empty( $genuine_care_img_val ) ) {
+    $genuine_care_img_val = get_post_meta( $page_id, '_quills_genuine_care_image', true ) ?: 'genuine-care.png';
+}
+$genuine_care_img = $resolve_about_img( $genuine_care_img_val, 'genuine-care.png' );
+
+$genuine_care_content = get_option( 'quills_about_genuine_care_content' );
+if ( empty( $genuine_care_content ) ) {
+    $genuine_care_content = get_post_meta( $page_id, '_quills_genuine_care_content', true ) ?: "We serve with warmth, hospitality, and attentiveness to the people around us. The barista knows your name. She asks how you are. He's there with you. She polishes tables not because her manager watches, but because she knows someone's going to sit there with their morning coffee. The roastery team works hard to find new and exciting coffees, because they care about curating a delightful solution for every customer. Managers work to make their cafes places where people want to gather and come back to. Whether it's behind the bar, in the roastery, or in the training lab, the team is never here just for people who want to create a place for connection.";
+}
 
 // Section: Continuous Craft
-$craft_title   = get_post_meta( $page_id, '_quills_continuous_craft_title', true ) ?: 'CONTINUOUS CRAFT';
-$craft_img     = $img_dir . ( get_post_meta( $page_id, '_quills_continuous_craft_image', true ) ?: 'continuous-craft.jpg' );
-$craft_content = get_post_meta( $page_id, '_quills_continuous_craft_content', true ) ?: "Excellence is not an accident. It's hundreds of small decisions made correctly every day. Water temperature, grind size, the timing of every shot. It's about constant improvement. We test, we taste, we tweak. Because coffee is a craft worth perfecting. It's the barista who continues to develop his palate, textures his milk to silk, to create a beautiful presentation every time. The manager who continues to hone our hospitality. The roaster improves their skill batch after batch. We're committed to an excellence and beauty in our craft.";
+$craft_title = get_option( 'quills_about_continuous_craft_title' );
+if ( empty( $craft_title ) ) {
+    $craft_title = get_post_meta( $page_id, '_quills_continuous_craft_title', true ) ?: 'CONTINUOUS CRAFT';
+}
+
+$craft_img_val = get_option( 'quills_about_continuous_craft_image' );
+if ( empty( $craft_img_val ) ) {
+    $craft_img_val = get_post_meta( $page_id, '_quills_continuous_craft_image', true ) ?: 'continuous-craft.jpg';
+}
+$craft_img = $resolve_about_img( $craft_img_val, 'continuous-craft.jpg' );
+
+$craft_content = get_option( 'quills_about_continuous_craft_content' );
+if ( empty( $craft_content ) ) {
+    $craft_content = get_post_meta( $page_id, '_quills_continuous_craft_content', true ) ?: "Excellence is not an accident. It's hundreds of small decisions made correctly every day. Water temperature, grind size, the timing of every shot. It's about constant improvement. We test, we taste, we tweak. Because coffee is a craft worth perfecting. It's the barista who continues to develop his palate, textures his milk to silk, to create a beautiful presentation every time. The manager who continues to hone our hospitality. The roaster improves their skill batch after batch. We're committed to an excellence and beauty in our craft.";
+}
 
 // Section: Creative Education
-$edu_title   = get_post_meta( $page_id, '_quills_creative_education_title', true ) ?: 'CREATIVE EDUCATION';
-$edu_img     = $img_dir . ( get_post_meta( $page_id, '_quills_creative_education_image', true ) ?: 'creative-education.jpg' );
-$edu_content = get_post_meta( $page_id, '_quills_creative_education_content', true ) ?: "Knowledge belongs to anyone who wants it. The customer who asks why this coffee tastes like chocolate gets a real answer from our team—about the processing, the roast, the origin. They adjust their language and make learning feel safe and exciting, never intimidating. A new barista learning to pull shots gets the time to understand, not just run through the motions. We light up when we share knowledge. And we share it freely because we want you to love coffee as much as we do. Because we believe knowledge can deepen every coffee experience.";
+$edu_title = get_option( 'quills_about_creative_education_title' );
+if ( empty( $edu_title ) ) {
+    $edu_title = get_post_meta( $page_id, '_quills_creative_education_title', true ) ?: 'CREATIVE EDUCATION';
+}
+
+$edu_img_val = get_option( 'quills_about_creative_education_image' );
+if ( empty( $edu_img_val ) ) {
+    $edu_img_val = get_post_meta( $page_id, '_quills_creative_education_image', true ) ?: 'creative-education.jpg';
+}
+$edu_img = $resolve_about_img( $edu_img_val, 'creative-education.jpg' );
+
+$edu_content = get_option( 'quills_about_creative_education_content' );
+if ( empty( $edu_content ) ) {
+    $edu_content = get_post_meta( $page_id, '_quills_creative_education_content', true ) ?: "Knowledge belongs to anyone who wants it. The customer who asks why this coffee tastes like chocolate gets a real answer from our team—about the processing, the roast, the origin. They adjust their language and make learning feel safe and exciting, never intimidating. A new barista learning to pull shots gets the time to understand, not just run through the motions. We light up when we share knowledge. And we share it freely because we want you to love coffee as much as we do. Because we believe knowledge can deepen every coffee experience.";
+}
 
 // Section: Where We're Going
-$where_going_title  = get_post_meta( $page_id, '_quills_where_were_going_title', true ) ?: "Where We're Going";
-$where_going_quote  = get_post_meta( $page_id, '_quills_where_were_going_quote', true ) ?: "Like soil worked for years, our roots merely grow richer with time. We're not trying to be the biggest coffee company, or the fastest. We're building a place where quality lives, where every cup honors the taste of each dear sight, and most importantly—where people strive to connect with other people.";
-$where_going_author = get_post_meta( $page_id, '_quills_where_were_going_author', true ) ?: '— Nathan Quillo, Founder';
-$where_going_img    = $img_dir . ( get_post_meta( $page_id, '_quills_where_were_going_image', true ) ?: 'where-were-going.jpg' );
+$where_going_title = get_option( 'quills_about_where_going_title' );
+if ( empty( $where_going_title ) ) {
+    $where_going_title = get_post_meta( $page_id, '_quills_where_were_going_title', true ) ?: "Where We're Going";
+}
+
+$where_going_quote = get_option( 'quills_about_where_going_quote' );
+if ( empty( $where_going_quote ) ) {
+    $where_going_quote = get_post_meta( $page_id, '_quills_where_were_going_quote', true ) ?: "Like soil worked for years, our roots merely grow richer with time. We're not trying to be the biggest coffee company, or the fastest. We're building a place where quality lives, where every cup honors the taste of each dear sight, and most importantly—where people strive to connect with other people.";
+}
+
+$where_going_author = get_option( 'quills_about_where_going_author' );
+if ( empty( $where_going_author ) ) {
+    $where_going_author = get_post_meta( $page_id, '_quills_where_were_going_author', true ) ?: '— Nathan Quillo, Founder';
+}
+
+$where_going_img_val = get_option( 'quills_about_where_going_image' );
+if ( empty( $where_going_img_val ) ) {
+    $where_going_img_val = get_post_meta( $page_id, '_quills_where_were_going_image', true ) ?: 'where-were-going.jpg';
+}
+$where_going_img = $resolve_about_img( $where_going_img_val, 'where-were-going.jpg' );
 ?>
 
 <div class="quills-about-page-container">

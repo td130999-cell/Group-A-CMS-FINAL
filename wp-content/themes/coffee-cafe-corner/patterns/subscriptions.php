@@ -15,10 +15,40 @@ if ( ! class_exists( 'Coffee_Cafe_Corner_Subscription_DB' ) ) {
 $sort_by = isset( $_GET['sort_by'] ) ? sanitize_text_field( wp_unslash( $_GET['sort_by'] ) ) : 'featured';
 $query   = Coffee_Cafe_Corner_Subscription_DB::get_subscription_products_query( $sort_by );
 
-$banner_url = content_url( '/uploads/quills/coffeesfreebagbanner2.png' );
-if ( ! file_exists( ABSPATH . 'wp-content/uploads/quills/coffeesfreebagbanner2.png' ) ) {
-	$banner_url = trailingslashit( get_template_directory_uri() ) . 'assets/images/subscriptions-banner.png';
+$sub_img_dir = trailingslashit( get_template_directory_uri() ) . 'assets/images/';
+
+$banner_url = get_option( 'quills_sub_hero_img', '' );
+if ( empty( $banner_url ) ) {
+	$banner_url = content_url( '/uploads/quills/coffeesfreebagbanner2.png' );
+	if ( ! file_exists( ABSPATH . 'wp-content/uploads/quills/coffeesfreebagbanner2.png' ) ) {
+		$banner_url = $sub_img_dir . 'subscriptions-banner.png';
+	}
 }
+
+$breadcrumb_home    = get_option( 'quills_sub_breadcrumb_home', __( 'Home', 'coffee-cafe-corner' ) );
+$breadcrumb_current = get_option( 'quills_sub_breadcrumb_current', __( 'Subscriptions', 'coffee-cafe-corner' ) );
+$hero_title         = get_option( 'quills_sub_hero_title', __( 'Subscriptions', 'coffee-cafe-corner' ) );
+
+$intro_title = get_option( 'quills_sub_intro_title', __( 'Get a free 12oz bag of Inkwell when you subscribe.', 'coffee-cafe-corner' ) );
+$intro_desc  = get_option( 'quills_sub_intro_desc', __( 'Experience freshly-roasted coffee delivered right to your door. Choose between crafted blends or a curated rotation of single-origins from around the world.', 'coffee-cafe-corner' ) );
+$intro_note  = get_option( 'quills_sub_intro_note', __( '(Free bag offer valid for new subscribers only.)', 'coffee-cafe-corner' ) );
+
+// Top quotes
+$top_q1_text   = get_option( 'quills_sub_top_q1_text', '"The smell alone makes you want to rip open the bag and drink it right away. This coffee is THE BEST."' );
+$top_q1_author = get_option( 'quills_sub_top_q1_author', '— C. Diller' );
+$top_q2_text   = get_option( 'quills_sub_top_q2_text', '"One cup is all it took, and we were hooked! Now we order online to have our favorite cup on a daily basis."' );
+$top_q2_author = get_option( 'quills_sub_top_q2_author', '— Brianne E.' );
+$top_q3_text   = get_option( 'quills_sub_top_q3_text', '"Quills has the best coffee and great customer service! 5 stars!!! We love getting to try a variety of different roasts!"' );
+$top_q3_author = get_option( 'quills_sub_top_q3_author', '— Kelly Davis' );
+
+// Bottom quotes
+$bottom_heading = get_option( 'quills_sub_bottom_heading', __( 'More kind words from customers', 'coffee-cafe-corner' ) );
+$bottom_q1_text   = get_option( 'quills_sub_bottom_q1_text', '"This is probably the best coffee I\'ve ever had."' );
+$bottom_q1_author = get_option( 'quills_sub_bottom_q1_author', '— Jamie W.' );
+$bottom_q2_text   = get_option( 'quills_sub_bottom_q2_text', '"It’s our favorite coffee!! We entertain frequently and everyone seems to enjoy this coffee."' );
+$bottom_q2_author = get_option( 'quills_sub_bottom_q2_author', '— Lisa Peters' );
+$bottom_q3_text   = get_option( 'quills_sub_bottom_q3_text', '"Mega delicious! Just sent some to my sister in California to try to get her hooked."' );
+$bottom_q3_author = get_option( 'quills_sub_bottom_q3_author', '— Sarah R.' );
 ?>
 
 <div class="quills-subscriptions-page">
@@ -26,17 +56,17 @@ if ( ! file_exists( ABSPATH . 'wp-content/uploads/quills/coffeesfreebagbanner2.p
 
 		<!-- 1. Breadcrumbs -->
 		<nav class="quills-sub-breadcrumbs" aria-label="<?php esc_attr_e( 'Breadcrumb', 'coffee-cafe-corner' ); ?>">
-			<a href="<?php echo esc_url( home_url( '/' ) ); ?>" class="quills-sub-breadcrumb-link"><?php esc_html_e( 'Home', 'coffee-cafe-corner' ); ?></a>
+			<a href="<?php echo esc_url( home_url( '/' ) ); ?>" class="quills-sub-breadcrumb-link"><?php echo esc_html( $breadcrumb_home ); ?></a>
 			<span class="quills-sub-sep">/</span>
-			<span class="quills-sub-current"><?php esc_html_e( 'Subscriptions', 'coffee-cafe-corner' ); ?></span>
+			<span class="quills-sub-current"><?php echo esc_html( $breadcrumb_current ); ?></span>
 		</nav>
 
 		<!-- 2. Hero Banner with Script Title and FREE BAG Badge -->
 		<section class="quills-sub-hero-banner" aria-label="<?php esc_attr_e( 'Subscriptions Banner', 'coffee-cafe-corner' ); ?>">
 			<div class="quills-sub-hero-image-wrap">
-				<img src="<?php echo esc_url( $banner_url ); ?>" alt="<?php esc_attr_e( 'Quills Coffee Subscriptions', 'coffee-cafe-corner' ); ?>" class="quills-sub-hero-bg-img" />
+				<img src="<?php echo esc_url( $banner_url ); ?>" alt="<?php echo esc_attr( $hero_title ); ?>" class="quills-sub-hero-bg-img" />
 				<div class="quills-sub-hero-overlay">
-					<h1 class="quills-sub-hero-title"><?php esc_html_e( 'Subscriptions', 'coffee-cafe-corner' ); ?></h1>
+					<h1 class="quills-sub-hero-title"><?php echo esc_html( $hero_title ); ?></h1>
 				</div>
 			</div>
 		</section>
@@ -44,13 +74,13 @@ if ( ! file_exists( ABSPATH . 'wp-content/uploads/quills/coffeesfreebagbanner2.p
 		<!-- 3. Rich Text Copy Section -->
 		<section class="quills-sub-intro-section">
 			<h2 class="quills-sub-intro-title">
-				<?php esc_html_e( 'Get a free 12oz bag of Inkwell when you subscribe.', 'coffee-cafe-corner' ); ?>
+				<?php echo esc_html( $intro_title ); ?>
 			</h2>
 			<p class="quills-sub-intro-desc">
-				<?php esc_html_e( 'Experience freshly-roasted coffee delivered right to your door. Choose between crafted blends or a curated rotation of single-origins from around the world.', 'coffee-cafe-corner' ); ?>
+				<?php echo esc_html( $intro_desc ); ?>
 			</p>
 			<p class="quills-sub-intro-note">
-				<?php esc_html_e( '(Free bag offer valid for new subscribers only.)', 'coffee-cafe-corner' ); ?>
+				<?php echo esc_html( $intro_note ); ?>
 			</p>
 		</section>
 
@@ -73,27 +103,27 @@ if ( ! file_exists( ABSPATH . 'wp-content/uploads/quills/coffeesfreebagbanner2.p
 				<div class="quills-sub-slide is-active" data-index="0">
 					<div class="quills-sub-stars">★★★★★</div>
 					<blockquote class="quills-sub-quote">
-						"The smell alone makes you want to rip open the bag and drink it right away. This coffee is THE BEST."
+						<?php echo esc_html( $top_q1_text ); ?>
 					</blockquote>
-					<div class="quills-sub-author">— C. Diller</div>
+					<div class="quills-sub-author"><?php echo esc_html( $top_q1_author ); ?></div>
 				</div>
 
 				<!-- Slide 2 -->
 				<div class="quills-sub-slide" data-index="1">
 					<div class="quills-sub-stars">★★★★★</div>
 					<blockquote class="quills-sub-quote">
-						"One cup is all it took, and we were hooked! Now we order online to have our favorite cup on a daily basis."
+						<?php echo esc_html( $top_q2_text ); ?>
 					</blockquote>
-					<div class="quills-sub-author">— Brianne E.</div>
+					<div class="quills-sub-author"><?php echo esc_html( $top_q2_author ); ?></div>
 				</div>
 
 				<!-- Slide 3 -->
 				<div class="quills-sub-slide" data-index="2">
 					<div class="quills-sub-stars">★★★★★</div>
 					<blockquote class="quills-sub-quote">
-						"Quills has the best coffee and great customer service! 5 stars!!! We love getting to try a variety of different roasts!"
+						<?php echo esc_html( $top_q3_text ); ?>
 					</blockquote>
-					<div class="quills-sub-author">— Kelly Davis</div>
+					<div class="quills-sub-author"><?php echo esc_html( $top_q3_author ); ?></div>
 				</div>
 			</div>
 		</div>
@@ -207,7 +237,7 @@ if ( ! file_exists( ABSPATH . 'wp-content/uploads/quills/coffeesfreebagbanner2.p
 		<!-- 7. Bottom Testimonial Section -->
 		<section class="quills-sub-bottom-testimonials" id="quills-bottom-testimonial-slider" aria-label="<?php esc_attr_e( 'More Customer Reviews', 'coffee-cafe-corner' ); ?>">
 			<h2 class="quills-sub-bottom-heading">
-				<?php esc_html_e( 'More kind words from customers', 'coffee-cafe-corner' ); ?>
+				<?php echo esc_html( $bottom_heading ); ?>
 			</h2>
 
 			<div class="quills-sub-track-container">
@@ -224,27 +254,27 @@ if ( ! file_exists( ABSPATH . 'wp-content/uploads/quills/coffeesfreebagbanner2.p
 					<div class="quills-sub-bottom-slide is-active" data-index="0">
 						<div class="quills-sub-stars">★★★★★</div>
 						<blockquote class="quills-sub-quote">
-							"This is probably the best coffee I've ever had."
+							<?php echo esc_html( $bottom_q1_text ); ?>
 						</blockquote>
-						<div class="quills-sub-author">— Jamie W.</div>
+						<div class="quills-sub-author"><?php echo esc_html( $bottom_q1_author ); ?></div>
 					</div>
 
 					<!-- Slide 2 -->
 					<div class="quills-sub-bottom-slide" data-index="1">
 						<div class="quills-sub-stars">★★★★★</div>
 						<blockquote class="quills-sub-quote">
-							"It’s our favorite coffee!! We entertain frequently and everyone seems to enjoy this coffee."
+							<?php echo esc_html( $bottom_q2_text ); ?>
 						</blockquote>
-						<div class="quills-sub-author">— Lisa Peters</div>
+						<div class="quills-sub-author"><?php echo esc_html( $bottom_q2_author ); ?></div>
 					</div>
 
 					<!-- Slide 3 -->
 					<div class="quills-sub-bottom-slide" data-index="2">
 						<div class="quills-sub-stars">★★★★★</div>
 						<blockquote class="quills-sub-quote">
-							"Mega delicious! Just sent some to my sister in California to try to get her hooked."
+							<?php echo esc_html( $bottom_q3_text ); ?>
 						</blockquote>
-						<div class="quills-sub-author">— Sarah R.</div>
+						<div class="quills-sub-author"><?php echo esc_html( $bottom_q3_author ); ?></div>
 					</div>
 				</div>
 			</div>

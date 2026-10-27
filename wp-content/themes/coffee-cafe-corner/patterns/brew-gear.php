@@ -51,6 +51,10 @@ if ( empty( $add_to_cart_text ) ) {
 	$add_to_cart_text = 'ADD TO CART';
 }
 
+$breadcrumb_home    = get_option( 'brew_gear_breadcrumb_home', __( 'Home', 'coffee-cafe-corner' ) );
+$breadcrumb_current = get_option( 'brew_gear_breadcrumb_current', $banner_title );
+$no_products_text   = get_option( 'brew_gear_no_products_text', __( 'No products found.', 'coffee-cafe-corner' ) );
+
 // 3. Process Dynamic Sorting from Request
 $allowed_sorts = array(
 	'manual'             => __( 'Featured', 'coffee-cafe-corner' ),
@@ -77,9 +81,9 @@ $total_products = $products_query->found_posts;
 
 		<!-- Breadcrumb -->
 		<nav class="quills-brew-gear-breadcrumb" aria-label="<?php esc_attr_e( 'Breadcrumb', 'coffee-cafe-corner' ); ?>">
-			<a href="<?php echo esc_url( home_url( '/' ) ); ?>" class="quills-breadcrumb-link"><?php esc_html_e( 'Home', 'coffee-cafe-corner' ); ?></a>
+			<a href="<?php echo esc_url( home_url( '/' ) ); ?>" class="quills-breadcrumb-link"><?php echo esc_html( $breadcrumb_home ); ?></a>
 			<span class="quills-breadcrumb-sep">/</span>
-			<span class="quills-breadcrumb-current"><?php echo esc_html( $banner_title ); ?></span>
+			<span class="quills-breadcrumb-current"><?php echo esc_html( $breadcrumb_current ); ?></span>
 		</nav>
 
 		<!-- Hero Banner -->
@@ -199,7 +203,7 @@ $total_products = $products_query->found_posts;
 				wp_reset_postdata();
 			else :
 				?>
-				<p class="quills-no-products"><?php esc_html_e( 'No products found.', 'coffee-cafe-corner' ); ?></p>
+				<p class="quills-no-products"><?php echo esc_html( $no_products_text ); ?></p>
 			<?php endif; ?>
 		</div>
 

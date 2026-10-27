@@ -6,7 +6,16 @@
  * Keywords: merch, apparel, hats, mugs, quills coffee
  */
 
-$img_dir = get_template_directory_uri() . '/assets/images/merch/';
+$img_dir = trailingslashit( get_template_directory_uri() ) . 'assets/images/merch/';
+
+$breadcrumb_home    = get_option( 'quills_merch_breadcrumb_home', __( 'Home', 'coffee-cafe-corner' ) );
+$breadcrumb_current = get_option( 'quills_merch_breadcrumb_current', __( 'Merch', 'coffee-cafe-corner' ) );
+$banner_title       = get_option( 'quills_merch_banner_title', __( 'Merch', 'coffee-cafe-corner' ) );
+$banner_img         = get_option( 'quills_merch_banner_image', $img_dir . 'banner-merch.jpg' );
+$sort_label         = get_option( 'quills_merch_sort_label', __( 'Sort by:', 'coffee-cafe-corner' ) );
+$add_to_cart_text   = get_option( 'quills_merch_add_to_cart_text', 'ADD TO CART' );
+$sold_out_text      = get_option( 'quills_merch_sold_out_text', 'SOLD OUT' );
+$no_products_text   = get_option( 'quills_merch_no_products_text', __( 'No products found.', 'coffee-cafe-corner' ) );
 
 $allowed_sorts = array(
   'featured'           => 'Featured',
@@ -124,18 +133,18 @@ $total_products = count( $merch_products );
   <!-- Breadcrumbs -->
   <div class="quills-merch-container">
     <nav class="quills-merch-breadcrumbs" aria-label="<?php esc_attr_e( 'Breadcrumbs', 'coffee-cafe-corner' ); ?>">
-      <a href="<?php echo esc_url( home_url( '/' ) ); ?>" class="quills-merch-bc-link">Home</a>
+      <a href="<?php echo esc_url( home_url( '/' ) ); ?>" class="quills-merch-bc-link"><?php echo esc_html( $breadcrumb_home ); ?></a>
       <span class="quills-merch-bc-sep">/</span>
-      <span class="quills-merch-bc-current">Merch</span>
+      <span class="quills-merch-bc-current"><?php echo esc_html( $breadcrumb_current ); ?></span>
     </nav>
   </div>
 
   <!-- Collection Banner -->
   <div class="quills-merch-container">
     <div class="quills-merch-banner">
-      <img src="<?php echo esc_url( $img_dir . 'banner-merch.jpg' ); ?>" alt="Quills Coffee Merch" class="quills-merch-banner-img" />
+      <img src="<?php echo esc_url( $banner_img ); ?>" alt="<?php echo esc_attr( $banner_title ); ?>" class="quills-merch-banner-img" />
       <div class="quills-merch-banner-overlay">
-        <h1 class="quills-merch-banner-title">Merch</h1>
+        <h1 class="quills-merch-banner-title"><?php echo esc_html( $banner_title ); ?></h1>
       </div>
     </div>
   </div>
@@ -145,7 +154,7 @@ $total_products = count( $merch_products );
     <div class="quills-merch-toolbar">
       <div class="quills-merch-count"><?php echo esc_html( $total_products ); ?> products</div>
       <div class="quills-merch-sort">
-        <label for="quills-sort-select" class="quills-merch-sort-label">Sort by:</label>
+        <label for="quills-sort-select" class="quills-merch-sort-label"><?php echo esc_html( $sort_label ); ?></label>
         <div class="quills-merch-sort-wrap">
           <select id="quills-sort-select" class="quills-merch-sort-select" onchange="window.location.search = '?sort_by=' + encodeURIComponent(this.value);">
             <?php foreach ( $allowed_sorts as $key => $label ) : ?>
@@ -183,12 +192,12 @@ $total_products = count( $merch_products );
                 <form class="quills-merch-quick-add-form" method="post" action="<?php echo esc_url( function_exists( 'wc_get_cart_url' ) ? wc_get_cart_url() : home_url( '/cart/' ) ); ?>" style="width: 100%; margin: 0; padding: 0;">
                   <input type="hidden" name="add-to-cart" value="<?php echo esc_attr( $product['id'] ); ?>" />
                   <button type="submit" class="quills-merch-btn-add" aria-label="<?php echo esc_attr( sprintf( __( 'ADD TO CART %s', 'coffee-cafe-corner' ), $product['title'] ) ); ?>">
-                    <span>ADD TO CART</span>
+                    <span><?php echo esc_html( $add_to_cart_text ); ?></span>
                   </button>
                 </form>
               <?php else : ?>
                 <button type="button" class="quills-merch-btn-add is-soldout" disabled aria-disabled="true">
-                  <span>SOLD OUT</span>
+                  <span><?php echo esc_html( $sold_out_text ); ?></span>
                 </button>
               <?php endif; ?>
             </div>

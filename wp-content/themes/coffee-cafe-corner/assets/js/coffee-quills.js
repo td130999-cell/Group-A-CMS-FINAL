@@ -539,7 +539,7 @@
         }
 
         // 5. Testimonial Sliders with Arrows & Mouse Drag / Touch Swipe
-        var topQuotes = [
+        var topQuotes = (typeof window.quillsTopQuotes !== 'undefined' && window.quillsTopQuotes.length) ? window.quillsTopQuotes : [
             { text: '"Heaven in a cup."', author: '— Tracy S.' },
             { text: '"The cleanest pour-over roast in Louisville. Sweet and lively."', author: '— Michael K.' },
             { text: '"Consistently fresh, vibrant and roasted with exceptional care."', author: '— Amanda L.' }
@@ -622,7 +622,7 @@
             showTopQuote(currentTopQuote + 1);
         });
 
-        var bottomQuotes = [
+        var bottomQuotes = (typeof window.quillsBottomQuotes !== 'undefined' && window.quillsBottomQuotes.length) ? window.quillsBottomQuotes : [
             { text: '"Amazing coffee. Quills is consistently head and shoulders above others."', author: '— Mitchell George' },
             { text: '"Their single-origin Ethiopia Bombe is hands-down the best coffee I had this year."', author: '— Sarah Jenkins' },
             { text: '"Subscribed to Blacksmith espresso for over 2 years now. Never disappointed."', author: '— David R.' }
