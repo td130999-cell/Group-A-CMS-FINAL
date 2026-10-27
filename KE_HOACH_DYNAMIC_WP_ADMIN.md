@@ -99,7 +99,7 @@ Nơi quản trị: `wp-admin -> Giao diện -> Cài đặt Trang chủ (Home)`
 
 ---
 
-### ☕ 2. TRANG CÀ PHÊ (Coffee Collection - `/coffee/`)
+### ☕ 2. TRANG CÀ PHÊ (Coffee Collection - `/coffee/`) - [HOÀN THÀNH 100%]
 File pattern: `wp-content/themes/coffee-cafe-corner/patterns/coffee.php`  
 Nơi quản trị: `wp-admin -> Giao diện -> Cài đặt Trang Cà phê (Coffee)` HOẶC `wp-admin -> Pages (Trang) -> Coffee` (qua Custom Meta Box)
 
@@ -123,7 +123,7 @@ Nơi quản trị: `wp-admin -> Giao diện -> Cài đặt Trang Cà phê (Coffe
 
 ---
 
-### ⚙️ 3. TRANG DỤNG CỤ PHA (Brew Gear - `/brew-gear/`)
+### ⚙️ 3. TRANG DỤNG CỤ PHA (Brew Gear - `/brew-gear/`) - [HOÀN THÀNH 100%]
 File pattern: `wp-content/themes/coffee-cafe-corner/patterns/brew-gear.php`  
 Nơi quản trị: `wp-admin -> Giao diện -> Cài đặt Dụng cụ (Brew Gear)` HOẶC `wp-admin -> Pages (Trang) -> Brew Gear` (qua Custom Meta Box)
 
@@ -140,7 +140,7 @@ Nơi quản trị: `wp-admin -> Giao diện -> Cài đặt Dụng cụ (Brew Gea
 
 ---
 
-### 📦 4. TRANG GÓI ĐỊNG KỲ (Subscriptions - `/subscriptions/`)
+### 📦 4. TRANG GÓI ĐỊNG KỲ (Subscriptions - `/subscriptions/`) - [HOÀN THÀNH 100%]
 File pattern: `wp-content/themes/coffee-cafe-corner/patterns/subscriptions.php`  
 Nơi quản trị: `wp-admin -> Giao diện -> Cài đặt Gói định kỳ (Subscriptions)` HOẶC `wp-admin -> Pages (Trang) -> Subscriptions` (qua Custom Meta Box)
 
@@ -161,81 +161,95 @@ Nơi quản trị: `wp-admin -> Giao diện -> Cài đặt Gói định kỳ (Su
 
 ---
 
-### 👕 5. TRANG HÀNG LƯU NIỆM (Merch - `/merch/`)
+### 👕 5. TRANG HÀNG LƯU NIỆM (Merch - `/merch/`) - [HOÀN THÀNH 100%]
 File pattern: `wp-content/themes/coffee-cafe-corner/patterns/merch.php`  
-Nơi quản trị: `wp-admin -> Pages (Trang) -> Merch` (qua Custom Meta Box)
+Nơi quản trị: `wp-admin -> Giao diện -> Cài đặt Hàng lưu niệm (Merch)` HOẶC `wp-admin -> Pages (Trang) -> Merch` (qua Custom Meta Box)
 
-- [ ] **Hero Banner:**
-  - [ ] Tiêu đề banner (*"Merch"*).
-  - [ ] Chọn Ảnh nền banner qua Media Library.
-  - [ ] Đoạn giới thiệu bộ sưu tập thời trang / phụ kiện Quills.
+- [x] **Hero Banner & Breadcrumbs:**
+  - [x] Tiêu đề banner (*"Merch"*).
+  - [x] Chọn Ảnh nền banner qua Media Library + Nút Khôi phục mặc định.
+  - [x] Chữ Breadcrumbs (*"Home / Merch"*).
+- [x] **Thanh công cụ & Nhãn nút bấm:**
+  - [x] Nhãn thanh sắp xếp (*"Sort by:"*).
+  - [x] Chữ trên nút thêm giỏ hàng (*"ADD TO CART"*).
+  - [x] Chữ hiển thị khi sản phẩm hết hàng (*"SOLD OUT"*).
+  - [x] Thông báo khi không có sản phẩm (*"No products found."*).
 - [x] **Danh sách sản phẩm Merch:** Đã kết nối tự động với tùy chọn size áo/mũ từ WooCommerce.
 
 ---
 
-### 🤝 6. TRANG BÁN BUÔN & HỢP TÁC (Wholesale - `/wholesale/`)
+### 🤝 6. TRANG BÁN BUÔN & HỢP TÁC (Wholesale - `/wholesale/`) - [HOÀN THÀNH 100%]
 File pattern: `wp-content/themes/coffee-cafe-corner/patterns/wholesale.php`  
-Nơi quản trị: `wp-admin -> Pages (Trang) -> Wholesale` (qua Custom Meta Box)
+Nơi quản trị: `wp-admin -> Giao diện -> Cài đặt Bán buôn (Wholesale)` HOẶC `wp-admin -> Pages (Trang) -> Wholesale` (qua Custom Meta Box)
 
-- [ ] **Hero Banner:**
-  - [ ] Tiêu đề Hero (*"Wholesale Coffee Roasting"*).
-- [ ] **Mục Video & Câu chuyện giới thiệu:**
-  - [ ] ID video Wistia (hoặc link nhúng video).
-  - [ ] Tiêu đề câu chuyện của Michael.
-  - [ ] Đoạn văn mở đầu nổi bật và các đoạn văn chi tiết.
-- [ ] **Form yêu cầu gửi mẫu thử (Sample Request Form):**
-  - [ ] Tiêu đề khung (*"Request Free Samples"*).
-  - [ ] Đoạn mô tả phụ.
-  - [ ] Ước tính thời gian (*"Takes 2 minutes"*).
-  - [ ] Chữ trên nút bắt đầu (*"Get started"*).
+- [x] **Hero Banner:**
+  - [x] Tiêu đề Hero (*"Wholesale Coffee Roasting"*).
+- [x] **Mục Video Wistia & Câu chuyện giới thiệu:**
+  - [x] ID video Wistia (`zihbfybcjm`) và phụ đề video.
+  - [x] Tiêu đề câu chuyện của Michael (*"Hey there! I'm Michael."*).
+  - [x] Đoạn văn mở đầu nổi bật và 3 đoạn văn chi tiết.
+- [x] **Form yêu cầu gửi mẫu thử (Sample Request Form):**
+  - [x] Chế độ form: Direct Form hoặc Typeform Embed (ID Typeform tùy chỉnh).
+  - [x] Tiêu đề khung (*"Request your samples"*).
+  - [x] Đoạn mô tả phụ (*"Tell us a little about you and your business"*).
+  - [x] Ước tính thời gian (*"Takes 1 minute"*).
+  - [x] Chữ trên nút bắt đầu (*"Get started"*), nút gửi (*"Send Sample Request"*), thông báo thành công.
 
 ---
 
-### 🎁 7. TRANG THẺ QUÀ TẶNG (Gift Cards - `/gift-cards/`)
+### 🎁 7. TRANG THẺ QUÀ TẶNG (Gift Cards - `/gift-cards/`) - [HOÀN THÀNH 100%]
 File pattern: `wp-content/themes/coffee-cafe-corner/patterns/gift-cards.php`  
-Nơi quản trị: `wp-admin -> Pages (Trang) -> Gift Cards` (qua Custom Meta Box)
+Nơi quản trị: `wp-admin -> Giao diện -> Cài đặt Thẻ quà tặng (Gift Cards)` HOẶC `wp-admin -> Pages (Trang) -> Gift Cards` (qua Custom Meta Box)
 
-- [ ] **Header trang:**
-  - [ ] Tiêu đề trang (*"Gift Cards"*).
-  - [ ] Đoạn văn hướng dẫn phân biệt 2 loại thẻ online và tại quán.
-- [ ] **Cột 1: Thẻ Quà Tặng Mua Sắm Online (Online Store Gift Card)**
-  - [ ] Tên thẻ (*"ONLINE STORE GIFT CARD"*).
-  - [ ] Đoạn mô tả công dụng.
-  - [ ] Chọn ảnh thẻ qua Media Library.
-  - [ ] Chọn sản phẩm WooCommerce liên kết hoặc nhập link mua.
-  - [ ] Chữ trên nút bấm (*"CLICK HERE TO PURCHASE"*).
-- [ ] **Cột 2: Thẻ Quà Tặng Dùng Tại Quán (Cafe / In Store Gift Card)**
-  - [ ] Tên thẻ (*"CAFE GIFT CARD"*).
-  - [ ] Đoạn mô tả dùng tại quầy.
-  - [ ] Chọn ảnh thẻ qua Media Library.
-  - [ ] Đường link thanh toán Square / POS (*mặc định: link Square của quán*).
-  - [ ] Chữ trên nút bấm (*"CLICK HERE TO PURCHASE"*).
+- [x] **Header trang:**
+  - [x] Tiêu đề trang (*"Gift Cards"*).
+  - [x] Đoạn văn hướng dẫn phân biệt 2 loại thẻ online và tại quán (hỗ trợ 2 đoạn dẫn).
+- [x] **Cột 1: Thẻ Quà Tặng Mua Sắm Online (Online Store Gift Card)**
+  - [x] Tên thẻ (*"ONLINE STORE GIFT CARD"*).
+  - [x] Đoạn mô tả công dụng (dòng 1 & dòng 2, hỗ trợ thẻ HTML).
+  - [x] Chọn ảnh thẻ qua Media Library + Nút Khôi phục.
+  - [x] Nhập link mua tùy chỉnh hoặc liên kết tự động tới sản phẩm Gift Card trên WooCommerce.
+  - [x] Chữ trên nút bấm (*"CLICK HERE TO PURCHASE"*).
+- [x] **Cột 2: Thẻ Quà Tặng Dùng Tại Quán (Cafe / In Store Gift Card)**
+  - [x] Tên thẻ (*"CAFE / IN STORE GIFT CARD"*).
+  - [x] Đoạn mô tả dùng tại quầy (dòng 1 & dòng 2, hỗ trợ thẻ HTML).
+  - [x] Chọn ảnh thẻ qua Media Library + Nút Khôi phục.
+  - [x] Đường link thanh toán Square / POS (*mặc định: link Square của quán*).
+  - [x] Chữ trên nút bấm (*"CLICK HERE TO PURCHASE"*).
 
 ---
 
-### 📖 8. TRANG GIỚI THIỆU (About Us) & QUÁN CAFE (Cafes/Visit)
+### 📖 8. TRANG GIỚI THIỆU (About Us) & QUÁN CAFE (Cafes/Visit) - [HOÀN THÀNH 100%]
 File pattern: `patterns/about.php`, `patterns/visit.php`, `patterns/cafe-detail.php`  
-Nơi quản trị: `wp-admin -> Pages -> About Us` và Menu **Quán Cafe (Cafes)**
+Nơi quản trị: `wp-admin -> Giao diện -> Cài đặt Giới thiệu (About Us)`, `Cài đặt Chi nhánh (Visit)`, `Pages -> About Us / Visit`, và Menu **Quán Cafe (Cafes)**
 
-- [x] Đã có hệ thống quản lý rất tốt các nội dung chính.
-- [ ] Cần rà soát và bổ sung:
-  - [ ] Trang About Us: Thêm ô chọn ảnh Media Library cho các hình minh họa (*about-hero.jpg, terroir.png, genuine-care.png, continuous-craft.png, creative-education.png*).
-  - [ ] Trang Quán Cafe: Đảm bảo toàn bộ 7 quán đều có thể chọn ảnh từ Media Library mà không cần hardcode tên file.
+- [x] **Trang Giới thiệu (About Us):**
+  - [x] Quản trị toàn bộ 10 phần: Hero Banner, Lịch sử Where We Started, Sứ mệnh Why We're Here, Phương thức How We Work, Thẻ định nghĩa Terroir, 3 Giá trị cốt lõi (Genuine Care, Continuous Craft, Creative Education), Tầm nhìn Where We're Going, và Ảnh đội ngũ cuối trang.
+  - [x] Tích hợp trọn bộ bộ chọn ảnh WordPress Media Library + Xem trước ảnh thực tế + Nút khôi phục cho toàn bộ 7 hình ảnh (*about-hero.jpg, why-were-here.jpg, terroir.png, genuine-care.png, continuous-craft.jpg, creative-education.jpg, where-were-going.jpg*).
+  - [x] Đồng bộ 2 chiều giữa `wp_options` và `wp_postmeta` của cả 2 trang `about-us` và `about`.
+- [x] **Trang Chi nhánh & Giờ mở cửa (Visit / Locations & Hours):**
+  - [x] Quản lý chữ Breadcrumb (*"Locations & Hours"*), Tiêu đề Hero (*"Our Cafes"*), Ảnh nền Banner qua Media Library, Lời giới thiệu chung và Tiêu đề danh sách quán (*"LOCATIONS & HOURS"*).
+- [x] **Quản lý Chi tiết 7 Chi nhánh Quán Cafe:**
+  - [x] Menu chuyên dụng **Quán Cafe (Cafes)** với 7 tab: Nulu, Highlands, Indianapolis, St. Matthews, J-Town, Norton Commons, Frankfort Avenue.
+  - [x] Chọn ảnh chính (Main Banner) và 3 ảnh bộ sưu tập (Gallery 1, 2, 3) qua WordPress Media Library.
+  - [x] Tự động xóa bộ nhớ đệm (RAM cache & File cache) ngay khi bấm Lưu quán.
 
 ---
 
-### 🌐 9. HEADER & FOOTER TOÀN WEBSITE
+### 🌐 9. HEADER & FOOTER TOÀN WEBSITE - [HOÀN THÀNH 100%]
 File: `wp-content/themes/coffee-cafe-corner/patterns/footer.php` và `parts/header.html`  
-Nơi quản trị: Tạo trang riêng **Giao diện $\rightarrow$ Cài đặt Chân trang (Footer Settings)**
+Nơi quản trị: Menu chuyên dụng **Giao diện -> Cài đặt Chân trang (Footer Settings)**
 
-- [ ] **Chân trang (Footer):**
-  - [ ] Tên thương hiệu (*"QUILLS COFFEE"*).
-  - [ ] Địa chỉ dòng 1 (Tên đường), Địa chỉ dòng 2 (Thành phố, Bang, Mã Zip).
-  - [ ] Số điện thoại liên hệ, Email hỗ trợ khách hàng.
-  - [ ] Link mạng xã hội: Facebook, Instagram.
-  - [ ] Dòng chữ bản quyền chân trang (*hỗ trợ token `{year}` tự động nhảy năm hiện tại*).
-- [ ] **Đầu trang (Header):**
-  - [ ] Quản lý Logo và Menu điều hướng chuẩn qua **Giao diện $\rightarrow$ Menus**.
+- [x] **Chân trang (Footer):**
+  - [x] Tên thương hiệu (*"QUILLS COFFEE"*).
+  - [x] Địa chỉ dòng 1 (Tên đường), Địa chỉ dòng 2 (Thành phố, Bang, Mã Zip).
+  - [x] Số điện thoại liên hệ, Email hỗ trợ khách hàng.
+  - [x] Mã tiền tệ hiển thị (mặc định: "USD"), Ngôn ngữ mặc định (hỗ trợ chuyển đổi song ngữ EN / VI).
+  - [x] Link mạng xã hội: Facebook, Instagram.
+  - [x] Dòng chữ bản quyền chân trang (*hỗ trợ token `{year}` tự động nhảy năm hiện tại*).
+  - [x] Hướng dẫn và liên kết trực tiếp tới quản lý 2 menu chân trang (Quick Links và Company) qua **Giao diện -> Menus**.
+- [x] **Đầu trang (Header):**
+  - [x] Quản lý Logo và Menu điều hướng chuẩn qua **Giao diện -> Menus**.
 
 ---
 

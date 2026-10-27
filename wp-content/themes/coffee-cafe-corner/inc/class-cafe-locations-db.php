@@ -176,7 +176,7 @@ class Coffee_Cafe_Corner_Cafe_Locations_DB {
 	public static function register_admin_menu() {
 		add_menu_page(
 			__( 'Quản lý Quán Cafe', 'coffee-cafe-corner' ),
-			__( 'Quán Cafe (Cafes)', 'coffee-cafe-corner' ),
+			__( 'Chi Nhánh', 'coffee-cafe-corner' ),
 			'manage_options',
 			'quills-cafes',
 			array( __CLASS__, 'render_admin_page' ),
@@ -254,6 +254,14 @@ class Coffee_Cafe_Corner_Cafe_Locations_DB {
 				}
 				update_post_meta( $visit_page->ID, '_visit_cafes', $visit_cafes );
 			}
+		}
+
+		// Clear page cache
+		if ( class_exists( 'Coffee_Cafe_Corner_Page_Content_Admin' ) ) {
+			Coffee_Cafe_Corner_Page_Content_Admin::clear_page_cache();
+		}
+		if ( function_exists( 'wp_cache_flush' ) ) {
+			wp_cache_flush();
 		}
 
 		// Redirect back with success message
