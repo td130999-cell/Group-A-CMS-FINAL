@@ -1,0 +1,1088 @@
+# Copyright (C) 2026 LegacyThemes
+# This file is distributed under the GNU General Public License v3.
+msgid ""
+msgstr ""
+"Project-Id-Version: Coffee Cafe Corner 0.0.2\n"
+"Report-Msgid-Bugs-To: https://WordPress.org/support/theme/coffee-cafe-corner\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2026-06-05T06:23:49+00:00\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"X-Generator: WP-CLI 2.11.0\n"
+"X-Domain: coffee-cafe-corner\n"
+
+#. Theme Name of the theme
+#: style.css
+msgid "Coffee Cafe Corner"
+msgstr ""
+
+#. Theme URI of the theme
+#: style.css
+msgid "https://www.legacytheme.net/products/coffee-cafe-corner"
+msgstr ""
+
+#. Description of the theme
+#: style.css
+msgid "Coffee Cafe Corner is designed for small cafes and coffee shops that want a warm and welcoming online presence. It helps you present your menu, special items, opening hours, and location in a clear and friendly way so customers can quickly find what they need. The layout focuses on simplicity, allowing visitors to explore your offerings without distractions while creating a cozy digital experience that reflects your cafe’s atmosphere. It also works smoothly across mobile and desktop devices, making it easy for customers to browse on the go. This theme is built for ease of use, so you can set up your website without technical effort and keep it updated as your menu or details change. It supports essential features like menu sections, image displays, and contact information while keeping everything lightweight and fast. Whether you run a local coffee corner or a growing cafe, it provides a practical and approachable way to connect with customers and share your space online."
+msgstr ""
+
+#. Author of the theme
+#: style.css
+msgid "LegacyThemes"
+msgstr ""
+
+#. Author URI of the theme
+#: style.css
+msgid "https://www.legacytheme.net"
+msgstr ""
+
+#: functions.php:42
+msgid "Banner"
+msgstr ""
+
+#: functions.php:49
+#: patterns/footer.php:37
+msgid "Services"
+msgstr ""
+
+#: patterns/404.php
+msgctxt "Pattern title"
+msgid "404"
+msgstr ""
+
+#: patterns/404.php:11
+msgid "404"
+msgstr ""
+
+#: patterns/404.php:15
+msgid "Page Not Found"
+msgstr ""
+
+#: patterns/404.php:19
+msgid "The page you are looking for might have been removed, had its name changed, or is temporarily unavailable."
+msgstr ""
+
+#: patterns/404.php:25
+msgid "Back to Homepage"
+msgstr ""
+
+#: patterns/archive-title.php
+msgctxt "Pattern title"
+msgid "Archive Title"
+msgstr ""
+
+#: patterns/archive.php
+msgctxt "Pattern title"
+msgid "Archive"
+msgstr ""
+
+#: patterns/archive.php:53
+#: patterns/index.php:53
+msgid "No posts found in this category."
+msgstr ""
+
+#: patterns/archive.php:57
+#: patterns/index.php:57
+msgid "Try browsing other categories or check out our latest content."
+msgstr ""
+
+#: patterns/footer.php
+msgctxt "Pattern title"
+msgid "Footer"
+msgstr ""
+
+#: patterns/footer.php:24
+msgid "useful links"
+msgstr ""
+
+#: patterns/footer.php:29
+msgid "About us"
+msgstr ""
+
+#: patterns/footer.php:33
+msgid "Portfolio"
+msgstr ""
+
+#: patterns/footer.php:41
+msgid "Blogs"
+msgstr ""
+
+#: patterns/footer.php:50
+msgid "Others"
+msgstr ""
+
+#: patterns/footer.php:55
+msgid "Careers"
+msgstr ""
+
+#: patterns/footer.php:59
+msgid "Privacy Policy"
+msgstr ""
+
+#: patterns/footer.php:63
+msgid "Products"
+msgstr ""
+
+#: patterns/footer.php:67
+msgid "Awards"
+msgstr ""
+
+#: patterns/footer.php:76
+msgid "FAQs"
+msgstr ""
+
+#: patterns/footer.php:81
+msgid "Is there a grace period for late arrivals?"
+msgstr ""
+
+#: patterns/footer.php:82
+#: patterns/footer.php:88
+#: patterns/footer.php:94
+#: patterns/footer.php:100
+msgid "Trusted Experience There are many variations of passages of Lorem Ipsum available."
+msgstr ""
+
+#: patterns/footer.php:87
+msgid "How far in advance should I book?"
+msgstr ""
+
+#: patterns/footer.php:93
+msgid "What services do you offer?"
+msgstr ""
+
+#: patterns/footer.php:99
+msgid "Do I need a permit for my CA?"
+msgstr ""
+
+#: patterns/footer.php:108
+msgid "Gallery"
+msgstr ""
+
+#: patterns/footer.php:145
+msgid "© 2026 Coffee Cafe Corner. Designed by LegacyThemes. All rights reserved."
+msgstr ""
+
+#: patterns/header.php
+msgctxt "Pattern title"
+msgid "Header"
+msgstr ""
+
+#: patterns/header.php:13
+msgid "Freshly Brewed Coffee Served All Day – Visit Brew Haven Today!"
+msgstr ""
+
+#: patterns/header.php:69
+msgid "Book a Table"
+msgstr ""
+
+#: patterns/hero-banner.php
+msgctxt "Pattern title"
+msgid "Hero Banner"
+msgstr ""
+
+#: patterns/hero-banner.php:16
+msgid "The Perfect"
+msgstr ""
+
+#: patterns/hero-banner.php:16
+msgid "Blend of"
+msgstr ""
+
+#: patterns/hero-banner.php:16
+msgid "Aroma"
+msgstr ""
+
+#: patterns/hero-banner.php:16
+msgid "Taste"
+msgstr ""
+
+#: patterns/hero-banner.php:20
+msgid "Experience the rich aroma of handpicked beans brewed to"
+msgstr ""
+
+#: patterns/hero-banner.php:20
+msgid "perfection. From classic espresso to creamy lattes, every cup"
+msgstr ""
+
+#: patterns/hero-banner.php:20
+msgid "is crafted to energize your day."
+msgstr ""
+
+#: patterns/hero-banner.php:26
+msgid "Explore Menu"
+msgstr ""
+
+#: patterns/hero-banner.php:32
+msgid "Learn More About Us"
+msgstr ""
+
+#: patterns/homepage-blog.php
+msgctxt "Pattern title"
+msgid "Homepage Blog"
+msgstr ""
+
+#: patterns/homepage-blog.php:11
+msgid "Our Latest Blogs"
+msgstr ""
+
+#: patterns/index-header-image.php
+msgctxt "Pattern title"
+msgid "Index Header Image"
+msgstr ""
+
+#: patterns/index-header-image.php:14
+msgid "blog"
+msgstr ""
+
+#: patterns/index.php
+msgctxt "Pattern title"
+msgid "Index"
+msgstr ""
+
+#: patterns/page-title.php
+msgctxt "Pattern title"
+msgid "Page Title"
+msgstr ""
+
+#: patterns/search-result.php
+msgctxt "Pattern title"
+msgid "Search Result"
+msgstr ""
+
+#: patterns/search.php
+msgctxt "Pattern title"
+msgid "Search"
+msgstr ""
+
+#: patterns/search.php:16
+msgid "Try searching for something else or refine your search terms below."
+msgstr ""
+
+#: patterns/services.php
+msgctxt "Pattern title"
+msgid "Services"
+msgstr ""
+
+#: patterns/services.php:23
+#: patterns/services.php:77
+msgid "Our Popular Brews"
+msgstr ""
+
+#: patterns/services.php:60
+#: patterns/services.php:124
+#: patterns/services.php:164
+#: patterns/services.php:204
+msgid "View More"
+msgstr ""
+
+#: patterns/services.php:103
+msgid "Espresso Shot"
+msgstr ""
+
+#: patterns/services.php:113
+#: patterns/services.php:153
+#: patterns/services.php:193
+msgid "$42"
+msgstr ""
+
+#: patterns/services.php:119
+#: patterns/services.php:159
+#: patterns/services.php:199
+msgid "Lorem ipsum dolor sit amet, tetur piscing elit. Suspendisse sm congue bibendum. Lorem ipsum"
+msgstr ""
+
+#: patterns/services.php:143
+msgid "Cappuccino"
+msgstr ""
+
+#: patterns/services.php:183
+msgid "Caramel Latte"
+msgstr ""
+
+#: patterns/sidebar.php
+msgctxt "Pattern title"
+msgid "Sidebar"
+msgstr ""
+
+#: patterns/sidebar.php:10
+msgid "Search"
+msgstr ""
+
+#: patterns/sidebar.php:18
+msgid "About"
+msgstr ""
+
+#: patterns/sidebar.php:22
+msgid "Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown prmontserrat took a galley of type and scrambled it to make a type specimen book."
+msgstr ""
+
+#: patterns/sidebar.php:26
+msgid "Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown prmontserrat took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged."
+msgstr ""
+
+#: patterns/sidebar.php:32
+msgid "Archive"
+msgstr ""
+
+#: patterns/sidebar.php:40
+msgid "Categories"
+msgstr ""
+
+#: patterns/sidebar.php:48
+msgid "Recent Posts"
+msgstr ""
+
+#: patterns/sidebar.php:56
+msgid "Tags"
+msgstr ""
+
+#: patterns/sidebar.php:64
+msgid "Social Icons"
+msgstr ""
+
+#: patterns/single-post-left-sidebar.php
+msgctxt "Pattern title"
+msgid "Single Post Left Sidebar"
+msgstr ""
+
+#: patterns/single-post-left-sidebar.php:44
+#: patterns/single.php:38
+msgid "Tags: "
+msgstr ""
+
+#: patterns/single.php
+msgctxt "Pattern title"
+msgid "Single"
+msgstr ""
+
+#: TGM/class-tgm-plugin-activation.php:327
+msgid "Install Required Plugins"
+msgstr ""
+
+#: TGM/class-tgm-plugin-activation.php:328
+msgid "Install Plugins"
+msgstr ""
+
+#. translators: %s: plugin name.
+#: TGM/class-tgm-plugin-activation.php:330
+msgid "Installing Plugin: %s"
+msgstr ""
+
+#. translators: %s: plugin name.
+#: TGM/class-tgm-plugin-activation.php:332
+msgid "Updating Plugin: %s"
+msgstr ""
+
+#: TGM/class-tgm-plugin-activation.php:333
+msgid "Something went wrong with the plugin API."
+msgstr ""
+
+#. translators: 1: plugin name(s).
+#: TGM/class-tgm-plugin-activation.php:334
+msgid "This theme requires the following plugin: %1$s."
+msgid_plural "This theme requires the following plugins: %1$s."
+msgstr[0] ""
+msgstr[1] ""
+
+#. translators: 1: plugin name(s).
+#: TGM/class-tgm-plugin-activation.php:340
+msgid "This theme recommends the following plugin: %1$s."
+msgid_plural "This theme recommends the following plugins: %1$s."
+msgstr[0] ""
+msgstr[1] ""
+
+#. translators: 1: plugin name(s).
+#: TGM/class-tgm-plugin-activation.php:346
+msgid "The following plugin needs to be updated to its latest version to ensure maximum compatibility with this theme: %1$s."
+msgid_plural "The following plugins need to be updated to their latest version to ensure maximum compatibility with this theme: %1$s."
+msgstr[0] ""
+msgstr[1] ""
+
+#. translators: 1: plugin name(s).
+#: TGM/class-tgm-plugin-activation.php:352
+msgid "There is an update available for: %1$s."
+msgid_plural "There are updates available for the following plugins: %1$s."
+msgstr[0] ""
+msgstr[1] ""
+
+#. translators: 1: plugin name(s).
+#: TGM/class-tgm-plugin-activation.php:358
+msgid "The following required plugin is currently inactive: %1$s."
+msgid_plural "The following required plugins are currently inactive: %1$s."
+msgstr[0] ""
+msgstr[1] ""
+
+#. translators: 1: plugin name(s).
+#: TGM/class-tgm-plugin-activation.php:364
+msgid "The following recommended plugin is currently inactive: %1$s."
+msgid_plural "The following recommended plugins are currently inactive: %1$s."
+msgstr[0] ""
+msgstr[1] ""
+
+#: TGM/class-tgm-plugin-activation.php:370
+msgid "Begin installing plugin"
+msgid_plural "Begin installing plugins"
+msgstr[0] ""
+msgstr[1] ""
+
+#: TGM/class-tgm-plugin-activation.php:375
+msgid "Begin updating plugin"
+msgid_plural "Begin updating plugins"
+msgstr[0] ""
+msgstr[1] ""
+
+#: TGM/class-tgm-plugin-activation.php:380
+msgid "Begin activating plugin"
+msgid_plural "Begin activating plugins"
+msgstr[0] ""
+msgstr[1] ""
+
+#: TGM/class-tgm-plugin-activation.php:385
+msgid "Return to Required Plugins Installer"
+msgstr ""
+
+#: TGM/class-tgm-plugin-activation.php:386
+#: TGM/class-tgm-plugin-activation.php:827
+#: TGM/class-tgm-plugin-activation.php:2533
+#: TGM/class-tgm-plugin-activation.php:3580
+msgid "Return to the Dashboard"
+msgstr ""
+
+#: TGM/class-tgm-plugin-activation.php:387
+#: TGM/class-tgm-plugin-activation.php:3159
+msgid "Plugin activated successfully."
+msgstr ""
+
+#: TGM/class-tgm-plugin-activation.php:388
+#: TGM/class-tgm-plugin-activation.php:2952
+msgid "The following plugin was activated successfully:"
+msgid_plural "The following plugins were activated successfully:"
+msgstr[0] ""
+msgstr[1] ""
+
+#. translators: 1: plugin name.
+#: TGM/class-tgm-plugin-activation.php:390
+msgid "No action taken. Plugin %1$s was already active."
+msgstr ""
+
+#. translators: 1: plugin name.
+#: TGM/class-tgm-plugin-activation.php:392
+msgid "Plugin not activated. A higher version of %s is needed for this theme. Please update the plugin."
+msgstr ""
+
+#. translators: 1: dashboard link.
+#: TGM/class-tgm-plugin-activation.php:394
+msgid "All plugins installed and activated successfully. %1$s"
+msgstr ""
+
+#: TGM/class-tgm-plugin-activation.php:395
+msgid "Dismiss this notice"
+msgstr ""
+
+#: TGM/class-tgm-plugin-activation.php:396
+msgid "There are one or more required or recommended plugins to install, update or activate."
+msgstr ""
+
+#: TGM/class-tgm-plugin-activation.php:397
+msgid "Please contact the administrator of this site for help."
+msgstr ""
+
+#: TGM/class-tgm-plugin-activation.php:522
+msgid "This plugin needs to be updated to be compatible with your theme."
+msgstr ""
+
+#: TGM/class-tgm-plugin-activation.php:523
+msgid "Update Required"
+msgstr ""
+
+#: TGM/class-tgm-plugin-activation.php:934
+msgid "The remote plugin package does not contain a folder with the desired slug and renaming did not work."
+msgstr ""
+
+#: TGM/class-tgm-plugin-activation.php:934
+#: TGM/class-tgm-plugin-activation.php:937
+msgid "Please contact the plugin provider and ask them to package their plugin according to the WordPress guidelines."
+msgstr ""
+
+#: TGM/class-tgm-plugin-activation.php:937
+msgid "The remote plugin package consists of more than one file, but the files are not packaged in a folder."
+msgstr ""
+
+#: TGM/class-tgm-plugin-activation.php:1121
+#: TGM/class-tgm-plugin-activation.php:2948
+msgctxt "plugin A *and* plugin B"
+msgid "and"
+msgstr ""
+
+#. translators: %s: version number
+#: TGM/class-tgm-plugin-activation.php:1982
+msgid "TGMPA v%s"
+msgstr ""
+
+#: TGM/class-tgm-plugin-activation.php:2273
+msgid "Required"
+msgstr ""
+
+#: TGM/class-tgm-plugin-activation.php:2276
+msgid "Recommended"
+msgstr ""
+
+#: TGM/class-tgm-plugin-activation.php:2292
+msgid "WordPress Repository"
+msgstr ""
+
+#: TGM/class-tgm-plugin-activation.php:2295
+msgid "External Source"
+msgstr ""
+
+#: TGM/class-tgm-plugin-activation.php:2298
+msgid "Pre-Packaged"
+msgstr ""
+
+#: TGM/class-tgm-plugin-activation.php:2315
+msgid "Not Installed"
+msgstr ""
+
+#: TGM/class-tgm-plugin-activation.php:2319
+msgid "Installed But Not Activated"
+msgstr ""
+
+#: TGM/class-tgm-plugin-activation.php:2321
+msgid "Active"
+msgstr ""
+
+#: TGM/class-tgm-plugin-activation.php:2327
+msgid "Required Update not Available"
+msgstr ""
+
+#: TGM/class-tgm-plugin-activation.php:2330
+msgid "Requires Update"
+msgstr ""
+
+#: TGM/class-tgm-plugin-activation.php:2333
+msgid "Update recommended"
+msgstr ""
+
+#. translators: 1: install status, 2: update status
+#: TGM/class-tgm-plugin-activation.php:2342
+msgctxt "Install/Update Status"
+msgid "%1$s, %2$s"
+msgstr ""
+
+#. translators: 1: number of plugins.
+#: TGM/class-tgm-plugin-activation.php:2388
+msgctxt "plugins"
+msgid "All <span class=\"count\">(%s)</span>"
+msgid_plural "All <span class=\"count\">(%s)</span>"
+msgstr[0] ""
+msgstr[1] ""
+
+#. translators: 1: number of plugins.
+#: TGM/class-tgm-plugin-activation.php:2392
+msgid "To Install <span class=\"count\">(%s)</span>"
+msgid_plural "To Install <span class=\"count\">(%s)</span>"
+msgstr[0] ""
+msgstr[1] ""
+
+#. translators: 1: number of plugins.
+#: TGM/class-tgm-plugin-activation.php:2396
+msgid "Update Available <span class=\"count\">(%s)</span>"
+msgid_plural "Update Available <span class=\"count\">(%s)</span>"
+msgstr[0] ""
+msgstr[1] ""
+
+#. translators: 1: number of plugins.
+#: TGM/class-tgm-plugin-activation.php:2400
+msgid "To Activate <span class=\"count\">(%s)</span>"
+msgid_plural "To Activate <span class=\"count\">(%s)</span>"
+msgstr[0] ""
+msgstr[1] ""
+
+#: TGM/class-tgm-plugin-activation.php:2482
+msgctxt "as in: \"version nr unknown\""
+msgid "unknown"
+msgstr ""
+
+#: TGM/class-tgm-plugin-activation.php:2490
+msgid "Installed version:"
+msgstr ""
+
+#: TGM/class-tgm-plugin-activation.php:2498
+msgid "Minimum required version:"
+msgstr ""
+
+#: TGM/class-tgm-plugin-activation.php:2510
+msgid "Available version:"
+msgstr ""
+
+#: TGM/class-tgm-plugin-activation.php:2533
+msgid "No plugins to install, update or activate."
+msgstr ""
+
+#: TGM/class-tgm-plugin-activation.php:2547
+msgid "Plugin"
+msgstr ""
+
+#: TGM/class-tgm-plugin-activation.php:2548
+msgid "Source"
+msgstr ""
+
+#: TGM/class-tgm-plugin-activation.php:2549
+msgid "Type"
+msgstr ""
+
+#: TGM/class-tgm-plugin-activation.php:2553
+msgid "Version"
+msgstr ""
+
+#: TGM/class-tgm-plugin-activation.php:2554
+msgid "Status"
+msgstr ""
+
+#. translators: %2$s: plugin name in screen reader markup
+#: TGM/class-tgm-plugin-activation.php:2603
+msgid "Install %2$s"
+msgstr ""
+
+#. translators: %2$s: plugin name in screen reader markup
+#: TGM/class-tgm-plugin-activation.php:2608
+msgid "Update %2$s"
+msgstr ""
+
+#. translators: %2$s: plugin name in screen reader markup
+#: TGM/class-tgm-plugin-activation.php:2614
+msgid "Activate %2$s"
+msgstr ""
+
+#: TGM/class-tgm-plugin-activation.php:2684
+msgid "Upgrade message from the plugin author:"
+msgstr ""
+
+#: TGM/class-tgm-plugin-activation.php:2717
+msgid "Install"
+msgstr ""
+
+#: TGM/class-tgm-plugin-activation.php:2723
+msgid "Update"
+msgstr ""
+
+#: TGM/class-tgm-plugin-activation.php:2726
+msgid "Activate"
+msgstr ""
+
+#: TGM/class-tgm-plugin-activation.php:2757
+msgid "No plugins were selected to be installed. No action taken."
+msgstr ""
+
+#: TGM/class-tgm-plugin-activation.php:2759
+msgid "No plugins were selected to be updated. No action taken."
+msgstr ""
+
+#: TGM/class-tgm-plugin-activation.php:2800
+msgid "No plugins are available to be installed at this time."
+msgstr ""
+
+#: TGM/class-tgm-plugin-activation.php:2802
+msgid "No plugins are available to be updated at this time."
+msgstr ""
+
+#: TGM/class-tgm-plugin-activation.php:2908
+msgid "No plugins were selected to be activated. No action taken."
+msgstr ""
+
+#: TGM/class-tgm-plugin-activation.php:2934
+msgid "No plugins are available to be activated at this time."
+msgstr ""
+
+#: TGM/class-tgm-plugin-activation.php:3158
+msgid "Plugin activation failed."
+msgstr ""
+
+#. translators: 1: plugin name, 2: action number 3: total number of actions.
+#: TGM/class-tgm-plugin-activation.php:3498
+msgid "Updating Plugin %1$s (%2$d/%3$d)"
+msgstr ""
+
+#. translators: 1: plugin name, 2: error message.
+#: TGM/class-tgm-plugin-activation.php:3501
+msgid "An error occurred while installing %1$s: <strong>%2$s</strong>."
+msgstr ""
+
+#. translators: 1: plugin name.
+#: TGM/class-tgm-plugin-activation.php:3503
+msgid "The installation of %1$s failed."
+msgstr ""
+
+#: TGM/class-tgm-plugin-activation.php:3507
+msgid "The installation and activation process is starting. This process may take a while on some hosts, so please be patient."
+msgstr ""
+
+#. translators: 1: plugin name.
+#: TGM/class-tgm-plugin-activation.php:3509
+msgid "%1$s installed and activated successfully."
+msgstr ""
+
+#. translators: 1: plugin name.
+#: TGM/class-tgm-plugin-activation.php:3509
+#: TGM/class-tgm-plugin-activation.php:3517
+msgid "Show Details"
+msgstr ""
+
+#. translators: 1: plugin name.
+#: TGM/class-tgm-plugin-activation.php:3509
+#: TGM/class-tgm-plugin-activation.php:3517
+msgid "Hide Details"
+msgstr ""
+
+#: TGM/class-tgm-plugin-activation.php:3510
+msgid "All installations and activations have been completed."
+msgstr ""
+
+#. translators: 1: plugin name, 2: action number 3: total number of actions.
+#: TGM/class-tgm-plugin-activation.php:3512
+msgid "Installing and Activating Plugin %1$s (%2$d/%3$d)"
+msgstr ""
+
+#: TGM/class-tgm-plugin-activation.php:3515
+msgid "The installation process is starting. This process may take a while on some hosts, so please be patient."
+msgstr ""
+
+#. translators: 1: plugin name.
+#: TGM/class-tgm-plugin-activation.php:3517
+msgid "%1$s installed successfully."
+msgstr ""
+
+#: TGM/class-tgm-plugin-activation.php:3518
+msgid "All installations have been completed."
+msgstr ""
+
+#. translators: 1: plugin name, 2: action number 3: total number of actions.
+#: TGM/class-tgm-plugin-activation.php:3520
+msgid "Installing Plugin %1$s (%2$d/%3$d)"
+msgstr ""
+
+#: TGM/tgm.php:10
+msgid "woocommerce"
+msgstr ""
+
+#: styles/blue.json
+msgctxt "Style variation name"
+msgid "Blue"
+msgstr ""
+
+#: styles/blue.json
+#: styles/green.json
+#: styles/pink.json
+#: styles/red.json
+#: styles/yellow.json
+#: theme.json
+msgctxt "Color name"
+msgid "Primary"
+msgstr ""
+
+#: styles/blue.json
+#: styles/green.json
+#: styles/pink.json
+#: styles/red.json
+#: styles/yellow.json
+#: theme.json
+msgctxt "Color name"
+msgid "Slidebg"
+msgstr ""
+
+#: styles/blue.json
+#: styles/green.json
+#: styles/pink.json
+#: styles/red.json
+#: styles/yellow.json
+#: theme.json
+msgctxt "Color name"
+msgid "Background"
+msgstr ""
+
+#: styles/blue.json
+#: styles/green.json
+#: styles/pink.json
+#: styles/red.json
+#: styles/yellow.json
+#: theme.json
+msgctxt "Color name"
+msgid "Tertiary"
+msgstr ""
+
+#: styles/blue.json
+#: styles/green.json
+#: styles/pink.json
+#: styles/red.json
+#: styles/yellow.json
+#: theme.json
+msgctxt "Color name"
+msgid "Fourth"
+msgstr ""
+
+#: styles/blue.json
+#: styles/green.json
+#: styles/pink.json
+#: styles/red.json
+#: styles/yellow.json
+#: theme.json
+msgctxt "Color name"
+msgid "Secondary"
+msgstr ""
+
+#: styles/blue.json
+#: styles/green.json
+#: styles/pink.json
+#: styles/red.json
+#: styles/yellow.json
+msgctxt "Color name"
+msgid "Accent"
+msgstr ""
+
+#: styles/blue.json
+#: styles/green.json
+#: styles/pink.json
+#: styles/red.json
+#: styles/yellow.json
+#: theme.json
+msgctxt "Color name"
+msgid "Heading"
+msgstr ""
+
+#: styles/blue.json
+#: styles/green.json
+#: styles/pink.json
+#: styles/red.json
+#: styles/yellow.json
+#: theme.json
+msgctxt "Color name"
+msgid "Body"
+msgstr ""
+
+#: styles/blue.json
+#: styles/green.json
+#: styles/pink.json
+#: styles/red.json
+#: styles/yellow.json
+#: theme.json
+msgctxt "Color name"
+msgid "Surface"
+msgstr ""
+
+#: styles/blue.json
+#: styles/green.json
+#: styles/pink.json
+#: styles/red.json
+#: styles/yellow.json
+#: theme.json
+msgctxt "Color name"
+msgid "Light Gray"
+msgstr ""
+
+#: styles/blue.json
+#: styles/green.json
+#: styles/pink.json
+#: styles/red.json
+#: styles/yellow.json
+#: theme.json
+msgctxt "Color name"
+msgid "Border"
+msgstr ""
+
+#: styles/blue.json
+#: styles/green.json
+#: styles/pink.json
+#: styles/red.json
+#: styles/yellow.json
+#: theme.json
+msgctxt "Color name"
+msgid "Muted"
+msgstr ""
+
+#: styles/blue.json
+#: styles/green.json
+#: styles/pink.json
+#: styles/red.json
+#: styles/yellow.json
+#: theme.json
+msgctxt "Color name"
+msgid "Success"
+msgstr ""
+
+#: styles/blue.json
+#: styles/green.json
+#: styles/pink.json
+#: styles/red.json
+#: styles/yellow.json
+#: theme.json
+msgctxt "Color name"
+msgid "Warning"
+msgstr ""
+
+#: styles/blue.json
+#: styles/green.json
+#: styles/pink.json
+#: styles/red.json
+#: styles/yellow.json
+#: theme.json
+msgctxt "Color name"
+msgid "Error"
+msgstr ""
+
+#: styles/blue.json
+#: styles/green.json
+#: styles/pink.json
+#: styles/red.json
+#: styles/yellow.json
+#: theme.json
+msgctxt "Color name"
+msgid "Transparent"
+msgstr ""
+
+#: styles/blue.json
+#: styles/green.json
+#: styles/pink.json
+#: styles/red.json
+#: styles/yellow.json
+#: theme.json
+msgctxt "Gradient name"
+msgid "Secondary Gradient"
+msgstr ""
+
+#: styles/green.json
+msgctxt "Style variation name"
+msgid "Green"
+msgstr ""
+
+#: styles/pink.json
+msgctxt "Style variation name"
+msgid "Pink"
+msgstr ""
+
+#: styles/red.json
+msgctxt "Style variation name"
+msgid "Red"
+msgstr ""
+
+#: styles/yellow.json
+msgctxt "Style variation name"
+msgid "Yellow"
+msgstr ""
+
+#: theme.json
+msgctxt "Color name"
+msgid "Bodies"
+msgstr ""
+
+#: theme.json
+msgctxt "Color name"
+msgid "Clip"
+msgstr ""
+
+#: theme.json
+msgctxt "Duotone name"
+msgid "Primary Duotone"
+msgstr ""
+
+#: theme.json
+msgctxt "Duotone name"
+msgid "Dark Duotone"
+msgstr ""
+
+#: theme.json
+msgctxt "Font family name"
+msgid "Lora"
+msgstr ""
+
+#: theme.json
+msgctxt "Font family name"
+msgid "Cookie"
+msgstr ""
+
+#: theme.json
+msgctxt "Font size name"
+msgid "Small"
+msgstr ""
+
+#: theme.json
+msgctxt "Font size name"
+msgid "Medium"
+msgstr ""
+
+#: theme.json
+msgctxt "Font size name"
+msgid "Large"
+msgstr ""
+
+#: theme.json
+msgctxt "Font size name"
+msgid "X Large"
+msgstr ""
+
+#: theme.json
+msgctxt "Font size name"
+msgid "XX Large"
+msgstr ""
+
+#: theme.json
+msgctxt "Font size name"
+msgid "XXX Large"
+msgstr ""
+
+#: theme.json
+msgctxt "Font size name"
+msgid "XXXX Large"
+msgstr ""
+
+#: theme.json
+msgctxt "Font size name"
+msgid "Huge"
+msgstr ""
+
+#: theme.json
+msgctxt "Space size name"
+msgid "X Small"
+msgstr ""
+
+#: theme.json
+msgctxt "Space size name"
+msgid "Small"
+msgstr ""
+
+#: theme.json
+msgctxt "Space size name"
+msgid "Medium"
+msgstr ""
+
+#: theme.json
+msgctxt "Space size name"
+msgid "Large"
+msgstr ""
+
+#: theme.json
+msgctxt "Space size name"
+msgid "X Large"
+msgstr ""
+
+#: theme.json
+msgctxt "Space size name"
+msgid "XX Large"
+msgstr ""
+
+#: theme.json
+msgctxt "Space size name"
+msgid "XXX Large"
+msgstr ""
+
+#: theme.json
+msgctxt "Template part name"
+msgid "Header"
+msgstr ""
+
+#: theme.json
+msgctxt "Template part name"
+msgid "Footer"
+msgstr ""

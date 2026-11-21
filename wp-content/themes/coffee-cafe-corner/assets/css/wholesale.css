@@ -1,0 +1,442 @@
+/**
+ * Wholesale Page Stylesheet
+ * 100% Pixel-Accurate Recreation matching Quills Coffee Wholesale page (quillscoffee.com/pages/wholesale)
+ *
+ * Design Specifications:
+ * - Color Palette:
+ *   * Page body & sections: #ECE8D7 with bg-quills.png linen texture
+ *   * Hero title text: #3A3837 (Clarendon URW Extra Narrow, 48px)
+ *   * Body text & headings: #262626
+ * - Typography:
+ *   * Clarendon URW Extra Narrow (Regular 400, Bold 700, Italic)
+ * - Layout:
+ *   * .quills-coffee-fest: 8fr / 7fr grid, 20px gap, 4px padding
+ */
+
+/* ----------------------------------------------------
+   1. Font Faces
+   ---------------------------------------------------- */
+@font-face {
+    font-family: 'Clarendon URW Extra Narrow';
+    src: url('../fonts/ClarendonURWExtNar-Reg.woff2') format('woff2');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Clarendon URW Extra Narrow';
+    src: url('../fonts/ClarendonURWExtNar-Bol.woff2') format('woff2');
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Clarendon URW Extra Narrow';
+    src: url('../fonts/ClarendonURWExtNar-RegObl.woff2') format('woff2');
+    font-weight: 400;
+    font-style: italic;
+    font-display: swap;
+}
+
+/* ----------------------------------------------------
+   2. Page Container & Linen Texture Background
+   ---------------------------------------------------- */
+body.page-template-page-wholesale,
+.page-template-page-wholesale,
+.wholesale-page-wrapper {
+    background-color: #ECE8D7 !important;
+    background-image: url('../images/about/bg-quills.png') !important;
+    background-repeat: repeat !important;
+    color: #262626;
+    font-family: 'Clarendon URW Extra Narrow', Georgia, 'Times New Roman', serif;
+    margin: 0;
+    padding: 0;
+    -webkit-font-smoothing: antialiased;
+}
+
+/* ----------------------------------------------------
+   3. Hero Title Section (Wholesale Coffee Roasting)
+   ---------------------------------------------------- */
+.quills-wholesale-hero-section {
+    width: 100%;
+    padding: 24px 20px 8px;
+    box-sizing: border-box;
+    text-align: center;
+}
+
+.quills-wholesale-hero-title {
+    font-family: 'Clarendon URW Extra Narrow', Georgia, serif;
+    font-weight: 400;
+    font-style: normal;
+    font-size: clamp(32px, 3.4vw, 48px);
+    line-height: 1.2;
+    color: #3A3837;
+    margin: 0;
+    padding: 0;
+    text-align: center;
+    letter-spacing: -0.2px;
+}
+
+/* ----------------------------------------------------
+   4. Main 2-Column Content: .quills-coffee-fest
+   ---------------------------------------------------- */
+.quills-wholesale-content-section {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 8px 16px 20px;
+}
+
+.quills-coffee-fest {
+    display: grid;
+    grid-template-columns: minmax(0, 8fr) minmax(0, 7fr);
+    align-items: center;
+    gap: 20px;
+    max-width: none;
+    width: 100%;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 4px;
+}
+
+/* ----------------------------------------------------
+   5. Video Container & Wistia Player
+   ---------------------------------------------------- */
+.quills-coffee-fest__video {
+    min-width: 0;
+    border-radius: 12px;
+    overflow: hidden;
+    background-color: #000000;
+    position: relative;
+    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.08);
+}
+
+.quills-coffee-fest wistia-player {
+    display: block;
+    width: 100%;
+    border-radius: 12px;
+}
+
+.quills-coffee-fest wistia-player[media-id='zihbfybcjm']:not(:defined) {
+    background: center / contain no-repeat url('https://fast.wistia.com/embed/medias/zihbfybcjm/swatch');
+    filter: blur(5px);
+    padding-top: 56.25%;
+}
+
+/* ----------------------------------------------------
+   6. Michael's Copy & Typography
+   ---------------------------------------------------- */
+.quills-coffee-fest__text {
+    min-width: 0;
+    box-sizing: border-box;
+    padding-left: 24px;
+    padding-right: 24px;
+}
+
+.quills-coffee-fest__text h2 {
+    font-family: 'Clarendon URW Extra Narrow', Georgia, serif;
+    font-style: italic;
+    font-weight: 400;
+    font-size: clamp(24px, 2.2vw, 30px);
+    line-height: 1.3;
+    color: #262626;
+    margin: 0 0 16px;
+}
+
+.quills-coffee-fest__text p {
+    font-family: 'Clarendon URW Extra Narrow', Georgia, serif;
+    font-weight: 400;
+    font-size: clamp(14.5px, 1.1vw, 16px);
+    line-height: 1.6;
+    color: #262626;
+    margin: 0 0 16px;
+}
+
+.quills-coffee-fest__text p strong {
+    font-weight: 700;
+    color: #262626;
+}
+
+.quills-coffee-fest__text p:last-child {
+    margin-bottom: 0;
+}
+
+/* ----------------------------------------------------
+   7. Typeform / Questionnaire Section
+   ---------------------------------------------------- */
+.quills-wholesale-typeform-section {
+    width: 100%;
+    box-sizing: border-box;
+    margin: 16px 0 60px;
+    padding: 0 16px;
+    min-height: 380px;
+}
+
+.quills-wholesale-typeform-section [data-tf-live] {
+    width: 100%;
+    min-height: 550px;
+    border: none;
+}
+
+/* ----------------------------------------------------
+   8. Direct Sample Request Card & Interactive Form
+   ---------------------------------------------------- */
+.quills-direct-sample-card {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 20px 0;
+}
+
+.quills-sample-cover {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 40px 16px;
+    box-sizing: border-box;
+}
+
+.quills-sample-title {
+    font-family: 'Clarendon URW Extra Narrow', Georgia, serif;
+    font-weight: 700;
+    font-size: clamp(26px, 2.6vw, 34px);
+    line-height: 1.25;
+    color: #3A3837;
+    margin: 0 0 8px;
+    text-align: center;
+}
+
+.quills-sample-subtitle {
+    font-family: 'Clarendon URW Extra Narrow', Georgia, serif;
+    font-weight: 400;
+    font-size: clamp(15px, 1.2vw, 17px);
+    line-height: 1.4;
+    color: #55524D;
+    margin: 0 0 24px;
+    text-align: center;
+}
+
+.quills-sample-start-btn {
+    background-color: #E25B45;
+    color: #FFFFFF;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    padding: 11px 26px;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(226, 91, 69, 0.28);
+    transition: background-color 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease;
+}
+
+.quills-sample-start-btn:hover {
+    background-color: #C94935;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(226, 91, 69, 0.36);
+}
+
+.quills-sample-start-btn:active {
+    transform: translateY(0);
+}
+
+.quills-sample-time-note {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    font-family: 'Clarendon URW Extra Narrow', Georgia, serif;
+    font-size: 13.5px;
+    color: #736D65;
+    margin-top: 12px;
+}
+
+.quills-sample-clock-icon {
+    stroke: #736D65;
+}
+
+/* Form Wrap (Revealed on click) */
+.quills-sample-form-wrap {
+    max-width: 720px;
+    margin: 0 auto;
+    background: rgba(255, 255, 255, 0.72);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    border-radius: 12px;
+    padding: 32px 28px;
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.05);
+    box-sizing: border-box;
+    animation: quillsFadeIn 0.3s ease-out;
+}
+
+@keyframes quillsFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.quills-sample-form-header {
+    text-align: center;
+    margin-bottom: 24px;
+}
+
+.quills-sample-form-title {
+    font-family: 'Clarendon URW Extra Narrow', Georgia, serif;
+    font-weight: 700;
+    font-size: 26px;
+    color: #3A3837;
+    margin: 0 0 6px;
+}
+
+.quills-sample-form-subtitle {
+    font-family: 'Clarendon URW Extra Narrow', Georgia, serif;
+    font-size: 15px;
+    color: #55524D;
+    margin: 0;
+}
+
+.quills-sample-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+.quills-form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.quills-form-group.full-width {
+    grid-column: 1 / -1;
+}
+
+.quills-form-group label {
+    font-family: 'Clarendon URW Extra Narrow', Georgia, serif;
+    font-size: 14px;
+    font-weight: 700;
+    color: #3A3837;
+    margin-bottom: 6px;
+}
+
+.quills-form-group input,
+.quills-form-group select,
+.quills-form-group textarea {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    font-size: 14.5px;
+    padding: 10px 12px;
+    background: #FFFFFF;
+    border: 1px solid #D4CEBE;
+    border-radius: 6px;
+    color: #262626;
+    outline: none;
+    box-sizing: border-box;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.quills-form-group input:focus,
+.quills-form-group select:focus,
+.quills-form-group textarea:focus {
+    border-color: #3A3837;
+    box-shadow: 0 0 0 3px rgba(58, 56, 55, 0.12);
+}
+
+.quills-form-actions {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 14px;
+}
+
+.quills-form-back-btn {
+    background: transparent;
+    border: 1px solid #D4CEBE;
+    color: #55524D;
+    padding: 10px 20px;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.quills-form-back-btn:hover {
+    background: rgba(0, 0, 0, 0.04);
+    color: #262626;
+}
+
+.quills-sample-submit-btn {
+    background-color: #E25B45;
+    color: #FFFFFF;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    padding: 11px 26px;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(226, 91, 69, 0.25);
+    transition: background-color 0.2s ease, transform 0.15s ease;
+}
+
+.quills-sample-submit-btn:hover {
+    background-color: #C94935;
+    transform: translateY(-1px);
+}
+
+.quills-sample-submit-btn:disabled {
+    opacity: 0.65;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.quills-form-feedback {
+    margin-top: 16px;
+    display: none;
+    padding: 14px 18px;
+    border-radius: 6px;
+    font-size: 14.5px;
+    line-height: 1.45;
+    text-align: center;
+}
+
+.quills-form-feedback.success {
+    display: block;
+    background: #E8F5E9;
+    border: 1px solid #C8E6C9;
+    color: #2E7D32;
+}
+
+.quills-form-feedback.error {
+    display: block;
+    background: #FFEBEE;
+    border: 1px solid #FFCDD2;
+    color: #C62828;
+}
+
+/* ----------------------------------------------------
+   8. Responsive Layout
+   ---------------------------------------------------- */
+@media screen and (max-width: 749px) {
+    .quills-coffee-fest {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 16px;
+        padding: 4px;
+    }
+
+    .quills-coffee-fest__text {
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+
+    .quills-wholesale-hero-title {
+        font-size: 28px;
+    }
+}
